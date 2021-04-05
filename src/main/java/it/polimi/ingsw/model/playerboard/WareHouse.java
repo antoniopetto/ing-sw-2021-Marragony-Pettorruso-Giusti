@@ -9,7 +9,7 @@ import java.util.stream.Collectors;
 public class WareHouse {
     private List<Depot> depotList;
     private DepotName depotName;
-
+    private boolean isFirstExtraDepot;
 
     public WareHouse() {
 
@@ -17,18 +17,21 @@ public class WareHouse {
         this.depotList.add(new Depot(DepotName.HIGH,DepotName.HIGH.getCapacity()));
         this.depotList.add(new Depot(DepotName.MEDIUM,DepotName.MEDIUM.getCapacity()));
         this.depotList.add(new Depot(DepotName.LOW,DepotName.LOW.getCapacity()));
-
+        this.isFirstExtraDepot = true;
     }
 
     public List<Depot> getDepots() {
         return this.depotList;
     }
 
-    public DepotName getDepotName() {
-        return depotName;
-    }
+    public DepotName getDepotName() { return depotName; }
 
-    public void createExtraDepot(DepotName depotName, Optional<Resource> r){ this.depotList.add( new Depot(depotName, depotName.getCapacity(), r));}
+    public void createExtraDepot(Resource r){
+        DepotName dExtraName;
+        if(isFirstExtraDepot) dExtraName =DepotName.FIRST_EXTRA;
+            else dExtraName = DepotName.SECOND_EXTRA;
+            this.depotList.add( new Depot(dExtraName, dExtraName.getCapacity(), r));
+    }
 
     public boolean isInsertable(DepotName depotName, Resource r, int quantity){
         Depot depotToInsert = this.depotList.get(depotName.getPosition());

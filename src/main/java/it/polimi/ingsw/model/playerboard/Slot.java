@@ -20,9 +20,13 @@ public class Slot {
         this.id = id;
     }
 
+    public int getId() { return id; }
+
     public DevelopmentCard getLastCard(){
         return this.developmentCardList.get(developmentCardList.size()-1);
     }
+
+    public List<DevelopmentCard> getDevelopmentCardList() { return developmentCardList; }
 
     public boolean addCard(DevelopmentCard dCard){
         if(isEmpty() || dCard.getLevel()==(getLastCard().getLevel()+1) )

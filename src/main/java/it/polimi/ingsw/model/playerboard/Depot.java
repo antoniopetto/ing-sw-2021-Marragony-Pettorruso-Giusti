@@ -8,13 +8,14 @@ public class Depot {
     private  DepotName name;
     private int quantity;
     private int capacity;
-    private Optional<Resource> constraint;
+   // private Optional<Resource> constraint;
+    private Resource resourceExtra;
 
-    public Depot(DepotName name, int capacity, Optional<Resource> constraint) {
+    public Depot(DepotName name, int capacity, Resource resourceExtra) {
         this.name = name;
         this.quantity = 0;
         this.capacity = capacity;
-        this.constraint = constraint;
+        this.resourceExtra = resourceExtra;
     }
 
     public Depot(DepotName name, int capacity){
@@ -24,10 +25,6 @@ public class Depot {
     }
 
     public DepotName getName() { return name; }
-
-    public Optional<Resource> getConstraint() {
-        return constraint;
-    }
 
     public int getCapacity() {
         return capacity;
