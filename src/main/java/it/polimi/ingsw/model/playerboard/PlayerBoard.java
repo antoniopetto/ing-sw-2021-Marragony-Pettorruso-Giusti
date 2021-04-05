@@ -41,7 +41,7 @@ public class PlayerBoard {
 
     public boolean isAffordable(ResourceRequirement resourceRequirement){
 
-        //controllo
+
         //if(! compareWithStrongBox(resourceRequirement.getResource(),resourceRequirement.getQuantity()) &&
         //      !this.wareHouse.totalResourcesofAType(resourceRequirement.getResource())>=resourceRequirement.getQuantity())
         //      return false;
