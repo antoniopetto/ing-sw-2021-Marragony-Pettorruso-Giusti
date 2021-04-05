@@ -6,4 +6,5 @@ public enum Resource {
     STONE,
     SERVANT,
     FAITH
+
 }

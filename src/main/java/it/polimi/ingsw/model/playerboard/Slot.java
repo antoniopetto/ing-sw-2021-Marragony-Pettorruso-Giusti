@@ -4,20 +4,28 @@ import it.polimi.ingsw.model.cards.DevelopmentCard;
 import java.util.ArrayList;
 import java.util.List;
 
-
+/**
+ * This class represents the Slot.
+ * It will contain a maximum of three <code>DevelopmentCards</code>
+ *
+ * @see DevelopmentCard
+ */
 public class Slot {
-    private List<DevelopmentCard> developmentCardList;
 
-    public Slot(){
+    private List<DevelopmentCard> developmentCardList;
+    private int id;
+
+    public Slot(int id){
         this.developmentCardList = new ArrayList<>();
+        this.id = id;
     }
 
-    public DevelopmentCard getCard(){
+    public DevelopmentCard getLastCard(){
         return this.developmentCardList.get(developmentCardList.size()-1);
     }
 
     public boolean addCard(DevelopmentCard dCard){
-        if(isEmpty() || dCard.getLevel()==(getCard().getLevel()+1) )
+        if(isEmpty() || dCard.getLevel()==(getLastCard().getLevel()+1) )
         {
             this.developmentCardList.add(dCard);
             return true;

@@ -38,14 +38,13 @@ public class StrongBox {
      * Removes a <code>resource</code> r unit from the StrongBox
      *
      * @param r The <code>Resource</code> to remove
-     * @throws IllegalArgumentException If the amount of <code>resource</code> r inside the Strongbox isn't enough
      */
-    public void removeResource( Resource r){
+    public boolean removeResource( Resource r){
             if(getQuantity(r)>1)
                 content.replace(r, content.get(r)-1);
                 else if(getQuantity(r)==1) content.remove(r);
-                    else throw new IllegalArgumentException("There aren't enough resources of the required " +
-                                                                        "type in the StrongBox");
+                    else return false;
+                    return true;
     }
 
     /**

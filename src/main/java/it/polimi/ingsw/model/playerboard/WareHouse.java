@@ -1,28 +1,83 @@
 package it.polimi.ingsw.model.playerboard;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 public class WareHouse {
-            private List<Depot> depotList;
+    private List<Depot> depotList;
+    private DepotName depotName;
+
+
+    public WareHouse() {
+
+        this.depotList = new ArrayList<>();
+        this.depotList.add(new Depot(DepotName.HIGH,DepotName.HIGH.getCapacity()));
+        this.depotList.add(new Depot(DepotName.MEDIUM,DepotName.MEDIUM.getCapacity()));
+        this.depotList.add(new Depot(DepotName.LOW,DepotName.LOW.getCapacity()));
+
+    }
 
     public List<Depot> getDepots() {
-        return depotList;
+        return this.depotList;
     }
 
-    public boolean isInsertable(Map<DepotName,List<Resource>> map){
-        return true;
+    public DepotName getDepotName() {
+        return depotName;
     }
 
-    public void insert(Map<DepotName,List<Resource>> map){ }
+    public void createExtraDepot(DepotName depotName, Optional<Resource> r){ this.depotList.add( new Depot(depotName, depotName.getCapacity(), r));}
 
-    public void switchDepots(Depot d1, Depot d2){}
+    public boolean isInsertable(DepotName depotName, Resource r, int quantity){
+        Depot depotToInsert = this.depotList.get(depotName.getPosition());
 
-    public boolean takeResource( Resource r){
-        return true;
+        List<Depot> depotList1 = this.depotList.stream()
+                                                    .filter(d -> !d.getName().equals(depotName))
+                                                        .collect(Collectors.toList());
+
+        for(Depot depot : depotList1) if(depot.getResource().equals(r)) return false;
+
+        if( (depotToInsert.isEmpty() && quantity <= depotToInsert.getCapacity()) ||
+                (depotToInsert.getResource().equals(r) && quantity <= depotToInsert.spaceAvailable()))
+        {
+            this.insert(depotToInsert,r,quantity);
+            return true;
+        }
+        else return false;
+
     }
+
+    public void insert(Depot depot, Resource r, int quantity){ for(int i = 0; i < quantity; i++) depot.addResource(r); }
+
+    public void switchDepots(DepotName depotName1, DepotName depotName2){
+
+    }
+
+    private DepotName setDepot(DepotName depotName){
+        return this.depotName = depotName;
+    }
+
+    public int totalResourcesofAType( Resource r){
+        int totalResources = 0;
+        for( Depot depot : this.depotList)
+        {
+            if(depot.getResource().equals(r)) {
+                if (!depot.isEmpty()) {
+                    setDepot(depot.getName());
+                    totalResources += depot.getQuantity();
+                }
+            }
+        }
+        return totalResources;
+    }
+
+    public void takeResource( Resource r){ this.depotList.get(getDepotName().getPosition()).removeResource(); }
 
     public int countTotalResources(){
-        return 5;
+        int totalResources = 0;
+        for( Depot depot : this.depotList) totalResources += depot.getQuantity();
+        return totalResources;
     }
 }
