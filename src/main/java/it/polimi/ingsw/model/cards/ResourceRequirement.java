@@ -1,6 +1,9 @@
 package it.polimi.ingsw.model.cards;
 
+import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.model.playerboard.Resource;
+
+import java.util.ArrayList;
 
 /**
  * this class implements Requirement and represents a requirement of resources. It has an integer attribute for the
@@ -15,8 +18,20 @@ public class ResourceRequirement implements Requirement{
         this.resource = resource;
     }
 
+    /**
+     * This method checks if the player has enough resources to satisfy this requirement.
+     */
     @Override
-    public boolean isSatisfied() { //it will be completed after the creation of Player class
-        return false;
+    public boolean isSatisfied(Player player) {
+        return player.getPlayerBoard().isAffordable(this);
+
+    }
+
+    public int getQuantity() {
+        return quantity;
+    }
+
+    public Resource getResource() {
+        return resource;
     }
 }

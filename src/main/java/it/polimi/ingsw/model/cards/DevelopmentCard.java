@@ -35,4 +35,14 @@ public class DevelopmentCard extends Card{
     public ResourceRequirement getRequirement() {
         return requirement;
     }
+
+    /**
+     *this method confront the levels of two cards
+     * @param card is the other card to confront
+     * @return true if the level of this is higher than the level of card
+     */
+    public boolean isLevelHigher(DevelopmentCard card)
+    {
+        return this.level> card.getLevel();
+    }
 }

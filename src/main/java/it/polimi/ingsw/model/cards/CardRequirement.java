@@ -1,5 +1,9 @@
 package it.polimi.ingsw.model.cards;
 
+import it.polimi.ingsw.model.Player;
+import it.polimi.ingsw.model.playerboard.Slot;
+
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -18,8 +22,37 @@ public class CardRequirement implements Requirement{
         this.quantity = quantity;
     }
 
+    public CardRequirement(CardColor color, int quantity)
+    {
+        this.color=color;
+        this.quantity = quantity;
+        level=Optional.empty();
+    }
+
+    /**
+     * This method checks if the player has the cards required to satisfy this requirement
+     */
     @Override
-    public boolean isSatisfied() {
+    public boolean isSatisfied(Player player) {
+        int needed = this.quantity;
+        boolean check = false;
+        List<Slot> slots = player.getPlayerBoard().getSlotList();
+        for (Slot slot:slots) {
+            List<DevelopmentCard> cards= slot.getDevelopmentCardList();
+            for (DevelopmentCard card:cards) {
+                if (card.getColor().equals(this.color))
+                {
+                    if(level.isPresent())
+                    {
+                        if(level.get().equals(card.getLevel()))
+                            needed--;
+                    }
+                    else needed--;
+
+                }
+                if(needed==0) return true;
+            }
+        }
         return false;
     }
 }
