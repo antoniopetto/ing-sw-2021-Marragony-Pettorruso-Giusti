@@ -1,13 +1,12 @@
-package it.polimi.ingsw.model;
+package it.polimi.ingsw.model.shared;
 
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-
-import static org.junit.Assert.*;
 
 public class MarketBoardTest {
 
@@ -45,12 +44,12 @@ public class MarketBoardTest {
         marketBoard.insertSpareInColumn(columnId);
         List<Marble> postColumn = marketBoard.getColumn(columnId);
 
-        assertEquals(preColumn.size(), postColumn.size());
-        assertEquals(preSpareMarble, postColumn.get(size - 1));
-        assertEquals(preColumn.get(0), marketBoard.getSpareMarble());
+        Assert.assertEquals(preColumn.size(), postColumn.size());
+        Assert.assertEquals(preSpareMarble, postColumn.get(size - 1));
+        Assert.assertEquals(preColumn.get(0), marketBoard.getSpareMarble());
 
         for (int i = 0; i < size - 1; i++)
-            assertEquals("Shift column error at position " + i,
+            Assert.assertEquals("Shift column error at position " + i,
                     postColumn.get(i),
                     preColumn.get(i + 1));
     }
@@ -65,12 +64,12 @@ public class MarketBoardTest {
         marketBoard.insertSpareInRow(rowId);
         List<Marble> postRow = marketBoard.getRow(rowId);
 
-        assertEquals(preRow.size(), postRow.size());
-        assertEquals(preSpareMarble, postRow.get(preRow.size() - 1));
-        assertEquals(preRow.get(0), marketBoard.getSpareMarble());
+        Assert.assertEquals(preRow.size(), postRow.size());
+        Assert.assertEquals(preSpareMarble, postRow.get(preRow.size() - 1));
+        Assert.assertEquals(preRow.get(0), marketBoard.getSpareMarble());
 
         for (int i = 0; i < preRow.size() - 1; i++)
-            assertEquals("Shift row error at position " + i,
+            Assert.assertEquals("Shift row error at position " + i,
                     postRow.get(i),
                     preRow.get(i+1));
     }

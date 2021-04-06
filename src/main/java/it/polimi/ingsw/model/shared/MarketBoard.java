@@ -1,4 +1,4 @@
-package it.polimi.ingsw.model;
+package it.polimi.ingsw.model.shared;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -20,17 +20,36 @@ public class MarketBoard {
     private Marble spareMarble;
 
     /**
-     * Constructs the MarketBoard based on the 13 marbles obtained in the configuration of the game.
+     * Constructs the MarketBoard filling it with the 13 default game marbles.
+     */
+    public MarketBoard() {
+
+        List<Marble> marbles = new ArrayList<>();
+        marbles.addAll(Collections.nCopies(1, Marble.RED));
+        marbles.addAll(Collections.nCopies(2, Marble.BLUE));
+        marbles.addAll(Collections.nCopies(2, Marble.YELLOW));
+        marbles.addAll(Collections.nCopies(2, Marble.GREY));
+        marbles.addAll(Collections.nCopies(2, Marble.PURPLE));
+        marbles.addAll(Collections.nCopies(4, Marble.WHITE));
+        Collections.shuffle(marbles);
+
+        for (int i = 0; i < marbles.size() - 1; i++)
+            marbleGrid[i / COLUMNS][i % COLUMNS] = marbles.get(i);
+
+        spareMarble = marbles.get(marbles.size() - 1);
+    }
+
+    /**
+     * Constructs the MarketBoard restoring a .
      *
-     * @param marbles                       The list of input <code>Marble</code>
-     * @throws IllegalArgumentException     If <code>marbles</code> doesn't contain exactly 13 elements
+     * @param marbles                       The list of input <code>Marble</code>,
+     *                                      ordered row by row, the 13th being the spare one.
+     * @throws IllegalArgumentException     If <code>marbles</code> doesn't contain exactly 13 elements.
      */
     public MarketBoard(List<Marble> marbles) {
 
         if (marbles.size() != ROWS * COLUMNS + 1)
             throw new IllegalArgumentException("MarketBoard must contain" + ROWS * COLUMNS + 1 + "marbles");
-
-        Collections.shuffle(marbles);
 
         for (int i = 0; i < marbles.size() - 1; i++)
             marbleGrid[i / COLUMNS][i % COLUMNS] = marbles.get(i);
@@ -42,7 +61,7 @@ public class MarketBoard {
      * Inserts the spare <code>Marble</code> at the end of the input column,
      * shifting the rest and storing the new spare.
      *
-     * @param columnId  The column in which the spare marble gets inserted
+     * @param columnId  The column in which the spare marble gets inserted.
      */
     public void insertSpareInColumn(int columnId) {
 
@@ -59,7 +78,7 @@ public class MarketBoard {
      * Inserts the spare <code>Marble</code> at the end of the input column,
      * shifting the rest and storing the new spare.
      *
-     * @param rowId   The row in which the spare marble gets inserted
+     * @param rowId   The row in which the spare marble gets inserted.
      */
     public void insertSpareInRow(int rowId) {
 
@@ -82,4 +101,16 @@ public class MarketBoard {
     }
 
     public List<Marble> getRow(int rowId) { return Arrays.asList(marbleGrid[rowId].clone()); }
+
+    /*
+    public List<Marble> exportState() {
+
+        List<Marble> state = new ArrayList<>();
+
+        for (int i = 0; i < ROWS; i++){
+            state.addAll(Arrays.asList(marbleGrid[i].clone()));
+        }
+        state.add(spareMarble);
+        return state;
+    }*/
 }
