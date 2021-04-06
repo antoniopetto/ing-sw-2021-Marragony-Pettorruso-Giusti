@@ -25,6 +25,7 @@ public class StrongBox {
 
     /**
      * Adds a <code>resource</code> r unit inside the StrongBox
+     *
      * @param r The <code>Resource</code> to add
      */
     public void addResource( Resource r){

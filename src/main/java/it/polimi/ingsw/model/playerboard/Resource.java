@@ -5,6 +5,6 @@ public enum Resource {
     SHIELD,
     STONE,
     SERVANT,
-    FAITH
-
+    FAITH,
+    EMPTY
 }
