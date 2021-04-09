@@ -35,7 +35,7 @@ public class CardRequirement implements Requirement{
     @Override
     public boolean isSatisfied(Player player) {
         int needed = this.quantity;
-        boolean check = false;
+
         List<Slot> slots = player.getPlayerBoard().getSlotList();
         for (Slot slot:slots) {
             List<DevelopmentCard> cards= slot.getDevelopmentCardList();

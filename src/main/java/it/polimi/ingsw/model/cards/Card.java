@@ -22,4 +22,7 @@ public abstract class Card extends Identifiable {
         return this.victoryPoints;
     }
 
+    public int getId() {
+        return super.getId();
+    }
 }

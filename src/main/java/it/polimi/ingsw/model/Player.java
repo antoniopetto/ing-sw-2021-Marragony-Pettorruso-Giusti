@@ -1,5 +1,6 @@
 package it.polimi.ingsw.model;
 
+import it.polimi.ingsw.model.cards.LeaderCard;
 import it.polimi.ingsw.model.cards.DevelopmentCard;
 import it.polimi.ingsw.model.cards.LeaderCard;
 import it.polimi.ingsw.model.cards.ProductionPower;
@@ -16,12 +17,18 @@ public class Player {
     private final PlayerBoard playerBoard = new PlayerBoard();
     private final Set<Resource> activeDiscount = new HashSet<>();
     private final Set<Resource> whiteMarbleAliases = new HashSet<>();
+    private final Set<Resource> extraProductionPower = new HashSet<>(); //può andare nella Playerboard
+    private List<LeaderCard> leaderCardList;
 
     Player(String username){
         this.username = username;
         tiles.add(new PopeFavourTile(2));
         tiles.add(new PopeFavourTile(3));
         tiles.add(new PopeFavourTile(4));
+    }
+
+    public void setLeaderCardList(List<LeaderCard> leaderCardList) {
+        this.leaderCardList = leaderCardList;
     }
 
     public String getUsername() { return username; }
@@ -60,5 +67,29 @@ public class Player {
     public Position getPosition() { return position; }
 
     public void setPosition(Position position) { this.position = position; }
+
+    /**
+     * This method is used to play a Leader card
+     * @param cardId is the id of the card to ble played, which can be 1 or 0
+     * @return true if the card is playable and therefore played
+     */
+    public boolean playLeaderCard(int cardId)
+    {
+        if(cardId!=0&&cardId!=1) throw new IllegalArgumentException("Invalid id number");
+        LeaderCard card = leaderCardList.get(cardId);
+        if(card.isPlayed()) throw new IllegalStateException("Card already played");
+        if(card.isPlayable(this))
+        {
+            card.play(this);
+            return true;
+        }
+        else return false;
+    }
+
+    public void discardLeaderCard(int cardId)
+    {
+        if(cardId!=0&&cardId!=1) throw new IllegalArgumentException("Invalid id number");
+        leaderCardList.remove(cardId);
+    }
 
 }
