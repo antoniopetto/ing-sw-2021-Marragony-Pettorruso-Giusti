@@ -8,7 +8,7 @@ import java.util.*;
  * attribute which contains the cards.
  */
 public class CardDeck {
-    private final int num_of_cards = 4;
+    private static final int num_of_cards = 4;
     private final int level;
     private final CardColor color;
     private final Stack<DevelopmentCard> deck = new Stack<DevelopmentCard>();
@@ -34,18 +34,12 @@ public class CardDeck {
     /**
      * The method adds a card in the stack and if the stack is full it gets shuffled.
      * @param card the card which is added
+     * @throws Exception if the deck is full
      */
-    public void add(DevelopmentCard card)
-    {
-        try{
-            deck.push(card);
-            if(deck.size()>num_of_cards)
-                throw new Exception();
-        }catch(Exception e)
-        {
-            System.out.println("Deck full");
-            deck.pop();
-        }
+    public void add(DevelopmentCard card) throws Exception {
+        if(deck.size()==num_of_cards)
+            throw new Exception();
+        deck.push(card);
         if(deck.size()==num_of_cards)
         {
             Collections.shuffle(deck);
@@ -58,19 +52,13 @@ public class CardDeck {
     /**
      * The method remove the card on top of the stack
      * @return the card removed
+     * @throws Exception if the deck is empty
      */
-    public DevelopmentCard pop(){
-        DevelopmentCard card;
-        try{
-            if(deck.empty())
-                throw new Exception();
-            card = deck.pop();
-        }catch (Exception e)
-        {
-            System.out.println("The deck is empty");
-            card=null;
-        }
-        return card;
+    public DevelopmentCard pop() throws Exception {
+
+        if(deck.empty())
+            throw new Exception();
+        return deck.pop();
     }
 
     /**

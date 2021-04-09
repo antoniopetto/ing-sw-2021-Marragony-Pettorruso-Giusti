@@ -10,6 +10,7 @@ import java.util.Optional;
 
 public class Game
 {
+    private boolean endgame;
     private final Optional<SoloRival> soloRival;
     private final boolean singlePlayer;
     private final List<Player> players = new ArrayList<>();
