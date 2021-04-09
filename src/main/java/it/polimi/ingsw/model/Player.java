@@ -6,12 +6,14 @@ import it.polimi.ingsw.model.cards.LeaderCard;
 import it.polimi.ingsw.model.cards.ProductionPower;
 import it.polimi.ingsw.model.exceptions.NotAffordableException;
 import it.polimi.ingsw.model.playerboard.*;
+import it.polimi.ingsw.model.shared.Marble;
 import it.polimi.ingsw.model.shared.Position;
 
 import java.util.*;
 
 public class Player {
 
+    private int idSlotSelect;
     private final String username;
     private Position position;
     private final List<PopeFavourTile> tiles = new ArrayList<>();
@@ -102,5 +104,50 @@ public class Player {
 
     public void activateProduction(Set<Integer> selectedCardIds, Map<Integer, ProductionPower> selectedExtraPowers) throws NotAffordableException {
         playerBoard.activateProduction(selectedCardIds, selectedExtraPowers);
+    }
+
+
+    public boolean tryBuyDevelopmentCard(DevelopmentCard developmentCard){
+        return developmentCard.getRequirement().isSatisfied(this);
+    }
+
+    public boolean tryToAddDevelopmentCard(DevelopmentCard developmentCard){
+
+        boolean isPossibleAddCard = true;
+
+        try {
+            this.playerBoard.addCard(developmentCard, getIdSlotSelect());
+
+        }catch (IllegalArgumentException e){
+            isPossibleAddCard = true;
+        }
+
+        return isPossibleAddCard;
+
+    }
+
+    public void selectIdSlot(int idSlot){
+        this.idSlotSelect = idSlot;
+    }
+
+    public int getIdSlotSelect() {
+        return idSlotSelect;
+    }
+
+    public void buyResources(Game game, int idLine , boolean isRow, DepotName depotName ){
+        List<Marble> marbleList;
+        if(isRow) marbleList = game.getMarketBoard().getRow(idLine);
+        else marbleList = game.getMarketBoard().getColumn(idLine);
+
+        for(Marble marble : marbleList){
+            if(marble.getResource()!= null){
+                while (!playerBoard.getWareHouse().isInsertable(depotName,marble.getResource())){
+                    System.out.println("it is not possible to place this resource in the warehouse");
+                    //cambio del depotName da parte dell'utente
+                    //possibile prove di depotSwitch da parte dell'utente
+                }
+                //utente decide di scartare la risorsa o la risorsa viene scartata in automatico dopo un tot?
+            }
+        }
     }
 }
