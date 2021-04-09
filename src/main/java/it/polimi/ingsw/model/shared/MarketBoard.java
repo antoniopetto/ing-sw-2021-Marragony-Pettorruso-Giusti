@@ -102,15 +102,4 @@ public class MarketBoard {
 
     public List<Marble> getRow(int rowId) { return Arrays.asList(marbleGrid[rowId].clone()); }
 
-    /*
-    public List<Marble> exportState() {
-
-        List<Marble> state = new ArrayList<>();
-
-        for (int i = 0; i < ROWS; i++){
-            state.addAll(Arrays.asList(marbleGrid[i].clone()));
-        }
-        state.add(spareMarble);
-        return state;
-    }*/
 }

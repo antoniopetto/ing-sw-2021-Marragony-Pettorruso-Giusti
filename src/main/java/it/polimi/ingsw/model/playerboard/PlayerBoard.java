@@ -192,7 +192,7 @@ public class PlayerBoard {
      * @return                              The first of the objects with the specified <code>id</code>.
      * @throws ElementNotFoundException     If no object in the <code>Collection</code> has the specified <code>id</code>.
      */
-    private <E extends Identifiable> E findById(int id, Collection<E> collection) throws ElementNotFoundException{
+    public <E extends Identifiable> E findById(int id, Collection<E> collection) throws ElementNotFoundException{
         E result = collection.stream()
                 .filter(x -> x.getId() == id)
                 .findFirst().orElse(null);

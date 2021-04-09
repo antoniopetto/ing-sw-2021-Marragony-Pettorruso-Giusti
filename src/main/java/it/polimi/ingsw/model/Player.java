@@ -1,9 +1,7 @@
 package it.polimi.ingsw.model;
 
+import it.polimi.ingsw.model.cards.*;
 import it.polimi.ingsw.model.cards.LeaderCard;
-import it.polimi.ingsw.model.cards.DevelopmentCard;
-import it.polimi.ingsw.model.cards.LeaderCard;
-import it.polimi.ingsw.model.cards.ProductionPower;
 import it.polimi.ingsw.model.exceptions.NotAffordableException;
 import it.polimi.ingsw.model.playerboard.*;
 import it.polimi.ingsw.model.shared.Marble;
@@ -23,11 +21,13 @@ public class Player {
     private final Set<Resource> extraProductionPower = new HashSet<>(); //può andare nella Playerboard
     private List<LeaderCard> leaderCardList;
 
+
     Player(String username){
         this.username = username;
         tiles.add(new PopeFavourTile(2));
         tiles.add(new PopeFavourTile(3));
         tiles.add(new PopeFavourTile(4));
+
     }
 
     public void setLeaderCardList(List<LeaderCard> leaderCardList) {
@@ -106,12 +106,7 @@ public class Player {
         playerBoard.activateProduction(selectedCardIds, selectedExtraPowers);
     }
 
-
-    public boolean tryBuyDevelopmentCard(DevelopmentCard developmentCard){
-        return developmentCard.getRequirement().isSatisfied(this);
-    }
-
-    public boolean tryToAddDevelopmentCard(DevelopmentCard developmentCard){
+    public boolean tryToAddDevelopmentCardInSlot(DevelopmentCard developmentCard){
 
         boolean isPossibleAddCard = true;
 
@@ -134,20 +129,12 @@ public class Player {
         return idSlotSelect;
     }
 
-    public void buyResources(Game game, int idLine , boolean isRow, DepotName depotName ){
+    public List<Marble> buyResources(Game game, int idLine , boolean isRow){
         List<Marble> marbleList;
         if(isRow) marbleList = game.getMarketBoard().getRow(idLine);
         else marbleList = game.getMarketBoard().getColumn(idLine);
 
-        for(Marble marble : marbleList){
-            if(marble.getResource()!= null){
-                while (!playerBoard.getWareHouse().isInsertable(depotName,marble.getResource())){
-                    System.out.println("it is not possible to place this resource in the warehouse");
-                    //cambio del depotName da parte dell'utente
-                    //possibile prove di depotSwitch da parte dell'utente
-                }
-                //utente decide di scartare la risorsa o la risorsa viene scartata in automatico dopo un tot?
-            }
-        }
+        return marbleList;
+
     }
 }

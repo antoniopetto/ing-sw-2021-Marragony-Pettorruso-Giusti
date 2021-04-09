@@ -7,10 +7,13 @@ public enum Marble {
     BLUE(Resource.SHIELD),
     GREY(Resource.STONE),
     PURPLE(Resource.SERVANT),
-    WHITE(null),
+    WHITE(),
     RED(Resource.FAITH);
 
     private Resource resource;
+
+    Marble(){}
+
     Marble(Resource resource) {
         this.resource = resource;
     }
