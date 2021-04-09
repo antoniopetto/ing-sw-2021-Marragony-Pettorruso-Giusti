@@ -10,7 +10,8 @@ import java.util.Map;
  * @see Resource
  */
 public class StrongBox {
-    protected Map<Resource, Integer> content;
+
+    private final Map<Resource, Integer> content;
 
     /**
      * Constructs the StrongBox
@@ -29,10 +30,10 @@ public class StrongBox {
      * @param r The <code>Resource</code> to add
      */
     public void addResource( Resource r){
-        Integer integer = 1;
+
         if(content.containsKey(r))
             content.replace(r, content.get(r)+1);
-            else content.put(r, integer);
+            else content.put(r, 1);
     }
 
     /**
@@ -40,12 +41,11 @@ public class StrongBox {
      *
      * @param r The <code>Resource</code> to remove
      */
-    public boolean removeResource( Resource r){
+    public void removeResource( Resource r){
             if(getQuantity(r)>1)
                 content.replace(r, content.get(r)-1);
                 else if(getQuantity(r)==1) content.remove(r);
-                    else return false;
-                    return true;
+                    else throw new IllegalArgumentException("In StrongBox there is no Resource r");
     }
 
     /**

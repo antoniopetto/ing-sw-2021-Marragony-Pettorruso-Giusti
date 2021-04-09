@@ -1,5 +1,8 @@
 package it.polimi.ingsw.model;
 
+import it.polimi.ingsw.model.cards.DevelopmentCard;
+import it.polimi.ingsw.model.shared.MarketBoard;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -10,6 +13,7 @@ public class Game
     private final Optional<SoloRival> soloRival;
     private final boolean singlePlayer;
     private final List<Player> players = new ArrayList<>();
+    private MarketBoard marketBoard = new MarketBoard();
 
     public static Game newSinglePlayerGame(String username){
         return new Game(username);
@@ -43,6 +47,36 @@ public class Game
                       .filter(player -> username.equals(player.getUsername()))
                       .findFirst().orElse(null);
     }
+
+    public MarketBoard getMarketBoard() {
+        return marketBoard;
+    }
+
+    /*
+    private int idSlot = 0; // da passare nel costruttore
+
+    public void insertCardInSlot(DevelopmentCard dCard, String user){
+
+        Player player = findPlayer(user);
+        if( player.tryBuyDevelopmentCard(dCard) ) {
+            boolean allSlots = false;
+
+            for(int i = 0; i < 3; i++){
+                player.selectIdSlot(idSlot);
+                if(player.tryToAddDevelopmentCard(dCard)){
+                    player.getPlayerBoard().pay(dCard.getRequirement());
+                    allSlots = true;
+                    break;
+                }
+            }
+
+            if(allSlots) System.out.println("The DevelopmentCard cannot be inserted in any slot");
+
+        }
+        else System.out.println("The" + user + "Player hasn't enough resources to pay the DevelopmentCard dCard");
+
+      }
+    */
 
     public boolean isSinglePlayer() { return singlePlayer; }
 

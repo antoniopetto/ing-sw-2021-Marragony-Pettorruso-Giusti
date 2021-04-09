@@ -1,9 +1,9 @@
 package it.polimi.ingsw.model.playerboard;
 
-import it.polimi.ingsw.model.cards.Card;
 import it.polimi.ingsw.model.cards.DevelopmentCard;
 import it.polimi.ingsw.model.cards.ResourceRequirement;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -15,21 +15,19 @@ import java.util.List;
  */
 public class PlayerBoard {
 
-    private StrongBox strongBox;
-    private WareHouse wareHouse;
-    private List<Slot> slotList;
+    private final StrongBox strongBox;
+    private final WareHouse wareHouse;
+    private final List<Slot> slotList;
 
     /**
      * Constructs the PlayerBoard
      * It will contain a StrongBox, a WareHouse, three Slots
-     * @param strongBox the chest that contains resources
-     * @param wareHouse the WareHouse consisting of Depots
-     * @param slotList the list of slots
+     *
      */
-    public PlayerBoard(StrongBox strongBox, WareHouse wareHouse, List<Slot> slotList) {
-        this.strongBox = strongBox;
-        this.wareHouse = wareHouse;
-        this.slotList = slotList;
+    public PlayerBoard() {
+        this.strongBox = new StrongBox();
+        this.wareHouse = new WareHouse();
+        this.slotList = new ArrayList<>();
         this.slotList.add( new Slot(1));
         this.slotList.add( new Slot(2));
         this.slotList.add( new Slot(3));
@@ -50,24 +48,13 @@ public class PlayerBoard {
 
     /**
      *
-     * @param r is the resource that the player wants to compare
-     * @param quantity is the total of resources r
-     * @return true if there are more resources in the StrongBox than the amount of <code>Resources</code> r
-     */
-    public boolean compareWithStrongBox(Resource r, int quantity){
-        if(this.strongBox.getQuantity(r)>= quantity)return true;
-        else return false;
-    }
-
-    /**
-     *
      * @param developmentCard is the <code>DevelopmentCard</code> the player tries to add
      * @param idSlot represents the number of the <code>Slot</code> in which to insert the <code>DevelopmentCard</code>
      * @return true if it passes all checks in the 'idSlot' <code>Slot</code> and then add the developmentCard in the slot
      */
-    public boolean addCard(DevelopmentCard developmentCard, int idSlot){ // o card in generale?
-        if(this.slotList.get(idSlot).addCard(developmentCard)) return true;
-            else return false;
+    public void addCard(DevelopmentCard developmentCard, int idSlot){
+        if(slotList.get(idSlot).tryAddCard(developmentCard)) slotList.get(idSlot).addCard(developmentCard);
+            else throw new IllegalArgumentException("Unable to insert development card in this slot, change destination slot");
     }
 
     /**
@@ -77,25 +64,36 @@ public class PlayerBoard {
      */
     public boolean isAffordable(ResourceRequirement resourceRequirement){
 
-        if(! compareWithStrongBox(resourceRequirement.getResource(), resourceRequirement.getQuantity())&&
-                ! ( this.wareHouse.totalResourcesofAType(resourceRequirement.getResource())>=resourceRequirement.getQuantity() ) )
-                  return false;
-        else return true;
+        return ( strongBox.getQuantity(resourceRequirement.getResource()) +
+                    wareHouse.totalResourcesOfAType(resourceRequirement.getResource()) ) >= resourceRequirement.getQuantity();
     }
 
     /**
-     * Removes first from the strongBox and then if in the strongBox there aren't enough Resources of the required type , removes from wareHouse
+     * Removes first from the WareHouse and then if in the WareHouse there aren't enough Resources of the required type , removes from StrongBox
      *
      * @param resourceRequirement represents the <code>Resources</code> to be removed / paid from the strongbox or warehouse
      * to buy a <code>DevelopmentCard</code> or activate production power
      */
     public void pay(ResourceRequirement resourceRequirement){
 
-        boolean resourceInStrongBox = true;
+        boolean resourceInWareHouse = true;
+        int i = 0;
 
-        for(int i = 0; i < resourceRequirement.getQuantity() ; i++) {
-            if(resourceInStrongBox) resourceInStrongBox = this.strongBox.removeResource(resourceRequirement.getResource());
-                else this.wareHouse.takeResource(resourceRequirement.getResource());
+        while( i < resourceRequirement.getQuantity() ) {
+
+            if(resourceInWareHouse) {
+                try {
+                    wareHouse.resourceResourcefromWareHouse(resourceRequirement.getResource());
+                    i++;
+                }
+                catch (IllegalArgumentException e) {
+                    resourceInWareHouse = false;
+                }
+            }
+            else {
+                strongBox.removeResource(resourceRequirement.getResource());
+                i++;
+            }
         }
     }
 

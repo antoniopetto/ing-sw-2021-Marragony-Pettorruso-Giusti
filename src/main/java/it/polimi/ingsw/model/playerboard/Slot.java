@@ -1,8 +1,9 @@
 package it.polimi.ingsw.model.playerboard;
 
+import it.polimi.ingsw.model.cards.Card;
 import it.polimi.ingsw.model.cards.DevelopmentCard;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Stack;
 
 /**
  * This class represents the Slot.
@@ -12,7 +13,7 @@ import java.util.List;
  */
 public class Slot {
 
-    private List<DevelopmentCard> developmentCardList;
+    private final Stack<DevelopmentCard> developmentCardList;
     private final int id;
 
     /**
@@ -20,7 +21,7 @@ public class Slot {
      * @param id  It identifies this slot
      */
     public Slot(int id){
-        this.developmentCardList = new ArrayList<>();
+        this.developmentCardList = new Stack<>();
         this.id = id;
     }
 
@@ -30,9 +31,7 @@ public class Slot {
      *
      * @return the last <code>DevelopmentCard</code> inserted in this slot
      */
-    public DevelopmentCard getLastCard(){
-        return this.developmentCardList.get(developmentCardList.size()-1);
-    }
+    public DevelopmentCard getLastCard(){ return this.developmentCardList.peek(); }
 
     /**
      *
@@ -40,38 +39,29 @@ public class Slot {
      */
     public List<DevelopmentCard> getDevelopmentCardList() { return developmentCardList; }
 
+    public boolean tryAddCard(DevelopmentCard dCard){ return isEmpty() || dCard.isLevelHigher(getLastCard()); }
     /**
      * Returns true when the slot contains no cards or if the card the player, wants to insert, has only one level more than the last one inserted
      * @param dCard The <code>DevelopmentCard</code> that the player wants to insert
      * @return true if is possible to insert dCard in this slot alternatively false
      */
-    public boolean addCard(DevelopmentCard dCard){
-        if(isEmpty() || dCard.isLevelHigher(getLastCard()) )
-        {
-            this.developmentCardList.add(dCard);
-            return true;
-        }
-        return false;
-    }
+    public void addCard(DevelopmentCard dCard){ this.developmentCardList.add(dCard); }
 
     /**
      *
      * @return the total of points given by the sum of the <code>VictoryPoints</code> of each single card
      */
     public int countCardPoints(){
-        int totalCardPoints = 0;
-        for(DevelopmentCard developmentCard : this.developmentCardList)
-            totalCardPoints += developmentCard.getVictoryPoints();
 
-        return totalCardPoints;
+        return this.developmentCardList.stream()
+                                            .map(Card::getVictoryPoints)
+                                                .reduce(0, Integer::sum);
     }
 
     /**
      *
      * @return true if the slot contains no <code>DevelopmentCards</code>
      */
-    public boolean isEmpty(){
-        if(this.developmentCardList.size()==0) return true;
-            else return false;
-    }
+    public boolean isEmpty(){ return this.developmentCardList.size() == 0; }
+
 }

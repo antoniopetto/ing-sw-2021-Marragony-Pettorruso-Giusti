@@ -2,7 +2,9 @@ package it.polimi.ingsw.model.playerboard;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
+
 
 /**
  * This class represents the WareHouse
@@ -12,8 +14,7 @@ import java.util.stream.Collectors;
  * @see Resource
  */
 public class WareHouse {
-    private List<Depot> depotList;
-    private DepotName depotName;
+    private final List<Depot> depotList;
     private boolean isFirstExtraDepot;
 
     /**
@@ -40,10 +41,13 @@ public class WareHouse {
      */
     public void createExtraDepot(Resource r){
         DepotName dExtraName;
-        if(isFirstExtraDepot) dExtraName =DepotName.FIRST_EXTRA;
-            else dExtraName = DepotName.SECOND_EXTRA;
+        if(isFirstExtraDepot){
+            dExtraName =DepotName.FIRST_EXTRA;
+            isFirstExtraDepot = false;
+        }
+        else dExtraName = DepotName.SECOND_EXTRA;
 
-            this.depotList.add( new Depot(dExtraName, dExtraName.getCapacity(), r));
+        this.depotList.add( new Depot(dExtraName, dExtraName.getCapacity(), r));
     }
 
     /**
@@ -52,23 +56,23 @@ public class WareHouse {
      *
      * @param depotName indicates in which Depot to add the <code>Resource</code> r
      * @param r is the <code>Resource</code> that the player wants to insert in the WareHouse
-     * @param quantity is the number of resources to insert
      * @return true if there is an empty space of the select Depot in which to insert the <code>Resource</code>
      */
-    public boolean isInsertable(DepotName depotName, Resource r, int quantity){
+    public boolean isInsertable(DepotName depotName, Resource r){
         Depot depotToInsert = this.depotList.get(depotName.getPosition());
 
-        List<Depot> depotList1 = this.depotList.stream()
-                                                    .filter(d -> !d.getName().equals(depotName))
-                                                        .collect(Collectors.toList());
+        List<Depot> depotList1 =  this.depotList.stream()
+                                                    .filter(d -> !d.getName().equals(depotName) )
+                                                            .filter(d -> d.getConstraint().isEmpty())
+                                                                    .collect(Collectors.toList());
+
 
         for(Depot depot : depotList1) if(depot.getResource().equals(r)) return false;
 
-        if( (depotToInsert.isEmpty() && quantity <= depotToInsert.getCapacity()) ||
-                (depotToInsert.getResource().equals(r) && quantity <= depotToInsert.spaceAvailable()))
+        if( depotToInsert.isEmpty() || (depotToInsert.getResource().equals(r) && !depotToInsert.isFull()))
         {
-            this.insert(depotToInsert,r,quantity);
-            return true;
+            this.insert(depotToInsert,r);
+                return true;
         }
         else return false;
 
@@ -76,24 +80,39 @@ public class WareHouse {
 
     /**
      * Inserts the number of <code>Resources</code> r in the 'depot' Depot
-     *
+     * @param depot the depot in which to place the resource
+     * @param r the Resource to add
      */
-    public void insert(Depot depot, Resource r, int quantity){ for(int i = 0; i < quantity; i++) depot.addResource(r); }
+    public void insert(Depot depot, Resource r){ depot.addResource(r); }
 
     /**
-     * Exchanges resources between the two depots (depotName1 and depotName2)
+     * depotName1 and depotName2 are the names of the Depots to compare
+     *
+     * @return true if the total number of resources in the 'depotName1' Depot is less than / equal to the total capacity of the 'depotName2' Depot
+     */
+    private boolean compareTwoDepots(DepotName depotName1, DepotName depotName2){
+        return  this.depotList.get(depotName1.getPosition()).getQuantity() <= this.depotList.get(depotName2.getPosition()).getCapacity();
+    }
+
+    /**
+     *
+     * @param depotName the DepotName of the Depot to analyze
+     * @return true if 'DepotName' Depot contains no constraint and so it isn't a ExtraDepot
+     */
+    private boolean isNotExtraDepot(DepotName depotName){
+        return this.depotList.get(depotName.getPosition()).getConstraint().isEmpty();
+    }
+
+    /**
+     * Exchanges resources between the two depots (depotName1 and depotName2), ExtraDepots are not included
      *
      * @param depotName1 the Depot from which to take the resources to be exchanged
      * @param depotName2 the Depot with which to exchange resources
      * @exception IllegalArgumentException if It isn't possible switch the Resources between Depots
      */
     public void switchDepots(DepotName depotName1, DepotName depotName2){
-        if(this.depotList.get(depotName1.getPosition()).getQuantity() <= this.depotList.get(depotName2.getPosition()).getCapacity() &&
-                this.depotList.get(depotName2.getPosition()).getQuantity() <= this.depotList.get(depotName1.getPosition()).getCapacity() &&
-                (!this.depotList.get(depotName1.getPosition()).getConstraint().isPresent() ||
-                        this.depotList.get(depotName1.getPosition()).getConstraint().equals(this.depotList.get(depotName2.getPosition()).getResource()))
-            && (!this.depotList.get(depotName2.getPosition()).getConstraint().isPresent() ||
-                this.depotList.get(depotName2.getPosition()).getConstraint().equals(this.depotList.get(depotName1.getPosition()).getResource())) )
+        if(  compareTwoDepots(depotName1, depotName2) && compareTwoDepots(depotName2,depotName1)
+               && isNotExtraDepot(depotName1)  && isNotExtraDepot(depotName2) )
         {
             Resource resourceTmp = this.depotList.get(depotName2.getPosition()).getResource();
             int quantityTmp = this.depotList.get(depotName2.getPosition()).getQuantity();
@@ -112,44 +131,70 @@ public class WareHouse {
 
     }
 
-    private DepotName setDepot(DepotName depotName){
-        return this.depotName = depotName;
-    }
+    /**
+     *
+     * @param r the Resource on which to filter the depots
+     * @return a List of Depots which includes the <code>Depots</code> containing the <code>Resource</code> r
+     */
+    private List<Depot> depotFilter(Resource r){
+         return this.depotList.stream()
+                                    .filter(d -> !d.isEmpty())
+                                            .filter(d -> d.getResource().equals(r))
+                                                                .collect(Collectors.toList());
 
+    }
     /**
      *
      * @param r the Resource to count
-     * @return the total number of Resources r
+     * @return the total number of Resources r in all the Depots
      */
-    public int totalResourcesofAType( Resource r){
-        int totalResources = 0;
-        for( Depot depot : this.depotList)
-        {
-            if(depot.getResource().equals(r)) {
-                if (!depot.isEmpty()) {
-                    setDepot(depot.getName());
-                    totalResources += depot.getQuantity();
-                }
-            }
-        }
-        return totalResources;
-    }
-
-    public DepotName getDepotName() { return depotName; }
+    public int totalResourcesOfAType( Resource r){ return sumOfResInDepotList(this.depotFilter(r)); }
 
     /**
      * Removes the <code>Resource</code> r  from a Depot that contains it
      * @param r the Resource to remove
      */
-    public void takeResource( Resource r){ this.depotList.get(getDepotName().getPosition()).removeResource(); }
+    public void resourceResourcefromWareHouse( Resource r){
+        Optional<Depot> optional = this.depotFilter(r)
+                                                .stream()
+                                                    .findFirst();
+
+        /*
+        optional.ifPresentOrElse( d -> {
+            DepotName dName = optional
+                    .map(Depot::getName)
+                    .get();//gestire warning
+                },
+                () -> {
+                throw new IllegalArgumentException("Problema");
+                }
+                );
+        */
+
+        if(optional.isEmpty()) throw new IllegalArgumentException(" There is no Resource r in WareHouse ");
+
+        DepotName dName = optional
+                            .map(Depot::getName)
+                                .get();//gestire warning
+
+        this.depotList.get(dName.getPosition()).removeResourceFromDepot();
+
+    }
 
     /**
      *
      * @return the total number of resources in WareHouse
      */
-    public int countTotalResources(){
-        int totalResources = 0;
-        for( Depot depot : this.depotList) totalResources += depot.getQuantity();
-        return totalResources;
+    public int countTotalResources(){ return sumOfResInDepotList(this.depotList); }
+
+    /**
+     *
+     * @param depotList the set of Depots on which to calculate the sum
+     * @return the sum of the resources within the various Depots of the depotList
+     */
+    private int sumOfResInDepotList(List<Depot> depotList){
+        return depotList.stream()
+                            .map(Depot::getQuantity)
+                                .reduce(0, Integer::sum);
     }
 }
