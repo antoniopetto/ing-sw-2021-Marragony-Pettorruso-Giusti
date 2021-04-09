@@ -17,7 +17,7 @@ public class Depot {
 
     private final DepotName name;
     private final int capacity;
-    private Optional<Resource> constraint;
+    private final Optional<Resource> constraint;
     private Resource resource;
 
     /**
@@ -38,6 +38,7 @@ public class Depot {
         this.name = name;
         this.quantity = 0;
         this.capacity = capacity;
+        this.constraint = Optional.empty();
     }
 
     public void setQuantity(int quantity) { this.quantity = quantity; }
@@ -57,7 +58,7 @@ public class Depot {
      * @return the type of <code>Resource</code> inserted in the Depot
      */
     public Resource getResource(){
-        if(this.isEmpty()) return Resource.EMPTY;
+        if(this.isEmpty()) throw new IllegalArgumentException("It is no resource");
             else return this.resource;
     }
 
@@ -70,17 +71,26 @@ public class Depot {
      * @exception IllegalArgumentException if the Depot is an ExtraDepot and the Resource r type is not equal to constraint
      */
     public void addResource(Resource r) {
-        if(this.constraint.equals(r) || !constraint.isPresent()){
-            if(this.isEmpty()) this.resource = constraint.orElse(r);
+
+        if( constraint.isEmpty() ||  this.constraint.get().equals(r)){
+            if(this.isEmpty()) this.resource = r;
+            if(this.isFull()) throw new IllegalArgumentException("The Depot is full!");
             this.quantity++;
         }
         else throw new IllegalArgumentException("The inserted Resource r doesn't match the special resource");
     }
 
     /**
-     * Removes an unit of Resource from the Depot
+     * Removes an unit of Resource from the Depot if this Depot is not Empty
+     *
+     * @exception IllegalArgumentException when there is no Resource in this Depot
      */
-    public void removeResource(){ this.quantity--; }
+    public void removeResourceFromDepot(){
+
+        if(!this.isEmpty()) this.quantity--;
+            else throw new IllegalArgumentException("There is no Resource  in this Depot");
+
+    }
 
     /**
      *
@@ -90,9 +100,9 @@ public class Depot {
 
     /**
      *
-     * @return total empty spaces in the Depot
+     * @return true if the Depot has no space available
      */
-    public int spaceAvailable(){
-        return this.getCapacity()-this.getQuantity();
+    public boolean isFull(){
+        return this.getCapacity()==this.getQuantity();
     }
 }

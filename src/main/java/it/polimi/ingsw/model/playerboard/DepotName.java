@@ -7,10 +7,10 @@ public enum DepotName {
     FIRST_EXTRA (2, 3),
     SECOND_EXTRA (2, 4);
 
-    private int capacity;
-    private int position;
+    private final int capacity;
+    private final int position;
 
-    private DepotName(int capacity, int position) {
+    DepotName(int capacity, int position) {
         this.capacity = capacity;
         this.position = position;
     }
