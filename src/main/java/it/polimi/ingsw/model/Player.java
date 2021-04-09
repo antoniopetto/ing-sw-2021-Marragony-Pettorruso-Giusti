@@ -4,6 +4,7 @@ import it.polimi.ingsw.model.cards.LeaderCard;
 import it.polimi.ingsw.model.cards.DevelopmentCard;
 import it.polimi.ingsw.model.cards.LeaderCard;
 import it.polimi.ingsw.model.cards.ProductionPower;
+import it.polimi.ingsw.model.exceptions.NotAffordableException;
 import it.polimi.ingsw.model.playerboard.*;
 import it.polimi.ingsw.model.shared.Position;
 
@@ -40,7 +41,10 @@ public class Player {
         }
         counter += playerBoard.countVictoryPoints();
         counter += position.getVictoryPoints();
-        // add leaderCardPoints
+        for (LeaderCard card:leaderCardList) {
+            if(card.isPlayed())
+                counter+=card.getVictoryPoints();
+        }
         return counter;
     }
 
@@ -86,10 +90,17 @@ public class Player {
         else return false;
     }
 
+    /**
+     * This method is used to discard a leader card
+     * @param cardId is the id of the card to discard
+     */
     public void discardLeaderCard(int cardId)
     {
         if(cardId!=0&&cardId!=1) throw new IllegalArgumentException("Invalid id number");
         leaderCardList.remove(cardId);
     }
 
+    public void activateProduction(Set<Integer> selectedCardIds, Map<Integer, ProductionPower> selectedExtraPowers) throws NotAffordableException {
+        playerBoard.activateProduction(selectedCardIds, selectedExtraPowers);
+    }
 }
