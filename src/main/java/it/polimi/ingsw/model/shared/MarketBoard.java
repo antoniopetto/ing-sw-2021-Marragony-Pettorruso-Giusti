@@ -40,7 +40,7 @@ public class MarketBoard {
     }
 
     /**
-     * Constructs the MarketBoard restoring a .
+     * Constructs the MarketBoard restoring a previous game.
      *
      * @param marbles                       The list of input <code>Marble</code>,
      *                                      ordered row by row, the 13th being the spare one.

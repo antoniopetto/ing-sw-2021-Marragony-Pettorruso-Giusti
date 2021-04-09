@@ -10,14 +10,17 @@ public class Position {
     private final OptionalInt sectionNumber;
 
     Position(int number, int victoryPoints, boolean popeSpace){
-        this(number, victoryPoints, popeSpace, OptionalInt.empty());
-    }
-
-    Position(int number, int victoryPoints, boolean popeSpace, OptionalInt sectionNumber){
         this.number = number;
         this.victoryPoints = victoryPoints;
         this.popeSpace = popeSpace;
-        this.sectionNumber = sectionNumber;
+        this.sectionNumber = OptionalInt.empty();
+    }
+
+    Position(int number, int victoryPoints, boolean popeSpace, int sectionNumber){
+        this.number = number;
+        this.victoryPoints = victoryPoints;
+        this.popeSpace = popeSpace;
+        this.sectionNumber = OptionalInt.of(sectionNumber);
     }
 
     public int getNumber() { return number; }

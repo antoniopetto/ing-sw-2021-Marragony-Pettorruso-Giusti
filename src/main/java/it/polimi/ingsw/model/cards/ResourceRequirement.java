@@ -13,7 +13,7 @@ public class ResourceRequirement implements Requirement{
     private final int quantity;
     private final Resource resource;
 
-    public ResourceRequirement(int quantity, Resource resource) {
+    public ResourceRequirement(Resource resource, int quantity) {
         this.quantity = quantity;
         this.resource = resource;
     }

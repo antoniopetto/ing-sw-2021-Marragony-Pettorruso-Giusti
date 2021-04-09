@@ -7,15 +7,16 @@ import it.polimi.ingsw.model.playerboard.Resource;
  * This class represents the extra production power ability. The attribute resource represents the input resource of
  * the production power
  */
-public class ExtraProductionPower implements SpecialAbility{
-    private final Resource resource;
+public class ExtraProductionAbility implements SpecialAbility{
+    private final ProductionPower productionPower;
 
-    public ExtraProductionPower(Resource resource) {
-        this.resource = resource;
+    public ExtraProductionAbility(ProductionPower productionPower) {
+        this.productionPower = productionPower;
     }
 
     @Override
     public void activateAbility(Player player) {
-        player.setExtraProductionPower(this.resource);
+
+        player.getPlayerBoard().addExtraProductionPower(productionPower);
     }
 }
