@@ -7,20 +7,13 @@ public class Position {
     private final int number;
     private final int victoryPoints;
     private final boolean popeSpace;
-    private final OptionalInt sectionNumber;
-
-    Position(int number, int victoryPoints, boolean popeSpace){
-        this.number = number;
-        this.victoryPoints = victoryPoints;
-        this.popeSpace = popeSpace;
-        this.sectionNumber = OptionalInt.empty();
-    }
+    private final int sectionNumber;
 
     Position(int number, int victoryPoints, boolean popeSpace, int sectionNumber){
         this.number = number;
         this.victoryPoints = victoryPoints;
         this.popeSpace = popeSpace;
-        this.sectionNumber = OptionalInt.of(sectionNumber);
+        this.sectionNumber = sectionNumber;
     }
 
     public int getNumber() { return number; }
@@ -29,5 +22,5 @@ public class Position {
 
     public boolean isPopeSpace(){ return popeSpace; }
 
-    public OptionalInt sectionNumber(){ return sectionNumber; }
+    public int sectionNumber(){ return sectionNumber; }
 }

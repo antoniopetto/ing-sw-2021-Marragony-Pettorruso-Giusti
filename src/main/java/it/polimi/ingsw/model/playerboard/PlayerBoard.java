@@ -115,7 +115,7 @@ public class PlayerBoard {
     /**
      * This method implements the logic behind the action of activating the production in a player's turn.
      * It receives from the user all the elements to identify what <code>ProductionPower</code>, regular or special,
-     * that he wants to activate. Moreover, in association with the <code>id</code> of every special <code>ProductionPower</code>,
+     * he wants to activate. Moreover, in association with the <code>id</code> of every special <code>ProductionPower</code>,
      * it requires a <code>ProductionPower</code> that represents all of its agnostic <code>Resources</code> after being determined.
      * The method first checks if the player can afford to activate these effects all at once, and if so proceeds.
      *
