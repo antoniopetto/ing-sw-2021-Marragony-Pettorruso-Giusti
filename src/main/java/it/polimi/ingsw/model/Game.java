@@ -5,6 +5,7 @@ import it.polimi.ingsw.model.cards.DevelopmentCard;
 import it.polimi.ingsw.model.cards.DevelopmentCardDecks;
 import it.polimi.ingsw.model.cards.ResourceRequirement;
 import it.polimi.ingsw.model.playerboard.Resource;
+import it.polimi.ingsw.model.shared.FaithTrack;
 import it.polimi.ingsw.model.shared.MarketBoard;
 
 import java.util.ArrayList;
@@ -19,6 +20,15 @@ public class Game {
     private final List<Player> players = new ArrayList<>();
     private MarketBoard marketBoard = new MarketBoard();
     private DevelopmentCardDecks developmentCardDecks;
+    private FaithTrack track;
+
+    public Optional<SoloRival> getSoloRival() {
+        return soloRival;
+    }
+
+    public FaithTrack getTrack() {
+        return track;
+    }
 
     public static Game newSinglePlayerGame(String username) {
         return new Game(username);
@@ -33,6 +43,7 @@ public class Game {
         players.add(new Player(username));
         soloRival = Optional.of(new SoloRival());
     }
+
 
     private Game(List<String> usernames) {
         if (usernames.size() > 4 || usernames.size() < 2)
@@ -53,6 +64,13 @@ public class Game {
                 .findFirst().orElse(null);
     }
 
+    public void singlePlayerTurn()
+    {
+        if(soloRival.isPresent())
+            soloRival.get().soloTurn(this);
+        else
+            throw new IllegalStateException("Not a single player game");
+    }
     public MarketBoard getMarketBoard() {
         return marketBoard;
     }

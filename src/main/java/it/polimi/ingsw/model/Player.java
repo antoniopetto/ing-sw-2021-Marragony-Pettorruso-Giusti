@@ -9,11 +9,11 @@ import it.polimi.ingsw.model.shared.Position;
 
 import java.util.*;
 
-public class Player {
+public class Player extends AbstractPlayer{
 
     private int idSlotSelect;
     private final String username;
-    private Position position;
+
     private final List<PopeFavourTile> tiles = new ArrayList<>();
     private final PlayerBoard playerBoard = new PlayerBoard();
     private final Set<Resource> activeDiscount = new HashSet<>();
@@ -41,7 +41,7 @@ public class Player {
             counter += t.isGained() ? t.getValue() : 0;
         }
         counter += playerBoard.countVictoryPoints();
-        counter += position.getVictoryPoints();
+        counter += super.getPosition().getVictoryPoints();
         for (LeaderCard card:leaderCardList) {
             if(card.isPlayed())
                 counter+=card.getVictoryPoints();
@@ -69,9 +69,7 @@ public class Player {
         whiteMarbleAliases.add(resource);
     }
 
-    public Position getPosition() { return position; }
 
-    public void setPosition(Position position) { this.position = position; }
 
     /**
      * This method is used to play a Leader card

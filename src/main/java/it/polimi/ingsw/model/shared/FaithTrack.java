@@ -1,5 +1,6 @@
 package it.polimi.ingsw.model.shared;
 
+import it.polimi.ingsw.model.AbstractPlayer;
 import it.polimi.ingsw.model.Player;
 
 import java.util.*;
@@ -60,7 +61,7 @@ public class FaithTrack {
 
     }
 
-    public void advance(Player player){
+    public void advance(AbstractPlayer player){
 
         int currentIndex = track.indexOf(player.getPosition());
         if(track.get(currentIndex).getNumber() == LAST_POSITION)
