@@ -1,5 +1,7 @@
 package it.polimi.ingsw.model.cards;
 
+import java.util.List;
+
 /**
  * This class represents a development card and extends the abstract class "Card". It has an integer attribute for the
  * level, a CardColor attribute for the color, a ResourceRequirement attribute for its requirements and a ProductionPower
@@ -8,15 +10,15 @@ package it.polimi.ingsw.model.cards;
 public class DevelopmentCard extends Card{
     private final int level;
     private final CardColor color;
-    private final ResourceRequirement requirement;
+    private final List<ResourceRequirement> requirements;
     private final ProductionPower power;
 
-    public DevelopmentCard(int victoryPoints, int level, CardColor color, ResourceRequirement requirement, ProductionPower power)
+    public DevelopmentCard(int victoryPoints, int level, CardColor color, List<ResourceRequirement> requirements, ProductionPower power)
     {
         super(victoryPoints);
         this.level = level;
         this.color = color;
-        this.requirement = requirement;
+        this.requirements = requirements;
         this.power = power;
     }
 
@@ -32,8 +34,8 @@ public class DevelopmentCard extends Card{
         return power;
     }
 
-    public ResourceRequirement getRequirement() {
-        return requirement;
+    public List<ResourceRequirement> getRequirement() {
+        return requirements;
     }
 
     /**

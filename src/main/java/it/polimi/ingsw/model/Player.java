@@ -18,7 +18,6 @@ public class Player {
     private final PlayerBoard playerBoard = new PlayerBoard();
     private final Set<Resource> activeDiscount = new HashSet<>();
     private final Set<Resource> whiteMarbleAliases = new HashSet<>();
-    private final Set<Resource> extraProductionPower = new HashSet<>(); //può andare nella Playerboard
     private List<LeaderCard> leaderCardList;
 
 
