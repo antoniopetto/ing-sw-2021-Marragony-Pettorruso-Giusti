@@ -29,7 +29,7 @@ public class ProductionPower extends Identifiable {
         super(id);
         this.agnosticInput = agnosticInput;
         this.agnosticOutput = agnosticOutput;
-        if(inputResources.get(Resource.FAITH) != 0){
+        if(!(inputResources.isEmpty())&&inputResources.get(Resource.FAITH) != 0){
             throw new IllegalArgumentException("Cannot have Faith as input resource");
         }
         this.inputResources = inputResources;
