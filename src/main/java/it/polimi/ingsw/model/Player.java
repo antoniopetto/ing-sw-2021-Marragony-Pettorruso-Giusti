@@ -135,6 +135,8 @@ public class Player extends AbstractPlayer{
 
     }
 
+
+
     @Override
     public void vaticanReportEffect(int tileNumber) {
         tiles.get(tileNumber).gain();

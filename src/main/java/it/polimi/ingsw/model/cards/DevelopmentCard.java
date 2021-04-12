@@ -41,10 +41,10 @@ public class DevelopmentCard extends Card{
     /**
      *this method confront the levels of two cards
      * @param card is the other card to confront
-     * @return true if the level of this is higher than the level of card
+     * @return true if the level of this is higher by 1 than the level of <code>card</code>
      */
     public boolean isLevelHigher(DevelopmentCard card)
     {
-        return this.level> card.getLevel();
+        return this.level== card.getLevel()+1;
     }
 }

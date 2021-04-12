@@ -44,7 +44,7 @@ public class CardRequirement implements Requirement{
                 {
                     if(level.isPresent())
                     {
-                        if(level.get().equals(card.getLevel()))
+                        if(level.get()<=card.getLevel())
                             needed--;
                     }
                     else needed--;

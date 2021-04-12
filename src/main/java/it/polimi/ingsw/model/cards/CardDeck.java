@@ -14,6 +14,7 @@ public class CardDeck {
     private final Stack<DevelopmentCard> deck = new Stack<DevelopmentCard>();
 
     public CardDeck(int level, CardColor color) {
+        if(level<1||level>3) throw new IllegalStateException("Illegal level");
         this.level = level;
         this.color = color;
     }
@@ -34,11 +35,11 @@ public class CardDeck {
     /**
      * The method adds a card in the stack and if the stack is full it gets shuffled.
      * @param card the card which is added
-     * @throws Exception if the deck is full
      */
-    public void add(DevelopmentCard card) throws Exception {
+    public void add(DevelopmentCard card) {
+        if(!belongs(card)) throw new IllegalArgumentException("Card doesn't belong to this deck");
         if(deck.size()==num_of_cards)
-            throw new Exception();
+            throw new IllegalStateException("The deck il full");
         deck.push(card);
         if(deck.size()==num_of_cards)
         {
@@ -52,12 +53,10 @@ public class CardDeck {
     /**
      * The method remove the card on top of the stack
      * @return the card removed
-     * @throws Exception if the deck is empty
+     * @throws EmptyStackException if the deck is empty
      */
-    public DevelopmentCard pop() throws Exception {
+    public DevelopmentCard pop()  throws EmptyStackException{
 
-        if(deck.empty())
-            throw new Exception();
         return deck.pop();
     }
 
@@ -74,8 +73,9 @@ public class CardDeck {
 
     /**
      * @return the element on top of the deck without removing it
+     * @throws EmptyStackException if the deck is empty
      */
-    public DevelopmentCard peek(){
+    public DevelopmentCard peek()throws EmptyStackException{
         return deck.peek();
     }
 
