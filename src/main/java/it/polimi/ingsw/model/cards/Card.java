@@ -11,9 +11,9 @@ public abstract class Card extends Identifiable {
 
     private final int victoryPoints;
 
-    public Card(int victoryPoints)
+    public Card(int id, int victoryPoints)
     {
-        super();
+        super(id);
         this.victoryPoints = victoryPoints;
     }
 

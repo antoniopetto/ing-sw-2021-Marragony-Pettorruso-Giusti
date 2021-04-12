@@ -32,7 +32,6 @@ public class PlayerBoard {
         this.slotList.add( new Slot(1));
         this.slotList.add( new Slot(2));
         this.slotList.add( new Slot(3));
-        addExtraProductionPower(new ProductionPower(2, 1));
     }
 
     public WareHouse getWareHouse() { return wareHouse; }
@@ -52,7 +51,7 @@ public class PlayerBoard {
      *
      * @param developmentCard is the <code>DevelopmentCard</code> the player tries to add
      * @param idSlot represents the number of the <code>Slot</code> in which to insert the <code>DevelopmentCard</code>
-     * @return true if it passes all checks in the 'idSlot' <code>Slot</code> and then add the developmentCard in the slot
+     *
      */
     public void addCard(DevelopmentCard developmentCard, int idSlot){
         if(slotList.get(idSlot).tryAddCard(developmentCard)) slotList.get(idSlot).addCard(developmentCard);
@@ -207,7 +206,7 @@ public class PlayerBoard {
      * @return                         A <code>List</code> with the first element of each of the <code>Slot</code>s
      */
     private List<DevelopmentCard> getLastDevCards(){
-        //TODO implemented as if the slots are implemented via stacks, as we were saying
+
         List<DevelopmentCard> lastDevCards = new ArrayList<>();
         for (Slot s : slotList){
             try{
@@ -238,21 +237,25 @@ public class PlayerBoard {
      */
     private boolean specialProductionConsistent(ProductionPower power, ProductionPower chosenResources) {
 
+        if(chosenResources.getAgnosticInput() != 0 || chosenResources.getAgnosticOutput() != 0)
+            return false;
         var chosenInput = chosenResources.getInputResources();
         var chosenOutput = chosenResources.getOutputResources();
 
         if(chosenInput.containsKey(Resource.FAITH) || chosenOutput.containsKey(Resource.FAITH))
             return false;
-        /*
-        if(power.getAgnosticInput() != chosenInput.entrySet().stream()
-                                                  .mapToInt(entry -> entry.getValue())
-                                                  .reduce(0, a, b -> a + b, Integer::sum))
-            return false;*/
+
+        if(power.getAgnosticInput() != chosenInput.values().stream().mapToInt(Integer::intValue).sum())
+            return false;
+
+        if(power.getAgnosticOutput() != chosenInput.values().stream().mapToInt(Integer::intValue).sum())
+            return false;
+
         return true;
     }
 
     /**
-     * Adds a new possibly agnostic <code>ProductioPower</code> to the <code>extraProductionPower</code>
+     * Adds a new possibly agnostic <code>ProductionPower</code> to the <code>extraProductionPower</code>
      *
      * @param productionPower           The power to add
      */

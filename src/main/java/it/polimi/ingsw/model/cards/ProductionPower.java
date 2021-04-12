@@ -17,16 +17,16 @@ public class ProductionPower extends Identifiable {
     private final int agnosticInput;
     private final int agnosticOutput;
 
-    public ProductionPower(int agnosticInput, int agnosticOutput) {
-        this(new HashMap<>(), new HashMap<>(), agnosticInput, agnosticOutput);
+    public ProductionPower(int id, int agnosticInput, int agnosticOutput) {
+        this(id, new HashMap<>(), new HashMap<>(), agnosticInput, agnosticOutput);
     }
 
-    public ProductionPower(Map<Resource, Integer> inputResources, Map<Resource, Integer> outputResources) {
-        this(inputResources, outputResources, 0,0);
+    public ProductionPower(int id, Map<Resource, Integer> inputResources, Map<Resource, Integer> outputResources) {
+        this(id, inputResources, outputResources, 0,0);
     }
 
-    public ProductionPower(Map<Resource, Integer> inputResources, Map<Resource, Integer> outputResources, int agnosticInput, int agnosticOutput) {
-        super();
+    public ProductionPower(int id, Map<Resource, Integer> inputResources, Map<Resource, Integer> outputResources, int agnosticInput, int agnosticOutput) {
+        super(id);
         this.agnosticInput = agnosticInput;
         this.agnosticOutput = agnosticOutput;
         if(inputResources.get(Resource.FAITH) != 0){

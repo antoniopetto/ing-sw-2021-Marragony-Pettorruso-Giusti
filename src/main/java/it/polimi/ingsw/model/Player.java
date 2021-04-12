@@ -134,4 +134,9 @@ public class Player extends AbstractPlayer{
         return marbleList;
 
     }
+
+    @Override
+    public void vaticanReportEffect(int tileNumber) {
+        tiles.get(tileNumber).gain();
+    }
 }

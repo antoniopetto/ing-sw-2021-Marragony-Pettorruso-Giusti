@@ -8,4 +8,5 @@ public abstract class AbstractPlayer {
     public Position getPosition() { return position; }
 
     public void setPosition(Position position) { this.position = position; }
+    abstract public void vaticanReportEffect(int tileNumber);
 }

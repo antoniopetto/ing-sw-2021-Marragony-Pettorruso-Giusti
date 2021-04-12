@@ -1,7 +1,6 @@
 package it.polimi.ingsw.model.shared;
 
 import it.polimi.ingsw.model.AbstractPlayer;
-import it.polimi.ingsw.model.Player;
 
 import java.util.*;
 
@@ -14,7 +13,7 @@ public class FaithTrack {
     private int vaticanReportCounter = 0;
 
 
-    FaithTrack(List<AbstractPlayer> players, Map<Integer, Integer> victoryPointMap, int[][] sectionRanges){
+    FaithTrack(List<AbstractPlayer> players, Map<Integer, Integer> victoryPointsMap, int[][] sectionRanges){
 
         if (!legalSectionRanges(sectionRanges))
             throw new IllegalArgumentException("Illegal section ranges in configuration");
@@ -25,8 +24,8 @@ public class FaithTrack {
 
         for(int i = 1; i <= LAST_POSITION; i++){
 
-            int currentVictoryPoints = victoryPointMap.containsKey(i) ?
-                    victoryPointMap.get(i) : track.get(i-1).getVictoryPoints();
+            int currentVictoryPoints = victoryPointsMap.containsKey(i) ?
+                    victoryPointsMap.get(i) : track.get(i-1).getVictoryPoints();
 
             boolean popeSpace = false;
             for(int j = 0; j < N_SECT; j++)
@@ -61,6 +60,7 @@ public class FaithTrack {
      * @return          The section number if inside one, 0 otherwise.
      */
     private int posToSectionNumber(int pos, int[][] ranges){
+
         for (int i = 0; i < N_SECT; i++){
             if (ranges[i][0] <= pos && pos <= ranges[i][1])
                 return i + 1;
@@ -73,13 +73,13 @@ public class FaithTrack {
         vaticanReportCounter++;
         for (AbstractPlayer p : players){
             if (p.getPosition().sectionNumber() == vaticanReportCounter)
-                p.getTiles().get(vaticanReportCounter).gain();
+                p.vaticanReportEffect(vaticanReportCounter + 1);
         }
     }
 
-    private boolean isAbsoluteFirst(Player player){
+    private boolean isAbsoluteFirst(AbstractPlayer player){
 
-        for(Player p : players)
+        for(AbstractPlayer p : players)
             if(!p.equals(player) && player.getPosition().getNumber() <= p.getPosition().getNumber())
                 return false;
         return true;
@@ -97,13 +97,15 @@ public class FaithTrack {
         }
     }
 
-    public void advanceAllBut(AbstractPlayer excludedPlayer){
+    public void
+    advanceAllBut(AbstractPlayer excludedPlayer){
 
         boolean isVaticanReportDue = false;
 
-        for(Player p : players){
+        for(AbstractPlayer p : players){
             Position currentPos = p.getPosition();
             int currentIndex = track.indexOf(currentPos);
+
             if(!p.equals(excludedPlayer) && currentPos.getNumber() < LAST_POSITION)
                 p.setPosition(track.get(currentIndex + 1));
                 if (p.getPosition().isPopeSpace() && isAbsoluteFirst(p))

@@ -41,4 +41,9 @@ public class SoloRival extends AbstractPlayer{
             activeTokens.push(token);
         discardedTokens.clear();
     }
+
+    @Override
+    public void vaticanReportEffect(int tileNumber) {
+        return;
+    }
 }
