@@ -14,7 +14,7 @@ public class CardDeckTest {
     private List<DevelopmentCard> cards = new ArrayList<>();
     private CardDeck deck;
 
-    @Test (expected = IllegalStateException.class)
+    @Test
     public void constructorTest(){
         try
         {
@@ -22,8 +22,17 @@ public class CardDeckTest {
         }catch (IllegalStateException e){
             fail();
         }
-        CardDeck deck1 = new CardDeck(5, CardColor.BLUE);
-        fail();
+        //tries to create a deck with an invalid level number
+        try
+        {
+            CardDeck deck1 = new CardDeck(5, CardColor.BLUE);
+            fail();
+        }catch (IllegalArgumentException e)
+        {
+            assertTrue(true);
+        }
+
+
 
 
     }
@@ -60,12 +69,14 @@ public class CardDeckTest {
         DevelopmentCard card5= new DevelopmentCard(9, 0,2, CardColor.BLUE, null, null);
         CardDeck deck1 = new CardDeck(2, CardColor.BLUE);
         boolean shuffled = false;
+        //tries to add a card with wrong color or level
         try {
             deck.add(cards.get(0));
             fail();
         }catch (IllegalArgumentException e){
             assertTrue(true);
         }
+        //tries to add the same 4 cards in two decks and checks that they are shuffled
         try {
             deck.add(card1);
             deck.add(card2);
@@ -85,6 +96,7 @@ public class CardDeckTest {
         {
             fail();
         }
+        //tries to add 5 cards in a deck
         try {
             deck.add(card1);
             deck.add(card2);
@@ -103,12 +115,14 @@ public class CardDeckTest {
     @Test
     public void popTest()
     {
+        //tries to do the pop of an empty deck
         try {
             deck.pop();
             fail();
         }catch (EmptyStackException e){
             assertTrue(true);
         }
+        //checks that the pop works properly
         deck.add(cards.get(1));
         assertEquals(cards.get(1), deck.pop());
     }
@@ -125,6 +139,7 @@ public class CardDeckTest {
     @Test
     public void peekTest()
     {
+        //tries to read the peek of an empty deck
         try{
             deck.peek();
             fail();
@@ -132,6 +147,7 @@ public class CardDeckTest {
         {
             assertTrue(true);
         }
+        //checks if the method works properly on a deck with 2 cards
         DevelopmentCard card1 = new DevelopmentCard(5, 0, 2, CardColor.BLUE, null, null);
         DevelopmentCard card2 = new DevelopmentCard(6, 0, 2, CardColor.BLUE, null, null);
         deck.add(card1);
@@ -147,6 +163,7 @@ public class CardDeckTest {
     @Test
     public void sizeTest()
     {
+        //checks if the size returned is equal to 2 for a deck with 2 cards
         DevelopmentCard card1 = new DevelopmentCard(5,0, 2, CardColor.BLUE, null, null);
         DevelopmentCard card2 = new DevelopmentCard(6,0, 2, CardColor.BLUE, null, null);
         deck.add(card1);

@@ -11,10 +11,10 @@ public class CardDeck {
     private static final int num_of_cards = 4;
     private final int level;
     private final CardColor color;
-    private final Stack<DevelopmentCard> deck = new Stack<DevelopmentCard>();
+    private final Stack<DevelopmentCard> deck = new Stack<>();
 
     public CardDeck(int level, CardColor color) {
-        if(level<1||level>3) throw new IllegalStateException("Illegal level");
+        if(level<1||level>3) throw new IllegalArgumentException("Illegal level");
         this.level = level;
         this.color = color;
     }

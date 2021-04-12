@@ -10,15 +10,15 @@ import java.util.*;
  * ArrayList decks.
  */
 public class DevelopmentCardDecks {
-    private final List<CardDeck> decks=new ArrayList<CardDeck>();
+    private final List<CardDeck> decks=new ArrayList<>();
 
     /**
      * The constructor creates 12 decks with all the possible combinations of colors and levels and add each card
      * in the List received into the right deck
      * @param cards is a list of development cards which have to be divided in different decks.
+     * @throws IllegalStateException if more than 4 cards in <code>cards</code> belong to a deck
      */
-    public DevelopmentCardDecks(List<DevelopmentCard> cards)  {
-        Iterator<DevelopmentCard> iterator = cards.iterator();
+    public DevelopmentCardDecks(List<DevelopmentCard> cards)  throws IllegalStateException{
         decks.add(new CardDeck(1, CardColor.GREEN));
         decks.add(new CardDeck(2, CardColor.GREEN));
         decks.add(new CardDeck(3, CardColor.GREEN));
@@ -31,21 +31,10 @@ public class DevelopmentCardDecks {
         decks.add(new CardDeck(1, CardColor.PURPLE));
         decks.add(new CardDeck(2, CardColor.PURPLE));
         decks.add(new CardDeck(3, CardColor.PURPLE));
-        while(iterator.hasNext())
-        {
-            DevelopmentCard card = iterator.next(); //provare con funzionale
-            for (CardDeck deck: decks) {
-                if(deck.belongs(card)) {
-                    try{
-                        deck.add(card);
-                    }catch (Exception e){
-                        System.out.println("Deck full");
-                    }
-
-                    break;
-                }
-            }
+        for (CardDeck deck: decks) {
+                cards.stream().filter(deck::belongs).forEach(deck::add);
         }
+
     }
 
     /**
@@ -53,17 +42,13 @@ public class DevelopmentCardDecks {
      * @param color is the color of the deck from which the card is drawn
      * @param level is the level of the deck from which the card is drawn
      * @return the first card of the deck with those color and level.
+     * @throws EmptyStackException if the deck with color=<code>color</code> and level = <code>level</code> is empty
      */
-    public DevelopmentCard drawCard(CardColor color, int level)  {
+    public DevelopmentCard drawCard(CardColor color, int level)  throws EmptyStackException{
+        if(level<1||level>3) throw new IllegalArgumentException("Level value not valid");
         for (CardDeck deck : decks) {
             if (deck.properties(color, level)) {
-                try{
                     return deck.pop();
-                }catch(Exception e)
-                {
-                    System.out.println("Deck empty");
-                }
-
             }
         }
         return null;
@@ -75,7 +60,7 @@ public class DevelopmentCardDecks {
      * @param level is the level of the deck from which the card is read
      * @return the card on top of the deck without removing it
      */
-    public DevelopmentCard readTop(CardColor color, int level)
+    public DevelopmentCard readTop(CardColor color, int level) throws EmptyStackException
     {
         for (CardDeck deck : decks) {
             if (deck.properties(color, level)) {
@@ -93,6 +78,7 @@ public class DevelopmentCardDecks {
      */
     public int deckSize(CardColor color, int level)
     {
+        if(level<1||level>3) throw new IllegalArgumentException("Invalid level value");
         for (CardDeck deck : decks) {
             if (deck.properties(color, level)) {
                 return deck.size();
@@ -118,7 +104,7 @@ public class DevelopmentCardDecks {
                         deck.pop();
                         toDiscard--;
                         if(toDiscard==0) return;
-                    }catch (Exception e)
+                    }catch (EmptyStackException e)
                     {
                         level++;
                         break;
