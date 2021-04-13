@@ -13,7 +13,7 @@ public class FaithTrack {
     private int vaticanReportCounter = 0;
 
 
-    FaithTrack(List<AbstractPlayer> players, Map<Integer, Integer> victoryPointsMap, int[][] sectionRanges){
+    public FaithTrack(List<AbstractPlayer> players, Map<Integer, Integer> victoryPointsMap, int[][] sectionRanges){
 
         if (!legalSectionRanges(sectionRanges))
             throw new IllegalArgumentException("Illegal section ranges in configuration");

@@ -7,14 +7,42 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Stack;
 
+/**
+ * This class represents the virtual player who plays against the player in a single player game. It extends the
+ * AbstractPlayer class, in which the position in the faith track is saved.
+ * <code>activeTokens is a stack of tokens yet to be played</code>
+ * <code>discardedTokens</code> is a list of the tokens already played
+ */
 public class SoloRival extends AbstractPlayer{
     private Stack<SoloActionToken> activeTokens=new Stack<>();
     private List<SoloActionToken> discardedTokens= new ArrayList<>();
+    private SoloActionToken lastPlayedToken;
 
-    public void soloTurn(Game game){
-        this.takeFirst().activateToken(game);
+
+    public SoloRival(){
+        discardedTokens.add(new DiscardToken(CardColor.GREEN, 1));
+        discardedTokens.add(new DiscardToken(CardColor.YELLOW, 2));
+        discardedTokens.add(new DiscardToken(CardColor.BLUE, 3));
+        discardedTokens.add(new DiscardToken(CardColor.PURPLE, 4));
+        discardedTokens.add(new MoveToken(1, 5));
+        discardedTokens.add(new MoveToken(2, 6));
+        setStack();
     }
 
+    /**
+     * This method represents the turn of the virtual player. It takes the first token from <code>activeTokens</code>
+     * and activates it
+     * @param game is the single player game in which the token is used
+     */
+    public void soloTurn(Game game){
+        lastPlayedToken=this.takeFirst();
+        lastPlayedToken.activateToken(game);
+    }
+
+    /**
+     * This method takes the first token from <code>activeTokens</code> and put it in <code>discardedTokens</code>
+     * @return the token took from <code>activeTokens</code>
+     */
     private SoloActionToken takeFirst(){
         SoloActionToken token;
         token = activeTokens.pop();
@@ -22,16 +50,10 @@ public class SoloRival extends AbstractPlayer{
         return token;
     }
 
-    public SoloRival(){
-        discardedTokens.add(new DiscardToken(CardColor.GREEN));
-        discardedTokens.add(new DiscardToken(CardColor.YELLOW));
-        discardedTokens.add(new DiscardToken(CardColor.BLUE));
-        discardedTokens.add(new DiscardToken(CardColor.PURPLE));
-        discardedTokens.add(new MoveToken(1));
-        discardedTokens.add(new MoveToken(2));
-        setStack();
-    }
-
+    /**
+     * This method creates a new stack of active tokens. It puts all the tokens in <code>discardedTokens</code>,
+     * it shuffles the collection and then it puts all the tokens in <code>activeTokens</code>
+     */
     public void setStack()
     {
         while (!activeTokens.isEmpty())
@@ -42,8 +64,14 @@ public class SoloRival extends AbstractPlayer{
         discardedTokens.clear();
     }
 
+    /**
+     * This method does nothing because the virtual player doesn't have a vatican report effect
+     */
     @Override
     public void vaticanReportEffect(int tileNumber) {
-        return;
+    }
+
+    public SoloActionToken getLastPlayedToken() {
+        return lastPlayedToken;
     }
 }

@@ -7,9 +7,11 @@ package it.polimi.ingsw.model;
  */
 public class MoveToken implements SoloActionToken{
     private final int steps;
+    private final int id;
 
-    public MoveToken(int steps) {
+    public MoveToken(int steps, int id) {
         this.steps = steps;
+        this.id = id;
     }
 
     @Override
@@ -24,5 +26,10 @@ public class MoveToken implements SoloActionToken{
             game.getTrack().advance(game.getSoloRival().get());
             game.getSoloRival().get().setStack();
         }
+    }
+
+    @Override
+    public int getId() {
+        return id;
     }
 }

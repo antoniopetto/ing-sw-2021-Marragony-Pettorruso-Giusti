@@ -9,4 +9,6 @@ public interface SoloActionToken {
      * This method is used when a token is drawn and activates its ability.
      */
     void activateToken(Game game);
+
+    int getId();
 }
