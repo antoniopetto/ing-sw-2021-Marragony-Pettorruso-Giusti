@@ -40,12 +40,6 @@ public class PlayerBoard {
 
     public StrongBox getStrongBox() { return strongBox; }
 
-    /**
-     * Adds Resource r in the StrongBox
-     *
-     * @param r the Resource to add in the StrongBox
-     */
-    public void addInStrongBox(Resource r){ this.strongBox.addResource(r);}
 
     /**
      *
@@ -176,10 +170,7 @@ public class PlayerBoard {
         for(Resource r : totalInput.keySet())
             pay(new ResourceRequirement(r, totalInput.get(r)));
 
-        //TODO we should replace/add a method to insert resourceRequirements in strongBox instead of Resources
-        for(Resource r: totalOutput.keySet())
-            for(int i = 0; i < totalOutput.get(r); i++)
-                strongBox.addResource(r);
+        for(Resource r: totalOutput.keySet()) strongBox.addResource(r, totalOutput.get(r));
     }
 
     /**

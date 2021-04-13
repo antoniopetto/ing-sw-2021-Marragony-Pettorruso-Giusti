@@ -79,33 +79,39 @@ public class Game {
         return developmentCardDecks;
     }
 
+
+
     public boolean tryBuyCard(Player player, CardColor cardColor, int level) {
 
         boolean isPossible = false;
-        /*
-        DevelopmentCard developmentCard = developmentCardDecks.readTop(cardColor, level);
-        ResourceRequirement resourceRequirement = developmentCard.getRequirement();
-        ResourceRequirement resourceRequirementDiscount;
-        int n = resourceRequirement.getQuantity();
-        for (Resource resource : player.getActiveDiscount())
-            if (resourceRequirement.getResource().equals(resource)) n--;
+        int newQuantityThenDiscount = 0;
 
-            resourceRequirementDiscount = new ResourceRequirement(resourceRequirement.getResource(), n);
+        DevelopmentCard developmentCard = developmentCardDecks.readTop(cardColor, level); //potrebbe avere senso spostarlo nel controller
+        // e passare nel metodo direttamente la carta ( in questo caso spostare questo metodo nel player)
+        List<ResourceRequirement> resourceRequirement = developmentCard.getRequirement();
+        List<ResourceRequirement> resourceRequirementDiscount = new ArrayList<>();
 
+        for( ResourceRequirement resourceRequirement1 : resourceRequirement ){
+            newQuantityThenDiscount = resourceRequirement1.getQuantity();
 
+            for (Resource resource : player.getActiveDiscount())
+                if (resourceRequirement1.getResource().equals(resource)) newQuantityThenDiscount--;
 
+            resourceRequirementDiscount.add(new ResourceRequirement(resourceRequirement1.getResource(), newQuantityThenDiscount));
+        }
 
-        isPossible = resourceRequirementDiscount.isSatisfied(player);
+        for( ResourceRequirement resourceRequirementDiscount1 : resourceRequirementDiscount){
+            isPossible = resourceRequirementDiscount1.isSatisfied(player);
+            if(!isPossible) return false;
+        }
 
-        if(isPossible){
-
-        }*/
         return isPossible;
     }
 
 
 
     /*
+    //DA SPOSTARE NEL CONTROLLER E DA CAMBIARE
     private int idSlot = 0; // da passare nel costruttore
 
     public void insertCardInSlot(DevelopmentCard dCard, String user){

@@ -5,7 +5,6 @@ import it.polimi.ingsw.model.cards.LeaderCard;
 import it.polimi.ingsw.model.exceptions.NotAffordableException;
 import it.polimi.ingsw.model.playerboard.*;
 import it.polimi.ingsw.model.shared.Marble;
-import it.polimi.ingsw.model.shared.Position;
 
 import java.util.*;
 
@@ -103,7 +102,8 @@ public class Player extends AbstractPlayer{
         playerBoard.activateProduction(selectedCardIds, selectedExtraPowers);
     }
 
-    public boolean tryToAddDevelopmentCardInSlot(DevelopmentCard developmentCard){
+
+    public boolean tryToAddDevelopmentCardInSlot(DevelopmentCard developmentCard){ // passare la carta sviluppo o il colore e l'intero ( nel secondo caso spostarlo nel game)?
 
         boolean isPossibleAddCard = true;
 
@@ -111,7 +111,7 @@ public class Player extends AbstractPlayer{
             this.playerBoard.addCard(developmentCard, getIdSlotSelect());
 
         }catch (IllegalArgumentException e){
-            isPossibleAddCard = true;
+            isPossibleAddCard = false;
         }
 
         return isPossibleAddCard;
@@ -125,6 +125,7 @@ public class Player extends AbstractPlayer{
     public int getIdSlotSelect() {
         return idSlotSelect;
     }
+
 
     public List<Marble> buyResources(Game game, int idLine , boolean isRow){
         List<Marble> marbleList;

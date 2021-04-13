@@ -97,39 +97,100 @@ public class WareHouse {
     /**
      *
      * @param depotName the DepotName of the Depot to analyze
-     * @return true if 'DepotName' Depot contains no constraint and so it isn't a ExtraDepot
+     * @return true if 'DepotName' Depot contains constraint and so it is an ExtraDepot
      */
-    private boolean isNotExtraDepot(DepotName depotName){
-        return this.depotList.get(depotName.getPosition()).getConstraint().isEmpty();
+    private boolean isExtraDepot(DepotName depotName){
+        return this.depotList.get(depotName.getPosition()).getConstraint().isPresent();
     }
 
     /**
-     * Exchanges resources between the two depots (depotName1 and depotName2), ExtraDepots are not included
-     *
+     * Switch resources between the two depots (depotName1 and depotName2), includes moving between two ExtraDepots, an Extradepot and a normal depot
+     * or two normal Depots
      * @param depotName1 the Depot from which to take the resources to be exchanged
      * @param depotName2 the Depot with which to exchange resources
      * @exception IllegalArgumentException if It isn't possible switch the Resources between Depots
      */
     public void switchDepots(DepotName depotName1, DepotName depotName2){
-        if(  compareTwoDepots(depotName1, depotName2) && compareTwoDepots(depotName2,depotName1)
-               && isNotExtraDepot(depotName1)  && isNotExtraDepot(depotName2) )
+            if(isExtraDepot(depotName1) && isExtraDepot(depotName2))switchExtraDepots(depotName1, depotName2, false, true);
+            else if(isExtraDepot(depotName1))  switchExtraDepots(depotName1, depotName2, true, false);
+                else if(isExtraDepot(depotName2))  switchExtraDepots(depotName1, depotName2, false, false);
+                    else switchNormalDepot(depotName1,depotName2);
+    }
+
+    /**
+     * Check for resource constraint and that the depotNameA Depot must not be empty
+     *
+     * @param depotNameA basically it is the depot from which to remove the resources
+     * @param depotNameB it is the depot to fill
+     * @param fromExtraToNormal is true if the move is from an ExtraDepot to a Depot
+     * @param allExtraDepots is true if depotNameA and depotNameB are both ExtraDepot
+     * da scrivere la documentazione sulle eccezioni
+     */
+    public void switchExtraDepots(DepotName depotNameA, DepotName depotNameB, boolean fromExtraToNormal, boolean allExtraDepots){
+
+        if( depotByName(depotNameA).isEmpty() ) throw new IllegalArgumentException("DepotA is just empty");
+                else{
+                    //cercare di migliorarlo
+                    if(!fromExtraToNormal){
+                        var depotTmp = depotNameA;
+                        depotNameA = depotNameB;
+                        depotNameB = depotTmp;
+                    }
+
+                    if ( (!allExtraDepots && depotByName(depotNameB).isEmpty()) ||
+                            depotByName(depotNameA).getConstraint().get().equals(depotByName(depotNameB).getResource())){
+
+                        if(fromExtraToNormal) fillTheOtherDepot(depotNameA, depotNameB);
+                            else fillTheOtherDepot(depotNameB, depotNameA);
+
+                    }
+                     else throw new IllegalArgumentException("It isn't possible switch the Resources between Depots, " +
+                                                "the type of resource that the player tries to insert in the extraDepot is different from the constraint ");
+                }
+    }
+
+    /**
+     * Moves resources from depotToEmpty Depot to depotToFill Depot until the depotToFill Depot is full or the depotToEmpty is empty
+     *
+     * @param depotToEmpty the name of the Depot from which to fetch resources
+     * @param depotToFill the name of the Depot to fill
+     */
+    public void fillTheOtherDepot(DepotName depotToEmpty, DepotName depotToFill){
+
+        while(!depotByName(depotToFill).isFull() || !depotByName(depotToEmpty).isEmpty()){
+            depotByName(depotToFill).addResource(depotByName(depotToEmpty).getResource());
+            depotByName(depotToEmpty).removeResourceFromDepot();
+        }
+    }
+
+    /**
+     * Switch resources between the two depots (depotName1 and depotName2 Depots) if there is enough space in both to make the switch
+     *
+     * @exception IllegalArgumentException if one of the two Depots has the capacity that is less than the amount of Resources in the other Depot
+     */
+    public void switchNormalDepot(DepotName depotName1, DepotName depotName2){
+
+        if( compareTwoDepots(depotName1, depotName2) && compareTwoDepots(depotName2,depotName1) )
         {
-            Resource resourceTmp = this.depotList.get(depotName2.getPosition()).getResource();
-            int quantityTmp = this.depotList.get(depotName2.getPosition()).getQuantity();
+            var resourceTmp = depotByName(depotName2).getResource();
+            var quantityTmp = depotByName(depotName2).getQuantity();
 
-            this.depotList.get(depotName2.getPosition())
-                                            .setResource(this.depotList.get(depotName1.getPosition()).getResource());
+            depotByName(depotName2).setResource(depotByName(depotName1).getResource());
+            depotByName(depotName2).setQuantity(depotByName(depotName1).getQuantity());
 
-            this.depotList.get(depotName2.getPosition())
-                                            .setQuantity(this.depotList.get(depotName1.getPosition()).getQuantity());
-
-            this.depotList.get(depotName1.getPosition()).setResource(resourceTmp);
-            this.depotList.get(depotName1.getPosition()).setQuantity(quantityTmp);
-
+            depotByName(depotName1).setResource(resourceTmp);
+            depotByName(depotName1).setQuantity(quantityTmp);
         }
         else throw new IllegalArgumentException("It isn't possible switch the Resources between Depots");
 
     }
+
+    /**
+     *
+     * @param depotName the name of Depot
+     * @return the Depot in the depotList found by its name
+     */
+    public Depot depotByName( DepotName depotName){ return depotList.get(depotName.getPosition());}
 
     /**
      *

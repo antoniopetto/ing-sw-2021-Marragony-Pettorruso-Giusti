@@ -25,15 +25,16 @@ public class StrongBox {
     public int getQuantity(Resource r){ return content.get(r); }
 
     /**
-     * Adds a <code>resource</code> r unit inside the StrongBox
+     * Adds a quantity of <code>resource</code> r inside the StrongBox
      *
      * @param r The <code>Resource</code> to add
+     * @param quantity number of Resource r to add in StrongBox
      */
-    public void addResource( Resource r){
+    public void addResource( Resource r, int quantity){
 
         if(content.containsKey(r))
-            content.replace(r, content.get(r)+1);
-            else content.put(r, 1);
+            content.replace(r, content.get(r)+quantity);
+            else content.put(r, quantity);
     }
 
     /**
