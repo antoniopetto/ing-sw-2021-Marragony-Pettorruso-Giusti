@@ -146,7 +146,7 @@ public class Game {
     public void setTrack() {
         List<AbstractPlayer> playerList = new ArrayList<>(players);
         soloRival.ifPresent(playerList::add);
-        this.track = new FaithTrack(playerList, null, null);
+        //this.track = new FaithTrack(playerList, null, null);
         //TODO complete the creation of the track with non null parameters
     }
 }

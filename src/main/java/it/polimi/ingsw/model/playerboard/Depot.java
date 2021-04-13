@@ -105,4 +105,6 @@ public class Depot {
     public boolean isFull(){
         return this.getCapacity()==this.getQuantity();
     }
+
+
 }

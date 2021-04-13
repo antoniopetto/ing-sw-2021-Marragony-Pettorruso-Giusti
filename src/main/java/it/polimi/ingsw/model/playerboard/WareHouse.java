@@ -3,6 +3,7 @@ package it.polimi.ingsw.model.playerboard;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 
@@ -66,7 +67,6 @@ public class WareHouse {
                                                             .filter(d -> d.getConstraint().isEmpty())
                                                                     .collect(Collectors.toList());
 
-
         for(Depot depot : depotList1) if(depot.getResource().equals(r)) return false;
 
         if( depotToInsert.isEmpty() || (depotToInsert.getResource().equals(r) && !depotToInsert.isFull()))
@@ -108,12 +108,10 @@ public class WareHouse {
      * or two normal Depots
      * @param depotName1 the Depot from which to take the resources to be exchanged
      * @param depotName2 the Depot with which to exchange resources
-     * @exception IllegalArgumentException if It isn't possible switch the Resources between Depots
      */
     public void switchDepots(DepotName depotName1, DepotName depotName2){
-            if(isExtraDepot(depotName1) && isExtraDepot(depotName2))switchExtraDepots(depotName1, depotName2, false, true);
-            else if(isExtraDepot(depotName1))  switchExtraDepots(depotName1, depotName2, true, false);
-                else if(isExtraDepot(depotName2))  switchExtraDepots(depotName1, depotName2, false, false);
+            if(isExtraDepot(depotName1) && isExtraDepot(depotName2)) switchExtraDepots(depotName1, depotName2, true);
+            else if(isExtraDepot(depotName1) || isExtraDepot(depotName2))  switchExtraDepots(depotName1, depotName2, false);
                     else switchNormalDepot(depotName1,depotName2);
     }
 
@@ -122,31 +120,32 @@ public class WareHouse {
      *
      * @param depotNameA basically it is the depot from which to remove the resources
      * @param depotNameB it is the depot to fill
-     * @param fromExtraToNormal is true if the move is from an ExtraDepot to a Depot
      * @param allExtraDepots is true if depotNameA and depotNameB are both ExtraDepot
      * da scrivere la documentazione sulle eccezioni
      */
-    public void switchExtraDepots(DepotName depotNameA, DepotName depotNameB, boolean fromExtraToNormal, boolean allExtraDepots){
+    private void switchExtraDepots(DepotName depotNameA, DepotName depotNameB, boolean allExtraDepots){
 
-        if( depotByName(depotNameA).isEmpty() ) throw new IllegalArgumentException("DepotA is just empty");
-                else{
-                    //cercare di migliorarlo
-                    if(!fromExtraToNormal){
-                        var depotTmp = depotNameA;
-                        depotNameA = depotNameB;
-                        depotNameB = depotTmp;
-                    }
+        if( depotByName(depotNameA).isEmpty() ) throw new IllegalStateException("DepotA is just empty");
 
-                    if ( (!allExtraDepots && depotByName(depotNameB).isEmpty()) ||
-                            depotByName(depotNameA).getConstraint().get().equals(depotByName(depotNameB).getResource())){
+        Function<DepotName,Boolean> controlResource = (depotName) -> {
+            if(depotByName(depotName).getConstraint().isEmpty()) return compareResourceType(depotNameB,depotNameA);
+                return compareResourceType(depotNameA,depotNameB);
+        };
 
-                        if(fromExtraToNormal) fillTheOtherDepot(depotNameA, depotNameB);
-                            else fillTheOtherDepot(depotNameB, depotNameA);
-
-                    }
-                     else throw new IllegalArgumentException("It isn't possible switch the Resources between Depots, " +
+        if ( (!allExtraDepots && depotByName(depotNameB).isEmpty())  || controlResource.apply(depotNameA)) fillTheOtherDepot(depotNameA, depotNameB);
+            else throw new IllegalArgumentException("It isn't possible switch the Resources between Depots, " +
                                                 "the type of resource that the player tries to insert in the extraDepot is different from the constraint ");
-                }
+
+    }
+
+    /**
+     *
+     * @param depotNameA is the name of ExtraDepot
+     * @param depotNameB is the name of Normal Depot
+     * @return true if the constraint of the depotNameA Depot is equal to the resource contained in the depotNameB Depot
+     */
+    private boolean compareResourceType(DepotName depotNameA, DepotName depotNameB){
+        return depotByName(depotNameA).getConstraint().get().equals(depotByName(depotNameB).getResource());
     }
 
     /**
@@ -155,7 +154,7 @@ public class WareHouse {
      * @param depotToEmpty the name of the Depot from which to fetch resources
      * @param depotToFill the name of the Depot to fill
      */
-    public void fillTheOtherDepot(DepotName depotToEmpty, DepotName depotToFill){
+    private void fillTheOtherDepot(DepotName depotToEmpty, DepotName depotToFill){
 
         while(!depotByName(depotToFill).isFull() || !depotByName(depotToEmpty).isEmpty()){
             depotByName(depotToFill).addResource(depotByName(depotToEmpty).getResource());
@@ -168,7 +167,7 @@ public class WareHouse {
      *
      * @exception IllegalArgumentException if one of the two Depots has the capacity that is less than the amount of Resources in the other Depot
      */
-    public void switchNormalDepot(DepotName depotName1, DepotName depotName2){
+    private void switchNormalDepot(DepotName depotName1, DepotName depotName2){
 
         if( compareTwoDepots(depotName1, depotName2) && compareTwoDepots(depotName2,depotName1) )
         {
