@@ -35,7 +35,7 @@ public class DevelopmentCardTest {
         assertEquals(3, card.getVictoryPoints());
         assertEquals(2, card.getLevel());
         assertEquals(CardColor.BLUE, card.getColor());
-        assertEquals(list, card.getRequirement());
+        assertEquals(list, card.getRequirements());
         assertEquals(power, card.getPower());
     }
 

@@ -88,7 +88,7 @@ public class Game {
 
         DevelopmentCard developmentCard = developmentCardDecks.readTop(cardColor, level); //potrebbe avere senso spostarlo nel controller
         // e passare nel metodo direttamente la carta ( in questo caso spostare questo metodo nel player)
-        List<ResourceRequirement> resourceRequirement = developmentCard.getRequirement();
+        List<ResourceRequirement> resourceRequirement = developmentCard.getRequirements();
         List<ResourceRequirement> resourceRequirementDiscount = new ArrayList<>();
 
         for( ResourceRequirement resourceRequirement1 : resourceRequirement ){

@@ -34,7 +34,7 @@ public class DevelopmentCard extends Card{
         return power;
     }
 
-    public List<ResourceRequirement> getRequirement() {
+    public List<ResourceRequirement> getRequirements() {
         return requirements;
     }
 

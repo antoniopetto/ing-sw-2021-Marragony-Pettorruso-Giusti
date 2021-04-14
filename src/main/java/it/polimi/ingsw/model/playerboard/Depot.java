@@ -24,14 +24,13 @@ public class Depot {
      * Constructs the Depot
      * @param name is the name of this Depot
      * @param capacity indicates the maximum number of resources that can be inserted in this Depot
-     * @param resourceExtra indicates the only resource that can be inserted if the Depot is a <code>ExtraDepot</code>
+     * @param constraint indicates the only resource that can be inserted if the Depot is a <code>ExtraDepot</code>
      */
-    public Depot(DepotName name, int capacity, Resource resourceExtra) {
+    public Depot(DepotName name, int capacity, Resource constraint) {
         this.name = name;
         this.quantity = 0;
         this.capacity = capacity;
-        this.constraint = Optional.of(resourceExtra);
-
+        this.constraint = Optional.of(constraint);
     }
 
     public Depot(DepotName name, int capacity){

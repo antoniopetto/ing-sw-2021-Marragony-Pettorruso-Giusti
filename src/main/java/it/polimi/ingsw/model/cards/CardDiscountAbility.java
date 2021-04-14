@@ -9,14 +9,16 @@ import it.polimi.ingsw.model.playerboard.Resource;
 public class CardDiscountAbility implements SpecialAbility{
 
     private final Resource resource;
+    private final int amount;
 
-    public CardDiscountAbility(Resource resource)
+    public CardDiscountAbility(Resource resource, int amount)
     {
-        this.resource=resource;
+        this.resource = resource;
+        this.amount = amount;
     }
 
     @Override
     public void activateAbility(Player player) {
-        player.addActiveDiscount(this.resource);
+        player.addActiveDiscount(resource, amount);
     }
 }

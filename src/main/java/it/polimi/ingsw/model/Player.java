@@ -15,7 +15,7 @@ public class Player extends AbstractPlayer{
 
     private final List<PopeFavourTile> tiles = new ArrayList<>();
     private final PlayerBoard playerBoard = new PlayerBoard();
-    private final Set<Resource> activeDiscount = new HashSet<>();
+    private final Map<Resource, Integer> activeDiscounts = new EnumMap<>(Resource.class);
     private final Set<Resource> whiteMarbleAliases = new HashSet<>();
     private List<LeaderCard> leaderCardList;
 
@@ -52,12 +52,12 @@ public class Player extends AbstractPlayer{
         return playerBoard;
     }
 
-    public Set<Resource> getActiveDiscount() {
-        return activeDiscount;
+    public Map<Resource, Integer> getActiveDiscount() {
+        return activeDiscounts;
     }
 
-    public void addActiveDiscount(Resource resource) {
-        activeDiscount.add(resource);
+    public void addActiveDiscount(Resource resource, int amount) {
+        activeDiscounts.put(resource, amount);
     }
 
     public Set<Resource> getWhiteMarbleAliases() {

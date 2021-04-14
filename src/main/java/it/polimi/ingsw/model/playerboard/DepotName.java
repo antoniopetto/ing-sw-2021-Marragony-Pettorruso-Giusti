@@ -1,20 +1,17 @@
 package it.polimi.ingsw.model.playerboard;
 
 public enum DepotName {
-    HIGH (1,0) ,
-    MEDIUM (2, 1),
-    LOW (3, 2),
-    FIRST_EXTRA (2, 3),
-    SECOND_EXTRA (2, 4);
+    HIGH (0) ,
+    MEDIUM (1),
+    LOW (2),
+    FIRST_EXTRA (3),
+    SECOND_EXTRA (4);
 
-    private final int capacity;
     private final int position;
 
-    DepotName(int capacity, int position) {
-        this.capacity = capacity;
+    DepotName(int position) {
         this.position = position;
     }
 
-    public int getCapacity() { return capacity; }
     public int getPosition() { return position; }
 }

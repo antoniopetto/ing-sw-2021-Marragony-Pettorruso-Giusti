@@ -10,12 +10,16 @@ import it.polimi.ingsw.model.playerboard.Resource;
 public class ExtraDepotAbility implements SpecialAbility{
 
     private final Resource constraint;
-    public ExtraDepotAbility(Resource res) {
-        constraint=res;
+    private final int capacity;
+    public ExtraDepotAbility(Resource constraint, int capacity) {
+
+        this.constraint = constraint;
+        this.capacity = capacity;
+
     }
 
     @Override
     public void activateAbility(Player player) {
-        player.getPlayerBoard().getWareHouse().createExtraDepot(this.constraint);
+        player.getPlayerBoard().getWareHouse().createExtraDepot(constraint, capacity);
     }
 }

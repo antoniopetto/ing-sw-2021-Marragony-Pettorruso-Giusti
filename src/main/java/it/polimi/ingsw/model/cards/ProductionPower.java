@@ -11,22 +11,21 @@ import java.util.Map;
  * the player uses the power it checks if it has the resources in the input maps and it receives the resources in the
  * output map
  */
-public class ProductionPower extends Identifiable {
+public class ProductionPower {
     private final Map<Resource, Integer> inputResources;
     private final Map<Resource, Integer> outputResources;
     private final int agnosticInput;
     private final int agnosticOutput;
 
-    public ProductionPower(int id, int agnosticInput, int agnosticOutput) {
-        this(id, new HashMap<>(), new HashMap<>(), agnosticInput, agnosticOutput);
+    public ProductionPower(int agnosticInput, int agnosticOutput) {
+        this(new HashMap<>(), new HashMap<>(), agnosticInput, agnosticOutput);
     }
 
     public ProductionPower(int id, Map<Resource, Integer> inputResources, Map<Resource, Integer> outputResources) {
-        this(id, inputResources, outputResources, 0,0);
+        this(inputResources, outputResources, 0,0);
     }
 
-    public ProductionPower(int id, Map<Resource, Integer> inputResources, Map<Resource, Integer> outputResources, int agnosticInput, int agnosticOutput) {
-        super(id);
+    public ProductionPower(Map<Resource, Integer> inputResources, Map<Resource, Integer> outputResources, int agnosticInput, int agnosticOutput) {
         this.agnosticInput = agnosticInput;
         this.agnosticOutput = agnosticOutput;
         if(!(inputResources.isEmpty())&&inputResources.get(Resource.FAITH) != 0){

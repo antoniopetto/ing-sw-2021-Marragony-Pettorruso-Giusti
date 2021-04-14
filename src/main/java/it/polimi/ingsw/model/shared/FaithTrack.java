@@ -6,7 +6,7 @@ import java.util.*;
 
 public class FaithTrack {
 
-    private static final int LAST_POSITION = 20;
+    private static final int LAST_POSITION = 24;
     private static final int N_SECT = 3;
     private final List<Position> track = new ArrayList<>();
     private final List<AbstractPlayer> players;

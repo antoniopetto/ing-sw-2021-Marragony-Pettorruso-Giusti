@@ -138,29 +138,24 @@ public class PlayerBoard {
                 throw new IllegalArgumentException("The user requested a production he didn't have");
             }
 
-            incrementTotalMap(totalInput, power.getInputResources());
-            incrementTotalMap(totalInput, power.getOutputResources());
+            incrementMap(totalInput, power.getInputResources());
+            incrementMap(totalInput, power.getOutputResources());
         }
 
         for(Integer i : selectedExtraPowers.keySet()){
 
-            try {
-                power = findById(i, extraProductionPowers);
-            }
-            catch (ElementNotFoundException e){
-                throw new IllegalArgumentException("The user requested a special production he didn't have");
-            }
+            power = extraProductionPowers.get(i);
 
-            incrementTotalMap(totalInput, power.getInputResources());
-            incrementTotalMap(totalOutput, power.getOutputResources());
+            incrementMap(totalInput, power.getInputResources());
+            incrementMap(totalOutput, power.getOutputResources());
 
             ProductionPower chosenResources = selectedExtraPowers.get(i);
 
             if (!specialProductionConsistent(power, chosenResources))
                 throw new IllegalArgumentException("The client choice of special production is illegal");
 
-            incrementTotalMap(totalInput, chosenResources.getInputResources());
-            incrementTotalMap(totalOutput, chosenResources.getOutputResources());
+            incrementMap(totalInput, chosenResources.getInputResources());
+            incrementMap(totalOutput, chosenResources.getOutputResources());
         }
 
         for(Resource r : totalInput.keySet())
@@ -200,10 +195,8 @@ public class PlayerBoard {
 
         List<DevelopmentCard> lastDevCards = new ArrayList<>();
         for (Slot s : slotList){
-            try{
+            if(!s.isEmpty())
                 lastDevCards.add(s.getLastCard());
-            }
-            catch (EmptyStackException e) {}
         }
         return lastDevCards;
     }
@@ -214,7 +207,7 @@ public class PlayerBoard {
      * @param totalMap        The <code>Resource</code> map to be incremented.
      * @param map             The input <code>Resource</code> map to be added.
      */
-    private void incrementTotalMap(Map<Resource, Integer> totalMap, Map<Resource, Integer> map) {
+    private void incrementMap(Map<Resource, Integer> totalMap, Map<Resource, Integer> map) {
 
         for(Resource resource : map.keySet())
             totalMap.compute(resource, (k, v) -> (v == null) ? map.get(resource) : v + map.get(resource));

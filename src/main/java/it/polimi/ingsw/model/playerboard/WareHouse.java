@@ -25,10 +25,9 @@ public class WareHouse {
     public WareHouse() {
 
         this.depotList = new ArrayList<>();
-        this.depotList.add(new Depot(DepotName.HIGH,DepotName.HIGH.getCapacity()));
-        this.depotList.add(new Depot(DepotName.MEDIUM,DepotName.MEDIUM.getCapacity()));
-        this.depotList.add(new Depot(DepotName.LOW,DepotName.LOW.getCapacity()));
-        this.isFirstExtraDepot = true;
+        this.depotList.add(new Depot(DepotName.HIGH,1));
+        this.depotList.add(new Depot(DepotName.MEDIUM,2));
+        this.depotList.add(new Depot(DepotName.LOW,3));
     }
 
     public List<Depot> getDepots() {
@@ -38,17 +37,16 @@ public class WareHouse {
     /**
      * Creates a ExtraDepot
      *
-     * @param r   It is the <code>Resource</code> constraint of the ExtraDepot
+     * @param constraint   It is the <code>Resource</code> constraint of the ExtraDepot
+     * @param capacity     The capacity of the ExtraDepot
      */
-    public void createExtraDepot(Resource r){
-        DepotName dExtraName;
-        if(isFirstExtraDepot){
-            dExtraName =DepotName.FIRST_EXTRA;
-            isFirstExtraDepot = false;
-        }
-        else dExtraName = DepotName.SECOND_EXTRA;
+    public void createExtraDepot(Resource constraint, int capacity){
 
-        this.depotList.add( new Depot(dExtraName, dExtraName.getCapacity(), r));
+        if(depotList.size() == 3)
+            depotList.add(new Depot(DepotName.FIRST_EXTRA, capacity, constraint));
+        else if(depotList.size() == 4)
+            depotList.add(new Depot(DepotName.SECOND_EXTRA, capacity, constraint));
+        else throw new IllegalArgumentException("Trying to add too many extraDepots");
     }
 
     /**
