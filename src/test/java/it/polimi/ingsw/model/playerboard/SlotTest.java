@@ -24,7 +24,7 @@ public class SlotTest {
         slot = new Slot(1);
         this.developmentCardList = new Stack<>();
         requirements = new ArrayList<>();
-        productionPower = new ProductionPower(1,0,0);
+        productionPower = new ProductionPower(0,0);
     }
 
     @Test

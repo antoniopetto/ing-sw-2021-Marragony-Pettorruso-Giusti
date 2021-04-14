@@ -159,10 +159,20 @@ public class Player extends AbstractPlayer{
 
     }
 
+    public void discard(Game game){
+        game.getTrack().advanceAllBut(this);
+    }
 
 
     @Override
     public void vaticanReportEffect(int tileNumber) {
         tiles.get(tileNumber).gain();
     }
+
+    @Override
+    public void activateEndGame() {
+
+    }
+
+
 }

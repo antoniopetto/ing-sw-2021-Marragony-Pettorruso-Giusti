@@ -71,6 +71,11 @@ public class SoloRival extends AbstractPlayer{
     public void vaticanReportEffect(int tileNumber) {
     }
 
+    @Override
+    public void activateEndGame() {
+
+    }
+
     public SoloActionToken getLastPlayedToken() {
         return lastPlayedToken;
     }

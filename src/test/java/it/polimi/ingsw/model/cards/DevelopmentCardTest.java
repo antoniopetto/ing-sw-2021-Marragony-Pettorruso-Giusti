@@ -23,7 +23,7 @@ public class DevelopmentCardTest {
         list.add(new ResourceRequirement(Resource.SHIELD, 1));
         Map<Resource, Integer> input = new HashMap<>();
         Map<Resource, Integer> output = new HashMap<>();
-        power = new ProductionPower(1,input, output);
+        power = new ProductionPower(input, output);
         card = new DevelopmentCard(1, 3,2, CardColor.BLUE, list, power);
     }
 

@@ -21,7 +21,7 @@ public class ProductionPower {
         this(new HashMap<>(), new HashMap<>(), agnosticInput, agnosticOutput);
     }
 
-    public ProductionPower(int id, Map<Resource, Integer> inputResources, Map<Resource, Integer> outputResources) {
+    public ProductionPower(Map<Resource, Integer> inputResources, Map<Resource, Integer> outputResources) {
         this(inputResources, outputResources, 0,0);
     }
 

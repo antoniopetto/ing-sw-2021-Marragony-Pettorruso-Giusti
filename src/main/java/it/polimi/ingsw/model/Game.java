@@ -18,7 +18,7 @@ public class Game {
     private final Optional<SoloRival> soloRival;
     private final boolean singlePlayer;
     private final List<Player> players = new ArrayList<>();
-    private MarketBoard marketBoard = new MarketBoard();
+    private final MarketBoard marketBoard = new MarketBoard();
     private DevelopmentCardDecks developmentCardDecks;
     private FaithTrack track;
 
