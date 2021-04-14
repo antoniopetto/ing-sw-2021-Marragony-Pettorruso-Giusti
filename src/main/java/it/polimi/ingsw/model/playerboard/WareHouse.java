@@ -50,38 +50,36 @@ public class WareHouse {
     }
 
     /**
-     * Checks if there aren't other Depots that contain the <code>Resource</code> r and then
-     * if the 'depotName' Depot has enough space, the <code>Resource</code> r will be placed in the 'depotName' Depot
+     * Checks if there aren't other Depots that contain the <code>Resource</code> r
      *
      * @param depotName indicates in which Depot to add the <code>Resource</code> r
      * @param r is the <code>Resource</code> that the player wants to insert in the WareHouse
      * @return true if there is an empty space of the select Depot in which to insert the <code>Resource</code>
      */
     public boolean isInsertable(DepotName depotName, Resource r){
-        Depot depotToInsert = this.depotList.get(depotName.getPosition());
+        Depot depotToInsert = depotByName(depotName);
 
         List<Depot> depotList1 =  this.depotList.stream()
-                                                    .filter(d -> !d.getName().equals(depotName) )
-                                                            .filter(d -> d.getConstraint().isEmpty())
-                                                                    .collect(Collectors.toList());
+                .filter(d -> !d.getName().equals(depotName) )
+                .filter(d -> d.getConstraint().isEmpty())
+                .collect(Collectors.toList());
 
         for(Depot depot : depotList1) if(depot.getResource().equals(r)) return false;
 
-        if( depotToInsert.isEmpty() || (depotToInsert.getResource().equals(r) && !depotToInsert.isFull()))
-        {
-            this.insert(depotToInsert,r);
-                return true;
-        }
-        else return false;
+        return depotToInsert.isEmpty() || (depotToInsert.getResource().equals(r) && !depotToInsert.isFull());
 
     }
 
     /**
-     * Inserts the number of <code>Resources</code> r in the 'depot' Depot
-     * @param depot the depot in which to place the resource
+     * If the 'depotName' Depot has enough space, inserts the number of <code>Resources</code> r in the 'depotName' Depot
+     * @param depotName the Name of Depot in which to place the resource
      * @param r the Resource to add
      */
-    public void insert(Depot depot, Resource r){ depot.addResource(r); }
+    public void insert(DepotName depotName, Resource r){
+        if(isInsertable(depotName,r)) depotByName(depotName).addResource(r);
+        else throw new IllegalArgumentException("There isn't an empty space of the select Depot in which to insert the Resource r");
+    }
+
 
     /**
      * depotName1 and depotName2 are the names of the Depots to compare

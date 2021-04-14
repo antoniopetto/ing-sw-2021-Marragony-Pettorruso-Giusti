@@ -102,20 +102,43 @@ public class Player extends AbstractPlayer{
         playerBoard.activateProduction(selectedCardIds, selectedExtraPowers);
     }
 
+    public boolean tryBuyCard(DevelopmentCard developmentCard) {
 
-    public boolean tryToAddDevelopmentCardInSlot(DevelopmentCard developmentCard){ // passare la carta sviluppo o il colore e l'intero ( nel secondo caso spostarlo nel game)?
+        boolean isPossible = false;
+        int newQuantityThenDiscount = 0;
 
-        boolean isPossibleAddCard = true;
+        //DevelopmentCard developmentCard = developmentCardDecks.readTop(cardColor, level); -->DA SPOSTARE NEL CONTROLLER
+        // passare nel metodo direttamente la carta ( in questo caso spostare questo metodo nel player)
 
-        try {
-            this.playerBoard.addCard(developmentCard, getIdSlotSelect());
+        List<ResourceRequirement> resourceRequirement = developmentCard.getRequirements();
+        List<ResourceRequirement> resourceRequirementDiscount = new ArrayList<>();
 
-        }catch (IllegalArgumentException e){
-            isPossibleAddCard = false;
+        for( ResourceRequirement resourceRequirement1 : resourceRequirement ){
+            newQuantityThenDiscount = resourceRequirement1.getQuantity();
+
+            for (Resource resource : this.getActiveDiscount().keySet()) {
+                if (resourceRequirement1.getResource().equals(resource)) {
+                    if (newQuantityThenDiscount >= this.getActiveDiscount().get(resource))
+                        newQuantityThenDiscount = -this.getActiveDiscount().get(resource);
+                    else throw new IllegalArgumentException("Unable to remove more resources than are requested in the requirements");
+                }
+            }
+
+            resourceRequirementDiscount.add(new ResourceRequirement(resourceRequirement1.getResource(), newQuantityThenDiscount));
         }
 
-        return isPossibleAddCard;
+        for( ResourceRequirement resourceRequirementDiscount1 : resourceRequirementDiscount){
+            isPossible = resourceRequirementDiscount1.isSatisfied(this);
+            if(!isPossible) return false;
+        }
 
+        //Come gestire il discorso del Pay? Come far arrivare al metodo pay la nuova lista di resourceRequirement (resourceRequirementDiscount)?
+
+        return isPossible;
+    }
+
+    public boolean tryAddDevelopmentCardInSlot(DevelopmentCard developmentCard){
+        return tryBuyCard(developmentCard) && this.playerBoard.tryAddCard(developmentCard, getIdSlotSelect());
     }
 
     public void selectIdSlot(int idSlot){

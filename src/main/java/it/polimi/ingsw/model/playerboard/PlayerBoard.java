@@ -45,11 +45,21 @@ public class PlayerBoard {
      *
      * @param developmentCard is the <code>DevelopmentCard</code> the player tries to add
      * @param idSlot represents the number of the <code>Slot</code> in which to insert the <code>DevelopmentCard</code>
-     *
+     * @return true if the IllegalArgumentException is not called, false if the developmentCard does not pass the checks in the idSlot Slot
      */
-    public void addCard(DevelopmentCard developmentCard, int idSlot){
-        if(slotList.get(idSlot).tryAddCard(developmentCard)) slotList.get(idSlot).addCard(developmentCard);
-            else throw new IllegalArgumentException("Unable to insert development card in this slot, change destination slot");
+    public boolean tryAddCard(DevelopmentCard developmentCard, int idSlot){
+
+        boolean isPossibleAddCard = true;
+
+        try {
+            slotList.get(idSlot).addCard(developmentCard);
+
+        }catch (IllegalArgumentException e){
+            isPossibleAddCard = false;
+        }
+
+        return isPossibleAddCard;
+
     }
 
     /**
@@ -70,6 +80,7 @@ public class PlayerBoard {
      * to buy a <code>DevelopmentCard</code> or activate production power
      */
     public void pay(ResourceRequirement resourceRequirement){
+        if(!isAffordable(resourceRequirement)) throw new IllegalArgumentException("The player cannot proceed with the payment cause he doesn't have enough Resources");
 
         boolean resourceInWareHouse = true;
         int i = 0;
@@ -91,6 +102,7 @@ public class PlayerBoard {
             }
         }
     }
+
 
     /**
      *
