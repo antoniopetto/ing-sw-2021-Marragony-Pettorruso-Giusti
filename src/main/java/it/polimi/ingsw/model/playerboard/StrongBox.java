@@ -1,5 +1,6 @@
 package it.polimi.ingsw.model.playerboard;
 
+import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -16,13 +17,14 @@ public class StrongBox {
     /**
      * Constructs the StrongBox
      */
-    public StrongBox() { this.content = new HashMap<>(); }
+    public StrongBox() { this.content = new EnumMap<Resource, Integer>(Resource.class); }
 
     /**
      * @param r    The <code>Resource</code>
      * @return total units of <code>resource</code> r  inside the StrongBox
      */
-    public int getQuantity(Resource r){ return content.get(r); }
+    public int getQuantity(Resource r){
+        return content.containsKey(r) ? content.get(r) : 0;  }
 
     /**
      * Adds a quantity of <code>resource</code> r inside the StrongBox
@@ -46,7 +48,8 @@ public class StrongBox {
             if(getQuantity(r)>1)
                 content.replace(r, content.get(r)-1);
                 else if(getQuantity(r)==1) content.remove(r);
-                    else throw new IllegalArgumentException("In StrongBox there is no Resource r");
+                    else if(getQuantity(r) == 0)
+                        throw new IllegalArgumentException("In StrongBox there is no Resource r");
     }
 
     /**

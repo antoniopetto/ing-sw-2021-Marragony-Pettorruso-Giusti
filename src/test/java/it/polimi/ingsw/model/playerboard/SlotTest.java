@@ -15,14 +15,12 @@ import static org.junit.Assert.*;
 
 public class SlotTest {
     private Slot slot;
-    private Stack<DevelopmentCard> developmentCardList;
     private List<ResourceRequirement> requirements;
     private ProductionPower productionPower;
 
     @Before
     public void testInizializeSlot(){
         slot = new Slot(1);
-        this.developmentCardList = new Stack<>();
         requirements = new ArrayList<>();
         productionPower = new ProductionPower(0,0);
     }
