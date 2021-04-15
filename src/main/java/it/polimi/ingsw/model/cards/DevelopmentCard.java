@@ -1,6 +1,10 @@
 package it.polimi.ingsw.model.cards;
 
+import it.polimi.ingsw.model.playerboard.Resource;
+
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * This class represents a development card and extends the abstract class "Card". It has an integer attribute for the
@@ -36,6 +40,16 @@ public class DevelopmentCard extends Card{
 
     public List<ResourceRequirement> getRequirements() {
         return requirements;
+    }
+
+    public List<ResourceRequirement> getDiscountedRequirements (Map<Resource, Integer> discounts){
+        List<ResourceRequirement> discounted = new ArrayList<>();
+        for (ResourceRequirement req : requirements){
+            Resource res = req.getResource();
+            int qty = req.getQuantity();
+            discounted.add(new ResourceRequirement(res, qty - discounts.getOrDefault(res, 0)));
+        }
+        return discounted;
     }
 
     /**

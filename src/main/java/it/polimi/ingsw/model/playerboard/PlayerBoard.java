@@ -47,19 +47,12 @@ public class PlayerBoard {
      * @param idSlot represents the number of the <code>Slot</code> in which to insert the <code>DevelopmentCard</code>
      * @return true if the IllegalArgumentException is not called, false if the developmentCard does not pass the checks in the idSlot Slot
      */
-    public boolean tryAddCard(DevelopmentCard developmentCard, int idSlot){
+    public boolean canAddCardInSlot(DevelopmentCard developmentCard, int idSlot){
+        return slotList.get(idSlot).canAddCard(developmentCard);
+    }
 
-        boolean isPossibleAddCard = true;
-
-        try {
-            slotList.get(idSlot).addCard(developmentCard);
-
-        }catch (IllegalArgumentException e){
-            isPossibleAddCard = false;
-        }
-
-        return isPossibleAddCard;
-
+    public void addCardInSlot(DevelopmentCard developmentCard, int idSlot){
+        slotList.get(idSlot).addCard(developmentCard);
     }
 
     /**

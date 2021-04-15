@@ -10,7 +10,6 @@ import java.util.*;
 
 public class Player extends AbstractPlayer{
 
-    private int idSlotSelect;
     private final String username;
 
     private final List<PopeFavourTile> tiles = new ArrayList<>();
@@ -18,7 +17,6 @@ public class Player extends AbstractPlayer{
     private final Map<Resource, Integer> activeDiscounts = new EnumMap<>(Resource.class);
     private final Set<Resource> whiteMarbleAliases = new HashSet<>();
     private List<LeaderCard> leaderCardList;
-
 
     Player(String username){
         this.username = username;
@@ -68,8 +66,6 @@ public class Player extends AbstractPlayer{
         whiteMarbleAliases.add(resource);
     }
 
-
-
     /**
      * This method is used to play a Leader card
      * @param cardId is the id of the card to ble played, which can be 1 or 0
@@ -102,53 +98,25 @@ public class Player extends AbstractPlayer{
         playerBoard.activateProduction(selectedCardIds, selectedExtraPowers);
     }
 
-    public boolean tryBuyCard(DevelopmentCard developmentCard) {
+    public void buyAndAddCard(DevelopmentCard card, int idSlot){
+        if (canBuyCard(card) && playerBoard.canAddCardInSlot(card, idSlot)){
 
-        boolean isPossible = false;
-        int newQuantityThenDiscount = 0;
-
-        //DevelopmentCard developmentCard = developmentCardDecks.readTop(cardColor, level); -->DA SPOSTARE NEL CONTROLLER
-        // passare nel metodo direttamente la carta ( in questo caso spostare questo metodo nel player)
-
-        List<ResourceRequirement> resourceRequirement = developmentCard.getRequirements();
-        List<ResourceRequirement> resourceRequirementDiscount = new ArrayList<>();
-
-        for( ResourceRequirement resourceRequirement1 : resourceRequirement ){
-            newQuantityThenDiscount = resourceRequirement1.getQuantity();
-
-            for (Resource resource : this.getActiveDiscount().keySet()) {
-                if (resourceRequirement1.getResource().equals(resource)) {
-                    if (newQuantityThenDiscount >= this.getActiveDiscount().get(resource))
-                        newQuantityThenDiscount = -this.getActiveDiscount().get(resource);
-                    else throw new IllegalArgumentException("Unable to remove more resources than are requested in the requirements");
-                }
+            for (ResourceRequirement req : card.getDiscountedRequirements(activeDiscounts)){
+                playerBoard.pay(req);
             }
-
-            resourceRequirementDiscount.add(new ResourceRequirement(resourceRequirement1.getResource(), newQuantityThenDiscount));
+            playerBoard.addCardInSlot(card, idSlot);
         }
+        else throw new IllegalArgumentException("Invalid move: can't pay or place the selected Development Card");
+    }
 
-        for( ResourceRequirement resourceRequirementDiscount1 : resourceRequirementDiscount){
-            isPossible = resourceRequirementDiscount1.isSatisfied(this);
-            if(!isPossible) return false;
+    public boolean canBuyCard(DevelopmentCard card) {
+
+        for (ResourceRequirement req : card.getDiscountedRequirements(activeDiscounts)) {
+            if (!req.isSatisfied(this))
+                return false;
         }
-
-        //Come gestire il discorso del Pay? Come far arrivare al metodo pay la nuova lista di resourceRequirement (resourceRequirementDiscount)?
-
-        return isPossible;
+        return true;
     }
-
-    public boolean tryAddDevelopmentCardInSlot(DevelopmentCard developmentCard){
-        return tryBuyCard(developmentCard) && this.playerBoard.tryAddCard(developmentCard, getIdSlotSelect());
-    }
-
-    public void selectIdSlot(int idSlot){
-        this.idSlotSelect = idSlot;
-    }
-
-    public int getIdSlotSelect() {
-        return idSlotSelect;
-    }
-
 
     public List<Marble> buyResources(Game game, int idLine , boolean isRow){
         List<Marble> marbleList;
@@ -156,11 +124,7 @@ public class Player extends AbstractPlayer{
         else marbleList = game.getMarketBoard().getColumn(idLine);
 
         return marbleList;
-
     }
-
-
-
 
     @Override
     public void vaticanReportEffect(int tileNumber) {
@@ -171,6 +135,4 @@ public class Player extends AbstractPlayer{
     public void activateEndGame() {
 
     }
-
-
 }

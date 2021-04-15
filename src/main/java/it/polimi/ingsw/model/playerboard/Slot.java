@@ -39,14 +39,14 @@ public class Slot {
      */
     public List<DevelopmentCard> getDevelopmentCardList() { return developmentCardList; }
 
-    public boolean tryAddCard(DevelopmentCard dCard){ return isEmpty() ? dCard.getLevel()==1  : dCard.isLevelHigher(getLastCard()); }
+    public boolean canAddCard(DevelopmentCard dCard){ return isEmpty() ? dCard.getLevel()==1  : dCard.isLevelHigher(getLastCard()); }
 
     /**
      * Returns true when the slot contains no cards or if the card the player, wants to insert, has only one level more than the last one inserted
      * @param dCard The <code>DevelopmentCard</code> that the player wants to insert
      */
     public void addCard(DevelopmentCard dCard){
-        if(tryAddCard(dCard)) this.developmentCardList.add(dCard);
+        if(canAddCard(dCard)) this.developmentCardList.add(dCard);
         else throw new IllegalArgumentException("Unable to insert development card in this slot, change destination slot");
     }
 
