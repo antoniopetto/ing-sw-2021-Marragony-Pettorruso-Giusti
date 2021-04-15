@@ -159,9 +159,7 @@ public class Player extends AbstractPlayer{
 
     }
 
-    public void discard(Game game){
-        game.getTrack().advanceAllBut(this);
-    }
+
 
 
     @Override
