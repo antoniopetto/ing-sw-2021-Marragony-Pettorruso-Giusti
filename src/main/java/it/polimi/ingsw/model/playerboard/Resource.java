@@ -7,5 +7,4 @@ public enum Resource {
     SERVANT,
     FAITH;
 
-
 }

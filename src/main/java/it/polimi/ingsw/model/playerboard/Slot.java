@@ -47,7 +47,7 @@ public class Slot {
      */
     public void addCard(DevelopmentCard dCard){
         if(canAddCard(dCard)) this.developmentCardList.add(dCard);
-        else throw new IllegalArgumentException("Unable to insert development card in this slot, change destination slot");
+            else throw new IllegalArgumentException("Unable to insert development card in this slot, change destination slot");
     }
 
     /**

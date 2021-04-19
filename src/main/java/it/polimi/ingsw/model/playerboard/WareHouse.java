@@ -16,7 +16,6 @@ import java.util.stream.Collectors;
  */
 public class WareHouse {
     private final List<Depot> depotList;
-    private boolean isFirstExtraDepot;
 
     /**
      * Constructs the WareHouse
@@ -25,6 +24,7 @@ public class WareHouse {
     public WareHouse() {
 
         this.depotList = new ArrayList<>();
+        //spostare in un metodo a sè
         this.depotList.add(new Depot(DepotName.HIGH,1));
         this.depotList.add(new Depot(DepotName.MEDIUM,2));
         this.depotList.add(new Depot(DepotName.LOW,3));
@@ -57,15 +57,19 @@ public class WareHouse {
      * @return true if there is an empty space of the select Depot in which to insert the <code>Resource</code>
      */
     public boolean isInsertable(DepotName depotName, Resource r){
+
         Depot depotToInsert = depotByName(depotName);
 
-        List<Depot> depotList1 =  this.depotList.stream()
-                .filter(d -> !d.getName().equals(depotName) )
-                .filter(d -> d.getConstraint().isEmpty())
-                .collect(Collectors.toList());
+        if(depotByName(depotName).getConstraint().isEmpty()) {
 
-        for(Depot depot : depotList1) if(depot.getResource().equals(r)) return false;
+            List<Depot> depotList1 = this.depotList.stream()
+                    .filter(d -> !d.getName().equals(depotName))
+                    .filter(d -> d.getConstraint().isEmpty())
+                    .filter(d -> !d.isEmpty())
+                    .collect(Collectors.toList());
 
+            for (Depot depot : depotList1) if (depot.getResource().equals(r)) return false;
+        }
         return depotToInsert.isEmpty() || (depotToInsert.getResource().equals(r) && !depotToInsert.isFull());
 
     }
@@ -77,7 +81,9 @@ public class WareHouse {
      */
     public void insert(DepotName depotName, Resource r){
         if(isInsertable(depotName,r)) depotByName(depotName).addResource(r);
-        else throw new IllegalArgumentException("There isn't an empty space of the select Depot in which to insert the Resource r");
+          else throw new IllegalArgumentException("There isn't an empty space of the select Depot in which to insert the Resource r" +
+                                                    "or The Resource that the player wants to insert does not match " +
+                                                    "the one already inserted in that Depot");
     }
 
 
@@ -165,18 +171,39 @@ public class WareHouse {
      */
     private void switchNormalDepot(DepotName depotName1, DepotName depotName2){
 
-        if( compareTwoDepots(depotName1, depotName2) && compareTwoDepots(depotName2,depotName1) )
-        {
-            var resourceTmp = depotByName(depotName2).getResource();
-            var quantityTmp = depotByName(depotName2).getQuantity();
+        if(!(depotByName(depotName1).isEmpty() && depotByName(depotName2).isEmpty())){
+            if( compareTwoDepots(depotName1, depotName2) && compareTwoDepots(depotName2,depotName1))
+            {
+                //Utilizzo di una risorsa Empty? Meglio del null o no?
+                Resource resourceTmp1;
+                Resource resourceTmp2;
+                int quantityTmp1;
+                int quantityTmp2;
 
-            depotByName(depotName2).setResource(depotByName(depotName1).getResource());
-            depotByName(depotName2).setQuantity(depotByName(depotName1).getQuantity());
+                if(depotByName(depotName2).isEmpty()){
+                    resourceTmp2 = null;
+                    quantityTmp2 = 0;
+                }else {
+                    resourceTmp2 = depotByName(depotName2).getResource();
+                    quantityTmp2 = depotByName(depotName2).getQuantity();
+                }
 
-            depotByName(depotName1).setResource(resourceTmp);
-            depotByName(depotName1).setQuantity(quantityTmp);
+                if(depotByName(depotName1).isEmpty()){
+                    resourceTmp1 = null;
+                    quantityTmp1 = 0;
+                }else {
+                    resourceTmp1 = depotByName(depotName1).getResource();
+                    quantityTmp1 = depotByName(depotName1).getQuantity();
+                }
+
+                depotByName(depotName2).setResource(resourceTmp1);
+                depotByName(depotName2).setQuantity(quantityTmp1);
+
+                depotByName(depotName1).setResource(resourceTmp2);
+                depotByName(depotName1).setQuantity(quantityTmp2);
+            }
+            else throw new IllegalArgumentException("It isn't possible switch the Resources between Depots");
         }
-        else throw new IllegalArgumentException("It isn't possible switch the Resources between Depots");
 
     }
 
@@ -193,24 +220,26 @@ public class WareHouse {
      * @return a List of Depots which includes the <code>Depots</code> containing the <code>Resource</code> r
      */
     private List<Depot> depotFilter(Resource r){
-         return this.depotList.stream()
-                                    .filter(d -> !d.isEmpty())
-                                            .filter(d -> d.getResource().equals(r))
-                                                                .collect(Collectors.toList());
+        //Se non dovesse esserci la risorsa r in nessun depot cosa succede? Ha senso utilizzare un optional?
+        return  this.depotList.stream()
+                                .filter(d -> !d.isEmpty())
+                                    .filter(d -> d.getResource().equals(r))
+                                        .collect(Collectors.toList());
 
     }
+
     /**
      *
      * @param r the Resource to count
      * @return the total number of Resources r in all the Depots
      */
-    public int totalResourcesOfAType( Resource r){ return sumOfResInDepotList(this.depotFilter(r)); }
+    public int totalResourcesOfAType(Resource r){ return sumOfResInDepotList(this.depotFilter(r)); }
 
     /**
      * Removes the <code>Resource</code> r  from a Depot that contains it
      * @param r the Resource to remove
      */
-    public void resourceResourcefromWareHouse( Resource r){
+    public void removeResourcefromWareHouse( Resource r){
         Optional<Depot> optional = this.depotFilter(r)
                                                 .stream()
                                                     .findFirst();
