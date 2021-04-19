@@ -118,7 +118,6 @@ public class Game {
      * @throws ElementNotFoundException if <code>marble</code> is not in <code>marbleBuffer</code>
      */
     public boolean putResource(Marble marble, DepotName depot) throws ElementNotFoundException {
-        int listId = findMarble(marble);
         Resource resource;
         if(!marble.equals(Marble.WHITE))
             resource = marble.getResource();
@@ -126,15 +125,26 @@ public class Game {
         {
             if(playing.getWhiteMarbleAliases().size()==1)
                 resource=playing.getWhiteMarbleAliases().iterator().next();
-            else
-            {
-                List<Resource> resources = new ArrayList<>();
-                while(playing.getWhiteMarbleAliases().iterator().hasNext())
-                    resources.add(playing.getWhiteMarbleAliases().iterator().next());
-                resource = choseBetweenResources(resources);
-            }
-
+            else throw new IllegalStateException("Wrong method");
         }
+        return putResource(marble, depot, resource);
+
+    }
+
+    /**
+     * This method tries to put a resource in a depot. The method is used when a player has a white marble and more
+     * than one leader card with the white marble ability played, so it has to chose a resource from
+     * <code>whiteMarbleAliases</code>.
+     * @param marble is the marble selected from <code>marbleBuffer</code>.
+     * @param depot is the depot where the player tries to put the resource.
+     * @param resource is the resource to put in the depot.
+     * @return false if the resource is not insertable, else it puts the resource and returns true.
+     * @throws ElementNotFoundException if <code>marble</code> is not in <code>marbleBuffer</code>
+     */
+    public boolean putResource(Marble marble, DepotName depot, Resource resource) throws ElementNotFoundException {
+        if(!marble.equals(Marble.WHITE)&&!(marble.getResource().equals(resource))) throw new IllegalArgumentException();
+        if(marble.equals(Marble.WHITE)&&!playing.getWhiteMarbleAliases().contains(resource)) throw new IllegalArgumentException();
+        int listId = findMarble(marble);
         if(!playing.getPlayerBoard().getWareHouse().isInsertable(depot, resource)) return false;
         playing.getPlayerBoard().getWareHouse().insert(depot, resource);
         marbleBuffer.remove(listId);
@@ -173,13 +183,7 @@ public class Game {
         return listId;
     }
 
-    public Resource choseBetweenResources(List<Resource> resouces)
-    {
-        Resource resourceChosen;
-        //messaggio all'utente
-        resourceChosen=resouces.get(0); //temporaneo
-        return resourceChosen;
-    }
+
 
 
 
