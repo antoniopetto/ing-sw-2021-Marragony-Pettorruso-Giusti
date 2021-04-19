@@ -18,7 +18,7 @@ public class Player extends AbstractPlayer{
     private final Set<Resource> whiteMarbleAliases = new HashSet<>();
     private List<LeaderCard> leaderCardList;
 
-    Player(String username){
+    public Player(String username){
         this.username = username;
         tiles.add(new PopeFavourTile(2));
         tiles.add(new PopeFavourTile(3));

@@ -64,11 +64,11 @@ public class SlotTest {
     public void testTryToAddCard(){
         DevelopmentCard developmentCard = new DevelopmentCard(0,10,
                 2, CardColor.BLUE,requirements,productionPower);
-        assertFalse(slot.tryAddCard(developmentCard));
+        assertFalse(slot.canAddCard(developmentCard));
 
         DevelopmentCard developmentCard2 = new DevelopmentCard(0,10,
                 1, CardColor.BLUE,requirements,productionPower);
-        assertTrue(slot.tryAddCard(developmentCard2));
+        assertTrue(slot.canAddCard(developmentCard2));
 
         slot.addCard(developmentCard2);
 
@@ -77,13 +77,13 @@ public class SlotTest {
         DevelopmentCard developmentCard4 = new DevelopmentCard(0,10,
                 3, CardColor.BLUE,requirements,productionPower);
 
-        assertFalse(slot.tryAddCard(developmentCard3));
-        assertFalse(slot.tryAddCard(developmentCard4));
-        assertTrue(slot.tryAddCard(developmentCard));
+        assertFalse(slot.canAddCard(developmentCard3));
+        assertFalse(slot.canAddCard(developmentCard4));
+        assertTrue(slot.canAddCard(developmentCard));
 
         slot.addCard(developmentCard);
         slot.addCard(developmentCard4);
-        assertFalse(slot.tryAddCard(developmentCard3));
+        assertFalse(slot.canAddCard(developmentCard3));
 
 
     }

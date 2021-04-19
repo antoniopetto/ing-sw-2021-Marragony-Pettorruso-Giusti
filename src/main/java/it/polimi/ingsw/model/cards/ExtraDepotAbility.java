@@ -11,8 +11,9 @@ public class ExtraDepotAbility implements SpecialAbility{
 
     private final Resource constraint;
     private final int capacity;
-    public ExtraDepotAbility(Resource constraint, int capacity) {
 
+    public ExtraDepotAbility(Resource constraint, int capacity) {
+        if (capacity<1) throw new IllegalArgumentException("Illegal capacity");
         this.constraint = constraint;
         this.capacity = capacity;
 
