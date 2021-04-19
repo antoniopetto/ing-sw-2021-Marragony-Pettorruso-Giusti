@@ -29,9 +29,10 @@ public class PlayerBoard {
         this.strongBox = new StrongBox();
         this.wareHouse = new WareHouse();
         this.slotList = new ArrayList<>();
+        //creare metodo ausiliario per la creazione degli slot
+        this.slotList.add( new Slot(0));
         this.slotList.add( new Slot(1));
         this.slotList.add( new Slot(2));
-        this.slotList.add( new Slot(3));
     }
 
     public WareHouse getWareHouse() { return wareHouse; }
@@ -82,7 +83,7 @@ public class PlayerBoard {
 
             if(resourceInWareHouse) {
                 try {
-                    wareHouse.resourceResourcefromWareHouse(resourceRequirement.getResource());
+                    wareHouse.removeResourcefromWareHouse(resourceRequirement.getResource());
                     i++;
                 }
                 catch (IllegalArgumentException e) {

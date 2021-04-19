@@ -23,8 +23,7 @@ public class StrongBox {
      * @param r    The <code>Resource</code>
      * @return total units of <code>resource</code> r  inside the StrongBox
      */
-    public int getQuantity(Resource r){
-        return content.containsKey(r) ? content.get(r) : 0;  }
+    public int getQuantity(Resource r){ return content.getOrDefault(r,0); }
 
     /**
      * Adds a quantity of <code>resource</code> r inside the StrongBox
@@ -33,6 +32,8 @@ public class StrongBox {
      * @param quantity number of Resource r to add in StrongBox
      */
     public void addResource( Resource r, int quantity){
+
+        if(quantity<=0) throw new IllegalArgumentException("No sense to enter a negative / equal to 0 quantity");
 
         if(content.containsKey(r))
             content.replace(r, content.get(r)+quantity);

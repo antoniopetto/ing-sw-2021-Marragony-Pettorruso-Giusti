@@ -4,12 +4,13 @@ import it.polimi.ingsw.model.cards.CardColor;
 import it.polimi.ingsw.model.cards.DevelopmentCard;
 import it.polimi.ingsw.model.cards.ProductionPower;
 import it.polimi.ingsw.model.cards.ResourceRequirement;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Stack;
+
 
 import static org.junit.Assert.*;
 
@@ -19,10 +20,17 @@ public class SlotTest {
     private ProductionPower productionPower;
 
     @Before
-    public void testInizializeSlot(){
+    public void inizializeSlot(){
         slot = new Slot(1);
         requirements = new ArrayList<>();
         productionPower = new ProductionPower(0,0);
+    }
+
+    @After
+    public void clearSlot(){
+        slot = null;
+        productionPower = null;
+        requirements.clear();
     }
 
     @Test
@@ -61,7 +69,7 @@ public class SlotTest {
     */
 
     @Test
-    public void testTryToAddCard(){
+    public void testCanAddCard(){
         DevelopmentCard developmentCard = new DevelopmentCard(0,10,
                 2, CardColor.BLUE,requirements,productionPower);
         assertFalse(slot.canAddCard(developmentCard));

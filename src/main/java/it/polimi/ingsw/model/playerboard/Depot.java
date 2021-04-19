@@ -31,6 +31,8 @@ public class Depot {
         this.quantity = 0;
         this.capacity = capacity;
         this.constraint = Optional.of(constraint);
+        this.resource = constraint;
+
     }
 
     public Depot(DepotName name, int capacity){
@@ -38,11 +40,18 @@ public class Depot {
         this.quantity = 0;
         this.capacity = capacity;
         this.constraint = Optional.empty();
+        this.resource = null;
     }
 
-    public void setQuantity(int quantity) { this.quantity = quantity; }
+    public void setQuantity(int quantity) {
+        if(quantity>getCapacity()) throw new IllegalArgumentException("Error");
+        this.quantity = quantity;
+    }
 
-    public void setResource(Resource resource) { this.resource = resource; }
+    public void setResource(Resource resource) {
+        if(constraint.isEmpty() || constraint.get().equals(resource)) this.resource = resource;
+            else throw new IllegalArgumentException("There is a constraint");
+    }
 
     public DepotName getName() { return name; }
 
@@ -57,8 +66,8 @@ public class Depot {
      * @return the type of <code>Resource</code> inserted in the Depot
      */
     public Resource getResource(){
-        if(this.isEmpty()) throw new IllegalArgumentException("It is no resource");
-            else return this.resource;
+        //if(this.isEmpty()) throw new IllegalArgumentException("It is no resource");
+                return this.resource;
     }
 
     public int getQuantity(){ return quantity; }
@@ -71,10 +80,15 @@ public class Depot {
      */
     public void addResource(Resource r) {
 
-        if( constraint.isEmpty() ||  this.constraint.get().equals(r)){
-            if(this.isEmpty()) this.resource = r;
+        if( constraint.isEmpty()  || constraint.get().equals(r)){
             if(this.isFull()) throw new IllegalArgumentException("The Depot is full!");
-            this.quantity++;
+
+            if(this.isEmpty()){
+                this.resource = r;
+                this.quantity++;
+            }
+            else if(this.getResource().equals(r)) this.quantity++;
+                else throw new IllegalArgumentException("The type of resource that the player wants to insert does not match the type of resource already present");
         }
         else throw new IllegalArgumentException("The inserted Resource r doesn't match the special resource");
     }

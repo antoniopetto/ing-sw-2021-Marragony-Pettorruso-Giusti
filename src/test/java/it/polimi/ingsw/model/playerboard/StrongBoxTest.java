@@ -1,19 +1,21 @@
 package it.polimi.ingsw.model.playerboard;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-
-import java.util.EnumMap;
-import java.util.Map;
-
 import static org.junit.Assert.*;
 
 public class StrongBoxTest {
     private StrongBox strongBox;
 
     @Before
-    public void testInitStrongBox(){
+    public void initStrongBox(){
         strongBox = new StrongBox();
+    }
+
+    @After
+    public void clearStrongBox() {
+        strongBox = null;
     }
 
     @Test
@@ -35,12 +37,21 @@ public class StrongBoxTest {
 
         strongBox.addResource(Resource.COIN, 7);
         assertEquals(12, strongBox.getQuantity(Resource.COIN));
+
+        try{
+            strongBox.addResource(Resource.SHIELD, 0);
+            fail();
+        }catch (IllegalArgumentException e){
+            assertTrue(true);
+        }
+
     }
 
     @Test
     public void testRemoveResource(){
         try{
             strongBox.removeResource(Resource.COIN);
+            fail();
         }catch (IllegalArgumentException e){
             assertTrue(true);
         }
