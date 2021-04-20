@@ -17,6 +17,8 @@ public class CardRequirement implements Requirement{
     private final int quantity;
 
     public CardRequirement(CardColor color, Integer level, int quantity) {
+        if(level<1||level>3)throw new IllegalArgumentException();
+        if(quantity<1) throw new IllegalArgumentException();
         this.color = color;
         this.level = Optional.of(level);
         this.quantity = quantity;

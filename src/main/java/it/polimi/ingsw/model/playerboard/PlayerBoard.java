@@ -41,6 +41,9 @@ public class PlayerBoard {
 
     public StrongBox getStrongBox() { return strongBox; }
 
+    public List<ProductionPower> getExtraProductionPowers() {
+        return extraProductionPowers;
+    }
 
     /**
      *

@@ -13,6 +13,8 @@ public class CardDiscountAbility implements SpecialAbility{
 
     public CardDiscountAbility(Resource resource, int amount)
     {
+        if(amount<1) throw new IllegalArgumentException();
+        if(resource.equals(Resource.FAITH)) throw new IllegalArgumentException();
         this.resource = resource;
         this.amount = amount;
     }
