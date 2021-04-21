@@ -95,7 +95,7 @@ public class Player extends AbstractPlayer{
         leaderCardList.remove(cardId);
     }
 
-    public void activateProduction(Set<Integer> selectedCardIds, Map<Integer, ProductionPower> selectedExtraPowers) throws NotAffordableException {
+    public void activateProduction(Set<UUID> selectedCardIds, Map<Integer, ProductionPower> selectedExtraPowers) throws NotAffordableException {
         playerBoard.activateProduction(selectedCardIds, selectedExtraPowers);
     }
 

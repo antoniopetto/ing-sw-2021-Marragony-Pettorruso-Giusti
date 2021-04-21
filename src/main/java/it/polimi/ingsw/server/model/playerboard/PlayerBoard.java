@@ -3,7 +3,6 @@ package it.polimi.ingsw.server.model.playerboard;
 import it.polimi.ingsw.server.model.cards.*;
 import it.polimi.ingsw.server.model.exceptions.ElementNotFoundException;
 import it.polimi.ingsw.server.model.exceptions.NotAffordableException;
-import it.polimi.ingsw.server.model.shared.Identifiable;
 
 import java.util.*;
 /**
@@ -29,7 +28,7 @@ public class PlayerBoard {
         this.strongBox = new StrongBox();
         this.wareHouse = new WareHouse();
         this.slotList = new ArrayList<>();
-        //creare metodo ausiliario per la creazione degli slot
+
         this.slotList.add( new Slot(0));
         this.slotList.add( new Slot(1));
         this.slotList.add( new Slot(2));
@@ -132,13 +131,13 @@ public class PlayerBoard {
      * @see ProductionPower
      */
 
-    public void activateProduction(Set<Integer> selectedCardIds, Map<Integer, ProductionPower> selectedExtraPowers) throws NotAffordableException {
+    public void activateProduction(Set<UUID> selectedCardIds, Map<Integer, ProductionPower> selectedExtraPowers) throws NotAffordableException {
 
         Map<Resource, Integer> totalInput = new EnumMap<>(Resource.class);
         Map<Resource, Integer> totalOutput = new EnumMap<>(Resource.class);
         ProductionPower power;
 
-        for(Integer i : selectedCardIds){
+        for(UUID i : selectedCardIds){
 
             try{
                 power = findById(i, getLastDevCards()).getPower();
@@ -186,7 +185,7 @@ public class PlayerBoard {
      * @return                              The first of the objects with the specified <code>id</code>.
      * @throws ElementNotFoundException     If no object in the <code>Collection</code> has the specified <code>id</code>.
      */
-    public <E extends Identifiable> E findById(int id, Collection<E> collection) throws ElementNotFoundException{
+    public <E extends Card> E findById(UUID id, Collection<E> collection) throws ElementNotFoundException{
         E result = collection.stream()
                 .filter(x -> x.getId() == id)
                 .findFirst().orElse(null);

@@ -10,4 +10,5 @@ public abstract class AbstractPlayer {
     public void setPosition(Position position) { this.position = position; }
     abstract public void vaticanReportEffect(int tileNumber);
     abstract public void activateEndGame();
+    abstract public String getUsername();
 }
