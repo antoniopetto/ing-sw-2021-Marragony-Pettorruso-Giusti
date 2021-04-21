@@ -1,25 +1,35 @@
 package it.polimi.ingsw.server;
 
+import javax.imageio.event.IIOWriteProgressListener;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 
 public class PlayerHandler {
-    //private Socket player;
-    private ObjectInputStream input;
-    private ObjectOutputStream output;
 
-    public PlayerHandler(Socket socket) throws IOException {
-        input=new ObjectInputStream(socket.getInputStream());
-        output = new ObjectOutputStream(socket.getOutputStream());
+    private final Socket clientSocket;
+    private final ObjectInputStream input;
+    private final ObjectOutputStream output;
+
+    public PlayerHandler(Socket clientSocket) throws IOException {
+
+        this.clientSocket = clientSocket;
+        input = new ObjectInputStream(clientSocket.getInputStream());
+        output = new ObjectOutputStream(clientSocket.getOutputStream());
     }
 
-    public ObjectInputStream getInput() {
-        return input;
+    public void writeObject(Object o) throws IOException{
+        output.writeObject(o);
     }
 
-    public ObjectOutputStream getOutput() {
-        return output;
+    public Object readObject() throws IOException, ClassNotFoundException {
+        return input.readObject();
+    }
+
+    public void closeConnection() throws IOException {
+        input.close();
+        output.close();
+        clientSocket.close();
     }
 }

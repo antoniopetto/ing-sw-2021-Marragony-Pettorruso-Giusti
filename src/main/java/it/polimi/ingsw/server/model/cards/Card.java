@@ -1,19 +1,19 @@
 package it.polimi.ingsw.server.model.cards;
 
-import it.polimi.ingsw.server.model.shared.Identifiable;
+import java.util.UUID;
 
 /**
  * The class represents an abstraction of a card, which has an id and the number of Victory Points.
  * Two real classes extend this class: DevelopmentCard and LeaderCard
  */
 
-public abstract class Card extends Identifiable {
+public abstract class Card {
 
     private final int victoryPoints;
+    private final UUID id = UUID.randomUUID();
 
-    public Card(int id, int victoryPoints)
+    public Card(int victoryPoints)
     {
-        super(id);
         if(victoryPoints < 0) throw  new IllegalArgumentException();
         this.victoryPoints = victoryPoints;
     }
@@ -23,7 +23,7 @@ public abstract class Card extends Identifiable {
         return this.victoryPoints;
     }
 
-    public int getId() {
-        return super.getId();
+    public UUID getId() {
+        return id;
     }
 }
