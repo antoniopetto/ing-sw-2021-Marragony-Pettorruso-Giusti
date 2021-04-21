@@ -3,6 +3,9 @@ package it.polimi.ingsw.server.model.singleplayer;
 import it.polimi.ingsw.server.model.AbstractPlayer;
 import it.polimi.ingsw.server.model.Game;
 import it.polimi.ingsw.server.model.cards.CardColor;
+import it.polimi.ingsw.server.model.singleplayer.DiscardToken;
+import it.polimi.ingsw.server.model.singleplayer.MoveToken;
+import it.polimi.ingsw.server.model.singleplayer.SoloActionToken;
 
 import java.util.ArrayList;
 import java.util.Collections;

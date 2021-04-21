@@ -2,7 +2,6 @@ package it.polimi.ingsw.server.model.playerboard;
 
 import it.polimi.ingsw.server.model.cards.Card;
 import it.polimi.ingsw.server.model.cards.DevelopmentCard;
-
 import java.util.List;
 import java.util.Stack;
 

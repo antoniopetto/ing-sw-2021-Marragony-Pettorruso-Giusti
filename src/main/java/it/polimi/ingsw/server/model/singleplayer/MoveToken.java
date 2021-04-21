@@ -7,7 +7,7 @@ import it.polimi.ingsw.server.model.Game;
  * if <code>steps</code> ==1 the SoloRival position increases by one and all the tokens are shuffled and a
  * new stack of tokens is created
  */
-public class MoveToken implements SoloActionToken{
+public class MoveToken implements SoloActionToken {
     private final int steps;
     private final int id;
 

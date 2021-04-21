@@ -1,7 +1,5 @@
 package it.polimi.ingsw.server.model.shared;
 
-import java.util.OptionalInt;
-
 public class Position {
 
     private final int number;

@@ -14,6 +14,7 @@ public abstract class Card extends Identifiable {
     public Card(int id, int victoryPoints)
     {
         super(id);
+        if(victoryPoints < 0) throw  new IllegalArgumentException();
         this.victoryPoints = victoryPoints;
     }
 

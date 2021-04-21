@@ -1,11 +1,9 @@
 package it.polimi.ingsw.server.model.playerboard;
 
+import it.polimi.ingsw.server.model.cards.*;
 import it.polimi.ingsw.server.model.exceptions.ElementNotFoundException;
 import it.polimi.ingsw.server.model.exceptions.NotAffordableException;
 import it.polimi.ingsw.server.model.shared.Identifiable;
-import it.polimi.ingsw.server.model.cards.DevelopmentCard;
-import it.polimi.ingsw.server.model.cards.ProductionPower;
-import it.polimi.ingsw.server.model.cards.ResourceRequirement;
 
 import java.util.*;
 /**

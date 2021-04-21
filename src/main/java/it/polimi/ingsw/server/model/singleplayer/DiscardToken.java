@@ -6,7 +6,7 @@ import it.polimi.ingsw.server.model.cards.CardColor;
 /**
  * This class represents a discard token. When drawn, two cards of the color attribute are discarded
  */
-public class DiscardToken implements SoloActionToken{
+public class DiscardToken implements SoloActionToken {
     private final CardColor color;
     private final int id;
 

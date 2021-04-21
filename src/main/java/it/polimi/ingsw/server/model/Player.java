@@ -1,13 +1,10 @@
 package it.polimi.ingsw.server.model;
 
+import it.polimi.ingsw.server.model.cards.*;
 import it.polimi.ingsw.server.model.cards.LeaderCard;
 import it.polimi.ingsw.server.model.exceptions.NotAffordableException;
-import it.polimi.ingsw.server.model.playerboard.PlayerBoard;
+import it.polimi.ingsw.server.model.playerboard.*;
 import it.polimi.ingsw.server.model.shared.Marble;
-import it.polimi.ingsw.server.model.cards.DevelopmentCard;
-import it.polimi.ingsw.server.model.cards.ProductionPower;
-import it.polimi.ingsw.server.model.cards.ResourceRequirement;
-import it.polimi.ingsw.server.model.playerboard.Resource;
 import it.polimi.ingsw.server.model.shared.PopeFavourTile;
 
 import java.util.*;
