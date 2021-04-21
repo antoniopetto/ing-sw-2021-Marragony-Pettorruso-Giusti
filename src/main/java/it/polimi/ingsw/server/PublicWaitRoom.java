@@ -7,7 +7,7 @@ import java.util.Map;
 public class PublicWaitRoom {
 
     private int nPlayers = 0;
-    private Map<Socket, String> playerNames = new HashMap<>();
+    private Map<String, Socket> playerNames = new HashMap<>();
     private static PublicWaitRoom instance;
 
     public static PublicWaitRoom getInstance(){

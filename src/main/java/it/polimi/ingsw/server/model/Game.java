@@ -60,6 +60,7 @@ public class Game {
             players.add(new Player(s));
         }
         Collections.shuffle(players);
+        playing = players.get(0);
     }
 
     private Player findPlayer(String username) {
@@ -215,10 +216,25 @@ public class Game {
       }
     */
 
+    public void endTurn()
+    {
+        int index = players.indexOf(playing);
+        if(index==players.size()-1)
+        {
+            index =0;
+        }
+        else
+            index++;
+        playing=players.get(index);
+    }
     public boolean isSinglePlayer() { return singlePlayer; }
 
     public void setDevelopmentCardDecks(List<DevelopmentCard> list) {
         this.developmentCardDecks = new DevelopmentCardDecks(list);
+    }
+
+    public Player getPlaying() {
+        return playing;
     }
 
     public void setTrack() {
@@ -226,5 +242,9 @@ public class Game {
         soloRival.ifPresent(playerList::add);
         //this.track = new FaithTrack(playerList, null, null);
         //TODO complete the creation of the track with non null parameters
+    }
+
+    public boolean isEndgame() {
+        return endgame;
     }
 }

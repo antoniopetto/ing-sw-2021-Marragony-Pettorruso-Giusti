@@ -81,6 +81,11 @@ public class SoloRival extends AbstractPlayer {
 
     }
 
+    @Override
+    public String getUsername() {
+        return null;
+    }
+
     public SoloActionToken getLastPlayedToken() {
         return lastPlayedToken;
     }

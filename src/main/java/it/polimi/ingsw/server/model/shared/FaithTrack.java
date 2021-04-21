@@ -1,5 +1,6 @@
 package it.polimi.ingsw.server.model.shared;
 
+import it.polimi.ingsw.server.VirtualView;
 import it.polimi.ingsw.server.model.AbstractPlayer;
 
 import java.util.*;
@@ -11,7 +12,8 @@ public class FaithTrack {
     private final List<Position> track = new ArrayList<>();
     private final List<AbstractPlayer> players;
     private int vaticanReportCounter = 0;
-    private TrackObserver observer;
+    private VirtualView observer;
+
 
 
     public FaithTrack(List<AbstractPlayer> players, Map<Integer, Integer> victoryPointsMap, int[][] sectionRanges){
@@ -39,7 +41,7 @@ public class FaithTrack {
             p.setPosition(track.get(0));
         }
 
-        observer = new TrackObserver(this);
+
 
     }
 
@@ -72,12 +74,12 @@ public class FaithTrack {
     }
 
     public void vaticanReport(){
-
         vaticanReportCounter++;
         for (AbstractPlayer p : players){
             if (p.getPosition().sectionNumber() == vaticanReportCounter)
                 p.vaticanReportEffect(vaticanReportCounter + 1);
         }
+        observer.vaticanReportUpdate();
     }
 
     public boolean isAbsoluteFirst(AbstractPlayer player){
@@ -95,16 +97,16 @@ public class FaithTrack {
 
         if(currentPos.getNumber() < LAST_POSITION) {
             player.setPosition(track.get(currentIndex + 1));
-            //if (player.getPosition().isPopeSpace() && isAbsoluteFirst(player))
-                //vaticanReport();
-            observer.update(player);
+            if (player.getPosition().isPopeSpace() && isAbsoluteFirst(player))
+                vaticanReport();
         }
+        observer.faithTrackUpdate(player, false);
     }
 
     public void
     advanceAllBut(AbstractPlayer excludedPlayer){
 
-        //boolean isVaticanReportDue = false;
+        boolean isVaticanReportDue = false;
         List<AbstractPlayer> playerList = new ArrayList<>();
         for(AbstractPlayer p : players){
             Position currentPos = p.getPosition();
@@ -116,13 +118,13 @@ public class FaithTrack {
                 playerList.add(p);
             }
 
-                //if (p.getPosition().isPopeSpace() && isAbsoluteFirst(p))
-                   // isVaticanReportDue = true;
+                if (p.getPosition().isPopeSpace() && isAbsoluteFirst(p))
+                   isVaticanReportDue = true;
         }
-        observer.update(playerList);
 
-        //if(isVaticanReportDue)
-           // vaticanReport();
+        if(isVaticanReportDue)
+            vaticanReport();
+        observer.faithTrackUpdate(excludedPlayer, true);
     }
 
     public int getLastPosition()
