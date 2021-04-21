@@ -1,0 +1,995 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<config>
+
+    <developmentCards>
+
+        <developmentCard points="1" level="1" color="GREEN">
+            <cost>
+                <resourceQty type="SHIELD">2</resourceQty>
+            </cost>
+            <productionPower>
+                <input>
+                    <resourceQty type="COIN">1</resourceQty>
+                </input>
+                <output>
+                    <resourceQty type="FAITH">1</resourceQty>
+                </output>
+            </productionPower>
+        </developmentCard>
+
+        <developmentCard points="1" level="1" color="PURPLE">
+            <cost>
+                <resourceQty type="SERVANT">2</resourceQty>
+            </cost>
+            <productionPower>
+                <input>
+                    <resourceQty type="STONE">1</resourceQty>
+                </input>
+                <output>
+                    <resourceQty type="FAITH">1</resourceQty>
+                </output>
+            </productionPower>
+        </developmentCard>
+
+        <developmentCard points="1" level="1" color="BLUE">
+            <cost>
+                <resourceQty type="COIN">2</resourceQty>
+            </cost>
+            <productionPower>
+                <input>
+                    <resourceQty type="SHIELD">1</resourceQty>
+                </input>
+                <output>
+                    <resourceQty type="FAITH">1</resourceQty>
+                </output>
+            </productionPower>
+        </developmentCard>
+
+        <developmentCard points="1" level="1" color="YELLOW">
+            <cost>
+                <resourceQty type="STONE">2</resourceQty>
+            </cost>
+            <productionPower>
+                <input>
+                    <resourceQty type="SERVANT">1</resourceQty>
+                </input>
+                <output>
+                    <resourceQty type="FAITH">1</resourceQty>
+                </output>
+            </productionPower>
+        </developmentCard>
+
+        <developmentCard points="2" level="1" color="GREEN">
+            <cost>
+                <resourceQty type="SHIELD">1</resourceQty>
+                <resourceQty type="STONE">1</resourceQty>
+                <resourceQty type="SERVANT">1</resourceQty>
+            </cost>
+            <productionPower>
+                <input>
+                    <resourceQty type="STONE">1</resourceQty>
+                </input>
+                <output>
+                    <resourceQty type="SERVANT">1</resourceQty>
+                </output>
+            </productionPower>
+        </developmentCard>
+
+        <developmentCard points="2" level="1" color="PURPLE">
+            <cost>
+                <resourceQty type="SHIELD">1</resourceQty>
+                <resourceQty type="COIN">1</resourceQty>
+                <resourceQty type="SERVANT">1</resourceQty>
+            </cost>
+            <productionPower>
+                <input>
+                    <resourceQty type="COIN">1</resourceQty>
+                </input>
+                <output>
+                    <resourceQty type="SHIELD">1</resourceQty>
+                </output>
+            </productionPower>
+        </developmentCard>
+
+        <developmentCard points="2" level="1" color="BLUE">
+            <cost>
+                <resourceQty type="COIN">1</resourceQty>
+                <resourceQty type="STONE">1</resourceQty>
+                <resourceQty type="SERVANT">1</resourceQty>
+            </cost>
+            <productionPower>
+                <input>
+                    <resourceQty type="SERVANT">1</resourceQty>
+                </input>
+                <output>
+                    <resourceQty type="STONE">1</resourceQty>
+                </output>
+            </productionPower>
+        </developmentCard>
+
+        <developmentCard points="2" level="1" color="YELLOW">
+            <cost>
+                <resourceQty type="SHIELD">1</resourceQty>
+                <resourceQty type="COIN">1</resourceQty>
+                <resourceQty type="STONE">1</resourceQty>
+            </cost>
+            <productionPower>
+                <input>
+                    <resourceQty type="SHIELD">1</resourceQty>
+                </input>
+                <output>
+                    <resourceQty type="COIN">1</resourceQty>
+                </output>
+            </productionPower>
+        </developmentCard>
+
+        <developmentCard points="3" level="1" color="GREEN">
+            <cost>
+                <resourceQty type="SHIELD">3</resourceQty>
+            </cost>
+            <productionPower>
+                <input>
+                    <resourceQty type="SERVANT">2</resourceQty>
+                </input>
+                <output>
+                    <resourceQty type="COIN">1</resourceQty>
+                    <resourceQty type="SHIELD">1</resourceQty>
+                    <resourceQty type="STONE">1</resourceQty>
+                </output>
+            </productionPower>
+        </developmentCard>
+
+        <developmentCard points="3" level="1" color="PURPLE">
+            <cost>
+                <resourceQty type="SERVANT">3</resourceQty>
+            </cost>
+            <productionPower>
+                <input>
+                    <resourceQty type="COIN">2</resourceQty>
+                </input>
+                <output>
+                    <resourceQty type="SERVANT">1</resourceQty>
+                    <resourceQty type="SHIELD">1</resourceQty>
+                    <resourceQty type="STONE">1</resourceQty>
+                </output>
+            </productionPower>
+        </developmentCard>
+
+        <developmentCard points="3" level="1" color="BLUE">
+            <cost>
+                <resourceQty type="COIN">3</resourceQty>
+            </cost>
+            <productionPower>
+                <input>
+                    <resourceQty type="STONE">2</resourceQty>
+                </input>
+                <output>
+                    <resourceQty type="COIN">1</resourceQty>
+                    <resourceQty type="SERVANT">1</resourceQty>
+                    <resourceQty type="SHIELD">1</resourceQty>
+                </output>
+            </productionPower>
+        </developmentCard>
+
+        <developmentCard points="3" level="1" color="YELLOW">
+            <cost>
+                <resourceQty type="STONE">3</resourceQty>
+            </cost>
+            <productionPower>
+                <input>
+                    <resourceQty type="SHIELD">2</resourceQty>
+                </input>
+                <output>
+                    <resourceQty type="COIN">1</resourceQty>
+                    <resourceQty type="SERVANT">1</resourceQty>
+                    <resourceQty type="STONE">1</resourceQty>
+                </output>
+            </productionPower>
+        </developmentCard>
+
+        <developmentCard points="4" level="1" color="GREEN">
+            <cost>
+                <resourceQty type="SHIELD">2</resourceQty>
+                <resourceQty type="COIN">2</resourceQty>
+            </cost>
+            <productionPower>
+                <input>
+                    <resourceQty type="STONE">1</resourceQty>
+                    <resourceQty type="SERVANT">1</resourceQty>
+                </input>
+                <output>
+                    <resourceQty type="COIN">2</resourceQty>
+                    <resourceQty type="FAITH">1</resourceQty>
+                </output>
+            </productionPower>
+        </developmentCard>
+
+        <developmentCard points="4" level="1" color="PURPLE">
+            <cost>
+                <resourceQty type="SERVANT">2</resourceQty>
+                <resourceQty type="STONE">2</resourceQty>
+            </cost>
+            <productionPower>
+                <input>
+                    <resourceQty type="COIN">1</resourceQty>
+                    <resourceQty type="SHIELD">1</resourceQty>
+                </input>
+                <output>
+                    <resourceQty type="STONE">2</resourceQty>
+                    <resourceQty type="FAITH">1</resourceQty>
+                </output>
+            </productionPower>
+        </developmentCard>
+
+        <developmentCard points="4" level="1" color="BLUE">
+            <cost>
+                <resourceQty type="COIN">2</resourceQty>
+                <resourceQty type="SERVANT">2</resourceQty>
+            </cost>
+            <productionPower>
+                <input>
+                    <resourceQty type="SHIELD">1</resourceQty>
+                    <resourceQty type="STONE">1</resourceQty>
+                </input>
+                <output>
+                    <resourceQty type="SERVANT">2</resourceQty>
+                    <resourceQty type="FAITH">1</resourceQty>
+                </output>
+            </productionPower>
+        </developmentCard>
+
+        <developmentCard points="4" level="1" color="YELLOW">
+            <cost>
+                <resourceQty type="STONE">2</resourceQty>
+                <resourceQty type="SHIELD">2</resourceQty>
+            </cost>
+            <productionPower>
+                <input>
+                    <resourceQty type="COIN">1</resourceQty>
+                    <resourceQty type="SERVANT">1</resourceQty>
+                </input>
+                <output>
+                    <resourceQty type="SHIELD">2</resourceQty>
+                    <resourceQty type="FAITH">1</resourceQty>
+                </output>
+            </productionPower>
+        </developmentCard>
+
+        <developmentCard points="5" level="2" color="GREEN">
+            <cost>
+                <resourceQty type="SHIELD">4</resourceQty>
+            </cost>
+            <productionPower>
+                <input>
+                    <resourceQty type="STONE">1</resourceQty>
+                </input>
+                <output>
+                    <resourceQty type="FAITH">2</resourceQty>
+                </output>
+            </productionPower>
+        </developmentCard>
+
+        <developmentCard points="5" level="2" color="PURPLE">
+            <cost>
+                <resourceQty type="SERVANT">4</resourceQty>
+            </cost>
+            <productionPower>
+                <input>
+                    <resourceQty type="COIN">1</resourceQty>
+                </input>
+                <output>
+                    <resourceQty type="FAITH">2</resourceQty>
+                </output>
+            </productionPower>
+        </developmentCard>
+
+        <developmentCard points="5" level="2" color="BLUE">
+            <cost>
+                <resourceQty type="COIN">4</resourceQty>
+            </cost>
+            <productionPower>
+                <input>
+                    <resourceQty type="SERVANT">1</resourceQty>
+                </input>
+                <output>
+                    <resourceQty type="FAITH">2</resourceQty>
+                </output>
+            </productionPower>
+        </developmentCard>
+
+        <developmentCard points="5" level="2" color="YELLOW">
+            <cost>
+                <resourceQty type="STONE">4</resourceQty>
+            </cost>
+            <productionPower>
+                <input>
+                    <resourceQty type="SHIELD">1</resourceQty>
+                </input>
+                <output>
+                    <resourceQty type="FAITH">2</resourceQty>
+                </output>
+            </productionPower>
+        </developmentCard>
+
+        <developmentCard points="6" level="2" color="GREEN">
+            <cost>
+                <resourceQty type="SHIELD">3</resourceQty>
+                <resourceQty type="SERVANT">2</resourceQty>
+            </cost>
+            <productionPower>
+                <input>
+                    <resourceQty type="SHIELD">1</resourceQty>
+                    <resourceQty type="SERVANT">1</resourceQty>
+                </input>
+                <output>
+                    <resourceQty type="STONE">3</resourceQty>
+                </output>
+            </productionPower>
+        </developmentCard>
+
+        <developmentCard points="6" level="2" color="PURPLE">
+            <cost>
+                <resourceQty type="SERVANT">3</resourceQty>
+                <resourceQty type="COIN">2</resourceQty>
+            </cost>
+            <productionPower>
+                <input>
+                    <resourceQty type="COIN">1</resourceQty>
+                    <resourceQty type="SERVANT">1</resourceQty>
+                </input>
+                <output>
+                    <resourceQty type="SHIELD">3</resourceQty>
+                </output>
+            </productionPower>
+        </developmentCard>
+
+        <developmentCard points="6" level="2" color="BLUE">
+            <cost>
+                <resourceQty type="COIN">3</resourceQty>
+                <resourceQty type="STONE">2</resourceQty>
+            </cost>
+            <productionPower>
+                <input>
+                    <resourceQty type="COIN">1</resourceQty>
+                    <resourceQty type="STONE">1</resourceQty>
+                </input>
+                <output>
+                    <resourceQty type="SERVANT">3</resourceQty>
+                </output>
+            </productionPower>
+        </developmentCard>
+
+        <developmentCard points="6" level="2" color="YELLOW">
+            <cost>
+                <resourceQty type="STONE">3</resourceQty>
+                <resourceQty type="SHIELD">2</resourceQty>
+            </cost>
+            <productionPower>
+                <input>
+                    <resourceQty type="STONE">1</resourceQty>
+                    <resourceQty type="SHIELD">1</resourceQty>
+                </input>
+                <output>
+                    <resourceQty type="COIN">3</resourceQty>
+                </output>
+            </productionPower>
+        </developmentCard>
+
+        <developmentCard points="7" level="2" color="GREEN">
+            <cost>
+                <resourceQty type="SHIELD">5</resourceQty>
+            </cost>
+            <productionPower>
+                <input>
+                    <resourceQty type="COIN">2</resourceQty>
+                </input>
+                <output>
+                    <resourceQty type="STONE">2</resourceQty>
+                    <resourceQty type="FAITH">2</resourceQty>
+                </output>
+            </productionPower>
+        </developmentCard>
+
+        <developmentCard points="7" level="2" color="PURPLE">
+            <cost>
+                <resourceQty type="SERVANT">5</resourceQty>
+            </cost>
+            <productionPower>
+                <input>
+                    <resourceQty type="STONE">2</resourceQty>
+                </input>
+                <output>
+                    <resourceQty type="COIN">2</resourceQty>
+                    <resourceQty type="FAITH">2</resourceQty>
+                </output>
+            </productionPower>
+        </developmentCard>
+
+        <developmentCard points="7" level="2" color="BLUE">
+            <cost>
+                <resourceQty type="COIN">5</resourceQty>
+            </cost>
+            <productionPower>
+                <input>
+                    <resourceQty type="SERVANT">2</resourceQty>
+                </input>
+                <output>
+                    <resourceQty type="SHIELD">2</resourceQty>
+                    <resourceQty type="FAITH">2</resourceQty>
+                </output>
+            </productionPower>
+        </developmentCard>
+
+        <developmentCard points="7" level="2" color="YELLOW">
+            <cost>
+                <resourceQty type="STONE">5</resourceQty>
+            </cost>
+            <productionPower>
+                <input>
+                    <resourceQty type="SHIELD">2</resourceQty>
+                </input>
+                <output>
+                    <resourceQty type="SERVANT">2</resourceQty>
+                    <resourceQty type="FAITH">2</resourceQty>
+                </output>
+            </productionPower>
+        </developmentCard>
+
+        <developmentCard points="8" level="2" color="GREEN">
+            <cost>
+                <resourceQty type="SHIELD">3</resourceQty>
+                <resourceQty type="COIN">3</resourceQty>
+            </cost>
+            <productionPower>
+                <input>
+                    <resourceQty type="COIN">1</resourceQty>
+                </input>
+                <output>
+                    <resourceQty type="SHIELD">2</resourceQty>
+                    <resourceQty type="FAITH">1</resourceQty>
+                </output>
+            </productionPower>
+        </developmentCard>
+
+        <developmentCard points="8" level="2" color="PURPLE">
+            <cost>
+                <resourceQty type="SERVANT">3</resourceQty>
+                <resourceQty type="SHIELD">3</resourceQty>
+            </cost>
+            <productionPower>
+                <input>
+                    <resourceQty type="STONE">1</resourceQty>
+                </input>
+                <output>
+                    <resourceQty type="SERVANT">2</resourceQty>
+                    <resourceQty type="FAITH">1</resourceQty>
+                </output>
+            </productionPower>
+        </developmentCard>
+
+        <developmentCard points="8" level="2" color="BLUE">
+            <cost>
+                <resourceQty type="COIN">3</resourceQty>
+                <resourceQty type="STONE">3</resourceQty>
+            </cost>
+            <productionPower>
+                <input>
+                    <resourceQty type="SERVANT">1</resourceQty>
+                </input>
+                <output>
+                    <resourceQty type="STONE">2</resourceQty>
+                    <resourceQty type="FAITH">1</resourceQty>
+                </output>
+            </productionPower>
+        </developmentCard>
+
+        <developmentCard points="8" level="2" color="YELLOW">
+            <cost>
+                <resourceQty type="STONE">3</resourceQty>
+                <resourceQty type="SERVANT">3</resourceQty>
+            </cost>
+            <productionPower>
+                <input>
+                    <resourceQty type="SHIELD">1</resourceQty>
+                </input>
+                <output>
+                    <resourceQty type="COIN">2</resourceQty>
+                    <resourceQty type="FAITH">1</resourceQty>
+                </output>
+            </productionPower>
+        </developmentCard>
+
+        <developmentCard points="9" level="3" color="GREEN">
+            <cost>
+                <resourceQty type="SHIELD">6</resourceQty>
+            </cost>
+            <productionPower>
+                <input>
+                    <resourceQty type="COIN">2</resourceQty>
+                </input>
+                <output>
+                    <resourceQty type="STONE">3</resourceQty>
+                    <resourceQty type="FAITH">2</resourceQty>
+                    <resourceQty type="FAITH">2</resourceQty>
+                </output>
+            </productionPower>
+        </developmentCard>
+
+        <developmentCard points="9" level="3" color="PURPLE">
+            <cost>
+                <resourceQty type="SERVANT">6</resourceQty>
+            </cost>
+            <productionPower>
+                <input>
+                    <resourceQty type="STONE">2</resourceQty>
+                </input>
+                <output>
+                    <resourceQty type="COIN">3</resourceQty>
+                    <resourceQty type="FAITH">2</resourceQty>
+                </output>
+            </productionPower>
+        </developmentCard>
+
+        <developmentCard points="9" level="3" color="BLUE">
+            <cost>
+                <resourceQty type="COIN">6</resourceQty>
+            </cost>
+            <productionPower>
+                <input>
+                    <resourceQty type="SERVANT">2</resourceQty>
+                </input>
+                <output>
+                    <resourceQty type="SHIELD">3</resourceQty>
+                    <resourceQty type="FAITH">2</resourceQty>
+                </output>
+            </productionPower>
+        </developmentCard>
+
+        <developmentCard points="9" level="3" color="YELLOW">
+            <cost>
+                <resourceQty type="STONE">6</resourceQty>
+            </cost>
+            <productionPower>
+                <input>
+                    <resourceQty type="SHIELD">2</resourceQty>
+                </input>
+                <output>
+                    <resourceQty type="SERVANT">3</resourceQty>
+                    <resourceQty type="FAITH">2</resourceQty>
+                </output>
+            </productionPower>
+        </developmentCard>
+
+        <developmentCard points="0" level="3" color="GREEN">
+            <cost>
+                <resourceQty type="SHIELD">5</resourceQty>
+                <resourceQty type="SERVANT">2</resourceQty>
+            </cost>
+            <productionPower>
+                <input>
+                    <resourceQty type="COIN">1</resourceQty>
+                    <resourceQty type="SERVANT">1</resourceQty>
+                </input>
+                <output>
+                    <resourceQty type="SHIELD">2</resourceQty>
+                    <resourceQty type="STONE">2</resourceQty>
+                    <resourceQty type="FAITH">1</resourceQty>
+                </output>
+            </productionPower>
+        </developmentCard>
+
+        <developmentCard points="0" level="3" color="PURPLE">
+            <cost>
+                <resourceQty type="SERVANT">5</resourceQty>
+                <resourceQty type="COIN">2</resourceQty>
+            </cost>
+            <productionPower>
+                <input>
+                    <resourceQty type="STONE">1</resourceQty>
+                    <resourceQty type="SHIELD">1</resourceQty>
+                </input>
+                <output>
+                    <resourceQty type="COIN">2</resourceQty>
+                    <resourceQty type="SERVANT">2</resourceQty>
+                    <resourceQty type="FAITH">1</resourceQty>
+                </output>
+            </productionPower>
+        </developmentCard>
+
+        <developmentCard points="0" level="3" color="BLUE">
+            <cost>
+                <resourceQty type="COIN">5</resourceQty>
+                <resourceQty type="STONE">2</resourceQty>
+            </cost>
+            <productionPower>
+                <input>
+                    <resourceQty type="COIN">1</resourceQty>
+                    <resourceQty type="SHIELD">1</resourceQty>
+                </input>
+                <output>
+                    <resourceQty type="SERVANT">2</resourceQty>
+                    <resourceQty type="STONE">2</resourceQty>
+                    <resourceQty type="FAITH">1</resourceQty>
+                </output>
+            </productionPower>
+        </developmentCard>
+
+        <developmentCard points="0" level="3" color="YELLOW">
+            <cost>
+                <resourceQty type="STONE">5</resourceQty>
+                <resourceQty type="SERVANT">2</resourceQty>
+            </cost>
+            <productionPower>
+                <input>
+                    <resourceQty type="STONE">1</resourceQty>
+                    <resourceQty type="SERVANT">1</resourceQty>
+                </input>
+                <output>
+                    <resourceQty type="COIN">2</resourceQty>
+                    <resourceQty type="SHIELD">2</resourceQty>
+                    <resourceQty type="FAITH">1</resourceQty>
+                </output>
+            </productionPower>
+        </developmentCard>
+
+        <developmentCard points="1" level="3" color="GREEN">
+            <cost>
+                <resourceQty type="SHIELD">7</resourceQty>
+            </cost>
+            <productionPower>
+                <input>
+                    <resourceQty type="SERVANT">1</resourceQty>
+                </input>
+                <output>
+                    <resourceQty type="COIN">1</resourceQty>
+                    <resourceQty type="FAITH">3</resourceQty>
+                </output>
+            </productionPower>
+        </developmentCard>
+
+        <developmentCard points="1" level="3" color="PURPLE">
+            <cost>
+                <resourceQty type="SERVANT">7</resourceQty>
+            </cost>
+            <productionPower>
+                <input>
+                    <resourceQty type="COIN">1</resourceQty>
+                </input>
+                <output>
+                    <resourceQty type="STONE">1</resourceQty>
+                    <resourceQty type="FAITH">3</resourceQty>
+                </output>
+            </productionPower>
+        </developmentCard>
+
+        <developmentCard points="1" level="3" color="BLUE">
+            <cost>
+                <resourceQty type="COIN">7</resourceQty>
+            </cost>
+            <productionPower>
+                <input>
+                    <resourceQty type="STONE">1</resourceQty>
+                </input>
+                <output>
+                    <resourceQty type="SHIELD">1</resourceQty>
+                    <resourceQty type="FAITH">3</resourceQty>
+                </output>
+            </productionPower>
+        </developmentCard>
+
+        <developmentCard points="1" level="3" color="YELLOW">
+            <cost>
+                <resourceQty type="STONE">7</resourceQty>
+            </cost>
+            <productionPower>
+                <input>
+                    <resourceQty type="SHIELD">1</resourceQty>
+                </input>
+                <output>
+                    <resourceQty type="SERVANT">1</resourceQty>
+                    <resourceQty type="FAITH">3</resourceQty>
+                </output>
+            </productionPower>
+        </developmentCard>
+
+        <developmentCard points="2" level="3" color="GREEN">
+            <cost>
+                <resourceQty type="SHIELD">4</resourceQty>
+                <resourceQty type="COIN">4</resourceQty>
+            </cost>
+            <productionPower>
+                <input>
+                    <resourceQty type="STONE">1</resourceQty>
+                </input>
+                <output>
+                    <resourceQty type="COIN">3</resourceQty>
+                    <resourceQty type="SHIELD">1</resourceQty>
+                </output>
+            </productionPower>
+        </developmentCard>
+
+        <developmentCard points="2" level="3" color="PURPLE">
+            <cost>
+                <resourceQty type="SERVANT">4</resourceQty>
+                <resourceQty type="SHIELD">4</resourceQty>
+            </cost>
+            <productionPower>
+                <input>
+                    <resourceQty type="COIN">1</resourceQty>
+                </input>
+                <output>
+                    <resourceQty type="STONE">3</resourceQty>
+                    <resourceQty type="SERVANT">1</resourceQty>
+                </output>
+            </productionPower>
+        </developmentCard>
+
+        <developmentCard points="2" level="3" color="BLUE">
+            <cost>
+                <resourceQty type="COIN">4</resourceQty>
+                <resourceQty type="STONE">4</resourceQty>
+            </cost>
+            <productionPower>
+                <input>
+                    <resourceQty type="SERVANT">1</resourceQty>
+                </input>
+                <output>
+                    <resourceQty type="COIN">1</resourceQty>
+                    <resourceQty type="SHIELD">3</resourceQty>
+                </output>
+            </productionPower>
+        </developmentCard>
+
+        <developmentCard points="2" level="3" color="YELLOW">
+            <cost>
+                <resourceQty type="STONE">4</resourceQty>
+                <resourceQty type="SERVANT">4</resourceQty>
+            </cost>
+            <productionPower>
+                <input>
+                    <resourceQty type="SHIELD">1</resourceQty>
+                </input>
+                <output>
+                    <resourceQty type="STONE">1</resourceQty>
+                    <resourceQty type="SERVANT">3</resourceQty>
+                </output>
+            </productionPower>
+        </developmentCard>
+
+    </developmentCards>
+
+    <leaderCards>
+
+        <leaderCard points="2">
+            <resourceRequirements/>
+            <cardRequirements>
+                <cardReqQty color="YELLOW">1</cardReqQty>
+                <cardReqQty color="GREEN">1</cardReqQty>
+            </cardRequirements>
+            <cardDiscountAbility>SERVANT</cardDiscountAbility>
+        </leaderCard>
+
+        <leaderCard points="2">
+            <resourceRequirements/>
+            <cardRequirements>
+                <cardReqQty color="BLUE">1</cardReqQty>
+                <cardReqQty color="PURPLE">1</cardReqQty>
+            </cardRequirements>
+            <cardDiscountAbility>SHIELD</cardDiscountAbility>
+        </leaderCard>
+
+        <leaderCard points="2">
+            <resourceRequirements/>
+            <cardRequirements>
+                <cardReqQty color="GREEN">1</cardReqQty>
+                <cardReqQty color="BLUE">1</cardReqQty>
+            </cardRequirements>
+            <cardDiscountAbility>STONE</cardDiscountAbility>
+        </leaderCard>
+
+        <leaderCard points="2">
+            <resourceRequirements/>
+            <cardRequirements>
+                <cardReqQty color="YELLOW">1</cardReqQty>
+                <cardReqQty color="PURPLE">1</cardReqQty>
+            </cardRequirements>
+            <cardDiscountAbility>COIN</cardDiscountAbility>
+        </leaderCard>
+
+        <leaderCard points="3">
+            <resourceRequirements>
+                <resourceQty type="COIN">5</resourceQty>
+            </resourceRequirements>
+            <cardRequirements/>
+            <extraDepotAbility>STONE</extraDepotAbility>
+        </leaderCard>
+
+        <leaderCard points="3">
+            <resourceRequirements>
+                <resourceQty type="STONE">5</resourceQty>
+            </resourceRequirements>
+            <cardRequirements/>
+            <extraDepotAbility>SERVANT</extraDepotAbility>
+        </leaderCard>
+
+        <leaderCard points="3">
+            <resourceRequirements>
+                <resourceQty type="SERVANT">5</resourceQty>
+            </resourceRequirements>
+            <cardRequirements/>
+            <extraDepotAbility>SHIELD</extraDepotAbility>
+        </leaderCard>
+
+        <leaderCard points="3">
+            <resourceRequirements>
+                <resourceQty type="SHIELD">5</resourceQty>
+            </resourceRequirements>
+            <cardRequirements/>
+            <extraDepotAbility>COIN</extraDepotAbility>
+        </leaderCard>
+
+        <leaderCard points="5">
+            <resourceRequirements/>
+            <cardRequirements>
+                <cardReqQty color="YELLOW">2</cardReqQty>
+                <cardReqQty color="BLUE">1</cardReqQty>
+            </cardRequirements>
+            <whiteMarbleAbility>SERVANT</whiteMarbleAbility>
+        </leaderCard>
+
+        <leaderCard points="5">
+            <resourceRequirements/>
+            <cardRequirements>
+                <cardReqQty color="GREEN">2</cardReqQty>
+                <cardReqQty color="PURPLE">1</cardReqQty>
+            </cardRequirements>
+            <whiteMarbleAbility>SHIELD</whiteMarbleAbility>
+        </leaderCard>
+
+        <leaderCard points="5">
+            <resourceRequirements/>
+            <cardRequirements>
+                <cardReqQty color="BLUE">2</cardReqQty>
+                <cardReqQty color="YELLOW">1</cardReqQty>
+            </cardRequirements>
+            <whiteMarbleAbility>STONE</whiteMarbleAbility>
+        </leaderCard>
+
+        <leaderCard points="5">
+            <resourceRequirements/>
+            <cardRequirements>
+                <cardReqQty color="PURPLE">2</cardReqQty>
+                <cardReqQty color="GREEN">1</cardReqQty>
+            </cardRequirements>
+            <whiteMarbleAbility>COIN</whiteMarbleAbility>
+        </leaderCard>
+
+        <leaderCard points="4">
+            <resourceRequirements/>
+            <cardRequirements>
+                <cardReqQty color="YELLOW" level="2">1</cardReqQty>
+            </cardRequirements>
+            <productionPower>
+                <agnosticOutput>1</agnosticOutput>
+                <input>
+                    <resourceQty type="SHIELD">1</resourceQty>
+                </input>
+                <output>
+                    <resourceQty type="FAITH">1</resourceQty>
+                </output>
+            </productionPower>
+        </leaderCard>
+
+        <leaderCard points="4">
+            <resourceRequirements/>
+            <cardRequirements>
+                <cardReqQty color="BLUE" level="2">1</cardReqQty>
+            </cardRequirements>
+            <productionPower>
+                <agnosticOutput>1</agnosticOutput>
+                <input>
+                    <resourceQty type="SERVANT">1</resourceQty>
+                </input>
+                <output>
+                    <resourceQty type="FAITH">1</resourceQty>
+                </output>
+            </productionPower>
+        </leaderCard>
+
+        <leaderCard points="4">
+            <resourceRequirements/>
+            <cardRequirements>
+                <cardReqQty color="PURPLE" level="2">1</cardReqQty>
+            </cardRequirements>
+            <productionPower>
+                <agnosticOutput>1</agnosticOutput>
+                <input>
+                    <resourceQty type="STONE">1</resourceQty>
+                </input>
+                <output>
+                    <resourceQty type="FAITH">1</resourceQty>
+                </output>
+            </productionPower>
+        </leaderCard>
+
+        <leaderCard points="4">
+            <resourceRequirements/>
+            <cardRequirements>
+                <cardReqQty color="GREEN" level="2">1</cardReqQty>
+            </cardRequirements>
+            <productionPower>
+                <agnosticOutput>1</agnosticOutput>
+                <input>
+                    <resourceQty type="COIN">1</resourceQty>
+                </input>
+                <output>
+                    <resourceQty type="FAITH">1</resourceQty>
+                </output>
+            </productionPower>
+        </leaderCard>
+
+    </leaderCards>
+
+    <productionPower>
+        <agnosticInput>2</agnosticInput>
+        <agnosticOutput>1</agnosticOutput>
+        <input/>
+        <output/>
+    </productionPower>
+
+    <faithTrack>
+
+        <victoryPointsMap>
+            <pointChange>
+                <key>3</key>
+                <val>1</val>
+            </pointChange>
+            <pointChange>
+                <key>6</key>
+                <val>2</val>
+            </pointChange>
+            <pointChange>
+                <key>9</key>
+                <val>4</val>
+            </pointChange>
+            <pointChange>
+                <key>12</key>
+                <val>6</val>
+            </pointChange>
+            <pointChange>
+                <key>15</key>
+                <val>9</val>
+            </pointChange>
+            <pointChange>
+                <key>18</key>
+                <val>12</val>
+            </pointChange>
+            <pointChange>
+                <key>21</key>
+                <val>16</val>
+            </pointChange>
+            <pointChange>
+                <key>24</key>
+                <val>20</val>
+            </pointChange>
+        </victoryPointsMap>
+
+        <sectionRanges>
+            <range>
+                <start>5</start>
+                <end>8</end>
+            </range>
+            <range>
+                <start>12</start>
+                <end>16</end>
+            </range>
+            <range>
+                <start>19</start>
+                <end>24</end>
+            </range>
+        </sectionRanges>
+
+    </faithTrack>
+
+</config>
