@@ -6,13 +6,13 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 
-public class PlayerHandler {
+public class ClientHandler {
 
     private final Socket clientSocket;
     private final ObjectInputStream input;
     private final ObjectOutputStream output;
 
-    public PlayerHandler(Socket clientSocket) throws IOException {
+    public ClientHandler(Socket clientSocket) throws IOException {
 
         this.clientSocket = clientSocket;
         input = new ObjectInputStream(clientSocket.getInputStream());

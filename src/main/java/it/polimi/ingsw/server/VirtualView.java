@@ -2,51 +2,31 @@ package it.polimi.ingsw.server;
 
 import it.polimi.ingsw.server.model.AbstractPlayer;
 import it.polimi.ingsw.server.model.Game;
-import it.polimi.ingsw.server.model.Player;
 import it.polimi.ingsw.shared.messages.CommandMsg;
 import it.polimi.ingsw.shared.messages.TrackUpdateMsg;
 
 import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.net.Socket;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class VirtualView implements Runnable{
-    private Game game;
-    private Map<String, PlayerHandler> players;
-    private ObjectOutputStream output;
-    private ObjectInputStream input;
+    private final Game game;
+    private Map<String, ClientHandler> players = new HashMap<>();
 
+    public VirtualView(String username, ClientHandler clientHandler){
+        players.put(username, clientHandler);
+        game = Game.newSinglePlayerGame(username);
+    }
 
-    public VirtualView(Map<String, PlayerHandler> players)
+    public VirtualView(Map<String, ClientHandler> players)
     {
         this.players = players;
-        Iterator<String> it = players.keySet().iterator();
-        if(players.size()==1)
-        {
-
-            game = Game.newSinglePlayerGame(it.next());
-        }
-        else
-        {
-            List<String> usernames = new ArrayList<>();
-            while (it.hasNext())
-            {
-                usernames.add(it.next());
-            }
-            game = Game.newRegularGame(usernames);
-        }
-
+        game = Game.newRegularGame(new ArrayList<String>(players.keySet()));
     }
 
     @Override
     public void run() {
         while(!game.isEndgame()){
-            PlayerHandler handler = players.get(game.getPlaying().getUsername());
+            ClientHandler handler = players.get(game.getPlaying().getUsername());
             try {
                 Object nextMsg = handler.readObject();
                 CommandMsg command = (CommandMsg)nextMsg;
@@ -60,7 +40,7 @@ public class VirtualView implements Runnable{
 
     public void faithTrackUpdate(AbstractPlayer player, boolean allBut){
         TrackUpdateMsg msg = new TrackUpdateMsg(player, allBut);
-        for (PlayerHandler handler: players.values()) {
+        for (ClientHandler handler: players.values()) {
             try {
                 handler.writeObject(msg);
             } catch (IOException e) {
