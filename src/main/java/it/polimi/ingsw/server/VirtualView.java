@@ -12,15 +12,13 @@ public class VirtualView implements Runnable{
     private final Game game;
     private Map<String, ClientHandler> players = new HashMap<>();
 
-    public VirtualView(String username, ClientHandler clientHandler){
-        players.put(username, clientHandler);
-        game = Game.newSinglePlayerGame(username);
-    }
-
     public VirtualView(Map<String, ClientHandler> players)
     {
-        this.players = players;
-        game = Game.newRegularGame(new ArrayList<String>(players.keySet()));
+        this.players.putAll(players);
+        if (players.size() == 1)
+            game = Game.newSinglePlayerGame(players.keySet().iterator().next());
+        else
+            game = Game.newRegularGame(new ArrayList<String>(players.keySet()));
     }
 
     @Override

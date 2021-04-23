@@ -8,8 +8,8 @@ import java.util.regex.Pattern;
 
 public class Matchmaker implements Runnable{
 
-    private static final String USERNAME_PATTERN = "[a-zA-Z0-9[._-]]{3,20}";
-    private ClientHandler handler;
+    private static final String USERNAME_PATTERN = "[a-zA-Z0-9._-]{3,20}";
+    private final ClientHandler handler;
     private String username;
 
     Matchmaker(Socket clientSocket) throws IOException{
@@ -23,7 +23,7 @@ public class Matchmaker implements Runnable{
                 String username = ((UsernameMsg) handler.readObject()).getUsername();
                 if (Server.activeUsernames.contains(username))
                     handler.writeObject(new LogMsg("This username is already in use. Try a new one"));
-                else if (Pattern.matches(USERNAME_PATTERN, username))
+                else if (!Pattern.matches(USERNAME_PATTERN, username))
                     handler.writeObject(new LogMsg("Illegal characters: username must be a 3-20 characters long string" +
                             "containing alphanumeric or special [._-] characters"));
                 else {
@@ -33,24 +33,30 @@ public class Matchmaker implements Runnable{
                 }
             }
 
-            handler.writeObject(new GameModeRequest());
-            GameModeMsg gameModeMsg = (GameModeMsg) handler.readObject();
-            if(gameModeMsg.getMode().equals(GameModeMsg.GameMode.SINGLEPLAYER)) {
-                new Thread(new VirtualView(username, handler)).start();
+            handler.writeObject(new NPlayerRequest());
+            int nPlayers = ((NPlayerMsg) handler.readObject()).getNPlayers();
+            if (nPlayers < 1 || nPlayers > 4){
+                handler.writeObject(new LogMsg("Illegal number of players"));
+                terminate();
                 return;
             }
-
-            Server.publicRoom.add(username, handler);
-
+            else {
+                Server.publicRooms[nPlayers - 1].add(username, handler);
+            }
         }
         catch (IOException e){
             System.out.println("Connection dropped");
-            Server.logOut(username);
+            terminate();
         }
         catch (ClassNotFoundException e){
             System.out.println("Illegal object sent to matchmaker");
-            Server.logOut(username);
+            terminate();
         }
+    }
+
+    private void terminate(){
+        handler.closeConnection();
+        Server.logOut(username);
     }
 
 }

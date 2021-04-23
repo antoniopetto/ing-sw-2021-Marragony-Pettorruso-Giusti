@@ -1,8 +1,8 @@
 package it.polimi.ingsw.shared.messages;
 
-import it.polimi.ingsw.client.simplemodel.SimpleModel;
+import it.polimi.ingsw.client.simplemodel.SimpleGame;
 
 public interface ServerMsg {
 
-    void execute(SimpleModel model);
+    void execute(SimpleGame model);
 }

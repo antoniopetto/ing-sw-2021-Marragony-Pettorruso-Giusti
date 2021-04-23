@@ -8,12 +8,16 @@ import java.util.Set;
 
 public class Server {
 
-    public static final PublicWaitRoom publicRoom = PublicWaitRoom.getInstance();
+    public static final PublicWaitRoom[] publicRooms = new PublicWaitRoom[4];
     private static final int SOCKET_PORT = 7777;
     public static final Set<String> activeUsernames = new HashSet<>();
 
     public static void main(String[] args){
 
+        publicRooms[0] = new PublicWaitRoom(1);
+        publicRooms[1] = new PublicWaitRoom(2);
+        publicRooms[2] = new PublicWaitRoom(3);
+        publicRooms[3] = new PublicWaitRoom(4);
         ServerSocket socket;
         try{
             socket = new ServerSocket(SOCKET_PORT);
@@ -33,11 +37,12 @@ public class Server {
             catch (IOException e){
                 System.out.println("Connection dropped during thread creation");
             }
+
         }
     }
 
     public static void logOut(String username){
-        if (username != null && activeUsernames.contains(username)){
+        if (username != null){
             activeUsernames.remove(username);
         }
     }
