@@ -1,4 +1,4 @@
-package it.polimi.ingsw.shared.messages;
+package it.polimi.ingsw.shared.messages.server;
 
 import it.polimi.ingsw.client.simplemodel.SimpleGame;
 

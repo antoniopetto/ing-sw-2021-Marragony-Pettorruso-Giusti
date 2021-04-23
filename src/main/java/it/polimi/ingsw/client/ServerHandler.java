@@ -2,7 +2,7 @@ package it.polimi.ingsw.client;
 
 
 import it.polimi.ingsw.client.simplemodel.SimpleGame;
-import it.polimi.ingsw.shared.messages.ServerMsg;
+import it.polimi.ingsw.shared.messages.server.ServerMsg;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;

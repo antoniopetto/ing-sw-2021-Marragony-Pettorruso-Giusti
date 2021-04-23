@@ -2,10 +2,14 @@ package it.polimi.ingsw.client.simplemodel;
 
 import it.polimi.ingsw.client.View;
 
+import java.util.Map;
+
 public class SimplePlayer {
     private String username;
     private int position;
     private View view;
+    private SimpleWarehouse warehouse;
+    private Map<String, SimpleWarehouse> othersWarehouse;
 
 
     public void advance()
@@ -16,5 +20,17 @@ public class SimplePlayer {
 
     public String getUsername() {
         return username;
+    }
+
+    public View getView(){return view;}
+
+    public void changeOthersState(String player, SimpleWarehouse warehouse)
+    {
+        othersWarehouse.replace(player, warehouse);
+    }
+
+    public void changeWarehouse(SimpleWarehouse warehouse)
+    {
+        this.warehouse = warehouse;
     }
 }

@@ -2,8 +2,12 @@ package it.polimi.ingsw.server;
 
 import it.polimi.ingsw.server.model.AbstractPlayer;
 import it.polimi.ingsw.server.model.Game;
-import it.polimi.ingsw.shared.messages.CommandMsg;
-import it.polimi.ingsw.shared.messages.TrackUpdateMsg;
+import it.polimi.ingsw.server.model.playerboard.Depot;
+import it.polimi.ingsw.server.model.playerboard.DepotName;
+import it.polimi.ingsw.server.model.playerboard.Resource;
+import it.polimi.ingsw.shared.messages.command.CommandMsg;
+import it.polimi.ingsw.shared.messages.server.TrackUpdateMsg;
+import it.polimi.ingsw.shared.messages.server.WarehouseUpdateMsg;
 
 import java.io.IOException;
 import java.util.*;
@@ -18,7 +22,7 @@ public class VirtualView implements Runnable{
         if (players.size() == 1)
             game = Game.newSinglePlayerGame(players.keySet().iterator().next());
         else
-            game = Game.newRegularGame(new ArrayList<String>(players.keySet()));
+            game = Game.newRegularGame(new ArrayList<>(players.keySet()));
     }
 
     @Override
@@ -28,7 +32,7 @@ public class VirtualView implements Runnable{
             try {
                 Object nextMsg = handler.readObject();
                 CommandMsg command = (CommandMsg)nextMsg;
-                command.execute(game);
+                command.execute(game, handler);
             } catch (IOException | ClassNotFoundException e) {
                 e.printStackTrace();
             }
@@ -48,4 +52,24 @@ public class VirtualView implements Runnable{
     }
 
     public void vaticanReportUpdate(){}
+
+    public void warehouseUpdate()
+    {
+        Map<DepotName, Map<Resource, Integer>> warehouse = new HashMap<>();
+        for (Depot depot: game.getPlaying().getPlayerBoard().getWareHouse().getDepots()) {
+            Map<Resource, Integer> resources = new HashMap<>();
+            resources.put(depot.getResource(), depot.getQuantity());
+            warehouse.put(depot.getName(), resources);
+        }
+
+        WarehouseUpdateMsg msg = new WarehouseUpdateMsg(warehouse, game.getPlaying().getUsername());
+        players.values().forEach(c -> {
+            try {
+                c.writeObject(msg);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
+
+    }
 }
