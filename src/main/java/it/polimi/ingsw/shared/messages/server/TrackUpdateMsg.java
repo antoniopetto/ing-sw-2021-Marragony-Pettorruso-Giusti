@@ -1,10 +1,10 @@
-package it.polimi.ingsw.shared.messages;
+package it.polimi.ingsw.shared.messages.server;
 
 
-import it.polimi.ingsw.client.simplemodel.SimpleModel;
+import it.polimi.ingsw.client.simplemodel.SimpleGame;
 import it.polimi.ingsw.client.simplemodel.SimplePlayer;
 import it.polimi.ingsw.server.model.AbstractPlayer;
-import it.polimi.ingsw.server.model.Player;
+import it.polimi.ingsw.shared.messages.server.ServerMsg;
 
 public class TrackUpdateMsg implements ServerMsg {
     private String player;
@@ -18,7 +18,7 @@ public class TrackUpdateMsg implements ServerMsg {
 
 
     @Override
-    public void execute(SimpleModel model) {
+    public void execute(SimpleGame model) {
         for (SimplePlayer simplePlayer:model.getPlayers()) {
             //It has to be modified
             if((simplePlayer.getUsername()==null&&player==null&&!allBut)||

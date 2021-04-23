@@ -244,6 +244,10 @@ public class Game {
         //TODO complete the creation of the track with non null parameters
     }
 
+    public List<Marble> getMarbleBuffer() {
+        return marbleBuffer;
+    }
+
     public boolean isEndgame() {
         return endgame;
     }

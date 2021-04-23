@@ -1,18 +1,17 @@
 package it.polimi.ingsw.server;
 
-import javax.imageio.event.IIOWriteProgressListener;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 
-public class PlayerHandler {
+public class ClientHandler {
 
     private final Socket clientSocket;
     private final ObjectInputStream input;
     private final ObjectOutputStream output;
 
-    public PlayerHandler(Socket clientSocket) throws IOException {
+    public ClientHandler(Socket clientSocket) throws IOException {
 
         this.clientSocket = clientSocket;
         input = new ObjectInputStream(clientSocket.getInputStream());
@@ -27,9 +26,14 @@ public class PlayerHandler {
         return input.readObject();
     }
 
-    public void closeConnection() throws IOException {
-        input.close();
-        output.close();
-        clientSocket.close();
+    public void closeConnection() {
+        try {
+            input.close();
+            output.close();
+            clientSocket.close();
+        }
+        catch (IOException e){
+
+        }
     }
 }

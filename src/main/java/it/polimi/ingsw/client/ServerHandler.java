@@ -1,9 +1,8 @@
 package it.polimi.ingsw.client;
 
 
-import it.polimi.ingsw.client.simplemodel.SimpleModel;
-import it.polimi.ingsw.shared.messages.ServerMsg;
-import it.polimi.ingsw.shared.messages.TrackUpdateMsg;
+import it.polimi.ingsw.client.simplemodel.SimpleGame;
+import it.polimi.ingsw.shared.messages.server.ServerMsg;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -14,7 +13,7 @@ public class ServerHandler implements Runnable{
     private Socket serverSocket;
     private ObjectInputStream input;
     private ObjectOutputStream output;
-    private SimpleModel model;
+    private SimpleGame model;
 
     public ServerHandler(Socket socket) throws IOException {
         serverSocket=socket;

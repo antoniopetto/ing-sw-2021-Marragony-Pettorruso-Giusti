@@ -1,5 +1,7 @@
 package it.polimi.ingsw.server.model.playerboard;
 
+import it.polimi.ingsw.server.VirtualView;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -16,6 +18,7 @@ import java.util.stream.Collectors;
  */
 public class WareHouse {
     private final List<Depot> depotList;
+    private VirtualView observer;
 
     /**
      * Constructs the WareHouse
@@ -80,7 +83,11 @@ public class WareHouse {
      * @param r the Resource to add
      */
     public void insert(DepotName depotName, Resource r){
-        if(isInsertable(depotName,r)) depotByName(depotName).addResource(r);
+        if(isInsertable(depotName,r))
+        {
+            depotByName(depotName).addResource(r);
+            observer.warehouseUpdate();
+        }
           else throw new IllegalArgumentException("There isn't an empty space of the select Depot in which to insert the Resource r" +
                                                     "or The Resource that the player wants to insert does not match " +
                                                     "the one already inserted in that Depot");
@@ -115,6 +122,7 @@ public class WareHouse {
             if(isExtraDepot(depotName1) && isExtraDepot(depotName2)) switchExtraDepots(depotName1, depotName2, true);
             else if(isExtraDepot(depotName1) || isExtraDepot(depotName2))  switchExtraDepots(depotName1, depotName2, false);
                     else switchNormalDepot(depotName1,depotName2);
+            observer.warehouseUpdate();
     }
 
     /**
