@@ -1,6 +1,7 @@
 package it.polimi.ingsw.server;
 
 import it.polimi.ingsw.shared.messages.*;
+import it.polimi.ingsw.shared.messages.server.ErrorMsg;
 
 import java.io.IOException;
 import java.net.Socket;
@@ -22,9 +23,9 @@ public class Matchmaker implements Runnable{
                 handler.writeObject(new UsernameRequest());
                 String username = ((UsernameMsg) handler.readObject()).getUsername();
                 if (Server.activeUsernames.contains(username))
-                    handler.writeObject(new LogMsg("This username is already in use. Try a new one"));
+                    handler.writeObject(new ErrorMsg("This username is already in use. Try a new one"));
                 else if (!Pattern.matches(USERNAME_PATTERN, username))
-                    handler.writeObject(new LogMsg("Illegal characters: username must be a 3-20 characters long string" +
+                    handler.writeObject(new ErrorMsg("Illegal characters: username must be a 3-20 characters long string" +
                             "containing alphanumeric or special [._-] characters"));
                 else {
                     this.username = username;
@@ -36,7 +37,7 @@ public class Matchmaker implements Runnable{
             handler.writeObject(new NPlayerRequest());
             int nPlayers = ((NPlayerMsg) handler.readObject()).getNPlayers();
             if (nPlayers < 1 || nPlayers > 4){
-                handler.writeObject(new LogMsg("Illegal number of players"));
+                handler.writeObject(new ErrorMsg("Illegal number of players"));
                 terminate();
                 return;
             }

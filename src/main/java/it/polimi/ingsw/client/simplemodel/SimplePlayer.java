@@ -9,8 +9,6 @@ public class SimplePlayer {
     private int position;
     private View view;
     private SimpleWarehouse warehouse;
-    private Map<String, SimpleWarehouse> othersWarehouse;
-
 
     public void advance()
     {
@@ -24,10 +22,6 @@ public class SimplePlayer {
 
     public View getView(){return view;}
 
-    public void changeOthersState(String player, SimpleWarehouse warehouse)
-    {
-        othersWarehouse.replace(player, warehouse);
-    }
 
     public void changeWarehouse(SimpleWarehouse warehouse)
     {

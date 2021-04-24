@@ -11,20 +11,17 @@ import java.util.Map;
 public class WarehouseUpdateMsg implements ServerMsg{
 
     private SimpleWarehouse warehouse;
-    private String player;
+    private String username;
 
-    public WarehouseUpdateMsg(Map<DepotName, Map<Resource, Integer>> warehouse, String player) {
+    public WarehouseUpdateMsg(Map<DepotName, Map<Resource, Integer>> warehouse, String username) {
         this.warehouse = new SimpleWarehouse(warehouse);
-        this.player=player;
+        this.username = username;
     }
 
     @Override
-    public void execute(SimpleGame model) {
-        for (SimplePlayer player: model.getPlayers()) {
-            if(player.getUsername().equals(this.player))
-                player.changeWarehouse(this.warehouse);
-            else
-                player.changeOthersState(player.getUsername(), this.warehouse);
-        }
+    public void execute(SimpleGame game) {
+        for (SimplePlayer player : game.getPlayers())
+            if (player.getUsername().equals(username))
+                player.changeWarehouse(warehouse);
     }
 }

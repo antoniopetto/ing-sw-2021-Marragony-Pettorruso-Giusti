@@ -1,6 +1,6 @@
 package it.polimi.ingsw.server.model;
 
-import it.polimi.ingsw.server.model.cards.DevelopmentCard;
+import it.polimi.ingsw.server.VirtualView;
 import it.polimi.ingsw.server.model.cards.DevelopmentCardDecks;
 import it.polimi.ingsw.server.model.exceptions.ElementNotFoundException;
 import it.polimi.ingsw.server.model.playerboard.DepotName;
@@ -16,44 +16,44 @@ import java.util.List;
 import java.util.Optional;
 
 public class Game {
-    private boolean endgame;
-    private final Optional<SoloRival> soloRival;
+
+    private boolean lastRound = false;
+    private boolean preTurn = true;
+    private boolean inserting = false;
+    private boolean postTurn = false;
     private final boolean singlePlayer;
+    private Player playing;
+
+    private final VirtualView virtualView;
+    private final Optional<SoloRival> soloRival;
     private final List<Player> players = new ArrayList<>();
     private final MarketBoard marketBoard = new MarketBoard();
     private DevelopmentCardDecks developmentCardDecks;
-    private FaithTrack track;
-    private Player playing;
+    private FaithTrack faithTrack;
     private List<Marble> marbleBuffer = new ArrayList<>();
 
-    public Optional<SoloRival> getSoloRival() {
-        return soloRival;
+    public static Game newSinglePlayerGame(String username, VirtualView virtualView) {
+        return new Game(username, virtualView);
     }
 
-    public FaithTrack getTrack() {
-        return track;
+    public static Game newRegularGame(List<String> usernames, VirtualView virtualView) {
+        return new Game(usernames, virtualView);
     }
 
-    public static Game newSinglePlayerGame(String username) {
-        return new Game(username);
-    }
-
-    public static Game newRegularGame(List<String> usernames) {
-        return new Game(usernames);
-    }
-
-    private Game(String username) {
+    private Game(String username, VirtualView virtualView) {
+        this.virtualView = virtualView;
         singlePlayer = true;
         players.add(new Player(username));
         soloRival = Optional.of(new SoloRival());
     }
 
+    private Game(List<String> usernames, VirtualView virtualView) {
 
-    private Game(List<String> usernames) {
+        this.virtualView = virtualView;
+        singlePlayer = false;
         if (usernames.size() > 4 || usernames.size() < 2)
             throw new IllegalArgumentException("Number of players out of bounds");
 
-        singlePlayer = false;
         soloRival = Optional.empty();
 
         for (String s : usernames) {
@@ -63,25 +63,12 @@ public class Game {
         playing = players.get(0);
     }
 
-    private Player findPlayer(String username) {
-        return players.stream()
-                .filter(player -> username.equals(player.getUsername()))
-                .findFirst().orElse(null);
-    }
-
     public void singlePlayerTurn()
     {
         if(soloRival.isPresent())
             soloRival.get().soloTurn(this);
         else
             throw new IllegalStateException("Not a single player game");
-    }
-    public MarketBoard getMarketBoard() {
-        return marketBoard;
-    }
-
-    public DevelopmentCardDecks getDevelopmentCardDecks() {
-        return developmentCardDecks;
     }
 
     /**
@@ -98,7 +85,7 @@ public class Game {
         for (Marble marble:marbles) {
             if(marble.equals(Marble.RED))
             {
-                track.advance(playing);
+                faithTrack.advance(playing);
             }
             else if(marble.equals(Marble.WHITE))
             {
@@ -160,7 +147,7 @@ public class Game {
     public void discard(Marble marble) throws ElementNotFoundException {
         int listId = findMarble(marble);
         marbleBuffer.remove(listId);
-        track.advanceAllBut(playing);
+        faithTrack.advanceAllBut(playing);
     }
 
     /**
@@ -183,72 +170,41 @@ public class Game {
         return listId;
     }
 
-
-
-
-
-
-
-    /*
-    //DA SPOSTARE NEL CONTROLLER E DA CAMBIARE
-    private int idSlot = 0; // da passare nel costruttore
-
-    public void insertCardInSlot(DevelopmentCard dCard, String user){
-
-        Player player = findPlayer(user);
-        if( player.tryBuyDevelopmentCard(dCard) ) {
-            boolean allSlots = false;
-
-            for(int i = 0; i < 3; i++){
-                player.selectIdSlot(idSlot);
-                if(player.tryToAddDevelopmentCard(dCard)){
-                    player.getPlayerBoard().pay(dCard.getRequirement());
-                    allSlots = true;
-                    break;
-                }
-            }
-
-            if(!allSlots) System.out.println("The DevelopmentCard cannot be inserted in any slot");
-
-        }
-        else System.out.println("The" + user + "Player hasn't enough resources to pay the DevelopmentCard dCard");
-
-      }
-    */
-
     public void endTurn()
     {
-        int index = players.indexOf(playing);
-        if(index==players.size()-1)
-        {
-            index =0;
+        if (!postTurn){
+            virtualView.sendError("Cannot end turn before main move");
         }
-        else
-            index++;
-        playing=players.get(index);
-    }
-    public boolean isSinglePlayer() { return singlePlayer; }
-
-    public void setDevelopmentCardDecks(List<DevelopmentCard> list) {
-        this.developmentCardDecks = new DevelopmentCardDecks(list);
+        else {
+            int nextIndex = (players.indexOf(playing) + 1) % players.size();
+            if (lastRound && nextIndex == 0)
+                virtualView.endGame();
+            else
+                playing = players.get(nextIndex);
+        }
     }
 
     public Player getPlaying() {
         return playing;
     }
 
-    public void setTrack() {
-        List<AbstractPlayer> playerList = new ArrayList<>(players);
-        soloRival.ifPresent(playerList::add);
-        //this.track = new FaithTrack(playerList, null, null);
-        //TODO complete the creation of the track with non null parameters
-    }
-
     public List<Marble> getMarbleBuffer() {
         return marbleBuffer;
     }
 
-    public boolean isEndgame() {
-        return endgame;
+    public Optional<SoloRival> getSoloRival() {
+        return soloRival;
+    }
+
+    public FaithTrack getTrack() {
+        return faithTrack;
+    }
+
+    public MarketBoard getMarketBoard() {
+        return marketBoard;
+    }
+
+    public DevelopmentCardDecks getDevelopmentCardDecks() {
+        return developmentCardDecks;
     }
 }
