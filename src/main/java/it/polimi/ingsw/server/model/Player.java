@@ -1,5 +1,6 @@
 package it.polimi.ingsw.server.model;
 
+import it.polimi.ingsw.server.VirtualView;
 import it.polimi.ingsw.server.model.cards.*;
 import it.polimi.ingsw.server.model.cards.LeaderCard;
 import it.polimi.ingsw.server.model.exceptions.NotAffordableException;
@@ -18,6 +19,7 @@ public class Player extends AbstractPlayer{
     private final Map<Resource, Integer> activeDiscounts = new EnumMap<>(Resource.class);
     private final Set<Resource> whiteMarbleAliases = new HashSet<>();
     private List<LeaderCard> leaderCardList;
+    private VirtualView observer;
 
     public Player(String username){
         this.username = username;
@@ -80,6 +82,7 @@ public class Player extends AbstractPlayer{
         if(card.isPlayable(this))
         {
             card.play(this);
+            observer.leaderCardUpdate(this,cardId);
             return true;
         }
         else return false;

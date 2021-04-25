@@ -2,10 +2,12 @@ package it.polimi.ingsw.server;
 
 import it.polimi.ingsw.server.model.AbstractPlayer;
 import it.polimi.ingsw.server.model.Game;
+import it.polimi.ingsw.server.model.Player;
 import it.polimi.ingsw.server.model.playerboard.Depot;
 import it.polimi.ingsw.server.model.playerboard.DepotName;
 import it.polimi.ingsw.server.model.playerboard.Resource;
 import it.polimi.ingsw.shared.messages.command.CommandMsg;
+import it.polimi.ingsw.shared.messages.server.LeaderCardUpdateMsg;
 import it.polimi.ingsw.shared.messages.server.TrackUpdateMsg;
 import it.polimi.ingsw.shared.messages.server.WarehouseUpdateMsg;
 
@@ -70,6 +72,20 @@ public class VirtualView implements Runnable{
                 e.printStackTrace();
             }
         });
+
+    }
+
+    public void leaderCardUpdate(Player player, int cardId)
+    {
+        LeaderCardUpdateMsg msg = new LeaderCardUpdateMsg(player.getUsername(), cardId);
+        for (ClientHandler handler: players.values()) {
+            try {
+                handler.writeObject(msg);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
 
     }
 }

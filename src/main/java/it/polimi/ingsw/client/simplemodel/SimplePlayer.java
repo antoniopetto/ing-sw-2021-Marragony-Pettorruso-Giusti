@@ -10,6 +10,7 @@ public class SimplePlayer {
     private View view;
     private SimpleWarehouse warehouse;
     private Map<String, SimpleWarehouse> othersWarehouse;
+    private final SimpleLeaderCard[] simpleLeaderCards = new SimpleLeaderCard[2];
 
 
     public void advance()
@@ -32,5 +33,10 @@ public class SimplePlayer {
     public void changeWarehouse(SimpleWarehouse warehouse)
     {
         this.warehouse = warehouse;
+    }
+
+    public void activeLeaderCard(int cardId){
+        simpleLeaderCards[cardId].play();
+        view.faceUpLeaderCard(this);
     }
 }
