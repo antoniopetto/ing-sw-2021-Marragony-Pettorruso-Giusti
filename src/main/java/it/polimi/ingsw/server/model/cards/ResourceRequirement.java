@@ -12,6 +12,8 @@ public class ResourceRequirement implements Requirement{
     private final Resource resource;
 
     public ResourceRequirement(Resource resource, int quantity) {
+        if(quantity<1) throw new IllegalArgumentException("Invalid quantity");
+        if(resource.equals(Resource.FAITH)) throw new IllegalArgumentException("Faith is not a resource requirement");
         this.quantity = quantity;
         this.resource = resource;
     }

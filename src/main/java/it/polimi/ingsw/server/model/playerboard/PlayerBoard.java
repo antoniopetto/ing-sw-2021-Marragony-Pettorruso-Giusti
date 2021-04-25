@@ -190,7 +190,7 @@ public class PlayerBoard {
                 .filter(x -> x.getId() == id)
                 .findFirst().orElse(null);
         if (result == null)
-            throw new ElementNotFoundException();
+            throw new ElementNotFoundException("No object with the specified id");
         return result;
     }
 
