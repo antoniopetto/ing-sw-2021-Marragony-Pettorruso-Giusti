@@ -10,10 +10,11 @@ import java.util.UUID;
 public abstract class Card {
 
     private final int victoryPoints;
-    private final UUID id = UUID.randomUUID();
+    private final int id;
 
-    public Card(int victoryPoints)
+    public Card(int id, int victoryPoints)
     {
+        this.id = id;
         if(victoryPoints < 0) throw  new IllegalArgumentException();
         this.victoryPoints = victoryPoints;
     }
@@ -23,7 +24,7 @@ public abstract class Card {
         return this.victoryPoints;
     }
 
-    public UUID getId() {
+    public int getId() {
         return id;
     }
 }

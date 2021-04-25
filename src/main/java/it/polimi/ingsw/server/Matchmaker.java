@@ -1,7 +1,6 @@
 package it.polimi.ingsw.server;
 
-import it.polimi.ingsw.shared.messages.*;
-import it.polimi.ingsw.shared.messages.server.ErrorMsg;
+import it.polimi.ingsw.shared.messages.view.*;
 
 import java.io.IOException;
 import java.net.Socket;
@@ -20,7 +19,7 @@ public class Matchmaker implements Runnable{
     public void run(){
         try{
             while(true) {
-                handler.writeObject(new UsernameRequest());
+                handler.writeObject(new UsernameRequestMsg());
                 String username = ((UsernameMsg) handler.readObject()).getUsername();
                 if (Server.activeUsernames.contains(username))
                     handler.writeObject(new ErrorMsg("This username is already in use. Try a new one"));
@@ -34,7 +33,7 @@ public class Matchmaker implements Runnable{
                 }
             }
 
-            handler.writeObject(new NPlayerRequest());
+            handler.writeObject(new NPlayerRequestMsg());
             int nPlayers = ((NPlayerMsg) handler.readObject()).getNPlayers();
             if (nPlayers < 1 || nPlayers > 4){
                 handler.writeObject(new ErrorMsg("Illegal number of players"));

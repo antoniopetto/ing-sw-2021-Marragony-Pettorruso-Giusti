@@ -28,8 +28,8 @@ public class ServerHandler implements Runnable{
         {
             try {
                 Object message = input.readObject();
-                ServerMsg serverMsg = (ServerMsg)message;
-                serverMsg.execute(model);
+                ServerMsg updateMsg = (ServerMsg)message;
+                updateMsg.execute(model);
             } catch (IOException | ClassNotFoundException e) {
             }
 

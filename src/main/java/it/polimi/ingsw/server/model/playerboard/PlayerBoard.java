@@ -2,7 +2,6 @@ package it.polimi.ingsw.server.model.playerboard;
 
 import it.polimi.ingsw.server.model.cards.*;
 import it.polimi.ingsw.server.model.exceptions.ElementNotFoundException;
-import it.polimi.ingsw.server.model.exceptions.NotAffordableException;
 
 import java.util.*;
 /**
@@ -113,31 +112,12 @@ public class PlayerBoard {
                 + this.wareHouse.countTotalResources() + sumCardPoints;
     }
 
-    /**
-     * This method implements the logic behind the action of activating the production in a player's turn.
-     * It receives from the user all the elements to identify what <code>ProductionPower</code>, regular or special,
-     * he wants to activate. Moreover, in association with the <code>id</code> of every special <code>ProductionPower</code>,
-     * it requires a <code>ProductionPower</code> that represents all of its agnostic <code>Resources</code> after being determined.
-     * The method first checks if the player can afford to activate these effects all at once, and if so proceeds.
-     *
-     * @param selectedCardIds                   The <code>Set</code> of <code>DevelopmentCard id</code>s that the user has selected.
-     *
-     * @param selectedExtraPowers               A <code>Map</code> linking <code>id</code> and desired composition of a special <code>ProductionPower</code>.
-     *                                          The <code>Map</code> stores an <code>Integer</code> representing the <code>id</code>,
-     *                                          and a <code>ProductionPower</code> that contains the same fixed <code>Resources</code>
-     *                                          of the corresponding power, plus the agnostic <code>Resource</code>s converted in concrete ones.
-     *
-     * @throws NotAffordableException           When at least one <code>Resource</code> cannot be afforded the entire <code>PlayerBoard</code>.
-     * @see ProductionPower
-     */
-
-    public void activateProduction(Set<UUID> selectedCardIds, Map<Integer, ProductionPower> selectedExtraPowers) throws NotAffordableException {
-
+    public ProductionPower getTotalProductionPower(Set<Integer> selectedCardIds, Map<Integer, ProductionPower> selectedExtraPowers){
         Map<Resource, Integer> totalInput = new EnumMap<>(Resource.class);
         Map<Resource, Integer> totalOutput = new EnumMap<>(Resource.class);
         ProductionPower power;
 
-        for(UUID i : selectedCardIds){
+        for(int i : selectedCardIds){
 
             try{
                 power = findById(i, getLastDevCards()).getPower();
@@ -166,14 +146,47 @@ public class PlayerBoard {
             incrementMap(totalOutput, chosenResources.getOutputResources());
         }
 
-        for(Resource r : totalInput.keySet())
-            if (isAffordable(new ResourceRequirement(r, totalInput.get(r))))
-                throw new NotAffordableException();
+        return new ProductionPower(totalInput, totalOutput);
+    }
 
-        for(Resource r : totalInput.keySet())
-            pay(new ResourceRequirement(r, totalInput.get(r)));
+    public boolean canActivateProduction(Set<Integer> selectedCardIds, Map<Integer, ProductionPower> selectedExtraPowers){
+        ProductionPower totalProductionPower = getTotalProductionPower(selectedCardIds, selectedExtraPowers);
+        for(Map.Entry<Resource, Integer> entry : totalProductionPower.getInputResources().entrySet())
+            if (!isAffordable(new ResourceRequirement(entry.getKey(), entry.getValue())))
+                return false;
+        return true;
+    }
 
-        for(Resource r: totalOutput.keySet()) strongBox.addResource(r, totalOutput.get(r));
+    /**
+     * This method implements the logic behind the action of activating the production in a player's turn.
+     * It receives from the user all the elements to identify what <code>ProductionPower</code>, regular or special,
+     * he wants to activate. Moreover, in association with the <code>id</code> of every special <code>ProductionPower</code>,
+     * it requires a <code>ProductionPower</code> that represents all of its agnostic <code>Resources</code> after being determined.
+     * The method first checks if the player can afford to activate these effects all at once, and if so proceeds.
+     *
+     * @param selectedCardIds                   The <code>Set</code> of <code>DevelopmentCard id</code>s that the user has selected.
+     *
+     * @param selectedExtraPowers               A <code>Map</code> linking <code>id</code> and desired composition of a special <code>ProductionPower</code>.
+     *                                          The <code>Map</code> stores an <code>Integer</code> representing the <code>id</code>,
+     *                                          and a <code>ProductionPower</code> that contains the same fixed <code>Resources</code>
+     *                                          of the corresponding power, plus the agnostic <code>Resource</code>s converted in concrete ones.
+     *
+     * @see ProductionPower
+     */
+
+    public void activateProduction(Set<Integer> selectedCardIds, Map<Integer, ProductionPower> selectedExtraPowers){
+
+        ProductionPower totalProductionPower;
+        if(canActivateProduction(selectedCardIds, selectedExtraPowers)) {
+            totalProductionPower = getTotalProductionPower(selectedCardIds, selectedExtraPowers);
+            for (Resource r : totalProductionPower.getInputResources().keySet())
+                pay(new ResourceRequirement(r, totalProductionPower.getInputResources().get(r)));
+        }
+        else{
+            throw new IllegalArgumentException("Cannot activate production");
+        }
+        for(Resource r: totalProductionPower.getOutputResources().keySet())
+            strongBox.addResource(r, totalProductionPower.getOutputResources().get(r));
     }
 
     /**
@@ -185,7 +198,7 @@ public class PlayerBoard {
      * @return                              The first of the objects with the specified <code>id</code>.
      * @throws ElementNotFoundException     If no object in the <code>Collection</code> has the specified <code>id</code>.
      */
-    public <E extends Card> E findById(UUID id, Collection<E> collection) throws ElementNotFoundException{
+    public <E extends Card> E findById(int id, Collection<E> collection) throws ElementNotFoundException{
         E result = collection.stream()
                 .filter(x -> x.getId() == id)
                 .findFirst().orElse(null);

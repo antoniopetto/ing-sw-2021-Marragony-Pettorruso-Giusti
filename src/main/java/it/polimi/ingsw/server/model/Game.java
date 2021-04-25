@@ -2,6 +2,7 @@ package it.polimi.ingsw.server.model;
 
 import it.polimi.ingsw.server.VirtualView;
 import it.polimi.ingsw.server.model.cards.DevelopmentCardDecks;
+import it.polimi.ingsw.server.model.cards.ProductionPower;
 import it.polimi.ingsw.server.model.exceptions.ElementNotFoundException;
 import it.polimi.ingsw.server.model.playerboard.DepotName;
 import it.polimi.ingsw.server.model.playerboard.Resource;
@@ -9,18 +10,26 @@ import it.polimi.ingsw.server.model.shared.FaithTrack;
 import it.polimi.ingsw.server.model.shared.Marble;
 import it.polimi.ingsw.server.model.shared.MarketBoard;
 import it.polimi.ingsw.server.model.singleplayer.SoloRival;
+import org.w3c.dom.Document;
+import org.xml.sax.SAXException;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+import java.io.File;
+import java.io.IOException;
+import java.util.*;
 
 public class Game {
 
+    private enum State {
+        PRETURN,
+        INSERTING,
+        POSTTURN;
+    }
+
+    private State state = State.PRETURN;
     private boolean lastRound = false;
-    private boolean preTurn = true;
-    private boolean inserting = false;
-    private boolean postTurn = false;
     private final boolean singlePlayer;
     private Player playing;
 
@@ -41,6 +50,7 @@ public class Game {
     }
 
     private Game(String username, VirtualView virtualView) {
+        init("resources/config.xml");
         this.virtualView = virtualView;
         singlePlayer = true;
         players.add(new Player(username));
@@ -48,7 +58,7 @@ public class Game {
     }
 
     private Game(List<String> usernames, VirtualView virtualView) {
-
+        init("resources/config.xml");
         this.virtualView = virtualView;
         singlePlayer = false;
         if (usernames.size() > 4 || usernames.size() < 2)
@@ -61,6 +71,21 @@ public class Game {
         }
         Collections.shuffle(players);
         playing = players.get(0);
+    }
+
+    private void init(String configPath){
+        try {
+            File configFile = new File(configPath);
+            DocumentBuilderFactory domBuilderFactory = DocumentBuilderFactory.newInstance();
+            DocumentBuilder domBuilder = domBuilderFactory.newDocumentBuilder();
+            Document dom = domBuilder.parse(configFile);
+            dom.getDocumentElement().normalize();
+        }
+        catch (ParserConfigurationException | IOException | SAXException e){
+            e.printStackTrace();
+            System.out.println("Parsing error");
+            virtualView.exitGame();
+        }
     }
 
     public void singlePlayerTurn()
@@ -129,10 +154,14 @@ public class Game {
      * @throws ElementNotFoundException if <code>marble</code> is not in <code>marbleBuffer</code>
      */
     public boolean putResource(Marble marble, DepotName depot, Resource resource) throws ElementNotFoundException {
-        if(!marble.equals(Marble.WHITE)&&!(marble.getResource().equals(resource))) throw new IllegalArgumentException();
-        if(marble.equals(Marble.WHITE)&&!playing.getWhiteMarbleAliases().contains(resource)) throw new IllegalArgumentException();
+
+        if(!marble.equals(Marble.WHITE)&&!(marble.getResource().equals(resource)))
+            throw new IllegalArgumentException();
+        if(marble.equals(Marble.WHITE)&&!playing.getWhiteMarbleAliases().contains(resource))
+            throw new IllegalArgumentException();
         int listId = findMarble(marble);
-        if(!playing.getPlayerBoard().getWareHouse().isInsertable(depot, resource)) return false;
+        if(!playing.getPlayerBoard().getWareHouse().isInsertable(depot, resource))
+            return false;
         playing.getPlayerBoard().getWareHouse().insert(depot, resource);
         marbleBuffer.remove(listId);
         return true;
@@ -172,7 +201,7 @@ public class Game {
 
     public void endTurn()
     {
-        if (!postTurn){
+        if (!state.equals(State.POSTTURN)){
             virtualView.sendError("Cannot end turn before main move");
         }
         else {
@@ -181,7 +210,17 @@ public class Game {
                 virtualView.endGame();
             else
                 playing = players.get(nextIndex);
+                state = State.PRETURN;
         }
+    }
+
+    public void activateProduction(Set<Integer> selectedCardIds, Map<Integer, ProductionPower> selectedExtraPowers){
+        if (!state.equals(State.PRETURN))
+            virtualView.sendError("Cannot activate production now");
+        else if (!playing.getPlayerBoard().canActivateProduction(selectedCardIds, selectedExtraPowers))
+            virtualView.sendError("Cannot afford this production");
+        else playing.getPlayerBoard().activateProduction(selectedCardIds, selectedExtraPowers);
+        state = State.POSTTURN;
     }
 
     public Player getPlaying() {

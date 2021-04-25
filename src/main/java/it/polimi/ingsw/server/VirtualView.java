@@ -5,19 +5,18 @@ import it.polimi.ingsw.server.model.Game;
 import it.polimi.ingsw.server.model.playerboard.Depot;
 import it.polimi.ingsw.server.model.playerboard.DepotName;
 import it.polimi.ingsw.server.model.playerboard.Resource;
-import it.polimi.ingsw.shared.messages.LeaderboardMsg;
+import it.polimi.ingsw.shared.messages.view.LeaderboardMsg;
 import it.polimi.ingsw.shared.messages.command.CommandMsg;
-import it.polimi.ingsw.shared.messages.server.ErrorMsg;
+import it.polimi.ingsw.shared.messages.view.ErrorMsg;
 import it.polimi.ingsw.shared.messages.server.TrackUpdateMsg;
 import it.polimi.ingsw.shared.messages.server.WarehouseUpdateMsg;
 
 import java.io.IOException;
 import java.util.*;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 public class VirtualView implements Runnable{
 
-    private AtomicBoolean exiting = new AtomicBoolean(false);
+    private boolean exiting = false;
     private final Game game;
     private Map<String, ClientHandler> players = new HashMap<>();
 
@@ -32,7 +31,7 @@ public class VirtualView implements Runnable{
 
     @Override
     public void run() {
-        while(!exiting.get()){
+        while(exiting){
             try {
                 Object nextMsg = getPlayingHandler().readObject();
                 CommandMsg command = (CommandMsg)nextMsg;
@@ -104,8 +103,9 @@ public class VirtualView implements Runnable{
         exitGame();
     }
 
-    private void exitGame(){
-        exiting.set(true);
+    public void exitGame(){
+        System.out.println("Exiting game");
+        exiting = true;
         for (Map.Entry<String, ClientHandler> entry : players.entrySet()){
             Server.logOut(entry.getKey());
             entry.getValue().closeConnection();

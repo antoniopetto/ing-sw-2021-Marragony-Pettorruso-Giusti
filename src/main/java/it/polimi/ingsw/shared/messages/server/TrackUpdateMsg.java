@@ -4,7 +4,6 @@ package it.polimi.ingsw.shared.messages.server;
 import it.polimi.ingsw.client.simplemodel.SimpleGame;
 import it.polimi.ingsw.client.simplemodel.SimplePlayer;
 import it.polimi.ingsw.server.model.AbstractPlayer;
-import it.polimi.ingsw.shared.messages.server.ServerMsg;
 
 public class TrackUpdateMsg implements ServerMsg {
     private String player;
