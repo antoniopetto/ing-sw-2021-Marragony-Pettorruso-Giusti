@@ -20,7 +20,7 @@ public class LeaderCardTest {
     {
         //checks that it is impossible to create a leader card with a negative number of victory points
         try {
-            card = new LeaderCard(1, -1, null,null);
+            card = new LeaderCard(-1, null,null);
             fail();
         }catch (IllegalArgumentException e)
         {
@@ -29,7 +29,7 @@ public class LeaderCardTest {
         List<Requirement> requirements = new ArrayList<>();
         SpecialAbility ability = new CardDiscountAbility(Resource.COIN, 2);
         try {
-            card = new LeaderCard(1,1,requirements,ability);
+            card = new LeaderCard(1,requirements,ability);
         }catch (Exception e)
         {
             fail();
@@ -41,7 +41,7 @@ public class LeaderCardTest {
     {
         SpecialAbility ability = new CardDiscountAbility(Resource.COIN, 2);
         List<Requirement> requirements = new ArrayList<>();
-        card=new LeaderCard(1,1, requirements, ability);
+        card=new LeaderCard(1, requirements, ability);
         player = new Player("Test");
     }
 

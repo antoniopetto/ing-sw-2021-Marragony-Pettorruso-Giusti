@@ -3,7 +3,6 @@ package it.polimi.ingsw.server.model;
 import it.polimi.ingsw.server.VirtualView;
 import it.polimi.ingsw.server.model.cards.*;
 import it.polimi.ingsw.server.model.cards.LeaderCard;
-import it.polimi.ingsw.server.model.exceptions.NotAffordableException;
 import it.polimi.ingsw.server.model.playerboard.*;
 import it.polimi.ingsw.server.model.shared.Marble;
 import it.polimi.ingsw.server.model.shared.PopeFavourTile;
@@ -96,10 +95,6 @@ public class Player extends AbstractPlayer{
     {
         if(cardId!=0&&cardId!=1) throw new IllegalArgumentException("Invalid id number");
         leaderCardList.remove(cardId);
-    }
-
-    public void activateProduction(Set<UUID> selectedCardIds, Map<Integer, ProductionPower> selectedExtraPowers) throws NotAffordableException {
-        playerBoard.activateProduction(selectedCardIds, selectedExtraPowers);
     }
 
     public void buyAndAddCard(DevelopmentCard card, int idSlot){

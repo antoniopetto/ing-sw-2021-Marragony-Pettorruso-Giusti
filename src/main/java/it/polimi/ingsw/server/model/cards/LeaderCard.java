@@ -14,8 +14,8 @@ public class LeaderCard extends Card{
     private boolean played;
     private final SpecialAbility ability;
 
-    public LeaderCard(int id, int victoryPoints, List<Requirement> requirements, SpecialAbility ability) {
-        super(id, victoryPoints);
+    public LeaderCard(int victoryPoints, List<Requirement> requirements, SpecialAbility ability) {
+        super(victoryPoints);
         this.requirements = requirements;
         this.ability = ability;
         played = false;

@@ -1,7 +1,8 @@
 package it.polimi.ingsw.server.model;
 
-import it.polimi.ingsw.server.model.cards.DevelopmentCard;
+import it.polimi.ingsw.server.VirtualView;
 import it.polimi.ingsw.server.model.cards.DevelopmentCardDecks;
+import it.polimi.ingsw.server.model.cards.ProductionPower;
 import it.polimi.ingsw.server.model.exceptions.ElementNotFoundException;
 import it.polimi.ingsw.server.model.playerboard.DepotName;
 import it.polimi.ingsw.server.model.playerboard.Resource;
@@ -9,51 +10,60 @@ import it.polimi.ingsw.server.model.shared.FaithTrack;
 import it.polimi.ingsw.server.model.shared.Marble;
 import it.polimi.ingsw.server.model.shared.MarketBoard;
 import it.polimi.ingsw.server.model.singleplayer.SoloRival;
+import org.w3c.dom.Document;
+import org.xml.sax.SAXException;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+import java.io.File;
+import java.io.IOException;
+import java.util.*;
 
 public class Game {
-    private boolean endgame;
-    private final Optional<SoloRival> soloRival;
+
+    private enum State {
+        PRETURN,
+        INSERTING,
+        POSTTURN;
+    }
+
+    private State state = State.PRETURN;
+    private boolean lastRound = false;
     private final boolean singlePlayer;
+    private Player playing;
+
+    private final VirtualView virtualView;
+    private final Optional<SoloRival> soloRival;
     private final List<Player> players = new ArrayList<>();
     private final MarketBoard marketBoard = new MarketBoard();
     private DevelopmentCardDecks developmentCardDecks;
-    private FaithTrack track;
-    private Player playing;
+    private FaithTrack faithTrack;
     private List<Marble> marbleBuffer = new ArrayList<>();
 
-    public Optional<SoloRival> getSoloRival() {
-        return soloRival;
+    public static Game newSinglePlayerGame(String username, VirtualView virtualView) {
+        return new Game(username, virtualView);
     }
 
-    public FaithTrack getTrack() {
-        return track;
+    public static Game newRegularGame(List<String> usernames, VirtualView virtualView) {
+        return new Game(usernames, virtualView);
     }
 
-    public static Game newSinglePlayerGame(String username) {
-        return new Game(username);
-    }
-
-    public static Game newRegularGame(List<String> usernames) {
-        return new Game(usernames);
-    }
-
-    private Game(String username) {
+    private Game(String username, VirtualView virtualView) {
+        init("resources/config.xml");
+        this.virtualView = virtualView;
         singlePlayer = true;
         players.add(new Player(username));
         soloRival = Optional.of(new SoloRival());
     }
 
-
-    private Game(List<String> usernames) {
+    private Game(List<String> usernames, VirtualView virtualView) {
+        init("resources/config.xml");
+        this.virtualView = virtualView;
+        singlePlayer = false;
         if (usernames.size() > 4 || usernames.size() < 2)
             throw new IllegalArgumentException("Number of players out of bounds");
 
-        singlePlayer = false;
         soloRival = Optional.empty();
 
         for (String s : usernames) {
@@ -63,10 +73,19 @@ public class Game {
         playing = players.get(0);
     }
 
-    private Player findPlayer(String username) {
-        return players.stream()
-                .filter(player -> username.equals(player.getUsername()))
-                .findFirst().orElse(null);
+    private void init(String configPath){
+        try {
+            File configFile = new File(configPath);
+            DocumentBuilderFactory domBuilderFactory = DocumentBuilderFactory.newInstance();
+            DocumentBuilder domBuilder = domBuilderFactory.newDocumentBuilder();
+            Document dom = domBuilder.parse(configFile);
+            dom.getDocumentElement().normalize();
+        }
+        catch (ParserConfigurationException | IOException | SAXException e){
+            e.printStackTrace();
+            System.out.println("Parsing error");
+            virtualView.exitGame();
+        }
     }
 
     public void singlePlayerTurn()
@@ -75,13 +94,6 @@ public class Game {
             soloRival.get().soloTurn(this);
         else
             throw new IllegalStateException("Not a single player game");
-    }
-    public MarketBoard getMarketBoard() {
-        return marketBoard;
-    }
-
-    public DevelopmentCardDecks getDevelopmentCardDecks() {
-        return developmentCardDecks;
     }
 
     /**
@@ -98,7 +110,7 @@ public class Game {
         for (Marble marble:marbles) {
             if(marble.equals(Marble.RED))
             {
-                track.advance(playing);
+                faithTrack.advance(playing);
             }
             else if(marble.equals(Marble.WHITE))
             {
@@ -142,10 +154,14 @@ public class Game {
      * @throws ElementNotFoundException if <code>marble</code> is not in <code>marbleBuffer</code>
      */
     public boolean putResource(Marble marble, DepotName depot, Resource resource) throws ElementNotFoundException {
-        if(!marble.equals(Marble.WHITE)&&!(marble.getResource().equals(resource))) throw new IllegalArgumentException();
-        if(marble.equals(Marble.WHITE)&&!playing.getWhiteMarbleAliases().contains(resource)) throw new IllegalArgumentException();
+
+        if(!marble.equals(Marble.WHITE)&&!(marble.getResource().equals(resource)))
+            throw new IllegalArgumentException();
+        if(marble.equals(Marble.WHITE)&&!playing.getWhiteMarbleAliases().contains(resource))
+            throw new IllegalArgumentException();
         int listId = findMarble(marble);
-        if(!playing.getPlayerBoard().getWareHouse().isInsertable(depot, resource)) return false;
+        if(!playing.getPlayerBoard().getWareHouse().isInsertable(depot, resource))
+            return false;
         playing.getPlayerBoard().getWareHouse().insert(depot, resource);
         marbleBuffer.remove(listId);
         return true;
@@ -160,7 +176,7 @@ public class Game {
     public void discard(Marble marble) throws ElementNotFoundException {
         int listId = findMarble(marble);
         marbleBuffer.remove(listId);
-        track.advanceAllBut(playing);
+        faithTrack.advanceAllBut(playing);
     }
 
     /**
@@ -183,72 +199,51 @@ public class Game {
         return listId;
     }
 
-
-
-
-
-
-
-    /*
-    //DA SPOSTARE NEL CONTROLLER E DA CAMBIARE
-    private int idSlot = 0; // da passare nel costruttore
-
-    public void insertCardInSlot(DevelopmentCard dCard, String user){
-
-        Player player = findPlayer(user);
-        if( player.tryBuyDevelopmentCard(dCard) ) {
-            boolean allSlots = false;
-
-            for(int i = 0; i < 3; i++){
-                player.selectIdSlot(idSlot);
-                if(player.tryToAddDevelopmentCard(dCard)){
-                    player.getPlayerBoard().pay(dCard.getRequirement());
-                    allSlots = true;
-                    break;
-                }
-            }
-
-            if(!allSlots) System.out.println("The DevelopmentCard cannot be inserted in any slot");
-
-        }
-        else System.out.println("The" + user + "Player hasn't enough resources to pay the DevelopmentCard dCard");
-
-      }
-    */
-
     public void endTurn()
     {
-        int index = players.indexOf(playing);
-        if(index==players.size()-1)
-        {
-            index =0;
+        if (!state.equals(State.POSTTURN)){
+            virtualView.sendError("Cannot end turn before main move");
         }
-        else
-            index++;
-        playing=players.get(index);
+        else {
+            int nextIndex = (players.indexOf(playing) + 1) % players.size();
+            if (lastRound && nextIndex == 0)
+                virtualView.endGame();
+            else
+                playing = players.get(nextIndex);
+                state = State.PRETURN;
+        }
     }
-    public boolean isSinglePlayer() { return singlePlayer; }
 
-    public void setDevelopmentCardDecks(List<DevelopmentCard> list) {
-        this.developmentCardDecks = new DevelopmentCardDecks(list);
+    public void activateProduction(Set<Integer> selectedCardIds, Map<Integer, ProductionPower> selectedExtraPowers){
+        if (!state.equals(State.PRETURN))
+            virtualView.sendError("Cannot activate production now");
+        else if (!playing.getPlayerBoard().canActivateProduction(selectedCardIds, selectedExtraPowers))
+            virtualView.sendError("Cannot afford this production");
+        else playing.getPlayerBoard().activateProduction(selectedCardIds, selectedExtraPowers);
+        state = State.POSTTURN;
     }
 
     public Player getPlaying() {
         return playing;
     }
 
-    public void setTrack() {
-        List<AbstractPlayer> playerList = new ArrayList<>(players);
-        soloRival.ifPresent(playerList::add);
-        //this.track = new FaithTrack(playerList, null, null);
-        //TODO complete the creation of the track with non null parameters
-    }
-
     public List<Marble> getMarbleBuffer() {
         return marbleBuffer;
     }
 
-    public boolean isEndgame() {
-        return endgame;
+    public Optional<SoloRival> getSoloRival() {
+        return soloRival;
+    }
+
+    public FaithTrack getTrack() {
+        return faithTrack;
+    }
+
+    public MarketBoard getMarketBoard() {
+        return marketBoard;
+    }
+
+    public DevelopmentCardDecks getDevelopmentCardDecks() {
+        return developmentCardDecks;
     }
 }
