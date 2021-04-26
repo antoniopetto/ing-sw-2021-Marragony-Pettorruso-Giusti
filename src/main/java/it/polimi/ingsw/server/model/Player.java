@@ -2,6 +2,7 @@ package it.polimi.ingsw.server.model;
 
 import it.polimi.ingsw.server.model.cards.*;
 import it.polimi.ingsw.server.model.cards.LeaderCard;
+import it.polimi.ingsw.server.model.exceptions.ElementNotFoundException;
 import it.polimi.ingsw.server.model.playerboard.*;
 import it.polimi.ingsw.server.model.shared.Marble;
 import it.polimi.ingsw.server.model.shared.PopeFavourTile;
@@ -26,8 +27,12 @@ public class Player extends AbstractPlayer{
 
     }
 
-    public void setLeaderCardList(List<LeaderCard> leaderCardList) {
-        this.leaderCardList = leaderCardList;
+    public void setLeaderCards(List<LeaderCard> cards){
+        leaderCardList.addAll(cards);
+    }
+
+    public void removeLeaderCard(int id) throws ElementNotFoundException {
+        leaderCardList.remove(Card.getById(id, leaderCardList));
     }
 
     public String getUsername() { return username; }

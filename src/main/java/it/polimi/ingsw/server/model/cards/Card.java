@@ -1,5 +1,8 @@
 package it.polimi.ingsw.server.model.cards;
 
+import it.polimi.ingsw.server.model.exceptions.ElementNotFoundException;
+
+import java.util.Collection;
 import java.util.UUID;
 
 /**
@@ -11,6 +14,24 @@ public abstract class Card {
 
     private final int victoryPoints;
     private final int id;
+
+    /**
+     * General parametric method that finds, in a <code>Collection</code> of <code>Identifiable</code> objects, the element with the desired <code>id</code>.
+     *
+     * @param id                            The <code>id</code> of the element to search.
+     * @param collection                    The <Code>Collection</Code> where to search.
+     * @param <E>                           The type of the object which is forming the <code>Collection</code>.
+     * @return                              The first of the objects with the specified <code>id</code>.
+     * @throws ElementNotFoundException     If no object in the <code>Collection</code> has the specified <code>id</code>.
+     */
+    public static <E extends Card> E getById(int id, Collection<E> collection) throws ElementNotFoundException{
+        E result = collection.stream()
+                .filter(x -> x.getId() == id)
+                .findFirst().orElse(null);
+        if (result == null)
+            throw new ElementNotFoundException();
+        return result;
+    }
 
     public Card(int id, int victoryPoints)
     {
