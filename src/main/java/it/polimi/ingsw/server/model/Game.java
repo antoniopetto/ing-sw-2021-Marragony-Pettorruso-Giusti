@@ -209,14 +209,28 @@ public class Game {
     public void switchDepots(DepotName depot1, DepotName depot2)
     {
         if(!state.equals(State.INSERTING)) virtualView.sendError("Wrong state of the application");
-        try{
-            playing.getPlayerBoard().getWareHouse().switchDepots(depot1, depot2);
-        }catch (Exception e)
-        {
-            virtualView.sendError(e.getMessage());
+        else {
+            try {
+                playing.getPlayerBoard().getWareHouse().switchDepots(depot1, depot2);
+            } catch (Exception e) {
+                virtualView.sendError(e.getMessage());
+            }
+        }
+    }
+
+    public void moveDepots( DepotName depotFrom, DepotName depotTo){
+
+        if(!state.equals(State.INSERTING)) virtualView.sendError("Cannot move resources between depots now");
+            else{
+                try{
+                    playing.getPlayerBoard().getWareHouse().moveDepots(depotFrom, depotTo);
+                } catch (IllegalStateException | IllegalArgumentException e){
+                    virtualView.sendError(e.getMessage());
+                }
         }
 
     }
+
     public void endTurn()
     {
         if (!state.equals(State.POSTTURN)){

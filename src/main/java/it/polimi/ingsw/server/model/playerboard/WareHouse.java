@@ -120,44 +120,83 @@ public class WareHouse {
      * @param depotName1 the Depot from which to take the resources to be exchanged
      * @param depotName2 the Depot with which to exchange resources
      */
-    public void switchDepots(DepotName depotName1, DepotName depotName2){
-            if(isExtraDepot(depotName1) && isExtraDepot(depotName2)) switchExtraDepots(depotName1, depotName2, true);
-            else if(isExtraDepot(depotName1) || isExtraDepot(depotName2))  switchExtraDepots(depotName1, depotName2, false);
-                    else switchNormalDepot(depotName1,depotName2);
-            observer.warehouseUpdate();
+    public void switchDepots(DepotName depotName1, DepotName depotName2) throws Exception {
+            if(isExtraDepot(depotName1) || isExtraDepot(depotName2))  observer.sendError("It isn't possible to exchange resources from a Depot to an extraDepot or in reverse");
+                    else {
+                if(!(depotByName(depotName1).isEmpty() && depotByName(depotName2).isEmpty())){
+                    if( compareTwoDepots(depotName1, depotName2) && compareTwoDepots(depotName2,depotName1))
+                    {
+                        //Utilizzo di una risorsa Empty? Meglio del null o no?
+                        Resource resourceTmp1;
+                        Resource resourceTmp2;
+                        int quantityTmp1;
+                        int quantityTmp2;
+
+                        if(depotByName(depotName2).isEmpty()){
+                            resourceTmp2 = null;
+                            quantityTmp2 = 0;
+                        }else {
+                            resourceTmp2 = depotByName(depotName2).getResource();
+                            quantityTmp2 = depotByName(depotName2).getQuantity();
+                        }
+
+                        if(depotByName(depotName1).isEmpty()){
+                            resourceTmp1 = null;
+                            quantityTmp1 = 0;
+                        }else {
+                            resourceTmp1 = depotByName(depotName1).getResource();
+                            quantityTmp1 = depotByName(depotName1).getQuantity();
+                        }
+
+                        depotByName(depotName2).setResource(resourceTmp1);
+                        depotByName(depotName2).setQuantity(quantityTmp1);
+
+                        depotByName(depotName1).setResource(resourceTmp2);
+                        depotByName(depotName1).setQuantity(quantityTmp2);
+
+                        observer.warehouseUpdate();
+                    }
+                    else throw new Exception("It isn't possible switch the Resources between Depots");
+                }
+                else observer.sendError("Both depots are empty!");
+
+            }
+
     }
 
     /**
      * Check for resource constraint and that the depotNameA Depot must not be empty
      *
-     * @param depotNameA basically it is the depot from which to remove the resources
-     * @param depotNameB it is the depot to fill
-     * @param allExtraDepots is true if depotNameA and depotNameB are both ExtraDepot
+     * @param depotToEmpty basically it is the depot from which to remove the resources
+     * @param depotToFill it is the depot to fill
      * da scrivere la documentazione sulle eccezioni
      */
-    private void switchExtraDepots(DepotName depotNameA, DepotName depotNameB, boolean allExtraDepots){
+    public void moveDepots(DepotName depotToEmpty, DepotName depotToFill){
 
-        if( depotByName(depotNameA).isEmpty() ) throw new IllegalStateException("DepotA is just empty");
+        if( depotByName(depotToEmpty).isEmpty() ) throw new IllegalStateException("Depot to remove resources from is already empty");
 
         Function<DepotName,Boolean> controlResource = (depotName) -> {
-            if(depotByName(depotName).getConstraint().isEmpty()) return compareResourceType(depotNameB,depotNameA);
-                return compareResourceType(depotNameA,depotNameB);
+            if(depotByName(depotName).getConstraint().isEmpty()) return compareResourceType(depotToFill,depotToEmpty);
+                return compareResourceType(depotToEmpty,depotToFill);
         };
 
-        if ( (!allExtraDepots && depotByName(depotNameB).isEmpty())  || controlResource.apply(depotNameA)) fillTheOtherDepot(depotNameA, depotNameB);
-            else throw new IllegalArgumentException("It isn't possible switch the Resources between Depots, " +
+        if ( !depotByName(depotToFill).isEmpty()  || controlResource.apply(depotToEmpty)){
+            fillTheOtherDepot(depotToEmpty, depotToFill);
+            observer.warehouseUpdate();
+        }
+        else throw new IllegalArgumentException("It isn't possible switch the Resources between Depots, " +
                                                 "the type of resource that the player tries to insert in the extraDepot is different from the constraint ");
 
     }
 
     /**
      *
-     * @param depotNameA is the name of ExtraDepot
-     * @param depotNameB is the name of Normal Depot
-     * @return true if the constraint of the depotNameA Depot is equal to the resource contained in the depotNameB Depot
+     * @param depotToEmpty is the name of ExtraDepot
+     * @param depotToFill is the name of Normal Depot
+     * @return true if the constraint of the depotToEmpty Depot is equal to the resource contained in the depotToFill Depot
      */
-    private boolean compareResourceType(DepotName depotNameA, DepotName depotNameB){
-        return depotByName(depotNameA).getConstraint().get().equals(depotByName(depotNameB).getResource());
+    private boolean compareResourceType(DepotName depotToEmpty, DepotName depotToFill){
+        return depotByName(depotToEmpty).getConstraint().get().equals(depotByName(depotToFill).getResource());
     }
 
     /**
@@ -174,48 +213,7 @@ public class WareHouse {
         }
     }
 
-    /**
-     * Switch resources between the two depots (depotName1 and depotName2 Depots) if there is enough space in both to make the switch
-     *
-     * @exception IllegalArgumentException if one of the two Depots has the capacity that is less than the amount of Resources in the other Depot
-     */
-    private void switchNormalDepot(DepotName depotName1, DepotName depotName2){
 
-        if(!(depotByName(depotName1).isEmpty() && depotByName(depotName2).isEmpty())){
-            if( compareTwoDepots(depotName1, depotName2) && compareTwoDepots(depotName2,depotName1))
-            {
-                //Utilizzo di una risorsa Empty? Meglio del null o no?
-                Resource resourceTmp1;
-                Resource resourceTmp2;
-                int quantityTmp1;
-                int quantityTmp2;
-
-                if(depotByName(depotName2).isEmpty()){
-                    resourceTmp2 = null;
-                    quantityTmp2 = 0;
-                }else {
-                    resourceTmp2 = depotByName(depotName2).getResource();
-                    quantityTmp2 = depotByName(depotName2).getQuantity();
-                }
-
-                if(depotByName(depotName1).isEmpty()){
-                    resourceTmp1 = null;
-                    quantityTmp1 = 0;
-                }else {
-                    resourceTmp1 = depotByName(depotName1).getResource();
-                    quantityTmp1 = depotByName(depotName1).getQuantity();
-                }
-
-                depotByName(depotName2).setResource(resourceTmp1);
-                depotByName(depotName2).setQuantity(quantityTmp1);
-
-                depotByName(depotName1).setResource(resourceTmp2);
-                depotByName(depotName1).setQuantity(quantityTmp2);
-            }
-            else throw new IllegalArgumentException("It isn't possible switch the Resources between Depots");
-        }
-
-    }
 
     /**
      *
