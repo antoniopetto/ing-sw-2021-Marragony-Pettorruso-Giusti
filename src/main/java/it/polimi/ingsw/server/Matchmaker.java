@@ -28,6 +28,7 @@ public class Matchmaker implements Runnable{
                             "containing alphanumeric or special [._-] characters"));
                 else {
                     this.username = username;
+                    System.out.println("Client " + handler.getIP() + " chooses username " + username);
                     Server.activeUsernames.add(this.username);
                     break;
                 }

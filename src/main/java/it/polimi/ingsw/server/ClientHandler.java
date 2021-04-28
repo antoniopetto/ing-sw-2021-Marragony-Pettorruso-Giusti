@@ -3,6 +3,7 @@ package it.polimi.ingsw.server;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.net.InetAddress;
 import java.net.Socket;
 
 public class ClientHandler {
@@ -35,5 +36,10 @@ public class ClientHandler {
         catch (IOException e){
 
         }
+    }
+
+    public InetAddress getIP()
+    {
+        return clientSocket.getInetAddress();
     }
 }

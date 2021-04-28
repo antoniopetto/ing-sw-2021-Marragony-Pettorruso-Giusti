@@ -7,7 +7,7 @@ import it.polimi.ingsw.server.model.Player;
 import it.polimi.ingsw.server.model.playerboard.Depot;
 import it.polimi.ingsw.server.model.playerboard.DepotName;
 import it.polimi.ingsw.server.model.playerboard.Resource;
-import it.polimi.ingsw.shared.messages.server.ErrorMsg;
+import it.polimi.ingsw.shared.messages.view.ErrorMsg;
 import it.polimi.ingsw.shared.messages.view.LeaderboardMsg;
 import it.polimi.ingsw.shared.messages.command.CommandMsg;
 import it.polimi.ingsw.shared.messages.server.LeaderCardUpdateMsg;

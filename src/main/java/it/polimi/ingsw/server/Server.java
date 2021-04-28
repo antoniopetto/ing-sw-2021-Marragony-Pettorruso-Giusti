@@ -27,11 +27,12 @@ public class Server {
             System.exit(1);
             return;
         }
-
+        System.out.println("Server ready to accept connections!");
         while (true){
 
             try{
                 Socket clientSocket = socket.accept();
+                System.out.println("New connection with client " + clientSocket.getInetAddress());
                 new Thread(new Matchmaker(clientSocket)).start();
             }
             catch (IOException e){

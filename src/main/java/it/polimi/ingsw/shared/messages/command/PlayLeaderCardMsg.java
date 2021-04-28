@@ -2,7 +2,6 @@ package it.polimi.ingsw.shared.messages.command;
 
 import it.polimi.ingsw.server.ClientHandler;
 import it.polimi.ingsw.server.model.Game;
-import it.polimi.ingsw.shared.messages.server.ErrorMsg;
 
 import java.io.IOException;
 
@@ -15,7 +14,7 @@ public class PlayLeaderCardMsg implements CommandMsg {
     }
 
     @Override
-    public void execute(Game game, ClientHandler handler) throws IOException {
+    public void execute(Game game, ClientHandler handler) {
         game.playLeaderCard(this.cardId);
     }
 }
