@@ -1,19 +1,22 @@
 package it.polimi.ingsw.server;
 
+import it.polimi.ingsw.client.Client;
 import it.polimi.ingsw.server.model.AbstractPlayer;
 import it.polimi.ingsw.server.model.Game;
 import it.polimi.ingsw.server.model.Player;
 import it.polimi.ingsw.server.model.playerboard.Depot;
 import it.polimi.ingsw.server.model.playerboard.DepotName;
 import it.polimi.ingsw.server.model.playerboard.Resource;
+import it.polimi.ingsw.shared.messages.server.ErrorMsg;
 import it.polimi.ingsw.shared.messages.view.LeaderboardMsg;
 import it.polimi.ingsw.shared.messages.command.CommandMsg;
 import it.polimi.ingsw.shared.messages.server.LeaderCardUpdateMsg;
-import it.polimi.ingsw.shared.messages.view.ErrorMsg;
+
 import it.polimi.ingsw.shared.messages.server.TrackUpdateMsg;
 import it.polimi.ingsw.shared.messages.server.WarehouseUpdateMsg;
 
 import java.io.IOException;
+import java.sql.ClientInfoStatus;
 import java.util.*;
 
 public class VirtualView implements Runnable{
@@ -81,9 +84,13 @@ public class VirtualView implements Runnable{
     public void leaderCardUpdate(Player player, int cardId)
     {
         LeaderCardUpdateMsg msg = new LeaderCardUpdateMsg(player.getUsername(), cardId);
-        for (ClientHandler handler: players.values()) {
+        for (Map.Entry<String, ClientHandler> map: players.entrySet()) {
             try {
-                handler.writeObject(msg);
+                if(!map.getKey().equals(player.getUsername())){
+                    ErrorMsg errorMsg = new ErrorMsg("The"+ player.getUsername()+ "Player plays a LeaderCard");
+                    map.getValue().writeObject(errorMsg);
+                }
+                else map.getValue().writeObject(msg);
             } catch (IOException e) {
                 e.printStackTrace();
             }

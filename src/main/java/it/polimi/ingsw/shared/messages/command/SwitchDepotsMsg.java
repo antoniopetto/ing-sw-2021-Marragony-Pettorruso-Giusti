@@ -3,7 +3,8 @@ package it.polimi.ingsw.shared.messages.command;
 import it.polimi.ingsw.server.ClientHandler;
 import it.polimi.ingsw.server.model.Game;
 import it.polimi.ingsw.server.model.playerboard.DepotName;
-import it.polimi.ingsw.shared.messages.view.ErrorMsg;
+import it.polimi.ingsw.shared.messages.server.ErrorMsg;
+
 
 import java.io.IOException;
 

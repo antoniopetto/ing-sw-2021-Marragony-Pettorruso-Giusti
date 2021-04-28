@@ -81,7 +81,6 @@ public class Player extends AbstractPlayer{
         if(card.isPlayable(this))
         {
             card.play(this);
-            observer.leaderCardUpdate(this,cardId);
             return true;
         }
         else return false;

@@ -223,6 +223,25 @@ public class Game {
         state = State.POSTTURN;
     }
 
+    public void playLeaderCard(int cardId){
+        if(state.equals(State.INSERTING))
+            virtualView.sendError("Cannot play LeaderCard now");
+        else{
+            try {
+                if(!getPlaying().playLeaderCard(cardId)){
+                    virtualView.sendError("The player does not meet the requirements");
+                }
+                else virtualView.leaderCardUpdate(getPlaying(),cardId);
+            }catch (IllegalStateException e){
+                virtualView.sendError(e.getMessage());
+            }
+
+        }
+
+
+
+    }
+
     public Player getPlaying() {
         return playing;
     }

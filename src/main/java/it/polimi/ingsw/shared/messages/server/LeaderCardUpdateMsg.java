@@ -17,10 +17,6 @@ public class LeaderCardUpdateMsg implements ServerMsg {
         for (SimplePlayer player: model.getPlayers()) {
             if(player.getUsername().equals(this.username))
                 player.activeLeaderCard(cardId);
-            else {
-                ErrorMsg msg = new ErrorMsg("The"+ this.username+ "Player plays a LeaderCard");
-            };
         }
-
     }
 }

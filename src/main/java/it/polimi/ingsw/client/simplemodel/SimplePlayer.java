@@ -10,7 +10,7 @@ public class SimplePlayer {
     private View view;
     private SimpleWarehouse warehouse;
     private Map<String, SimpleWarehouse> othersWarehouse;
-    private final SimpleLeaderCard[] simpleLeaderCards = new SimpleLeaderCard[2];
+    private final boolean[] mydeckLeaderCards = new boolean[2];
 
 
     public void advance()
@@ -36,7 +36,8 @@ public class SimplePlayer {
     }
 
     public void activeLeaderCard(int cardId){
-        simpleLeaderCards[cardId].play();
+        mydeckLeaderCards[cardId] = true;
         view.faceUpLeaderCard(this);
+        view.showLeaderCardAllPlayers(cardId);
     }
 }

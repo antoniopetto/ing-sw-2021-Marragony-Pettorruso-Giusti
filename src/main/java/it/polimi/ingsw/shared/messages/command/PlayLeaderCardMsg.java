@@ -16,20 +16,6 @@ public class PlayLeaderCardMsg implements CommandMsg {
 
     @Override
     public void execute(Game game, ClientHandler handler) throws IOException {
-        boolean isPlayable = true;
-        try{
-            isPlayable = game.getPlaying().playLeaderCard(cardId);
-        }catch (IllegalArgumentException e){
-            ErrorMsg msg = new ErrorMsg(e.getMessage());
-            handler.writeObject(msg);
-        }catch (IllegalStateException i) {
-            ErrorMsg msg = new ErrorMsg(i.getMessage());
-            handler.writeObject(msg);
-        }
-
-        if(!isPlayable){
-                ErrorMsg msg = new ErrorMsg("The player does not meet the requirements");
-                handler.writeObject(msg);
-            }
+        game.playLeaderCard(this.cardId);
     }
 }
