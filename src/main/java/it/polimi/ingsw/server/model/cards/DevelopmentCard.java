@@ -17,9 +17,9 @@ public class DevelopmentCard extends Card{
     private final List<ResourceRequirement> requirements;
     private final ProductionPower power;
 
-    public DevelopmentCard(int victoryPoints, int level, CardColor color, List<ResourceRequirement> requirements, ProductionPower power)
+    public DevelopmentCard(int id, int victoryPoints, int level, CardColor color, List<ResourceRequirement> requirements, ProductionPower power)
     {
-        super(victoryPoints);
+        super(id, victoryPoints);
         this.level = level;
         this.color = color;
         this.requirements = requirements;

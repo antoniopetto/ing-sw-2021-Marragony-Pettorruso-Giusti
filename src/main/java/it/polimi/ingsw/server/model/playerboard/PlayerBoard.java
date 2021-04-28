@@ -112,51 +112,6 @@ public class PlayerBoard {
                 + this.wareHouse.countTotalResources() + sumCardPoints;
     }
 
-    public ProductionPower getTotalProductionPower(Set<Integer> selectedCardIds, Map<Integer, ProductionPower> selectedExtraPowers){
-        Map<Resource, Integer> totalInput = new EnumMap<>(Resource.class);
-        Map<Resource, Integer> totalOutput = new EnumMap<>(Resource.class);
-        ProductionPower power;
-
-        for(int i : selectedCardIds){
-
-            try{
-                power = findById(i, getLastDevCards()).getPower();
-            }
-            catch (ElementNotFoundException e){
-                throw new IllegalArgumentException("The user requested a production he didn't have");
-            }
-
-            incrementMap(totalInput, power.getInputResources());
-            incrementMap(totalInput, power.getOutputResources());
-        }
-
-        for(Integer i : selectedExtraPowers.keySet()){
-
-            power = extraProductionPowers.get(i);
-
-            incrementMap(totalInput, power.getInputResources());
-            incrementMap(totalOutput, power.getOutputResources());
-
-            ProductionPower chosenResources = selectedExtraPowers.get(i);
-
-            if (!specialProductionConsistent(power, chosenResources))
-                throw new IllegalArgumentException("The client choice of special production is illegal");
-
-            incrementMap(totalInput, chosenResources.getInputResources());
-            incrementMap(totalOutput, chosenResources.getOutputResources());
-        }
-
-        return new ProductionPower(totalInput, totalOutput);
-    }
-
-    public boolean canActivateProduction(Set<Integer> selectedCardIds, Map<Integer, ProductionPower> selectedExtraPowers){
-        ProductionPower totalProductionPower = getTotalProductionPower(selectedCardIds, selectedExtraPowers);
-        for(Map.Entry<Resource, Integer> entry : totalProductionPower.getInputResources().entrySet())
-            if (!isAffordable(new ResourceRequirement(entry.getKey(), entry.getValue())))
-                return false;
-        return true;
-    }
-
     /**
      * This method implements the logic behind the action of activating the production in a player's turn.
      * It receives from the user all the elements to identify what <code>ProductionPower</code>, regular or special,
@@ -189,22 +144,49 @@ public class PlayerBoard {
             strongBox.addResource(r, totalProductionPower.getOutputResources().get(r));
     }
 
-    /**
-     * General parametric method that finds, in a <code>Collection</code> of <code>Identifiable</code> objects, the element with the desired <code>id</code>.
-     *
-     * @param id                            The <code>id</code> of the element to search.
-     * @param collection                    The <Code>Collection</Code> where to search.
-     * @param <E>                           The type of the object which is forming the <code>Collection</code>.
-     * @return                              The first of the objects with the specified <code>id</code>.
-     * @throws ElementNotFoundException     If no object in the <code>Collection</code> has the specified <code>id</code>.
-     */
-    public <E extends Card> E findById(int id, Collection<E> collection) throws ElementNotFoundException{
-        E result = collection.stream()
-                .filter(x -> x.getId() == id)
-                .findFirst().orElse(null);
-        if (result == null)
-            throw new ElementNotFoundException("No object with the specified id");
-        return result;
+    public boolean canActivateProduction(Set<Integer> selectedCardIds, Map<Integer, ProductionPower> selectedExtraPowers){
+        ProductionPower totalProductionPower = getTotalProductionPower(selectedCardIds, selectedExtraPowers);
+        for(Map.Entry<Resource, Integer> entry : totalProductionPower.getInputResources().entrySet())
+            if (!isAffordable(new ResourceRequirement(entry.getKey(), entry.getValue())))
+                return false;
+        return true;
+    }
+
+    public ProductionPower getTotalProductionPower(Set<Integer> selectedCardIds, Map<Integer, ProductionPower> selectedExtraPowers){
+        Map<Resource, Integer> totalInput = new EnumMap<>(Resource.class);
+        Map<Resource, Integer> totalOutput = new EnumMap<>(Resource.class);
+        ProductionPower power;
+
+        for(int i : selectedCardIds){
+
+            try{
+                power = Card.getById(i, getLastDevCards()).getPower();
+            }
+            catch (ElementNotFoundException e){
+                throw new IllegalArgumentException("The user requested a production he didn't have");
+            }
+
+            incrementMap(totalInput, power.getInputResources());
+            incrementMap(totalInput, power.getOutputResources());
+        }
+
+        for(Integer i : selectedExtraPowers.keySet()){
+
+            power = extraProductionPowers.get(i);
+
+            incrementMap(totalInput, power.getInputResources());
+            incrementMap(totalOutput, power.getOutputResources());
+
+            ProductionPower chosenResources = selectedExtraPowers.get(i);
+
+            if (!specialProductionConsistent(power, chosenResources))
+                throw new IllegalArgumentException("The client choice of special production is illegal");
+
+            incrementMap(totalInput, chosenResources.getInputResources());
+            incrementMap(totalOutput, chosenResources.getOutputResources());
+        }
+
+        return new ProductionPower(totalInput, totalOutput);
     }
 
     /**
