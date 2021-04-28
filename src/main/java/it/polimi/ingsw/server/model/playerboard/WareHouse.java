@@ -176,7 +176,7 @@ public class WareHouse {
         if( depotByName(depotToEmpty).isEmpty() ) throw new IllegalStateException("Depot to remove resources from is already empty");
 
         Function<DepotName,Boolean> controlResource = (depotName) -> {
-            if(depotByName(depotName).getConstraint().isEmpty()) return compareResourceType(depotToFill,depotToEmpty);
+            if(depotByName(depotName).getConstraint() == null) return compareResourceType(depotToFill,depotToEmpty);
                 return compareResourceType(depotToEmpty,depotToFill);
         };
 
@@ -196,7 +196,7 @@ public class WareHouse {
      * @return true if the constraint of the depotToEmpty Depot is equal to the resource contained in the depotToFill Depot
      */
     private boolean compareResourceType(DepotName depotToEmpty, DepotName depotToFill){
-        return depotByName(depotToEmpty).getConstraint().get().equals(depotByName(depotToFill).getResource());
+        return depotByName(depotToEmpty).getConstraint().equals(depotByName(depotToFill).getResource());
     }
 
     /**
@@ -209,7 +209,7 @@ public class WareHouse {
 
         while(!depotByName(depotToFill).isFull() || !depotByName(depotToEmpty).isEmpty()){
             depotByName(depotToFill).addResource(depotByName(depotToEmpty).getResource());
-            depotByName(depotToEmpty).removeResourceFromDepot();
+            depotByName(depotToEmpty).removeResource();
         }
     }
 
