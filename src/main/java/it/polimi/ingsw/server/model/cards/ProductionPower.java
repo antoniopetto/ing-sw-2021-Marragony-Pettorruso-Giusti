@@ -4,6 +4,7 @@ import it.polimi.ingsw.server.model.playerboard.Resource;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.stream.Stream;
 
 /**
  * this class implements the production power. It has a map of resources as input and a map of resources as output, so
@@ -11,36 +12,46 @@ import java.util.Map;
  * output map
  */
 public class ProductionPower {
-    private final Map<Resource, Integer> inputResources;
-    private final Map<Resource, Integer> outputResources;
+    private final Map<Resource, Integer> input;
+    private final Map<Resource, Integer> output;
     private final int agnosticInput;
     private final int agnosticOutput;
 
-    public ProductionPower(int agnosticInput, int agnosticOutput) {
+    public ProductionPower(Integer agnosticInput, Integer agnosticOutput) {
         this(new HashMap<>(), new HashMap<>(), agnosticInput, agnosticOutput);
     }
 
-    public ProductionPower(Map<Resource, Integer> inputResources, Map<Resource, Integer> outputResources) {
-        this(inputResources, outputResources, 0,0);
+    public ProductionPower(Map<Resource, Integer> input, Map<Resource, Integer> output) {
+        this(input, output, 0,0);
     }
 
-    public ProductionPower(Map<Resource, Integer> inputResources, Map<Resource, Integer> outputResources, int agnosticInput, int agnosticOutput) {
-        if(agnosticInput<0||agnosticOutput<0) throw new IllegalArgumentException();
-        this.agnosticInput = agnosticInput;
-        this.agnosticOutput = agnosticOutput;
-        if(!(inputResources.isEmpty())&&inputResources.containsKey(Resource.FAITH) && inputResources.get(Resource.FAITH) != 0){
+    public ProductionPower(Map<Resource, Integer> input, Map<Resource, Integer> output, Integer agnosticInput, Integer agnosticOutput) {
+
+        this.agnosticInput = agnosticInput != null ? agnosticInput : 0;
+        this.agnosticOutput = agnosticOutput != null ? agnosticOutput : 0;
+        if (this.agnosticInput < 0 || this.agnosticOutput < 0)
+            throw new IllegalArgumentException();
+
+        if (input == null)
+            input = new HashMap<>();
+        if (output == null)
+            output = new HashMap<>();
+
+        if (Stream.concat(input.values().stream(), output.values().stream()).anyMatch(i -> i < 0))
+            throw new IllegalArgumentException("Cannot have negative resource quantity");
+        if (input.containsKey(Resource.FAITH) && input.get(Resource.FAITH) != 0)
             throw new IllegalArgumentException("Cannot have Faith as input resource");
-        }
-        this.inputResources = inputResources;
-        this.outputResources = outputResources;
+
+        this.input = input;
+        this.output = output;
     }
 
-    public Map<Resource, Integer> getInputResources() {
-        return inputResources;
+    public Map<Resource, Integer> getInput() {
+        return input;
     }
 
-    public Map<Resource, Integer> getOutputResources() {
-        return outputResources;
+    public Map<Resource, Integer> getOutput() {
+        return output;
     }
 
     public int getAgnosticInput() {

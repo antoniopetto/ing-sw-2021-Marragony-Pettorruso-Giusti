@@ -40,7 +40,7 @@ public class CardDeckTest {
     @Before
     public void inizializeCards()
     {
-        cards.add(new DevelopmentCard(1, 10,1, CardColor.GREEN, null, null));
+        cards.add(new DevelopmentCard(1,10,1, CardColor.GREEN, null, null));
         cards.add(new DevelopmentCard(2,10,2, CardColor.BLUE, null, null));
         cards.add(new DevelopmentCard(3,10,3, CardColor.YELLOW, null, null));
         cards.add(new DevelopmentCard(4,10,2, CardColor.GREEN, null, null));
@@ -62,11 +62,11 @@ public class CardDeckTest {
     @Test
     public void addTest()
     {
-        DevelopmentCard card1 = new DevelopmentCard(5,0, 2, CardColor.BLUE, null, null);
-        DevelopmentCard card2 = new DevelopmentCard(6,0, 2, CardColor.BLUE, null, null);
-        DevelopmentCard card3 = new DevelopmentCard( 7,0,2, CardColor.BLUE, null, null);
-        DevelopmentCard card4 = new  DevelopmentCard( 8,0,2, CardColor.BLUE, null, null);
-        DevelopmentCard card5= new DevelopmentCard( 9,0,2, CardColor.BLUE, null, null);
+        DevelopmentCard card1 = new DevelopmentCard(5, 0, 2, CardColor.BLUE, null, null);
+        DevelopmentCard card2 = new DevelopmentCard(6, 0, 2, CardColor.BLUE, null, null);
+        DevelopmentCard card3 = new DevelopmentCard( 7, 0,2, CardColor.BLUE, null, null);
+        DevelopmentCard card4 = new  DevelopmentCard( 8, 0,2, CardColor.BLUE, null, null);
+        DevelopmentCard card5= new DevelopmentCard( 9, 0,2, CardColor.BLUE, null, null);
         CardDeck deck1 = new CardDeck(2, CardColor.BLUE);
         boolean shuffled = false;
         //tries to add a card with wrong color or level
@@ -149,8 +149,8 @@ public class CardDeckTest {
             assertTrue(true);
         }
         //checks if the method works properly on a deck with 2 cards
-        DevelopmentCard card1 = new DevelopmentCard( 10,0, 2, CardColor.BLUE, null, null);
-        DevelopmentCard card2 = new DevelopmentCard( 11,0, 2, CardColor.BLUE, null, null);
+        DevelopmentCard card1 = new DevelopmentCard(10, 0, 2, CardColor.BLUE, null, null);
+        DevelopmentCard card2 = new DevelopmentCard(22, 0, 2, CardColor.BLUE, null, null);
         deck.add(card1);
         deck.add(card2);
         try {

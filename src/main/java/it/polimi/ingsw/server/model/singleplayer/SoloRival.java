@@ -23,7 +23,6 @@ public class SoloRival extends AbstractPlayer {
     private List<SoloActionToken> discardedTokens= new ArrayList<>();
     private SoloActionToken lastPlayedToken;
 
-
     public SoloRival(){
         discardedTokens.add(new DiscardToken(CardColor.GREEN, 1));
         discardedTokens.add(new DiscardToken(CardColor.YELLOW, 2));
@@ -31,7 +30,7 @@ public class SoloRival extends AbstractPlayer {
         discardedTokens.add(new DiscardToken(CardColor.PURPLE, 4));
         discardedTokens.add(new MoveToken(1, 5));
         discardedTokens.add(new MoveToken(2, 6));
-        setStack();
+        resetStack();
     }
 
     /**
@@ -59,7 +58,7 @@ public class SoloRival extends AbstractPlayer {
      * This method creates a new stack of active tokens. It puts all the tokens in <code>discardedTokens</code>,
      * it shuffles the collection and then it puts all the tokens in <code>activeTokens</code>
      */
-    public void setStack()
+    public void resetStack()
     {
         while (!activeTokens.isEmpty())
             discardedTokens.add(activeTokens.pop());
@@ -74,11 +73,6 @@ public class SoloRival extends AbstractPlayer {
      */
     @Override
     public void vaticanReportEffect(int tileNumber) {
-    }
-
-    @Override
-    public void activateEndGame() {
-
     }
 
     @Override

@@ -13,12 +13,12 @@ public class Depot {
     /**
      * It indicates the number of resources present in this depot
      */
+    private Resource resource;
     private int quantity;
 
     private final DepotName name;
     private final int capacity;
-    private final Optional<Resource> constraint;
-    private Resource resource;
+    private final Resource constraint;
 
     /**
      * Constructs the Depot
@@ -30,7 +30,7 @@ public class Depot {
         this.name = name;
         this.quantity = 0;
         this.capacity = capacity;
-        this.constraint = Optional.of(constraint);
+        this.constraint = constraint;
         this.resource = constraint;
 
     }
@@ -39,23 +39,26 @@ public class Depot {
         this.name = name;
         this.quantity = 0;
         this.capacity = capacity;
-        this.constraint = Optional.empty();
+        this.constraint = null;
         this.resource = null;
     }
 
     public void setQuantity(int quantity) {
-        if(quantity>getCapacity()) throw new IllegalArgumentException("Error");
+        if (quantity > capacity)
+            throw new IllegalArgumentException("Not enough space in depot" + name.toString());
         this.quantity = quantity;
     }
 
     public void setResource(Resource resource) {
-        if(constraint.isEmpty() || constraint.get().equals(resource)) this.resource = resource;
-            else throw new IllegalArgumentException("There is a constraint");
+        if(constraint == null || constraint.equals(resource))
+            this.resource = resource;
+        else
+            throw new IllegalArgumentException("Constraint not satisfied");
     }
 
     public DepotName getName() { return name; }
 
-    public Optional<Resource> getConstraint() { return constraint; }
+    public Resource getConstraint() { return constraint; }
 
     public int getCapacity() {
         return capacity;
@@ -80,15 +83,18 @@ public class Depot {
      */
     public void addResource(Resource r) {
 
-        if( constraint.isEmpty()  || constraint.get().equals(r)){
-            if(this.isFull()) throw new IllegalArgumentException("The Depot is full!");
+        if (constraint == null  || constraint.equals(r)){
+            if (this.isFull())
+                throw new IllegalArgumentException("The Depot is full!");
 
-            if(this.isEmpty()){
+            if (this.isEmpty()){
                 this.resource = r;
                 this.quantity++;
             }
-            else if(this.getResource().equals(r)) this.quantity++;
-                else throw new IllegalArgumentException("The type of resource that the player wants to insert does not match the type of resource already present");
+            else if (this.getResource().equals(r))
+                this.quantity++;
+            else
+                throw new IllegalArgumentException("The type of resource that the player wants to insert does not match the type of resource already present");
         }
         else throw new IllegalArgumentException("The inserted Resource r doesn't match the special resource");
     }
@@ -98,26 +104,27 @@ public class Depot {
      *
      * @exception IllegalArgumentException when there is no Resource in this Depot
      */
-    public void removeResourceFromDepot(){
+    public void removeResource(){
 
-        if(!this.isEmpty()) this.quantity--;
-            else throw new IllegalArgumentException("There is no Resource  in this Depot");
-
+        if (!this.isEmpty())
+            this.quantity--;
+        else
+            throw new IllegalArgumentException("There is no Resource in this Depot");
     }
 
     /**
      *
      * @return true if the Depot contains no <code>Resources</code>
      */
-    public boolean isEmpty(){ return this.getQuantity() == 0; }
+    public boolean isEmpty(){
+        return (quantity == 0);
+    }
 
     /**
      *
      * @return true if the Depot has no space available
      */
     public boolean isFull(){
-        return this.getCapacity()==this.getQuantity();
+        return (capacity == quantity);
     }
-
-
 }

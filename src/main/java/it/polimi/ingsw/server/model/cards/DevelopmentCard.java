@@ -20,6 +20,8 @@ public class DevelopmentCard extends Card{
     public DevelopmentCard(int id, int victoryPoints, int level, CardColor color, List<ResourceRequirement> requirements, ProductionPower power)
     {
         super(id, victoryPoints);
+        if (level < 1 || level > 3 || color == null || requirements == null || power == null)
+            throw new IllegalArgumentException();
         this.level = level;
         this.color = color;
         this.requirements = requirements;

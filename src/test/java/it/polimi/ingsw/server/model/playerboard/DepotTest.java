@@ -26,10 +26,9 @@ public class DepotTest {
 
     @Test
     public void testGetConstraint(){
-        Optional<Resource> resourceOptional = Optional.of(Resource.COIN);
 
-        assertTrue(depot.getConstraint().isEmpty());
-        assertEquals(extraDepot.getConstraint(),resourceOptional);
+        assertNull(depot.getConstraint());
+        assertEquals(extraDepot.getConstraint(),Resource.COIN);
     }
 
     @Test
@@ -48,7 +47,7 @@ public class DepotTest {
         assertEquals(depot.getResource(), Resource.SERVANT);
 
         extraDepot.setResource(Resource.COIN);
-        assertEquals(extraDepot.getConstraint().get(),Resource.COIN);
+        assertEquals(extraDepot.getConstraint(),Resource.COIN);
 
         try {
             extraDepot.setResource(Resource.SERVANT);
@@ -111,14 +110,14 @@ public class DepotTest {
         extraDepot.addResource(Resource.COIN);
         assertEquals(1, extraDepot.getQuantity());
         assertEquals(Resource.COIN, extraDepot.getResource());
-        assertEquals(Optional.of(Resource.COIN), extraDepot.getConstraint());
+        assertEquals(Resource.COIN, extraDepot.getConstraint());
     }
 
     @Test
     public void testRemoveResourceFromDepot(){
 
         try {
-            depot.removeResourceFromDepot();
+            depot.removeResource();
             fail();
         }catch (IllegalArgumentException e){
             assertTrue(true);
@@ -127,7 +126,7 @@ public class DepotTest {
         assertEquals(depot.getQuantity(), 0);
         depot.addResource(Resource.COIN);
         assertEquals(depot.getQuantity(), 1);
-        depot.removeResourceFromDepot();
+        depot.removeResource();
         assertEquals(depot.getQuantity(),0);
 
     }

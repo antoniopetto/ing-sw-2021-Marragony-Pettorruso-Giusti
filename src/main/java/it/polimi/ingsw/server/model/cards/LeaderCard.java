@@ -2,6 +2,7 @@ package it.polimi.ingsw.server.model.cards;
 
 import it.polimi.ingsw.server.model.Player;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -10,15 +11,16 @@ import java.util.List;
  * ability attribute. The class extends the abstract class card.
  */
 public class LeaderCard extends Card{
-    private final List<Requirement> requirements;
-    private boolean played;
+    private final List<Requirement> requirements = new ArrayList<>();
+    private boolean played = false;
     private final SpecialAbility ability;
 
-    public LeaderCard(int id, int victoryPoints, List<Requirement> requirements, SpecialAbility ability) {
+    public LeaderCard(int id, int victoryPoints, List<? extends Requirement> requirements, SpecialAbility ability) {
         super(id, victoryPoints);
-        this.requirements = requirements;
+        if(requirements == null || ability == null)
+            throw new IllegalArgumentException();
+        this.requirements.addAll(requirements);
         this.ability = ability;
-        played = false;
     }
 
     /**

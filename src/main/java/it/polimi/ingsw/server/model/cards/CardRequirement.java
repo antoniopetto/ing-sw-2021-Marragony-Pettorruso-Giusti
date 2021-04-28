@@ -13,22 +13,19 @@ import java.util.Optional;
  */
 public class CardRequirement implements Requirement{
     private final CardColor color;
-    private final Optional<Integer> level;
+    private final Integer level;
     private final int quantity;
 
-    public CardRequirement(CardColor color, Integer level, int quantity) {
-        if(level<1||level>3)throw new IllegalArgumentException();
-        if(quantity<1) throw new IllegalArgumentException();
-        this.color = color;
-        this.level = Optional.of(level);
-        this.quantity = quantity;
+    public CardRequirement(CardColor color, int quantity) {
+        this(color, null, quantity);
     }
 
-    public CardRequirement(CardColor color, int quantity)
-    {
-        this.color=color;
+    public CardRequirement(CardColor color, Integer level, int quantity) {
+        if (level != null && (level < 1 || level > 3) || color == null || quantity < 1)
+            throw new IllegalArgumentException();
+        this.color = color;
+        this.level = level;
         this.quantity = quantity;
-        level=Optional.empty();
     }
 
     /**
@@ -37,21 +34,18 @@ public class CardRequirement implements Requirement{
     @Override
     public boolean isSatisfied(Player player) {
         int needed = this.quantity;
-        List<Slot> slots = player.getPlayerBoard().getSlotList();
-        for (Slot slot:slots) {
-            List<DevelopmentCard> cards= slot.getDevelopmentCardList();
-            for (DevelopmentCard card:cards) {
-                if (card.getColor().equals(this.color))
-                {
-                    if(level.isPresent())
-                    {
-                        if(level.get()<=card.getLevel())
-                            needed--;
-                    }
-                    else needed--;
 
+        for (Slot slot : player.getPlayerBoard().getSlotList()) {
+            for (DevelopmentCard card : slot.getDevelopmentCardList()) {
+                if (card.getColor().equals(this.color)) {
+                    if (level != null)
+                        if (level == card.getLevel())
+                            needed--;
+                    else
+                        needed--;
                 }
-                if(needed==0) return true;
+                if (needed == 0)
+                    return true;
             }
         }
         return false;

@@ -84,10 +84,10 @@ public class WareHouseTest {
     }
 
     @Test
-    public void testRemoveResourceFromWareHouse(){
+    public void testRemoveResource(){
 
         try {
-            wareHouse.removeResourcefromWareHouse(Resource.COIN);
+            wareHouse.removeResource(Resource.COIN);
             fail();
         }catch (IllegalArgumentException e){
             assertTrue(true);
@@ -97,20 +97,19 @@ public class WareHouseTest {
         wareHouse.insert(DepotName.MEDIUM, Resource.COIN);
         assertEquals(2, wareHouse.depotByName(DepotName.MEDIUM).getQuantity());
         wareHouse.insert(DepotName.HIGH, Resource.SHIELD);
-        wareHouse.removeResourcefromWareHouse(Resource.COIN);
+        wareHouse.removeResource(Resource.COIN);
         assertEquals(1, wareHouse.depotByName(DepotName.MEDIUM).getQuantity());
         assertEquals(1, wareHouse.depotByName(DepotName.HIGH).getQuantity());
 
         wareHouse.createExtraDepot(Resource.COIN,1);
         wareHouse.insert(DepotName.FIRST_EXTRA,Resource.COIN);
         assertEquals(1, wareHouse.depotByName(DepotName.FIRST_EXTRA).getQuantity());
-        wareHouse.removeResourcefromWareHouse(Resource.COIN);
+        wareHouse.removeResource(Resource.COIN);
         assertEquals(0, wareHouse.depotByName(DepotName.MEDIUM).getQuantity());
         assertEquals(1, wareHouse.depotByName(DepotName.FIRST_EXTRA).getQuantity());
-        wareHouse.removeResourcefromWareHouse(Resource.COIN);
+        wareHouse.removeResource(Resource.COIN);
         assertEquals(0, wareHouse.depotByName(DepotName.FIRST_EXTRA).getQuantity());
         assertEquals(1, wareHouse.depotByName(DepotName.HIGH).getQuantity());
-
     }
 
     @Test
