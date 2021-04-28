@@ -15,8 +15,9 @@ public class ClientHandler {
     public ClientHandler(Socket clientSocket) throws IOException {
 
         this.clientSocket = clientSocket;
-        input = new ObjectInputStream(clientSocket.getInputStream());
         output = new ObjectOutputStream(clientSocket.getOutputStream());
+        input = new ObjectInputStream(clientSocket.getInputStream());
+
     }
 
     public void writeObject(Object o) throws IOException{

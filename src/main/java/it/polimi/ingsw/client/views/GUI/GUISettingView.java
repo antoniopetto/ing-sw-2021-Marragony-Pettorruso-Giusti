@@ -4,7 +4,7 @@ import it.polimi.ingsw.client.views.SettingView;
 
 public class GUISettingView implements SettingView {
     @Override
-    public void run() {
+    public void execute() {
 
     }
 }

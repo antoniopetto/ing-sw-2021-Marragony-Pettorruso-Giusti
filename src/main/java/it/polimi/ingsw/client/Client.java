@@ -35,7 +35,7 @@ public class Client {
             settingView = new CLISettingView();
         else
             settingView = new GUISettingView();
-        new Thread(settingView).start();
+        settingView.execute();
     }
 
 }

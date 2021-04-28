@@ -13,7 +13,7 @@ public class CLISettingView implements SettingView {
     private View cliView = new CLIView();
 
     @Override
-    public void run() {
+    public void execute() {
         Scanner input = new Scanner(System.in);
         String ip;
         int port;
@@ -42,4 +42,5 @@ public class CLISettingView implements SettingView {
 
 
     }
+
 }

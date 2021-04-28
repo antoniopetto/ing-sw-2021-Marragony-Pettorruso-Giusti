@@ -41,7 +41,7 @@ public class ExtraDepotAbilityTest {
             int size = player.getPlayerBoard().getWareHouse().getDepots().size();
             assertEquals(4, size);
             Depot depot = player.getPlayerBoard().getWareHouse().getDepots().get(3);
-            assertEquals(Resource.COIN, depot.getConstraint().get());
+            assertEquals(Resource.COIN, depot.getConstraint());
             assertEquals(2, depot.getCapacity());
 
         }catch (Exception e)

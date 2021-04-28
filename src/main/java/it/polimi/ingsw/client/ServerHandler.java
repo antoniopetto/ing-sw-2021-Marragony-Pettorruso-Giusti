@@ -18,19 +18,28 @@ public class ServerHandler implements Runnable{
     private SimpleGame model;
     private View view;
 
-    public ServerHandler(Socket socket, View view) throws IOException {
+    public ServerHandler(Socket socket, View view) {
         serverSocket=socket;
-        input = new ObjectInputStream(socket.getInputStream());
-        output = new ObjectOutputStream(socket.getOutputStream());
         this.view=view;
     }
 
-
     @Override
     public void run() {
+        System.out.println("Try to get the streams");
+        try {
+            output = new ObjectOutputStream(serverSocket.getOutputStream());
+            //output.flush();
+            input = new ObjectInputStream(serverSocket.getInputStream());
+
+        } catch (IOException e) {
+            System.out.println("Error getting the streams");
+            return;
+        }
+        System.out.println("receiving message...");
         while(true)
         {
             try {
+
                 Object message = input.readObject();
                 if(ServerMsg.class.isInstance(message))
                 {

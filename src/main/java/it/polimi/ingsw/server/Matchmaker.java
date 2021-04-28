@@ -17,8 +17,10 @@ public class Matchmaker implements Runnable{
     }
 
     public void run(){
+        System.out.println("Sending username message...");
         try{
             while(true) {
+
                 handler.writeObject(new UsernameRequestMsg());
                 String username = ((UsernameMsg) handler.readObject()).getUsername();
                 if (Server.activeUsernames.contains(username))
@@ -46,6 +48,7 @@ public class Matchmaker implements Runnable{
             }
         }
         catch (IOException e){
+            e.printStackTrace();
             System.out.println("Connection dropped");
             terminate();
         }
