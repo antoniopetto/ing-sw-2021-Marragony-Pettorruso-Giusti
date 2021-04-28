@@ -29,7 +29,7 @@ public abstract class Card {
                 .filter(x -> x.getId() == id)
                 .findFirst().orElse(null);
         if (result == null)
-            throw new ElementNotFoundException();
+            throw new ElementNotFoundException("No object ha the specified id");
         return result;
     }
 

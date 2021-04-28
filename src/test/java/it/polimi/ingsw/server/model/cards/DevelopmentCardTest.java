@@ -24,7 +24,7 @@ public class DevelopmentCardTest {
         Map<Resource, Integer> input = new HashMap<>();
         Map<Resource, Integer> output = new HashMap<>();
         power = new ProductionPower(input, output);
-        card = new DevelopmentCard(1, 3,2, CardColor.BLUE, list, power);
+        card = new DevelopmentCard(1,3,2, CardColor.BLUE, list, power);
     }
 
     @Test
@@ -43,9 +43,9 @@ public class DevelopmentCardTest {
     public void isLevelHigherTest()
     {
         //checks the correctness of the method
-        DevelopmentCard card1 = new DevelopmentCard(2, 1, 1, CardColor.GREEN, list, power);
-        DevelopmentCard card2 = new DevelopmentCard(3, 1, 3, CardColor.YELLOW, list, power);
-        DevelopmentCard card3 = new DevelopmentCard(4, 1, 2, CardColor.YELLOW, list, power);
+        DevelopmentCard card1 = new DevelopmentCard( 1,1, 1, CardColor.GREEN, list, power);
+        DevelopmentCard card2 = new DevelopmentCard( 2,1, 3, CardColor.YELLOW, list, power);
+        DevelopmentCard card3 = new DevelopmentCard( 3,1, 2, CardColor.YELLOW, list, power);
         assertTrue(card.isLevelHigher(card1));
         assertFalse(card.isLevelHigher(card2));
         assertFalse(card.isLevelHigher(card3));

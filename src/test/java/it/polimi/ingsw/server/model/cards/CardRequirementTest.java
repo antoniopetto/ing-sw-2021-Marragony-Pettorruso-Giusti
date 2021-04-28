@@ -51,17 +51,17 @@ public class CardRequirementTest {
         List<Slot> slots = new ArrayList<>();
 
         Slot slot1 = new Slot(1);
-        slot1.addCard(new DevelopmentCard(1, 1, CardColor.BLUE, null, null));
-        slot1.addCard(new DevelopmentCard(1, 2, CardColor.BLUE, null, null));
-        slot1.addCard(new DevelopmentCard(1, 3, CardColor.GREEN, null, null));
+        slot1.addCard(new DevelopmentCard(1,1, 1, CardColor.BLUE, null, null));
+        slot1.addCard(new DevelopmentCard(2,1, 2, CardColor.BLUE, null, null));
+        slot1.addCard(new DevelopmentCard(3,1, 3, CardColor.GREEN, null, null));
         slots.add(slot1);
         Slot slot2 = new Slot(2);
-        slot2.addCard(new DevelopmentCard(1, 1, CardColor.GREEN, null, null));
-        slot2.addCard(new DevelopmentCard(1, 2, CardColor.PURPLE, null, null));
-        slot2.addCard(new DevelopmentCard(1, 3, CardColor.YELLOW, null, null));
+        slot2.addCard(new DevelopmentCard(4,1, 1, CardColor.GREEN, null, null));
+        slot2.addCard(new DevelopmentCard(5,1, 2, CardColor.PURPLE, null, null));
+        slot2.addCard(new DevelopmentCard(6,1, 3, CardColor.YELLOW, null, null));
         slots.add(slot2);
         Slot slot3 = new Slot(3);
-        slot3.addCard(new DevelopmentCard(1, 1, CardColor.BLUE, null, null));
+        slot3.addCard(new DevelopmentCard(7,1, 1, CardColor.BLUE, null, null));
         slots.add(slot3);
         PlayerBoardStub playerBoard = new PlayerBoardStub(slots);
         player.setPlayerBoard(playerBoard);

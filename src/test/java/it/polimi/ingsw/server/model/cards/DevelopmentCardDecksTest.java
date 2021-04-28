@@ -18,21 +18,21 @@ public class DevelopmentCardDecksTest {
     public void setUp() {
         //generates a list of DevelopmentCard to create a DevelopmentCardDecks with a card in every deck and 4 cards in
         //the BLUE 1 deck
-        cards.add(new DevelopmentCard(0,0, 1, CardColor.BLUE, null, null));
-        cards.add(new DevelopmentCard(1,0, 2, CardColor.BLUE, null, null));
-        cards.add(new DevelopmentCard(2,0, 3, CardColor.BLUE, null, null));
-        cards.add(new DevelopmentCard(3,0, 1, CardColor.YELLOW, null, null));
-        cards.add(new DevelopmentCard(4,0, 2, CardColor.YELLOW, null, null));
-        cards.add(new DevelopmentCard(5,0, 3, CardColor.YELLOW, null, null));
-        cards.add(new DevelopmentCard(6,0, 1, CardColor.PURPLE, null, null));
-        cards.add(new DevelopmentCard(7,0, 2, CardColor.PURPLE, null, null));
-        cards.add(new DevelopmentCard(8,0, 3, CardColor.PURPLE, null, null));
-        cards.add(new DevelopmentCard(9,0, 1, CardColor.GREEN, null, null));
-        cards.add(new DevelopmentCard(10,0, 2, CardColor.GREEN, null, null));
-        cards.add(new DevelopmentCard(11,0, 3, CardColor.GREEN, null, null));
-        cards.add(new DevelopmentCard(12,0, 1, CardColor.BLUE, null, null));
+        cards.add(new DevelopmentCard(1,0, 1, CardColor.BLUE, null, null));
+        cards.add(new DevelopmentCard(2,0, 2, CardColor.BLUE, null, null));
+        cards.add(new DevelopmentCard(3,0, 3, CardColor.BLUE, null, null));
+        cards.add(new DevelopmentCard(4,0, 1, CardColor.YELLOW, null, null));
+        cards.add(new DevelopmentCard(5,0, 2, CardColor.YELLOW, null, null));
+        cards.add(new DevelopmentCard(6,0, 3, CardColor.YELLOW, null, null));
+        cards.add(new DevelopmentCard(7,0, 1, CardColor.PURPLE, null, null));
+        cards.add(new DevelopmentCard(8,0, 2, CardColor.PURPLE, null, null));
+        cards.add(new DevelopmentCard(9,0, 3, CardColor.PURPLE, null, null));
+        cards.add(new DevelopmentCard(10,0, 1, CardColor.GREEN, null, null));
+        cards.add(new DevelopmentCard(11,0, 2, CardColor.GREEN, null, null));
+        cards.add(new DevelopmentCard(12,0, 3, CardColor.GREEN, null, null));
         cards.add(new DevelopmentCard(13,0, 1, CardColor.BLUE, null, null));
         cards.add(new DevelopmentCard(14,0, 1, CardColor.BLUE, null, null));
+        cards.add(new DevelopmentCard(15,0, 1, CardColor.BLUE, null, null));
         decks = new DevelopmentCardDecks(cards);
     }
     @After
@@ -51,7 +51,7 @@ public class DevelopmentCardDecksTest {
             fail();
         }
         //tries to create a DevelopmentCardDecks with 5 cards in a deck
-        cards.add(new DevelopmentCard(15,0, 1, CardColor.BLUE, null, null));
+        cards.add(new DevelopmentCard(16,0, 1, CardColor.BLUE, null, null));
         try
         {
             DevelopmentCardDecks decks2 = new DevelopmentCardDecks(cards);
@@ -65,7 +65,7 @@ public class DevelopmentCardDecksTest {
     @Test
     public void drawCardTest(){
         DevelopmentCard card = decks.drawCard(CardColor.YELLOW, 3);
-        assertEquals(5, card.getId());
+        assertEquals(6, card.getId());
         //tries to draw a card of level 4, which is impossible
         try
         {
@@ -90,7 +90,7 @@ public class DevelopmentCardDecksTest {
     public void readTopTest()
     {
         DevelopmentCard card = decks.readTop(CardColor.PURPLE, 2);
-        assertEquals(7, card.getId());
+        assertEquals(8, card.getId());
         //checks if the card has been removed from the deck after readTop
         try{
             decks.drawCard(CardColor.PURPLE, 2);
