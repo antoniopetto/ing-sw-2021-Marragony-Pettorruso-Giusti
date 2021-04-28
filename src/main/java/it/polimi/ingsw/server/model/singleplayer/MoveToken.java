@@ -20,13 +20,13 @@ public class MoveToken implements SoloActionToken {
     public void activateToken(Game game) {
         if(steps==2)
         {
-            game.getTrack().advance(game.getSoloRival());
-            game.getTrack().advance(game.getSoloRival());
+            game.getTrack().advance(game.getSoloRival().get());
+            game.getTrack().advance(game.getSoloRival().get());
         }
         else
         {
-            game.getTrack().advance(game.getSoloRival());
-            game.getSoloRival().setStack();
+            game.getTrack().advance(game.getSoloRival().get());
+            game.getSoloRival().get().setStack();
         }
     }
 

@@ -83,8 +83,8 @@ public class FaithTrack {
             player.setPosition(track.get(currentIndex + 1));
             if (player.getPosition().isPopeSpace() && isAbsoluteFirst(player))
                 vaticanReport();
-            if (player.getPosition().getNumber() == LAST_POSITION)
-                game.setLastRound(true);
+            //if (player.getPosition().getNumber() == LAST_POSITION)
+              //  game.setLastRound(true);
         }
 
         virtualView.faithTrackUpdate(player, false);
@@ -102,8 +102,8 @@ public class FaithTrack {
                 p.setPosition(track.get(currentIndex + 1));
                 if (p.getPosition().isPopeSpace() && isAbsoluteFirst(p))
                     isVaticanReportDue = true;
-                if (p.getPosition().getNumber() == LAST_POSITION)
-                    game.setLastRound(true);
+                //if (p.getPosition().getNumber() == LAST_POSITION)
+                   // game.setLastRound(true);
             }
         }
 

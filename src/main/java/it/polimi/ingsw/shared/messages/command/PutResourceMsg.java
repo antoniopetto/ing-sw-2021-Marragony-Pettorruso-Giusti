@@ -6,7 +6,9 @@ import it.polimi.ingsw.server.model.playerboard.DepotName;
 import it.polimi.ingsw.server.model.playerboard.Resource;
 import it.polimi.ingsw.server.model.shared.Marble;
 import it.polimi.ingsw.shared.messages.server.BufferUpdateMsg;
+import it.polimi.ingsw.shared.messages.server.ServerMsg;
 import it.polimi.ingsw.shared.messages.view.ErrorMsg;
+
 
 import java.io.IOException;
 import java.util.Optional;
@@ -35,24 +37,15 @@ public class PutResourceMsg implements CommandMsg {
         boolean result;
         String text;
         Object msg;
-        try
+        result = resource.map(value -> game.putResource(marble, depotName, value)).orElseGet(() -> game.putResource(marble, depotName));
+        if (result)
+            msg= new BufferUpdateMsg(marble);
+        else
         {
-            if(resource.isPresent())
-                result= game.putResource(marble, depotName, resource.get());
-            else
-                result= game.putResource(marble, depotName);
-            if (result)
-                msg= new BufferUpdateMsg(marble);
-            else
-            {
-                text = "Resource not insertable in that depot";
-                msg = new ErrorMsg(text);
-            }
-        }catch (Exception e)
-        {
-            text = "Marble not playable";
+            text = "Resource not insertable in that depot";
             msg = new ErrorMsg(text);
         }
+
         handler.writeObject(msg);
     }
 }

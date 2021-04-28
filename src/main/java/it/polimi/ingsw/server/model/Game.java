@@ -127,9 +127,8 @@ public class Game {
      * @param marble is the marble selected by the player
      * @param depot is the depot where the player tries to add the resource
      * @return false if it isn't possible to add the resource in <code>depot</code>, else it add the resource and return true
-     * @throws ElementNotFoundException if <code>marble</code> is not in <code>marbleBuffer</code>
      */
-    public boolean putResource(Marble marble, DepotName depot) throws ElementNotFoundException {
+    public boolean putResource(Marble marble, DepotName depot){
         Resource resource;
         if(!marble.equals(Marble.WHITE))
             resource = marble.getResource();
@@ -151,17 +150,20 @@ public class Game {
      * @param depot is the depot where the player tries to put the resource.
      * @param resource is the resource to put in the depot.
      * @return false if the resource is not insertable, else it puts the resource and returns true.
-     * @throws ElementNotFoundException if <code>marble</code> is not in <code>marbleBuffer</code>
      */
-    public boolean putResource(Marble marble, DepotName depot, Resource resource) throws ElementNotFoundException {
-
-        if(!marble.equals(Marble.WHITE)&&!(marble.getResource().equals(resource)))
-            throw new IllegalArgumentException();
-        if(marble.equals(Marble.WHITE)&&!playing.getWhiteMarbleAliases().contains(resource))
-            throw new IllegalArgumentException();
-        int listId = findMarble(marble);
-        if(!playing.getPlayerBoard().getWareHouse().isInsertable(depot, resource))
+    public boolean putResource(Marble marble, DepotName depot, Resource resource) {
+        int listId;
+        try{
+            if(!marble.equals(Marble.WHITE)&&!(marble.getResource().equals(resource))) throw new IllegalArgumentException("Wrong request");
+            if(marble.equals(Marble.WHITE)&&!playing.getWhiteMarbleAliases().contains(resource)) throw new IllegalArgumentException("White marble not associated to that resource");
+            listId = findMarble(marble);
+        }catch (Exception e)
+        {
+            virtualView.sendError(e.getMessage());
             return false;
+        }
+
+        if(!playing.getPlayerBoard().getWareHouse().isInsertable(depot, resource)) return false;
         playing.getPlayerBoard().getWareHouse().insert(depot, resource);
         marbleBuffer.remove(listId);
         return true;
@@ -171,12 +173,17 @@ public class Game {
      * This method is called when it is not possible to add the equivalent resource of a marble in the warehouse
      * so the marble is discarded.
      * @param marble is the marble to discard
-     * @throws ElementNotFoundException if <code>marble</code> is not in <code>marbleBuffer</code>
      */
-    public void discard(Marble marble) throws ElementNotFoundException {
-        int listId = findMarble(marble);
-        marbleBuffer.remove(listId);
-        faithTrack.advanceAllBut(playing);
+    public void discard(Marble marble)  {
+        try{
+            int listId = findMarble(marble);
+            marbleBuffer.remove(listId);
+            faithTrack.advanceAllBut(playing);
+        }catch (Exception e)
+        {
+            virtualView.sendError(e.getMessage());
+        }
+
     }
 
     /**
@@ -195,10 +202,21 @@ public class Game {
                 isPresent=true;
             else listId++;
         }
-        if(!isPresent) throw new ElementNotFoundException();
+        if(!isPresent) throw new ElementNotFoundException("Marble not playable");
         return listId;
     }
 
+    public void switchDepots(DepotName depot1, DepotName depot2)
+    {
+        if(!state.equals(State.INSERTING)) virtualView.sendError("Wrong state of the application");
+        try{
+            playing.getPlayerBoard().getWareHouse().switchDepots(depot1, depot2);
+        }catch (Exception e)
+        {
+            virtualView.sendError(e.getMessage());
+        }
+
+    }
     public void endTurn()
     {
         if (!state.equals(State.POSTTURN)){

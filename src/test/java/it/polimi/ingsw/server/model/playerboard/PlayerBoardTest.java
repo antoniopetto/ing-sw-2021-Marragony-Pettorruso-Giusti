@@ -26,16 +26,16 @@ public class PlayerBoardTest {
 
     @Test
     public void testCanAddCardInSlotEAddCardInSlot(){
-        DevelopmentCard developmentCard2 = new DevelopmentCard(10,3, CardColor.BLUE,
+        DevelopmentCard developmentCard2 = new DevelopmentCard(1,10,3, CardColor.BLUE,
                 resourceRequirementList, productionPower);
         assertFalse(playerBoard.canAddCardInSlot(developmentCard2, 0));
-        DevelopmentCard developmentCard1 = new DevelopmentCard(10,1, CardColor.BLUE,
+        DevelopmentCard developmentCard1 = new DevelopmentCard(2,10,1, CardColor.BLUE,
                                                                 resourceRequirementList, productionPower);
         assertTrue(playerBoard.canAddCardInSlot(developmentCard1, 0));
         playerBoard.addCardInSlot(developmentCard1, 0);
 
         assertFalse(playerBoard.canAddCardInSlot(developmentCard2,0));
-        DevelopmentCard developmentCard3 = new DevelopmentCard(10,1, CardColor.BLUE,
+        DevelopmentCard developmentCard3 = new DevelopmentCard(3,10,1, CardColor.BLUE,
                 resourceRequirementList, productionPower);
         assertFalse(playerBoard.canAddCardInSlot(developmentCard3,0));
         try {
@@ -49,10 +49,10 @@ public class PlayerBoardTest {
 
     @Test
     public void testCountVictoryPoints(){
-        DevelopmentCard developmentCard1 = new DevelopmentCard(10,1, CardColor.BLUE,
+        DevelopmentCard developmentCard1 = new DevelopmentCard(4,10,1, CardColor.BLUE,
                 resourceRequirementList, productionPower);
         playerBoard.addCardInSlot(developmentCard1,0);
-        DevelopmentCard developmentCard2 = new DevelopmentCard(3,2, CardColor.BLUE,
+        DevelopmentCard developmentCard2 = new DevelopmentCard(5,3,2, CardColor.BLUE,
                 resourceRequirementList, productionPower);
         playerBoard.addCardInSlot(developmentCard2,0);
 

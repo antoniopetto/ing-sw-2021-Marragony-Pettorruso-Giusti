@@ -3,7 +3,7 @@ package it.polimi.ingsw.shared.messages.command;
 import it.polimi.ingsw.server.ClientHandler;
 import it.polimi.ingsw.server.model.Game;
 import it.polimi.ingsw.server.model.playerboard.DepotName;
-import it.polimi.ingsw.shared.messages.server.ErrorMsg;
+
 
 
 import java.io.IOException;
@@ -19,16 +19,8 @@ public class SwitchDepotsMsg implements CommandMsg {
         this.depot2=depot2;
     }
     @Override
-    public void execute(Game game, ClientHandler handler) throws IOException {
+    public void execute(Game game, ClientHandler handler){
 
-        try
-        {
-            game.getPlaying().getPlayerBoard().getWareHouse().switchDepots(depot1, depot2);
-        }catch(Exception e)
-        {
-            ErrorMsg msg = new ErrorMsg(e.getMessage());
-            handler.writeObject(msg);
-        }
-
+        game.switchDepots(depot1, depot2);
     }
 }
