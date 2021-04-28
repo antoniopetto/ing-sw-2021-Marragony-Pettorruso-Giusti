@@ -94,16 +94,14 @@ public class DevelopmentCardDecks {
         int level = 1;
         int toDiscard=2;
         for (CardDeck deck:decks) {
-            if (deck.properties(color, level))
-            {
-                while(true)
-                {
+            if (deck.properties(color, level)) {
+                while(true) {
                     try {
                         deck.pop();
                         toDiscard--;
                         if(toDiscard==0) return;
-                    }catch (EmptyStackException e)
-                    {
+                    }
+                    catch (EmptyStackException e) {
                         level++;
                         break;
                     }

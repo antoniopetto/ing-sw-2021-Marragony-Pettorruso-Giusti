@@ -10,16 +10,16 @@ public class FaithTrack {
 
     private static final int LAST_POSITION = 24;
     private final List<Position> track = new ArrayList<>();
-    private final List<AbstractPlayer> players;
+    private final List<AbstractPlayer> players = new ArrayList<>();
     private final Game game;
     private int vaticanReportCounter = 0;
     private final VirtualView virtualView;
 
-    public FaithTrack(Game game, VirtualView virtualView, List<AbstractPlayer> players){
+    public FaithTrack(Game game, VirtualView virtualView, List<? extends AbstractPlayer> players){
 
         this.game = game;
         this.virtualView = virtualView;
-        this.players = players;
+        this.players.addAll(players);
 
         Map<Integer, Integer> vPMap = Map.of(3, 1,
                                              6, 2,

@@ -84,7 +84,7 @@ public class PlayerBoard {
 
             if(resourceInWareHouse) {
                 try {
-                    wareHouse.removeResourcefromWareHouse(resourceRequirement.getResource());
+                    wareHouse.removeResource(resourceRequirement.getResource());
                     i++;
                 }
                 catch (IllegalArgumentException e) {
@@ -134,19 +134,19 @@ public class PlayerBoard {
         ProductionPower totalProductionPower;
         if(canActivateProduction(selectedCardIds, selectedExtraPowers)) {
             totalProductionPower = getTotalProductionPower(selectedCardIds, selectedExtraPowers);
-            for (Resource r : totalProductionPower.getInputResources().keySet())
-                pay(new ResourceRequirement(r, totalProductionPower.getInputResources().get(r)));
+            for (Resource r : totalProductionPower.getInput().keySet())
+                pay(new ResourceRequirement(r, totalProductionPower.getInput().get(r)));
         }
         else{
             throw new IllegalArgumentException("Cannot activate production");
         }
-        for(Resource r: totalProductionPower.getOutputResources().keySet())
-            strongBox.addResource(r, totalProductionPower.getOutputResources().get(r));
+        for(Resource r: totalProductionPower.getOutput().keySet())
+            strongBox.addResource(r, totalProductionPower.getOutput().get(r));
     }
 
     public boolean canActivateProduction(Set<Integer> selectedCardIds, Map<Integer, ProductionPower> selectedExtraPowers){
         ProductionPower totalProductionPower = getTotalProductionPower(selectedCardIds, selectedExtraPowers);
-        for(Map.Entry<Resource, Integer> entry : totalProductionPower.getInputResources().entrySet())
+        for(Map.Entry<Resource, Integer> entry : totalProductionPower.getInput().entrySet())
             if (!isAffordable(new ResourceRequirement(entry.getKey(), entry.getValue())))
                 return false;
         return true;
@@ -166,24 +166,24 @@ public class PlayerBoard {
                 throw new IllegalArgumentException("The user requested a production he didn't have");
             }
 
-            incrementMap(totalInput, power.getInputResources());
-            incrementMap(totalInput, power.getOutputResources());
+            incrementMap(totalInput, power.getInput());
+            incrementMap(totalInput, power.getOutput());
         }
 
         for(Integer i : selectedExtraPowers.keySet()){
 
             power = extraProductionPowers.get(i);
 
-            incrementMap(totalInput, power.getInputResources());
-            incrementMap(totalOutput, power.getOutputResources());
+            incrementMap(totalInput, power.getInput());
+            incrementMap(totalOutput, power.getOutput());
 
             ProductionPower chosenResources = selectedExtraPowers.get(i);
 
             if (!specialProductionConsistent(power, chosenResources))
                 throw new IllegalArgumentException("The client choice of special production is illegal");
 
-            incrementMap(totalInput, chosenResources.getInputResources());
-            incrementMap(totalOutput, chosenResources.getOutputResources());
+            incrementMap(totalInput, chosenResources.getInput());
+            incrementMap(totalOutput, chosenResources.getOutput());
         }
 
         return new ProductionPower(totalInput, totalOutput);
@@ -224,21 +224,14 @@ public class PlayerBoard {
      */
     private boolean specialProductionConsistent(ProductionPower power, ProductionPower chosenResources) {
 
-        if(chosenResources.getAgnosticInput() != 0 || chosenResources.getAgnosticOutput() != 0)
+        if (chosenResources.getAgnosticInput() != 0 || chosenResources.getAgnosticOutput() != 0)
             return false;
-        var chosenInput = chosenResources.getInputResources();
-        var chosenOutput = chosenResources.getOutputResources();
+        var chosenInput = chosenResources.getInput();
+        var chosenOutput = chosenResources.getOutput();
 
-        if(chosenInput.containsKey(Resource.FAITH) || chosenOutput.containsKey(Resource.FAITH))
-            return false;
-
-        if(power.getAgnosticInput() != chosenInput.values().stream().mapToInt(Integer::intValue).sum())
-            return false;
-
-        if(power.getAgnosticOutput() != chosenInput.values().stream().mapToInt(Integer::intValue).sum())
-            return false;
-
-        return true;
+        return !chosenInput.containsKey(Resource.FAITH) && !chosenOutput.containsKey(Resource.FAITH) &&
+                power.getAgnosticInput() == chosenInput.values().stream().mapToInt(Integer::intValue).sum() &&
+                power.getAgnosticOutput() == chosenInput.values().stream().mapToInt(Integer::intValue).sum();
     }
 
     /**

@@ -1,45 +1,45 @@
 package it.polimi.ingsw.server.model;
 
 import it.polimi.ingsw.server.VirtualView;
-import it.polimi.ingsw.server.model.cards.DevelopmentCardDecks;
-import it.polimi.ingsw.server.model.cards.ProductionPower;
+import it.polimi.ingsw.server.model.cards.*;
 import it.polimi.ingsw.server.model.exceptions.ElementNotFoundException;
+import it.polimi.ingsw.server.model.exceptions.IllegalConfigXMLException;
 import it.polimi.ingsw.server.model.playerboard.DepotName;
 import it.polimi.ingsw.server.model.playerboard.Resource;
 import it.polimi.ingsw.server.model.shared.FaithTrack;
 import it.polimi.ingsw.server.model.shared.Marble;
 import it.polimi.ingsw.server.model.shared.MarketBoard;
 import it.polimi.ingsw.server.model.singleplayer.SoloRival;
-import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
 
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
-import java.io.File;
+import javax.xml.xpath.XPathExpressionException;
 import java.io.IOException;
 import java.util.*;
 
 public class Game {
 
     private enum State {
+        INITIALIZING,
         PRETURN,
         INSERTING,
-        POSTTURN;
+        POSTTURN
     }
 
-    private State state = State.PRETURN;
+    private static final String CONFIG_PATH = "resources/config.xml";
+    private State state = State.INITIALIZING;
     private boolean lastRound = false;
     private final boolean singlePlayer;
     private Player playing;
 
     private final VirtualView virtualView;
-    private final Optional<SoloRival> soloRival;
+    private final SoloRival soloRival;
     private final List<Player> players = new ArrayList<>();
     private final MarketBoard marketBoard = new MarketBoard();
+    private final FaithTrack faithTrack;
+    private final List<Marble> marbleBuffer = new ArrayList<>();
     private DevelopmentCardDecks developmentCardDecks;
-    private FaithTrack faithTrack;
-    private List<Marble> marbleBuffer = new ArrayList<>();
+
 
     public static Game newSinglePlayerGame(String username, VirtualView virtualView) {
         return new Game(username, virtualView);
@@ -50,51 +50,66 @@ public class Game {
     }
 
     private Game(String username, VirtualView virtualView) {
-        init("resources/config.xml");
+
+        state = State.INITIALIZING;
         this.virtualView = virtualView;
         singlePlayer = true;
+        soloRival = new SoloRival();
         players.add(new Player(username));
-        soloRival = Optional.of(new SoloRival());
+        playing = players.get(0);
+        faithTrack = new FaithTrack(this, virtualView, List.of(players.get(0), soloRival));
+        initCards();
     }
 
     private Game(List<String> usernames, VirtualView virtualView) {
-        init("resources/config.xml");
+
+        state = State.INITIALIZING;
         this.virtualView = virtualView;
         singlePlayer = false;
+        soloRival = null;
+
         if (usernames.size() > 4 || usernames.size() < 2)
             throw new IllegalArgumentException("Number of players out of bounds");
 
-        soloRival = Optional.empty();
-
-        for (String s : usernames) {
+        for (String s : usernames)
             players.add(new Player(s));
-        }
+
         Collections.shuffle(players);
         playing = players.get(0);
+        faithTrack = new FaithTrack(this, virtualView, players);
+        initCards();
     }
 
-    private void init(String configPath){
+    private void initCards(){
         try {
-            File configFile = new File(configPath);
-            DocumentBuilderFactory domBuilderFactory = DocumentBuilderFactory.newInstance();
-            DocumentBuilder domBuilder = domBuilderFactory.newDocumentBuilder();
-            Document dom = domBuilder.parse(configFile);
-            dom.getDocumentElement().normalize();
+            CardParser cardParser = new CardParser(CONFIG_PATH);
+
+            List<DevelopmentCard> developmentCards = cardParser.parseDevelopmentCards();
+
+            Collections.shuffle(developmentCards);
+            developmentCardDecks = new DevelopmentCardDecks(cardParser.parseDevelopmentCards());
+
+            List<LeaderCard> leaderCards = cardParser.parseLeaderCards();
+            Collections.shuffle(leaderCards);
+            for(Player p : players){
+                List<LeaderCard> firstFour = leaderCards.subList(0, 3);
+                p.setLeaderCards(firstFour);
+                //note: firstFour is backed by the original list
+                firstFour.clear();
+            }
+
+            ProductionPower basePower = cardParser.parseBaseProductionPower();
+            for(Player p : players)
+                p.getPlayerBoard().addExtraProductionPower(basePower);
         }
-        catch (ParserConfigurationException | IOException | SAXException e){
+        catch (ParserConfigurationException | IOException | SAXException | IllegalConfigXMLException e){
             e.printStackTrace();
             System.out.println("Parsing error");
             virtualView.exitGame();
         }
     }
 
-    public void singlePlayerTurn()
-    {
-        if(soloRival.isPresent())
-            soloRival.get().soloTurn(this);
-        else
-            throw new IllegalStateException("Not a single player game");
-    }
+
 
     /**
      * This method is called when <code>playing</code> buys resources from <code>MarketBoard</code>.
@@ -229,6 +244,8 @@ public class Game {
             else
                 playing = players.get(nextIndex);
                 state = State.PRETURN;
+                if (singlePlayer)
+                    soloRival.soloTurn(this);
         }
     }
 
@@ -260,6 +277,10 @@ public class Game {
 
     }
 
+    public void setLastRound(boolean lastRound){
+        this.lastRound = lastRound;
+    }
+
     public Player getPlaying() {
         return playing;
     }
@@ -268,9 +289,7 @@ public class Game {
         return marbleBuffer;
     }
 
-    public Optional<SoloRival> getSoloRival() {
-        return soloRival;
-    }
+    public Optional<SoloRival> getSoloRival() { return Optional.of(soloRival); }
 
     public FaithTrack getTrack() {
         return faithTrack;

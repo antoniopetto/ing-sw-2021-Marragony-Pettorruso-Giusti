@@ -65,11 +65,11 @@ public class WareHouse {
 
         Depot depotToInsert = depotByName(depotName);
 
-        if(depotByName(depotName).getConstraint().isEmpty()) {
+        if(depotByName(depotName).getConstraint() == null) {
 
             List<Depot> depotList1 = this.depotList.stream()
                     .filter(d -> !d.getName().equals(depotName))
-                    .filter(d -> d.getConstraint().isEmpty())
+                    .filter(d -> d.getConstraint() == null)
                     .filter(d -> !d.isEmpty())
                     .collect(Collectors.toList());
 
@@ -111,7 +111,7 @@ public class WareHouse {
      * @return true if 'DepotName' Depot contains constraint and so it is an ExtraDepot
      */
     private boolean isExtraDepot(DepotName depotName){
-        return this.depotList.get(depotName.getPosition()).getConstraint().isPresent();
+        return this.depotList.get(depotName.getPosition()).getConstraint() != null;
     }
 
     /**
@@ -140,7 +140,7 @@ public class WareHouse {
         if( depotByName(depotNameA).isEmpty() ) throw new IllegalStateException("DepotA is just empty");
 
         Function<DepotName,Boolean> controlResource = (depotName) -> {
-            if(depotByName(depotName).getConstraint().isEmpty()) return compareResourceType(depotNameB,depotNameA);
+            if(depotByName(depotName).getConstraint() == null) return compareResourceType(depotNameB,depotNameA);
                 return compareResourceType(depotNameA,depotNameB);
         };
 
@@ -157,7 +157,7 @@ public class WareHouse {
      * @return true if the constraint of the depotNameA Depot is equal to the resource contained in the depotNameB Depot
      */
     private boolean compareResourceType(DepotName depotNameA, DepotName depotNameB){
-        return depotByName(depotNameA).getConstraint().get().equals(depotByName(depotNameB).getResource());
+        return depotByName(depotNameA).getConstraint().equals(depotByName(depotNameB).getResource());
     }
 
     /**
@@ -170,7 +170,7 @@ public class WareHouse {
 
         while(!depotByName(depotToFill).isFull() || !depotByName(depotToEmpty).isEmpty()){
             depotByName(depotToFill).addResource(depotByName(depotToEmpty).getResource());
-            depotByName(depotToEmpty).removeResourceFromDepot();
+            depotByName(depotToEmpty).removeResource();
         }
     }
 
@@ -249,7 +249,7 @@ public class WareHouse {
      * Removes the <code>Resource</code> r  from a Depot that contains it
      * @param r the Resource to remove
      */
-    public void removeResourcefromWareHouse( Resource r){
+    public void removeResource( Resource r){
         Optional<Depot> optional = this.depotFilter(r)
                                                 .stream()
                                                     .findFirst();
@@ -266,13 +266,14 @@ public class WareHouse {
                 );
         */
 
-        if(optional.isEmpty()) throw new IllegalArgumentException(" There is no Resource r in WareHouse ");
+        if (optional.isEmpty())
+            throw new IllegalArgumentException(" There is no Resource r in WareHouse ");
 
         DepotName dName = optional
                             .map(Depot::getName)
                                 .get();//gestire warning
 
-        this.depotList.get(dName.getPosition()).removeResourceFromDepot();
+        this.depotList.get(dName.getPosition()).removeResource();
 
     }
 

@@ -133,9 +133,4 @@ public class Player extends AbstractPlayer{
     public void vaticanReportEffect(int tileNumber) {
         tiles.get(tileNumber).gain();
     }
-
-    @Override
-    public void activateEndGame() {
-
-    }
 }

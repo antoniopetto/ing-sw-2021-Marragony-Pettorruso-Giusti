@@ -18,15 +18,17 @@ public class MoveToken implements SoloActionToken {
 
     @Override
     public void activateToken(Game game) {
-        if(steps==2)
-        {
+
+        if (game.getSoloRival().isEmpty())
+            throw new IllegalArgumentException("A token was activated in a game with no soloRival");
+
+        if(steps == 1) {
             game.getTrack().advance(game.getSoloRival().get());
             game.getTrack().advance(game.getSoloRival().get());
         }
-        else
-        {
+        else {
             game.getTrack().advance(game.getSoloRival().get());
-            game.getSoloRival().get().setStack();
+            game.getSoloRival().get().resetStack();
         }
     }
 

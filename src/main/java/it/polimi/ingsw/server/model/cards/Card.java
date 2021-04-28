@@ -3,7 +3,10 @@ package it.polimi.ingsw.server.model.cards;
 import it.polimi.ingsw.server.model.exceptions.ElementNotFoundException;
 
 import java.util.Collection;
-import java.util.UUID;
+import java.util.Collections;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * The class represents an abstraction of a card, which has an id and the number of Victory Points.
@@ -33,10 +36,16 @@ public abstract class Card {
         return result;
     }
 
-    public Card(int id, int victoryPoints)
-    {
+    public static boolean containsDuplicates(List<? extends Card> cards){
+
+        Set<Integer> uniqueIds = cards.stream().map(Card::getId).collect(Collectors.toSet());
+        return (uniqueIds.size() == cards.size());
+    }
+
+    public Card(int id, int victoryPoints) {
         this.id = id;
-        if(victoryPoints < 0) throw  new IllegalArgumentException();
+        if(victoryPoints < 0)
+            throw  new IllegalArgumentException();
         this.victoryPoints = victoryPoints;
     }
 
