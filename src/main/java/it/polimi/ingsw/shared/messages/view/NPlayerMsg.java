@@ -1,6 +1,8 @@
 package it.polimi.ingsw.shared.messages.view;
 
-public class NPlayerMsg {
+import java.io.Serializable;
+
+public class NPlayerMsg implements Serializable {
 
     private final int nPlayers;
 

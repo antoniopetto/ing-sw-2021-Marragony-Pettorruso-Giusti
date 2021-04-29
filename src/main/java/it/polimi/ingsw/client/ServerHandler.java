@@ -25,7 +25,6 @@ public class ServerHandler implements Runnable{
 
     @Override
     public void run() {
-        System.out.println("Try to get the streams");
         try {
             output = new ObjectOutputStream(serverSocket.getOutputStream());
             //output.flush();
@@ -35,7 +34,6 @@ public class ServerHandler implements Runnable{
             System.out.println("Error getting the streams");
             return;
         }
-        System.out.println("receiving message...");
         while(true)
         {
             try {

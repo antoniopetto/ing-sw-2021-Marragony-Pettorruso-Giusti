@@ -4,8 +4,10 @@ import it.polimi.ingsw.client.ServerHandler;
 import it.polimi.ingsw.client.views.View;
 
 import java.io.IOException;
-import java.io.Serializable;
 
-public interface ViewMsg extends Serializable {
-    void changeView(View view, ServerHandler server) throws IOException;
+public class StartGameMsg implements ViewMsg{
+    @Override
+    public void changeView(View view, ServerHandler server) {
+        view.startGame();
+    }
 }

@@ -1,6 +1,8 @@
 package it.polimi.ingsw.shared.messages.view;
 
-public class UsernameMsg {
+import java.io.Serializable;
+
+public class UsernameMsg implements Serializable {
 
     private String username;
 

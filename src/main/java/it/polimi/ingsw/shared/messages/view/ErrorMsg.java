@@ -14,6 +14,6 @@ public class ErrorMsg implements ViewMsg {
 
     @Override
     public void changeView(View view, ServerHandler handler) {
-
+        view.showMessage(text);
     }
 }

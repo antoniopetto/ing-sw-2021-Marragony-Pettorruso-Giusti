@@ -17,7 +17,6 @@ public class Matchmaker implements Runnable{
     }
 
     public void run(){
-        System.out.println("Sending username message...");
         try{
             while(true) {
 
@@ -30,7 +29,7 @@ public class Matchmaker implements Runnable{
                             "containing alphanumeric or special [._-] characters"));
                 else {
                     this.username = username;
-                    System.out.println("Client " + handler.getIP() + " chooses username " + username);
+                    System.out.println("Client [" + handler.getIP() + "] chooses username " + username);
                     Server.activeUsernames.add(this.username);
                     break;
                 }
