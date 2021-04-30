@@ -36,6 +36,7 @@ public class ProductionPowerTest {
         {
             fail();
         }
+        //checks that it is impossible to create a production power with a faith resource as input
         input.put(Resource.FAITH, 2);
         try{
             ProductionPower p4 = new ProductionPower(input, output);
@@ -44,7 +45,7 @@ public class ProductionPowerTest {
         {
             assertTrue(true);
         }
-
+        //checks that it is impossible to create a production power with negative input/output
         try {
             ProductionPower p5 = new ProductionPower(-1,-1);
             fail();

@@ -21,6 +21,11 @@ public class PlayerBoardStub extends PlayerBoard {
         slots=slotList;
     }
 
+    public PlayerBoardStub(Map<Resource, Integer> resources, List<Slot> slots) {
+        this.resources = resources;
+        this.slots = slots;
+    }
+
     @Override
     public boolean isAffordable(ResourceRequirement resourceRequirement) {
         if(resources.containsKey(resourceRequirement.getResource()))

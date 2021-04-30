@@ -34,13 +34,13 @@ public class CardRequirement implements Requirement{
     @Override
     public boolean isSatisfied(Player player) {
         int needed = this.quantity;
-
         for (Slot slot : player.getPlayerBoard().getSlotList()) {
             for (DevelopmentCard card : slot.getDevelopmentCardList()) {
                 if (card.getColor().equals(this.color)) {
-                    if (level != null)
-                        if (level == card.getLevel())
+                    if (this.level != null) {
+                        if (this.level.equals(card.getLevel()))
                             needed--;
+                    }
                     else
                         needed--;
                 }

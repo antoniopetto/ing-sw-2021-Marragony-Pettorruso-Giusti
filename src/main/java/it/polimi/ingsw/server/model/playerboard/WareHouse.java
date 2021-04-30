@@ -50,8 +50,8 @@ public class WareHouse {
         else if(depotList.size() == 4)
             depotList.add(new Depot(DepotName.SECOND_EXTRA, capacity, constraint));
         else throw new IllegalArgumentException("Trying to add too many extraDepots");
-
-        observer.warehouseUpdate();
+        if(observer!=null)
+            observer.warehouseUpdate();
     }
 
     /**

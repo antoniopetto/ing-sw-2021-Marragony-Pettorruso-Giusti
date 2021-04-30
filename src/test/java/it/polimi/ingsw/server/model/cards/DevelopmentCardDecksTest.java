@@ -1,5 +1,6 @@
 package it.polimi.ingsw.server.model.cards;
 
+import it.polimi.ingsw.server.model.playerboard.Resource;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -13,26 +14,31 @@ import static org.junit.Assert.*;
 public class DevelopmentCardDecksTest {
     private List<DevelopmentCard> cards = new ArrayList<>();
     private DevelopmentCardDecks decks;
+    ProductionPower power;
+    List<ResourceRequirement> requirements = new ArrayList<>();
 
     @Before
     public void setUp() {
         //generates a list of DevelopmentCard to create a DevelopmentCardDecks with a card in every deck and 4 cards in
         //the BLUE 1 deck
-        cards.add(new DevelopmentCard(1,0, 1, CardColor.BLUE, null, null));
-        cards.add(new DevelopmentCard(2,0, 2, CardColor.BLUE, null, null));
-        cards.add(new DevelopmentCard(3,0, 3, CardColor.BLUE, null, null));
-        cards.add(new DevelopmentCard(4,0, 1, CardColor.YELLOW, null, null));
-        cards.add(new DevelopmentCard(5,0, 2, CardColor.YELLOW, null, null));
-        cards.add(new DevelopmentCard(6,0, 3, CardColor.YELLOW, null, null));
-        cards.add(new DevelopmentCard(7,0, 1, CardColor.PURPLE, null, null));
-        cards.add(new DevelopmentCard(8,0, 2, CardColor.PURPLE, null, null));
-        cards.add(new DevelopmentCard(9,0, 3, CardColor.PURPLE, null, null));
-        cards.add(new DevelopmentCard(10,0, 1, CardColor.GREEN, null, null));
-        cards.add(new DevelopmentCard(11,0, 2, CardColor.GREEN, null, null));
-        cards.add(new DevelopmentCard(12,0, 3, CardColor.GREEN, null, null));
-        cards.add(new DevelopmentCard(13,0, 1, CardColor.BLUE, null, null));
-        cards.add(new DevelopmentCard(14,0, 1, CardColor.BLUE, null, null));
-        cards.add(new DevelopmentCard(15,0, 1, CardColor.BLUE, null, null));
+        ResourceRequirement requirement = new ResourceRequirement(Resource.SHIELD, 1);
+        requirements.add(requirement);
+        power = new ProductionPower(1, 1);
+        cards.add(new DevelopmentCard(1,0, 1, CardColor.BLUE, requirements,power));
+        cards.add(new DevelopmentCard(2,0, 2, CardColor.BLUE, requirements,power));
+        cards.add(new DevelopmentCard(3,0, 3, CardColor.BLUE, requirements,power));
+        cards.add(new DevelopmentCard(4,0, 1, CardColor.YELLOW, requirements,power));
+        cards.add(new DevelopmentCard(5,0, 2, CardColor.YELLOW, requirements,power));
+        cards.add(new DevelopmentCard(6,0, 3, CardColor.YELLOW, requirements,power));
+        cards.add(new DevelopmentCard(7,0, 1, CardColor.PURPLE, requirements,power));
+        cards.add(new DevelopmentCard(8,0, 2, CardColor.PURPLE, requirements,power));
+        cards.add(new DevelopmentCard(9,0, 3, CardColor.PURPLE, requirements,power));
+        cards.add(new DevelopmentCard(10,0, 1, CardColor.GREEN, requirements,power));
+        cards.add(new DevelopmentCard(11,0, 2, CardColor.GREEN, requirements,power));
+        cards.add(new DevelopmentCard(12,0, 3, CardColor.GREEN, requirements,power));
+        cards.add(new DevelopmentCard(13,0, 1, CardColor.BLUE, requirements,power));
+        cards.add(new DevelopmentCard(14,0, 1, CardColor.BLUE, requirements,power));
+        cards.add(new DevelopmentCard(15,0, 1, CardColor.BLUE, requirements,power));
         decks = new DevelopmentCardDecks(cards);
     }
     @After
@@ -51,7 +57,7 @@ public class DevelopmentCardDecksTest {
             fail();
         }
         //tries to create a DevelopmentCardDecks with 5 cards in a deck
-        cards.add(new DevelopmentCard(16,0, 1, CardColor.BLUE, null, null));
+        cards.add(new DevelopmentCard(16,0, 1, CardColor.BLUE, requirements, power));
         try
         {
             DevelopmentCardDecks decks2 = new DevelopmentCardDecks(cards);

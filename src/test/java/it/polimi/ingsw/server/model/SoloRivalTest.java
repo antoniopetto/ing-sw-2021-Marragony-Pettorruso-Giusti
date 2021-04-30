@@ -25,11 +25,5 @@ public class SoloRivalTest {
         game = Game.newSinglePlayerGame("username", virtualView);
     }
 
-    @Test
-    public void constructorTest() {
-        SoloRival soloRival1 = new SoloRival();
-        soloRival.soloTurn(game);
-        soloRival1.soloTurn(game);
-        assertNotEquals(soloRival.getLastPlayedToken().getId(), soloRival1.getLastPlayedToken().getId());
-    }
+
 }
