@@ -1,10 +1,18 @@
-package it.polimi.ingsw.client.view.GUI;
+package it.polimi.ingsw.client.view.CLI;
 
 import it.polimi.ingsw.client.simplemodel.SimplePlayer;
 import it.polimi.ingsw.client.view.View;
 import it.polimi.ingsw.server.model.shared.Marble;
 
-public class GUIView implements View {
+import java.util.Scanner;
+
+public class CLIView implements View {
+    private CLISettingView settingView;
+
+    public CLIView() {
+        this.settingView = new CLISettingView(this);
+    }
+
     @Override
     public void positionUpdate(SimplePlayer player) {
 
@@ -17,7 +25,8 @@ public class GUIView implements View {
 
     @Override
     public void showMessage(String text) {
-
+        System.out.println(Graphics.ANSI_RED+"ATTENTION!");
+        System.out.println(text);
     }
 
     @Override
@@ -37,22 +46,28 @@ public class GUIView implements View {
 
     @Override
     public String getUsername() {
-        return null;
+        Scanner input = new Scanner(System.in);
+        System.out.println(Graphics.ANSI_RESET+"Insert your username:");
+        System.out.print(Graphics.ANSI_CYAN+">");
+        return input.nextLine();
     }
 
-    @Override
-    public int getNumber() {
-        return 0;
+    public int getNumber(){
+        Scanner input = new Scanner(System.in);
+        System.out.println(Graphics.ANSI_RESET+"Insert the number of players for your game:");
+        System.out.print(Graphics.ANSI_CYAN+">");
+        return input.nextInt();
     }
 
     @Override
     public void startGame() {
-
+        System.out.println(Graphics.ANSI_GREEN+Graphics.TITLE);
+        System.out.println("Game started");
     }
 
     @Override
     public void startSetting() {
-
+        settingView.execute();
     }
 
     @Override
@@ -64,4 +79,6 @@ public class GUIView implements View {
     public void addCardInSlot(SimplePlayer player, int cardId, int cardSlot) {
 
     }
+
+
 }

@@ -12,6 +12,7 @@ import it.polimi.ingsw.server.model.shared.MarketBoard;
 import it.polimi.ingsw.server.model.singleplayer.SoloRival;
 import org.xml.sax.SAXException;
 
+import javax.swing.plaf.nimbus.State;
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;
 import java.util.*;
@@ -274,6 +275,18 @@ public class Game {
                 virtualView.sendError(e.getMessage());
             }
 
+        }
+    }
+
+    public void discardLeaderCard(int cardId){
+        if(state.equals(State.INSERTING) || state.equals(State.INITIALIZING)){
+            virtualView.sendError("Cannot discard LeaderCard now");
+        }else{
+            try{
+                getPlaying().discardLeaderCard(cardId);
+            }catch (ElementNotFoundException e){
+                virtualView.sendError(e.getMessage());
+            }
         }
     }
 

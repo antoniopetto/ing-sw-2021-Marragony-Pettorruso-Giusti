@@ -93,10 +93,10 @@ public class Player extends AbstractPlayer{
      * This method is used to discard a leader card
      * @param cardId is the id of the card to discard
      */
-    public void discardLeaderCard(int cardId)
-    {
-        if(cardId!=0&&cardId!=1) throw new IllegalArgumentException("Invalid id number");
+    public void discardLeaderCard(int cardId) throws ElementNotFoundException {
+        Card.getById(cardId, leaderCardList);
         leaderCardList.remove(cardId);
+        observer.discardLeaderCardUpdate(cardId);
     }
 
     public void addCard(DevelopmentCard card, int idSlot){

@@ -11,14 +11,17 @@ public class SimplePlayer {
     private View view;
     private SimpleWarehouse warehouse;
     private Map<String, SimpleWarehouse> othersWarehouse;
-    private final boolean[] mydeckLeaderCards = new boolean[2];
+    private boolean[] mydeckLeaderCards;
     private ArrayList<SimpleSlot> slots;
+    private int leaderCardPresent;
 
     public SimplePlayer() {
         this.slots = new ArrayList<>();
         slots.add(new SimpleSlot());
         slots.add(new SimpleSlot());
         slots.add(new SimpleSlot());
+        leaderCardPresent = 2;
+        mydeckLeaderCards = new boolean[leaderCardPresent];
     }
 
     public void advance()
@@ -45,11 +48,20 @@ public class SimplePlayer {
 
     public void activeLeaderCard(int cardId){
         mydeckLeaderCards[cardId] = true;
-        view.faceUpLeaderCard(this);
+        view.faceUpLeaderCard(this, cardId);
         view.showLeaderCardAllPlayers(cardId);
     }
 
     public void insertCardInSlot(int cardId, int slotId){
         slots.get(slotId).addCard(cardId);
+        view.addCardInSlot(this, cardId, slotId);
+        view.showDevCardAllPlayers(cardId);
+    }
+
+    public void discardLeaderCard(int cardId){
+        leaderCardPresent--;
+        mydeckLeaderCards = new boolean[leaderCardPresent];
+        view.discardLeaderCard(this, cardId);
+        view.showDevCardAllPlayers(cardId);
     }
 }

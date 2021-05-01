@@ -1,9 +1,10 @@
-package it.polimi.ingsw.shared.messages.server;
+package it.polimi.ingsw.shared.messages.update;
 
 import it.polimi.ingsw.client.simplemodel.SimpleGame;
 import it.polimi.ingsw.client.simplemodel.SimplePlayer;
+import it.polimi.ingsw.shared.messages.update.UpdateMsg;
 
-public class AddCardInSlotUpdateMsg implements ServerMsg {
+public class AddCardInSlotUpdateMsg implements UpdateMsg {
 
     private String username;
     private int cardId;

@@ -2,14 +2,14 @@ package it.polimi.ingsw.shared.messages.update;
 
 import it.polimi.ingsw.client.simplemodel.SimpleGame;
 import it.polimi.ingsw.client.simplemodel.SimplePlayer;
-import it.polimi.ingsw.shared.messages.update.UpdateMsg;
 
-public class LeaderCardUpdateMsg implements UpdateMsg {
-    private final String username;
-    private final int cardId;
+public class DiscardLeaderCardUpdateMsg implements UpdateMsg{
 
-    public LeaderCardUpdateMsg(String userName, int cardId) {
-        this.username = userName;
+    private String username;
+    private int cardId;
+
+    public DiscardLeaderCardUpdateMsg(String username, int cardId) {
+        this.username = username;
         this.cardId = cardId;
     }
 
@@ -17,7 +17,7 @@ public class LeaderCardUpdateMsg implements UpdateMsg {
     public void execute(SimpleGame model) {
         for (SimplePlayer player: model.getPlayers()) {
             if(player.getUsername().equals(this.username))
-                player.activeLeaderCard(cardId);
+                player.discardLeaderCard(cardId);
         }
     }
 }

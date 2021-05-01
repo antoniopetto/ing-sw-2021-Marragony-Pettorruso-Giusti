@@ -8,14 +8,11 @@ import it.polimi.ingsw.server.model.cards.DevelopmentCard;
 import it.polimi.ingsw.server.model.playerboard.Depot;
 import it.polimi.ingsw.server.model.playerboard.DepotName;
 import it.polimi.ingsw.server.model.playerboard.Resource;
-import it.polimi.ingsw.shared.messages.server.*;
+import it.polimi.ingsw.shared.messages.update.*;
 import it.polimi.ingsw.shared.messages.view.ErrorMsg;
 import it.polimi.ingsw.shared.messages.view.LeaderboardMsg;
 import it.polimi.ingsw.shared.messages.command.CommandMsg;
-import it.polimi.ingsw.shared.messages.update.LeaderCardUpdateMsg;
 
-import it.polimi.ingsw.shared.messages.update.TrackUpdateMsg;
-import it.polimi.ingsw.shared.messages.update.WarehouseUpdateMsg;
 
 import java.io.IOException;
 import java.util.*;
@@ -82,13 +79,26 @@ public class VirtualView implements Runnable{
 
     }
 
-    public void leaderCardUpdate(int cardId)
-    {
+    public void playLeaderCardUpdate(int cardId) {
         LeaderCardUpdateMsg msg = new LeaderCardUpdateMsg(game.getPlaying().getUsername(), cardId);
+        messageFilter(msg, "The"+ game.getPlaying().getUsername()+ "Player plays a LeaderCard");
+    }
+
+    public void discardLeaderCardUpdate(int cardId){
+        DiscardLeaderCardUpdateMsg msg = new DiscardLeaderCardUpdateMsg(game.getPlaying().getUsername(), cardId);
+        messageFilter(msg, "The"+ game.getPlaying().getUsername()+ "Player has discarded a development card");
+    }
+
+    public void addAndBuyCardInSlot(int cardId, int slotId){
+        AddCardInSlotUpdateMsg msg = new AddCardInSlotUpdateMsg(game.getPlaying().getUsername(), cardId, slotId);
+        messageFilter(msg, "The"+ game.getPlaying().getUsername()+ "Player has bought a development card");
+    }
+
+    private void messageFilter(UpdateMsg msg, String text){
         for (Map.Entry<String, ClientHandler> map: players.entrySet()) {
             try {
                 if(!map.getKey().equals(game.getPlaying().getUsername())){
-                    ErrorMsg errorMsg = new ErrorMsg("The"+ game.getPlaying().getUsername()+ "Player plays a LeaderCard");
+                    ErrorMsg errorMsg = new ErrorMsg(text);
                     map.getValue().writeObject(errorMsg);
                 }
                 else map.getValue().writeObject(msg);
@@ -96,18 +106,7 @@ public class VirtualView implements Runnable{
                 e.printStackTrace();
             }
         }
-
     }
-
-    public void addAndBuyCardInSlot(int cardId, int slotId){
-        AddCardInSlotUpdateMsg msg = new AddCardInSlotUpdateMsg(game.getPlaying().getUsername(), cardId, slotId);
-        try{
-            getPlayingHandler().writeObject(msg);
-        }catch (IOException e){
-            e.printStackTrace();
-        }
-    }
-
 
 
     public void sendError (String text){

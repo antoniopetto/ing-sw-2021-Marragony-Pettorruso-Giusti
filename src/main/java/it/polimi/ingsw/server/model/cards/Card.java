@@ -27,7 +27,7 @@ public abstract class Card {
      * @return                              The first of the objects with the specified <code>id</code>.
      * @throws ElementNotFoundException     If no object in the <code>Collection</code> has the specified <code>id</code>.
      */
-    public static <E extends Card> E getById(int id, Collection<E> collection){
+    public static <E extends Card> E getById(int id, Collection<E> collection) throws ElementNotFoundException {
         E result = collection.stream()
                 .filter(x -> x.getId() == id)
                 .findFirst().orElse(null);
