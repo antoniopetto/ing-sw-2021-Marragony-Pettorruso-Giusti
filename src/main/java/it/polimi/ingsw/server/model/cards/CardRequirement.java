@@ -4,6 +4,7 @@ import it.polimi.ingsw.server.model.Player;
 import it.polimi.ingsw.server.model.playerboard.Slot;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 /**
@@ -49,5 +50,18 @@ public class CardRequirement implements Requirement{
             }
         }
         return false;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        CardRequirement that = (CardRequirement) o;
+        return quantity == that.quantity && color == that.color && Objects.equals(level, that.level);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(color, level, quantity);
     }
 }

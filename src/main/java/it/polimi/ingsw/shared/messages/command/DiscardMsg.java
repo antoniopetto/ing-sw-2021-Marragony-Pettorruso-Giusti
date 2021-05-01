@@ -3,8 +3,8 @@ package it.polimi.ingsw.shared.messages.command;
 import it.polimi.ingsw.server.ClientHandler;
 import it.polimi.ingsw.server.model.Game;
 import it.polimi.ingsw.server.model.shared.Marble;
-import it.polimi.ingsw.shared.messages.server.BufferUpdateMsg;
-import it.polimi.ingsw.shared.messages.server.UpdateMsg;
+import it.polimi.ingsw.shared.messages.update.BufferUpdateMsg;
+import it.polimi.ingsw.shared.messages.update.UpdateMsg;
 
 import java.io.IOException;
 

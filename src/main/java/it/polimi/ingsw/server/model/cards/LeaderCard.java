@@ -4,6 +4,7 @@ import it.polimi.ingsw.server.model.Player;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * This class represents the leader card. It has three attributes: a list of generic requirements (they can be resource
@@ -48,5 +49,18 @@ public class LeaderCard extends Card{
                 playable=false;
         }
         return playable;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        LeaderCard that = (LeaderCard) o;
+        return played == that.played && requirements.equals(that.requirements) && ability.equals(that.ability);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(requirements, played, ability);
     }
 }

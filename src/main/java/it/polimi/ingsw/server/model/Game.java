@@ -92,9 +92,8 @@ public class Game {
             List<LeaderCard> leaderCards = cardParser.parseLeaderCards();
             Collections.shuffle(leaderCards);
             for(Player p : players){
-                List<LeaderCard> firstFour = leaderCards.subList(0, 3);
+                List<LeaderCard> firstFour = leaderCards.subList(0, 4);
                 p.setLeaderCards(firstFour);
-                //note: firstFour is backed by the original list
                 firstFour.clear();
             }
 
@@ -217,7 +216,7 @@ public class Game {
                 isPresent=true;
             else listId++;
         }
-        if(!isPresent) throw new ElementNotFoundException("Marble not playable");
+        if (!isPresent) throw new ElementNotFoundException("Marble not playable");
         return listId;
     }
 

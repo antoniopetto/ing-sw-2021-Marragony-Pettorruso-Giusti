@@ -11,6 +11,7 @@ public class Client {
 
 
     public static void main(String[] args) {
+
         Scanner input = new Scanner(System.in);
         boolean valid = false;
         System.out.println("Please select how to play:");

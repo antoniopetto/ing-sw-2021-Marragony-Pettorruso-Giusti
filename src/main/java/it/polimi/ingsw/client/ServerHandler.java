@@ -3,7 +3,7 @@ package it.polimi.ingsw.client;
 
 import it.polimi.ingsw.client.simplemodel.SimpleGame;
 import it.polimi.ingsw.client.view.View;
-import it.polimi.ingsw.shared.messages.server.UpdateMsg;
+import it.polimi.ingsw.shared.messages.update.UpdateMsg;
 import it.polimi.ingsw.shared.messages.view.ViewMsg;
 
 import java.io.IOException;
@@ -51,7 +51,6 @@ public class ServerHandler implements Runnable{
 
             } catch (IOException | ClassNotFoundException e) {
             }
-
         }
     }
 

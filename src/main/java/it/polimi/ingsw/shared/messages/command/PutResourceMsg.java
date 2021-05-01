@@ -5,7 +5,7 @@ import it.polimi.ingsw.server.model.Game;
 import it.polimi.ingsw.server.model.playerboard.DepotName;
 import it.polimi.ingsw.server.model.playerboard.Resource;
 import it.polimi.ingsw.server.model.shared.Marble;
-import it.polimi.ingsw.shared.messages.server.BufferUpdateMsg;
+import it.polimi.ingsw.shared.messages.update.BufferUpdateMsg;
 import it.polimi.ingsw.shared.messages.view.ErrorMsg;
 
 

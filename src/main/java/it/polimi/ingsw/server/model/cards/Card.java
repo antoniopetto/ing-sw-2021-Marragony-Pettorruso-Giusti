@@ -27,19 +27,19 @@ public abstract class Card {
      * @return                              The first of the objects with the specified <code>id</code>.
      * @throws ElementNotFoundException     If no object in the <code>Collection</code> has the specified <code>id</code>.
      */
-    public static <E extends Card> E getById(int id, Collection<E> collection) throws ElementNotFoundException{
+    public static <E extends Card> E getById(int id, Collection<E> collection){
         E result = collection.stream()
                 .filter(x -> x.getId() == id)
                 .findFirst().orElse(null);
         if (result == null)
-            throw new ElementNotFoundException("No object ha the specified id");
+            throw new ElementNotFoundException("No object has the specified id");
         return result;
     }
 
     public static boolean containsDuplicates(List<? extends Card> cards){
 
         Set<Integer> uniqueIds = cards.stream().map(Card::getId).collect(Collectors.toSet());
-        return (uniqueIds.size() == cards.size());
+        return (uniqueIds.size() != cards.size());
     }
 
     public Card(int id, int victoryPoints) {

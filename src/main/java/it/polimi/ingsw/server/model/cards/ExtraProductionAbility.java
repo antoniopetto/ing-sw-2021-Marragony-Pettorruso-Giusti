@@ -2,6 +2,8 @@ package it.polimi.ingsw.server.model.cards;
 
 import it.polimi.ingsw.server.model.Player;
 
+import java.util.Objects;
+
 /**
  * This class represents the extra production power ability. The attribute resource represents the input resource of
  * the production power
@@ -17,5 +19,18 @@ public class ExtraProductionAbility implements SpecialAbility{
     public void activateAbility(Player player) {
 
         player.getPlayerBoard().addExtraProductionPower(productionPower);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ExtraProductionAbility that = (ExtraProductionAbility) o;
+        return productionPower.equals(that.productionPower);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(productionPower);
     }
 }

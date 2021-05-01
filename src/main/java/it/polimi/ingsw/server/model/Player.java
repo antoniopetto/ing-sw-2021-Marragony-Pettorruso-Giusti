@@ -18,7 +18,7 @@ public class Player extends AbstractPlayer{
     private final PlayerBoard playerBoard = new PlayerBoard();
     private final Map<Resource, Integer> activeDiscounts = new EnumMap<>(Resource.class);
     private final Set<Resource> whiteMarbleAliases = new HashSet<>();
-    private List<LeaderCard> leaderCardList;
+    private List<LeaderCard> leaderCardList = new ArrayList<>();
     private VirtualView observer;
 
     public Player(String username){
@@ -26,7 +26,6 @@ public class Player extends AbstractPlayer{
         tiles.add(new PopeFavourTile(2));
         tiles.add(new PopeFavourTile(3));
         tiles.add(new PopeFavourTile(4));
-
     }
 
     public void setLeaderCards(List<LeaderCard> cards){

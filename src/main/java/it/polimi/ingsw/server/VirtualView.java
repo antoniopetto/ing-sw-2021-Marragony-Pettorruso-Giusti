@@ -1,6 +1,5 @@
 package it.polimi.ingsw.server;
 
-import it.polimi.ingsw.client.Client;
 import it.polimi.ingsw.server.model.AbstractPlayer;
 import it.polimi.ingsw.server.model.Game;
 import it.polimi.ingsw.server.model.Player;
@@ -10,13 +9,12 @@ import it.polimi.ingsw.server.model.playerboard.Resource;
 import it.polimi.ingsw.shared.messages.view.ErrorMsg;
 import it.polimi.ingsw.shared.messages.view.LeaderboardMsg;
 import it.polimi.ingsw.shared.messages.command.CommandMsg;
-import it.polimi.ingsw.shared.messages.server.LeaderCardUpdateMsg;
+import it.polimi.ingsw.shared.messages.update.LeaderCardUpdateMsg;
 
-import it.polimi.ingsw.shared.messages.server.TrackUpdateMsg;
-import it.polimi.ingsw.shared.messages.server.WarehouseUpdateMsg;
+import it.polimi.ingsw.shared.messages.update.TrackUpdateMsg;
+import it.polimi.ingsw.shared.messages.update.WarehouseUpdateMsg;
 
 import java.io.IOException;
-import java.sql.ClientInfoStatus;
 import java.util.*;
 
 public class VirtualView implements Runnable{

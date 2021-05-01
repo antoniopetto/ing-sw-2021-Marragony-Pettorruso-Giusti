@@ -17,9 +17,12 @@ import java.util.stream.IntStream;
 import static java.util.stream.Collectors.toList;
 import static java.util.stream.Collectors.toMap;
 
+/**
+ * This class parses the content of an xml file in which are stored the cards
+ */
 public class CardParser {
 
-    private final Document dom;
+    private final Node config;
     private final XPath xPath = XPathFactory.newInstance().newXPath();
 
     public CardParser(String configPath) throws ParserConfigurationException, IOException, SAXException{
@@ -27,20 +30,19 @@ public class CardParser {
         File configFile = new File(configPath);
         DocumentBuilderFactory domBuilderFactory = DocumentBuilderFactory.newInstance();
         DocumentBuilder domBuilder = domBuilderFactory.newDocumentBuilder();
-        dom = domBuilder.parse(configFile);
+        Document dom = domBuilder.parse(configFile);
         dom.getDocumentElement().normalize();
+        config = getChildNode("config", dom)
+                .orElseThrow(() -> new IllegalConfigXMLException("Missing root config node"));
     }
 
     public List<DevelopmentCard> parseDevelopmentCards(){
 
-        NodeList devCardNodes = getChildrenByName("developmentCard", dom);
-
+        NodeList devCardNodes = getChildrenByName("developmentCard", config);
         if (devCardNodes.getLength() != 48)
             throw new IllegalConfigXMLException("Wrong number of development cards");
-
         List<DevelopmentCard> devCards = IntStream.range(0, 48)
                 .mapToObj(i -> parseDevCard(devCardNodes.item(i))).collect(toList());
-
         if (Card.containsDuplicates(devCards))
             throw new IllegalConfigXMLException("Duplicate development card IDs");
 
@@ -49,14 +51,11 @@ public class CardParser {
 
     public List<LeaderCard> parseLeaderCards() {
 
-        NodeList leaderCardNodes = getChildrenByName("leaderCard", dom);
-
+        NodeList leaderCardNodes = getChildrenByName("leaderCard", config);
         if (leaderCardNodes.getLength() != 16)
             throw new IllegalConfigXMLException("Wrong number of leader cards");
-
         List<LeaderCard> leaderCards = IntStream.range(0, 16)
                 .mapToObj(i -> parseLeaderCard(leaderCardNodes.item(i))).collect(toList());
-
         if (Card.containsDuplicates(leaderCards))
             throw new IllegalConfigXMLException("Duplicate leader card IDs");
 
@@ -65,7 +64,7 @@ public class CardParser {
 
     public ProductionPower parseBaseProductionPower(){
 
-        return getChildNode("baseProductionPower", dom).map(this::parseProductionPower)
+        return getChildNode("baseProductionPower", config).map(this::parseProductionPower)
                 .orElseThrow(() -> new IllegalConfigXMLException("Config.xml lacks base production power"));
     }
 
@@ -77,8 +76,8 @@ public class CardParser {
                 .orElseThrow(() -> new IllegalConfigXMLException("Development card" + id + ": missing points"));
         int level = getAttributeInteger("level", devCardNode)
                 .orElseThrow(() -> new IllegalConfigXMLException("Development card" + id + ": missing level"));
-        CardColor color = CardColor.valueOf(getAttributeText("color", devCardNode)
-                .orElseThrow(() -> new IllegalConfigXMLException("Development card" + id + ": missing color")).toUpperCase());
+        CardColor color = getAttributeEnum(CardColor.class, "color", devCardNode)
+                .orElseThrow(() -> new IllegalConfigXMLException("Development card" + id + ": missing color"));
         List<ResourceRequirement> resReqs = getChildNode("resourceRequirements", devCardNode).map(this::parseResourceRequirements)
                 .orElseThrow(() -> new IllegalConfigXMLException("Development card" + id + ": missing resource requirements"));
         ProductionPower power = getChildNode("productionPower", devCardNode).map(this::parseProductionPower)
@@ -93,8 +92,19 @@ public class CardParser {
                 .orElseThrow(() -> new IllegalConfigXMLException("Missing leader card id"));
         int points = getAttributeInteger("points", leaderCardNode)
                 .orElseThrow(() -> new IllegalConfigXMLException("Leader card" + id + ": missing points"));
-        //SpecialAbility cardAbility = getChildText("cardDiscountAbility", leaderCardNode).map(this::parseSpecialAbility)
-        //        .orElseThrow(() -> new IllegalConfigXMLException("Leader card" + id + ": missing special ability"));
+
+        List<SpecialAbility> abilityList = new ArrayList<>();
+        getChildEnum(Resource.class, "cardDiscountAbility", leaderCardNode)
+                .ifPresent(i -> abilityList.add(new CardDiscountAbility(i)));
+        getChildEnum(Resource.class, "extraDepotAbility", leaderCardNode)
+                .ifPresent(i -> abilityList.add(new ExtraDepotAbility(i)));
+        getChildEnum(Resource.class, "whiteMarbleAbility", leaderCardNode)
+                .ifPresent(i -> abilityList.add(new WhiteMarbleAbility(i)));
+        getChildNode("extraProductionAbility", leaderCardNode)
+                .ifPresent(i -> abilityList.add(new ExtraProductionAbility(parseProductionPower(i))));
+        if (abilityList.size() != 1)
+            throw new IllegalConfigXMLException("Leader card" + id + "Wrong number of special abilities");
+
 
         List<Requirement> reqs = new ArrayList<>();
         getChildNode("resourceRequirements", leaderCardNode)
@@ -102,8 +112,7 @@ public class CardParser {
         getChildNode("cardRequirements", leaderCardNode)
                 .ifPresent(i -> reqs.addAll(parseCardRequirements(i)));
 
-        //TODO fix ability
-        return new LeaderCard(id, points, reqs, null);
+        return new LeaderCard(id, points, reqs, abilityList.get(0));
     }
 
     private ProductionPower parseProductionPower(Node powerNode){
@@ -146,8 +155,8 @@ public class CardParser {
 
     private ResQty parseResQty(Node resQtyNode){
 
-        Resource resource = Resource.valueOf(getAttributeText("type", resQtyNode)
-                .orElseThrow(() -> new IllegalConfigXMLException("Missing type in resQty")).toUpperCase());
+        Resource resource = getAttributeEnum(Resource.class,"type", resQtyNode)
+                .orElseThrow(() -> new IllegalConfigXMLException("Missing type in resQty"));
         int quantity = getInteger(resQtyNode)
                 .orElseThrow(() -> new IllegalConfigXMLException("Missing quantity in resQty"));
         return new ResQty(resource, quantity);
@@ -155,8 +164,8 @@ public class CardParser {
 
     private CardRequirement parseCardRequirement(Node cardReqNode){
 
-        CardColor color = CardColor.valueOf(getAttributeText("color", cardReqNode)
-                .orElseThrow(() -> new IllegalConfigXMLException("Missing color in cardQty")).toUpperCase());
+        CardColor color = getAttributeEnum(CardColor.class, "color", cardReqNode)
+                .orElseThrow(() -> new IllegalConfigXMLException("Missing color in cardQty"));
         Integer level = getAttributeInteger("level", cardReqNode).orElse(null);
         int quantity = getInteger(cardReqNode)
                 .orElseThrow(() -> new IllegalConfigXMLException("Missing quantity in cardQty"));
@@ -166,7 +175,7 @@ public class CardParser {
 
     private NodeList getChildrenByName(String childName, Node context){
         try {
-            return (NodeList) xPath.evaluate("/*/" + childName, context, XPathConstants.NODESET);
+            return (NodeList) xPath.evaluate("./" + childName, context, XPathConstants.NODESET);
         }
         catch (XPathExpressionException e){
             throw new IllegalConfigXMLException("Illegal XPath expression");
@@ -177,18 +186,37 @@ public class CardParser {
         return getChildText(childName, context).map(Integer::parseInt);
     }
 
-    //private Optional<Enum> getChildEnum()
+    @SuppressWarnings("SameParameterValue")
+    private <T extends Enum<T>> Optional<T> getChildEnum(Class<T> enumType, String childName, Node context){
+        try{
+            return Optional.of(Enum.valueOf(enumType, getChildText(childName, context)
+                    .orElseThrow(NullPointerException::new).toUpperCase()));
+        }
+        catch (IllegalArgumentException | NullPointerException e){
+            return Optional.empty();
+        }
+    }
 
     private Optional<String> getChildText(String childName, Node context){
         return getChildNode(childName, context).map(Node::getTextContent);
     }
 
     private Optional<Node> getChildNode(String elementName, Node context){
-        return getNode("/*/" + elementName, context);
+        return getNode("./" + elementName, context);
     }
 
     private Optional<Integer> getAttributeInteger(String attributeName, Node context){
         return getAttributeText(attributeName, context).map(Integer::parseInt);
+    }
+
+    private <T extends Enum<T>> Optional<T> getAttributeEnum(Class<T> enumType, String attributeName, Node context){
+        try{
+            return Optional.of(Enum.valueOf(enumType, getAttributeText(attributeName, context)
+                    .orElseThrow(NullPointerException::new).toUpperCase()));
+        }
+        catch (IllegalArgumentException | NullPointerException e){
+            return Optional.empty();
+        }
     }
 
     private Optional<String> getAttributeText(String attributeName, Node context){
@@ -196,7 +224,7 @@ public class CardParser {
     }
 
     private Optional<Node> getAttributeNode(String attributeName, Node context){
-        return getNode("/*/@" + attributeName, context);
+        return getNode("./@" + attributeName, context);
     }
 
     private Optional<Integer> getInteger(Node node){
@@ -204,13 +232,13 @@ public class CardParser {
     }
 
     private Optional<String> getText(Node node){
-        return getNode("/*", node).map(Node::getTextContent);
+        return Optional.ofNullable(node.getTextContent());
     }
 
     private Optional<Node> getNode(String path, Node context){
         Optional<Node> node;
         try{
-            node = Optional.of((Node) xPath.evaluate(path, context, XPathConstants.NODE));
+            node = Optional.ofNullable((Node) xPath.evaluate(path, context, XPathConstants.NODE));
         }
         catch (XPathExpressionException e){
             throw new IllegalConfigXMLException("Illegal XPath expression");
@@ -239,4 +267,3 @@ public class CardParser {
     }
 
 }
-

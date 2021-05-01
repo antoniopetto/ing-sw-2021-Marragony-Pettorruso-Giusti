@@ -2,7 +2,7 @@ package it.polimi.ingsw.shared.messages.command;
 
 import it.polimi.ingsw.server.ClientHandler;
 import it.polimi.ingsw.server.model.Game;
-import it.polimi.ingsw.shared.messages.server.CreateBufferMsg;
+import it.polimi.ingsw.shared.messages.update.CreateBufferMsg;
 
 import java.io.IOException;
 
