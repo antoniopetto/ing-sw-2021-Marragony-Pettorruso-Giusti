@@ -1,11 +1,9 @@
 package it.polimi.ingsw.client;
 
-import it.polimi.ingsw.client.views.CLI.CLISettingView;
-import it.polimi.ingsw.client.views.SettingView;
-import it.polimi.ingsw.client.views.GUI.GUISettingView;
+import it.polimi.ingsw.client.view.CLI.CLISettingView;
+import it.polimi.ingsw.client.view.SettingView;
+import it.polimi.ingsw.client.view.GUI.GUISettingView;
 
-import java.io.IOException;
-import java.net.Socket;
 import java.util.Scanner;
 
 public class Client {

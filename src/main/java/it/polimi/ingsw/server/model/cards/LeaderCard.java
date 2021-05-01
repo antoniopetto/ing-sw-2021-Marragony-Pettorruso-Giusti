@@ -1,5 +1,6 @@
 package it.polimi.ingsw.server.model.cards;
 
+import it.polimi.ingsw.server.VirtualView;
 import it.polimi.ingsw.server.model.Player;
 
 import java.util.ArrayList;
@@ -14,6 +15,7 @@ public class LeaderCard extends Card{
     private final List<Requirement> requirements = new ArrayList<>();
     private boolean played = false;
     private final SpecialAbility ability;
+    private VirtualView observer;
 
     public LeaderCard(int id, int victoryPoints, List<? extends Requirement> requirements, SpecialAbility ability) {
         super(id, victoryPoints);
@@ -30,6 +32,7 @@ public class LeaderCard extends Card{
     public void play(Player player){
         ability.activateAbility(player);
         this.played=true;
+        observer.leaderCardUpdate(getId());
     }
 
     public boolean isPlayed() {

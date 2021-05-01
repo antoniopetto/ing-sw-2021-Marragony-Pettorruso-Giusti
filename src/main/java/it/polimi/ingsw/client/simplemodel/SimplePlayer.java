@@ -1,7 +1,8 @@
 package it.polimi.ingsw.client.simplemodel;
 
-import it.polimi.ingsw.client.views.View;
+import it.polimi.ingsw.client.view.View;
 
+import java.util.ArrayList;
 import java.util.Map;
 
 public class SimplePlayer {
@@ -11,7 +12,14 @@ public class SimplePlayer {
     private SimpleWarehouse warehouse;
     private Map<String, SimpleWarehouse> othersWarehouse;
     private final boolean[] mydeckLeaderCards = new boolean[2];
+    private ArrayList<SimpleSlot> slots;
 
+    public SimplePlayer() {
+        this.slots = new ArrayList<>();
+        slots.add(new SimpleSlot());
+        slots.add(new SimpleSlot());
+        slots.add(new SimpleSlot());
+    }
 
     public void advance()
     {
@@ -39,5 +47,9 @@ public class SimplePlayer {
         mydeckLeaderCards[cardId] = true;
         view.faceUpLeaderCard(this);
         view.showLeaderCardAllPlayers(cardId);
+    }
+
+    public void insertCardInSlot(int cardId, int slotId){
+        slots.get(slotId).addCard(cardId);
     }
 }

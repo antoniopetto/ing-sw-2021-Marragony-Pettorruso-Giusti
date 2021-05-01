@@ -46,7 +46,7 @@ public class PlayerBoardTest {
         }
 
     }
-
+/*
     @Test
     public void testCountVictoryPoints(){
         DevelopmentCard developmentCard1 = new DevelopmentCard(4,10,1, CardColor.BLUE,
@@ -68,7 +68,7 @@ public class PlayerBoardTest {
         assertEquals(27, playerBoard.countVictoryPoints());
 
     }
-
+*/
 
 
 }

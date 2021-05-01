@@ -78,10 +78,9 @@ public class Player extends AbstractPlayer{
      * @param cardId is the id of the card to ble played, which can be 1 or 0
      * @return true if the card is playable and therefore played
      */
-    public boolean playLeaderCard(int cardId)
-    {
-        if(cardId!=0&&cardId!=1) throw new IllegalArgumentException("Invalid id number");
-        LeaderCard card = leaderCardList.get(cardId);
+    public boolean playLeaderCard(int cardId) throws ElementNotFoundException {
+
+        LeaderCard card = Card.getById(cardId, leaderCardList);
         if(card.isPlayed()) throw new IllegalStateException("Card already played");
         if(card.isPlayable(this))
         {
@@ -101,15 +100,14 @@ public class Player extends AbstractPlayer{
         leaderCardList.remove(cardId);
     }
 
-    public void buyAndAddCard(DevelopmentCard card, int idSlot){
+    public void addCard(DevelopmentCard card, int idSlot){
         if (canBuyCard(card) && playerBoard.canAddCardInSlot(card, idSlot)){
-
             for (ResourceRequirement req : card.getDiscountedRequirements(activeDiscounts)){
                 playerBoard.pay(req);
             }
             playerBoard.addCardInSlot(card, idSlot);
         }
-        else throw new IllegalArgumentException("Invalid move: can't pay or place the selected Development Card");
+        else throw new IllegalArgumentException("Invalid move: can't pay or can't place the selected Development Card");
     }
 
     public boolean canBuyCard(DevelopmentCard card) {

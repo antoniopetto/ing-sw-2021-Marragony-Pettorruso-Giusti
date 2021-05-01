@@ -234,7 +234,6 @@ public class Game {
     }
 
     public void moveDepots( DepotName depotFrom, DepotName depotTo){
-
         if(!state.equals(State.INSERTING)) virtualView.sendError("Cannot move resources between depots now");
             else{
                 try{
@@ -243,7 +242,6 @@ public class Game {
                     virtualView.sendError(e.getMessage());
                 }
         }
-
     }
 
     public void endTurn()
@@ -273,22 +271,32 @@ public class Game {
     }
 
     public void playLeaderCard(int cardId){
-        if(state.equals(State.INSERTING))
+        if(state.equals(State.INSERTING) || state == State.INITIALIZING)
             virtualView.sendError("Cannot play LeaderCard now");
         else{
             try {
-                if(!getPlaying().playLeaderCard(cardId)){
+                if(!getPlaying().playLeaderCard(cardId))
                     virtualView.sendError("The player does not meet the requirements");
-                }
-                else virtualView.leaderCardUpdate(getPlaying(),cardId);
-            }catch (IllegalStateException e){
+            }catch (IllegalStateException | IllegalArgumentException | ElementNotFoundException e){
                 virtualView.sendError(e.getMessage());
             }
 
         }
+    }
 
+    public void buyandAddCardInSlot(CardColor cardColor, int level, int slotId){
 
+        if(state != State.INSERTING) virtualView.sendError("Cannot Insert DevCard now");
+        else {
+            DevelopmentCard developmentCard = developmentCardDecks.readTop(cardColor, level);
+            try{
+                getPlaying().addCard(developmentCard,slotId);
+            }catch (IllegalArgumentException e){
+                virtualView.sendError(e.getMessage());
+            }
+            developmentCardDecks.drawCard(cardColor, level);
 
+        }
     }
 
     public void setLastRound(boolean lastRound){

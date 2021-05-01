@@ -1,7 +1,7 @@
-package it.polimi.ingsw.client.views.CLI;
+package it.polimi.ingsw.client.view.CLI;
 
 import it.polimi.ingsw.client.simplemodel.SimplePlayer;
-import it.polimi.ingsw.client.views.View;
+import it.polimi.ingsw.client.view.View;
 import it.polimi.ingsw.server.model.shared.Marble;
 
 import java.util.Scanner;
@@ -67,4 +67,6 @@ public class CLIView implements View {
                 "                                                                                                                                                ");
         System.out.println("Game started");
     }
+
+
 }

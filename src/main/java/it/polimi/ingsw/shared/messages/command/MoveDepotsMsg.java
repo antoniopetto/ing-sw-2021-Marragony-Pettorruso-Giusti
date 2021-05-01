@@ -8,8 +8,8 @@ import java.io.IOException;
 
 public class MoveDepotsMsg implements CommandMsg {
 
-    private DepotName depotFrom;
-    private DepotName depotTo;
+    private final DepotName depotFrom;
+    private final DepotName depotTo;
 
     public MoveDepotsMsg(DepotName depotFrom, DepotName depotTo) {
         this.depotFrom = depotFrom;

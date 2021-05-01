@@ -32,7 +32,6 @@ public class DevelopmentCardDecks {
         for (CardDeck deck: decks) {
                 cards.stream().filter(deck::belongs).forEach(deck::add);
         }
-
     }
 
     /**
@@ -109,4 +108,6 @@ public class DevelopmentCardDecks {
             }
         }
     }
+
+
 }

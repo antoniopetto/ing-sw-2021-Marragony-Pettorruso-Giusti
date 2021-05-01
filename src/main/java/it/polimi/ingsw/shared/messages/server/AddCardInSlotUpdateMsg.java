@@ -3,20 +3,24 @@ package it.polimi.ingsw.shared.messages.server;
 import it.polimi.ingsw.client.simplemodel.SimpleGame;
 import it.polimi.ingsw.client.simplemodel.SimplePlayer;
 
-public class LeaderCardUpdateMsg implements ServerMsg {
-    private final String username;
-    private final int cardId;
+public class AddCardInSlotUpdateMsg implements ServerMsg {
 
-    public LeaderCardUpdateMsg(String userName, int cardId) {
-        this.username = userName;
+    private String username;
+    private int cardId;
+    private int slotId;
+
+
+    public AddCardInSlotUpdateMsg(String username, int cardId, int slotId) {
+        this.username = username;
         this.cardId = cardId;
+        this.slotId = slotId;
     }
 
     @Override
     public void execute(SimpleGame model) {
         for (SimplePlayer player: model.getPlayers()) {
             if(player.getUsername().equals(this.username))
-                player.activeLeaderCard(cardId);
+                player.insertCardInSlot(cardId, slotId);
         }
     }
 }

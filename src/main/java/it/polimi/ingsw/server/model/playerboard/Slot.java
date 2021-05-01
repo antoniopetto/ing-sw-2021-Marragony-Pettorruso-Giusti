@@ -1,5 +1,6 @@
 package it.polimi.ingsw.server.model.playerboard;
 
+import it.polimi.ingsw.server.VirtualView;
 import it.polimi.ingsw.server.model.cards.Card;
 import it.polimi.ingsw.server.model.cards.DevelopmentCard;
 import java.util.List;
@@ -15,6 +16,7 @@ public class Slot {
 
     private final Stack<DevelopmentCard> developmentCardList;
     private final int id;
+    private VirtualView observer;
 
     /**
      *Construct a slot
@@ -46,7 +48,10 @@ public class Slot {
      * @param dCard The <code>DevelopmentCard</code> that the player wants to insert
      */
     public void addCard(DevelopmentCard dCard){
-        if(canAddCard(dCard)) this.developmentCardList.add(dCard);
+        if(canAddCard(dCard)){
+            this.developmentCardList.add(dCard);
+            observer.addAndBuyCardInSlot(dCard.getId(), getId());
+        }
             else throw new IllegalArgumentException("Unable to insert development card in this slot, change destination slot");
     }
 

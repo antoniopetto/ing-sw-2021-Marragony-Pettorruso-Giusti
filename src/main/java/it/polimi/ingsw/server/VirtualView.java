@@ -4,16 +4,15 @@ import it.polimi.ingsw.client.Client;
 import it.polimi.ingsw.server.model.AbstractPlayer;
 import it.polimi.ingsw.server.model.Game;
 import it.polimi.ingsw.server.model.Player;
+import it.polimi.ingsw.server.model.cards.CardColor;
+import it.polimi.ingsw.server.model.cards.DevelopmentCard;
 import it.polimi.ingsw.server.model.playerboard.Depot;
 import it.polimi.ingsw.server.model.playerboard.DepotName;
 import it.polimi.ingsw.server.model.playerboard.Resource;
+import it.polimi.ingsw.shared.messages.server.*;
 import it.polimi.ingsw.shared.messages.view.ErrorMsg;
 import it.polimi.ingsw.shared.messages.view.LeaderboardMsg;
 import it.polimi.ingsw.shared.messages.command.CommandMsg;
-import it.polimi.ingsw.shared.messages.server.LeaderCardUpdateMsg;
-
-import it.polimi.ingsw.shared.messages.server.TrackUpdateMsg;
-import it.polimi.ingsw.shared.messages.server.WarehouseUpdateMsg;
 
 import java.io.IOException;
 import java.sql.ClientInfoStatus;
@@ -81,13 +80,13 @@ public class VirtualView implements Runnable{
 
     }
 
-    public void leaderCardUpdate(Player player, int cardId)
+    public void leaderCardUpdate(int cardId)
     {
-        LeaderCardUpdateMsg msg = new LeaderCardUpdateMsg(player.getUsername(), cardId);
+        LeaderCardUpdateMsg msg = new LeaderCardUpdateMsg(game.getPlaying().getUsername(), cardId);
         for (Map.Entry<String, ClientHandler> map: players.entrySet()) {
             try {
-                if(!map.getKey().equals(player.getUsername())){
-                    ErrorMsg errorMsg = new ErrorMsg("The"+ player.getUsername()+ "Player plays a LeaderCard");
+                if(!map.getKey().equals(game.getPlaying().getUsername())){
+                    ErrorMsg errorMsg = new ErrorMsg("The"+ game.getPlaying().getUsername()+ "Player plays a LeaderCard");
                     map.getValue().writeObject(errorMsg);
                 }
                 else map.getValue().writeObject(msg);
@@ -97,6 +96,17 @@ public class VirtualView implements Runnable{
         }
 
     }
+
+    public void addAndBuyCardInSlot(int cardId, int slotId){
+        AddCardInSlotUpdateMsg msg = new AddCardInSlotUpdateMsg(game.getPlaying().getUsername(), cardId, slotId);
+        try{
+            getPlayingHandler().writeObject(msg);
+        }catch (IOException e){
+            e.printStackTrace();
+        }
+    }
+
+
 
     public void sendError (String text){
         try {
