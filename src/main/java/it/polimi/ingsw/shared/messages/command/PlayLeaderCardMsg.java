@@ -3,11 +3,9 @@ package it.polimi.ingsw.shared.messages.command;
 import it.polimi.ingsw.server.ClientHandler;
 import it.polimi.ingsw.server.model.Game;
 
-import java.io.IOException;
-
 public class PlayLeaderCardMsg implements CommandMsg {
 
-    private int cardId;
+    private final int cardId;
 
     public PlayLeaderCardMsg(int cardId) {
         this.cardId = cardId;

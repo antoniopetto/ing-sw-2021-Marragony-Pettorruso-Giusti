@@ -21,7 +21,6 @@ public class PlayerBoard {
     /**
      * Constructs the PlayerBoard
      * It will contain a StrongBox, a WareHouse, three Slots
-     *
      */
     public PlayerBoard() {
         this.strongBox = new StrongBox();

@@ -1,5 +1,6 @@
 package it.polimi.ingsw.server.model.shared;
 
+import it.polimi.ingsw.server.VirtualView;
 import it.polimi.ingsw.server.model.Player;
 import org.junit.Before;
 import org.junit.Test;
@@ -17,7 +18,8 @@ public class FaithTrackTest {
     public void setUp() {
         p1 = new Player("First");
         p2 = new Player("Second");
-        //faithTrack = new FaithTrack();
+
+        //TODO faithTrack = new FaithTrack();
     }
 
     @Test

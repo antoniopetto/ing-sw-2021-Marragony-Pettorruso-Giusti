@@ -3,6 +3,8 @@ package it.polimi.ingsw.server.model.cards;
 import it.polimi.ingsw.server.model.Player;
 import it.polimi.ingsw.server.model.playerboard.Resource;
 
+import java.util.Objects;
+
 /**
  * This class represents the card discount ability. The attribute resource represents the resource of the discount
  */
@@ -10,6 +12,10 @@ public class CardDiscountAbility implements SpecialAbility{
 
     private final Resource resource;
     private final int amount;
+
+    public CardDiscountAbility(Resource resource){
+        this(resource, 1);
+    }
 
     public CardDiscountAbility(Resource resource, int amount)
     {
@@ -22,5 +28,18 @@ public class CardDiscountAbility implements SpecialAbility{
     @Override
     public void activateAbility(Player player) {
         player.addActiveDiscount(resource, amount);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        CardDiscountAbility that = (CardDiscountAbility) o;
+        return amount == that.amount && resource == that.resource;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(resource, amount);
     }
 }

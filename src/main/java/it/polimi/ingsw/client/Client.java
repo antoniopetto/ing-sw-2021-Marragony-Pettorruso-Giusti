@@ -1,8 +1,8 @@
 package it.polimi.ingsw.client;
 
-import it.polimi.ingsw.client.view.CLI.CLISettingView;
-import it.polimi.ingsw.client.view.SettingView;
-import it.polimi.ingsw.client.view.GUI.GUISettingView;
+import it.polimi.ingsw.client.view.CLI.CLIView;
+import it.polimi.ingsw.client.view.GUI.GUIView;
+import it.polimi.ingsw.client.view.View;
 
 import java.util.Scanner;
 
@@ -11,6 +11,7 @@ public class Client {
 
 
     public static void main(String[] args) {
+
         Scanner input = new Scanner(System.in);
         boolean valid = false;
         System.out.println("Please select how to play:");
@@ -28,12 +29,12 @@ public class Client {
                 System.out.println("Invalid input. Try again");
             }
         }
-        SettingView settingView;
+        View view;
         if(choice==1)
-            settingView = new CLISettingView();
+            view = new CLIView();
         else
-            settingView = new GUISettingView();
-        settingView.execute();
+            view = new GUIView();
+        view.startSetting();
     }
 
 }

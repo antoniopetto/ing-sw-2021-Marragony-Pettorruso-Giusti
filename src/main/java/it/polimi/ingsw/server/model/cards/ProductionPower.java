@@ -4,6 +4,7 @@ import it.polimi.ingsw.server.model.playerboard.Resource;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Stream;
 
 /**
@@ -62,4 +63,16 @@ public class ProductionPower {
         return agnosticOutput;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ProductionPower that = (ProductionPower) o;
+        return agnosticInput == that.agnosticInput && agnosticOutput == that.agnosticOutput && input.equals(that.input) && output.equals(that.output);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(input, output, agnosticInput, agnosticOutput);
+    }
 }

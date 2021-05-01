@@ -14,5 +14,5 @@ public interface View {
     String getUsername();
     int getNumber();
     void startGame();
-
+    void startSetting();
 }

@@ -14,7 +14,7 @@ public class CardDeck {
     private final Stack<DevelopmentCard> deck = new Stack<>();
 
     public CardDeck(int level, CardColor color) {
-        if(level<1||level>3) throw new IllegalArgumentException("Illegal level");
+        if (level<1||level>3) throw new IllegalArgumentException("Illegal level");
         this.level = level;
         this.color = color;
     }

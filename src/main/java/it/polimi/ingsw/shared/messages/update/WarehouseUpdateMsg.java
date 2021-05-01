@@ -1,4 +1,4 @@
-package it.polimi.ingsw.shared.messages.server;
+package it.polimi.ingsw.shared.messages.update;
 
 import it.polimi.ingsw.client.simplemodel.SimpleGame;
 import it.polimi.ingsw.client.simplemodel.SimplePlayer;
@@ -8,7 +8,7 @@ import it.polimi.ingsw.server.model.playerboard.Resource;
 
 import java.util.Map;
 
-public class WarehouseUpdateMsg implements ServerMsg {
+public class WarehouseUpdateMsg implements UpdateMsg {
 
     private SimpleWarehouse warehouse;
     private String username;

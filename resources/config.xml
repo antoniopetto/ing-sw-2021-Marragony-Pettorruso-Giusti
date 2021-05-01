@@ -509,7 +509,6 @@
             <output>
                 <resQty type="STONE">3</resQty>
                 <resQty type="FAITH">2</resQty>
-                <resQty type="FAITH">2</resQty>
             </output>
         </productionPower>
     </developmentCard>
