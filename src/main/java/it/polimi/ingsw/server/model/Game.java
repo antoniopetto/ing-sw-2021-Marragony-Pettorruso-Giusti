@@ -12,7 +12,6 @@ import it.polimi.ingsw.server.model.shared.MarketBoard;
 import it.polimi.ingsw.server.model.singleplayer.SoloRival;
 import org.xml.sax.SAXException;
 
-import javax.swing.plaf.nimbus.State;
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;
 import java.util.*;
@@ -54,7 +53,9 @@ public class Game {
         this.virtualView = virtualView;
         singlePlayer = true;
         soloRival = new SoloRival();
-        players.add(new Player(username));
+        Player player = new Player(username);
+        player.setObserver(virtualView);
+        players.add(player);
         playing = players.get(0);
         faithTrack = new FaithTrack(this, virtualView, List.of(players.get(0), soloRival));
         initCards();
@@ -69,8 +70,11 @@ public class Game {
         if (usernames.size() > 4 || usernames.size() < 2)
             throw new IllegalArgumentException("Number of players out of bounds");
 
-        for (String s : usernames)
+        for (String s : usernames){
+            Player player = new Player(s);
+            player.setObserver(virtualView);
             players.add(new Player(s));
+        }
 
         Collections.shuffle(players);
         playing = players.get(0);
@@ -115,39 +119,44 @@ public class Game {
      * @param isRow is a boolean which tells whether the line is a row or a column.
      */
     public void buyResources(int idLine, boolean isRow){
+
+        if (state != State.PRETURN){
+            virtualView.sendError("Illegal state command");
+            return;
+        }
+
         List<Marble> marbles = playing.buyResources(this, idLine, isRow);
-        for (Marble marble:marbles) {
-            if(marble.equals(Marble.RED))
-            {
+        for (Marble marble : marbles) {
+            if(marble.equals(Marble.RED)) {
                 faithTrack.advance(playing);
             }
-            else if(marble.equals(Marble.WHITE))
-            {
+            else if(marble.equals(Marble.WHITE)) {
                 if(!playing.getWhiteMarbleAliases().isEmpty())
                     marbleBuffer.add(marble);
             }
             else
                 marbleBuffer.add(marble);
         }
+
+        if(marbleBuffer.size() > 0){
+            virtualView.createBuffer(marbleBuffer);
+            state = State.INSERTING;
+        }
+        else
+            state = State.POSTTURN;
     }
 
     /**
-     * This method try to put the equivalent resource of a marble in a specific depot in the warehouse.
+     * This method tries to put the equivalent resource of a marble in a specific depot in the warehouse.
      * @param marble is the marble selected by the player
      * @param depot is the depot where the player tries to add the resource
-     * @return false if it isn't possible to add the resource in <code>depot</code>, else it add the resource and return true
      */
-    public boolean putResource(Marble marble, DepotName depot){
-        Resource resource;
-        if(!marble.equals(Marble.WHITE))
-            resource = marble.getResource();
-        else
-        {
-            if(playing.getWhiteMarbleAliases().size()==1)
-                resource=playing.getWhiteMarbleAliases().iterator().next();
-            else throw new IllegalStateException("Wrong method");
-        }
-        return putResource(marble, depot, resource);
+    public void putResource(Marble marble, DepotName depot){
+
+        if (marble == Marble.WHITE)
+            virtualView.sendError("Can't add a white marble without chosen resource");
+
+        putResource(marble, depot, marble.getResource());
     }
 
     /**
@@ -157,25 +166,30 @@ public class Game {
      * @param marble is the marble selected from <code>marbleBuffer</code>.
      * @param depot is the depot where the player tries to put the resource.
      * @param resource is the resource to put in the depot.
-     * @return false if the resource is not insertable, else it puts the resource and returns true.
      */
-    public boolean putResource(Marble marble, DepotName depot, Resource resource) {
-        int listId;
-        try{
-            if (marble != Marble.WHITE && marble.getResource() != resource)
-                throw new IllegalArgumentException("Wrong request");
-            if (marble == Marble.WHITE && !playing.getWhiteMarbleAliases().contains(resource))
-                throw new IllegalArgumentException("White marble is not associated to that resource");
-            listId = findMarble(marble);
-        } catch (IllegalArgumentException | ElementNotFoundException e) {
-            virtualView.sendError(e.getMessage());
-            return false;
+    public void putResource(Marble marble, DepotName depot, Resource resource){
+
+        if (state != State.INSERTING) {
+            virtualView.sendError("Illegal state command");
+            return;
         }
 
-        if(!playing.getPlayerBoard().getWareHouse().isInsertable(depot, resource)) return false;
+        int listId = marbleBuffer.indexOf(marble);
+        if (listId == -1 ||
+            marble != Marble.WHITE && marble.getResource() != resource ||
+            marble == Marble.WHITE && !playing.getWhiteMarbleAliases().contains(resource) ||
+            !playing.getPlayerBoard().getWareHouse().isInsertable(depot, resource)) {
+
+            virtualView.sendError("Illegal putResource request");
+            return;
+        }
+
         playing.getPlayerBoard().getWareHouse().insert(depot, resource);
         marbleBuffer.remove(listId);
-        return true;
+        virtualView.bufferUpdate(marble);
+
+        if (marbleBuffer.size() == 0)
+            state = State.POSTTURN;
     }
 
     /**
@@ -183,114 +197,125 @@ public class Game {
      * so the marble is discarded.
      * @param marble is the marble to discard
      */
-    public void discard(Marble marble)  {
-        try{
-            int listId = findMarble(marble);
-            marbleBuffer.remove(listId);
-            faithTrack.advanceAllBut(playing);
+    public void discardMarble(Marble marble)  {
+
+        if (state != State.INSERTING){
+            virtualView.sendError("Illegal state command");
+            return;
+        }
+
+        int listId = marbleBuffer.indexOf(marble);
+        if (listId == -1) {
+            virtualView.sendError("Illegal discardMarble request");
+            return;
+        }
+
+        marbleBuffer.remove(listId);
+        faithTrack.advanceAllBut(playing);
+        virtualView.bufferUpdate(marble);
+
+        if (marbleBuffer.size() == 0){
+            state = State.POSTTURN;
+        }
+    }
+
+    public void switchDepots(DepotName depot1, DepotName depot2) {
+
+        if(state != State.INSERTING){
+            virtualView.sendError("Illegal state command");
+            return;
+        }
+        try {
+            playing.getPlayerBoard().getWareHouse().switchDepots(depot1, depot2);
         } catch (Exception e) {
             virtualView.sendError(e.getMessage());
         }
     }
 
-    /**
-     * This method checks if <code>marble</code> is present in <code>marbleBuffer</code> and returns its position in it.
-     * @param marble is the marble to check.
-     * @return the position of <code>marble</code> in <code>marbleBuffer</code>
-     * @throws ElementNotFoundException if <code>marble</code> is not i <code>marbleBuffer</code>
-     */
-    private int findMarble(Marble marble) throws ElementNotFoundException {
-        if(marbleBuffer.isEmpty()) throw new IllegalStateException("No more marbles to handle");
-        boolean isPresent = false;
-        int listId=0;
-        while(listId<marbleBuffer.size()&&!isPresent)
-        {
-            if(marble.equals(marbleBuffer.get(listId)))
-                isPresent=true;
-            else listId++;
-        }
-        if (!isPresent) throw new ElementNotFoundException("Marble not playable");
-        return listId;
-    }
+    public void moveDepots(DepotName depotFrom, DepotName depotTo) {
 
-    public void switchDepots(DepotName depot1, DepotName depot2)
-    {
-        if(!state.equals(State.INSERTING)) virtualView.sendError("Wrong state of the application");
-        else {
-            try {
-                playing.getPlayerBoard().getWareHouse().switchDepots(depot1, depot2);
-            } catch (Exception e) {
-                    virtualView.sendError(e.getMessage());
-            }
+        if (!state.equals(State.INSERTING)){
+            virtualView.sendError("Illegal state command");
+            return;
+        }
+        try{
+            playing.getPlayerBoard().getWareHouse().moveDepots(depotFrom, depotTo);
+        } catch (IllegalStateException | IllegalArgumentException e) {
+            virtualView.sendError(e.getMessage());
         }
     }
 
-    public void moveDepots(DepotName depotFrom, DepotName depotTo){
-
-        if(!state.equals(State.INSERTING))
-            virtualView.sendError("Cannot move resources between depots now");
+    public void endTurn(){
+        if (state != State.POSTTURN && state != State.INITIALIZING){
+            virtualView.sendError("Illegal state command");
+            return;
+        }
+        int nextIndex = (players.indexOf(playing) + 1) % players.size();
+        if (nextIndex == 0 && lastRound)
+            virtualView.endGame();
         else{
-            try{
-                playing.getPlayerBoard().getWareHouse().moveDepots(depotFrom, depotTo);
-            } catch (IllegalStateException | IllegalArgumentException e){
-                virtualView.sendError(e.getMessage());
-            }
-        }
-    }
-
-    public void endTurn()
-    {
-        if (!state.equals(State.POSTTURN)){
-            virtualView.sendError("Cannot end turn before main move");
-        }
-        else {
-            int nextIndex = (players.indexOf(playing) + 1) % players.size();
-            if (lastRound && nextIndex == 0)
-                virtualView.endGame();
-            else
-                playing = players.get(nextIndex);
+            playing = players.get(nextIndex);
+            if (state == State.POSTTURN || nextIndex == 0)
                 state = State.PRETURN;
-                if (singlePlayer)
-                    soloRival.soloTurn(this);
+            if (singlePlayer)
+                soloRival.soloTurn(this);
         }
     }
 
     public void activateProduction(Set<Integer> selectedCardIds, Map<Integer, ProductionPower> selectedExtraPowers){
-        if (!state.equals(State.PRETURN))
-            virtualView.sendError("Cannot activate production now");
-        else if (!playing.getPlayerBoard().canActivateProduction(selectedCardIds, selectedExtraPowers))
+
+        if (!state.equals(State.PRETURN)) {
+            virtualView.sendError("Illegal state command");
+            return;
+        }
+
+        if (!playing.getPlayerBoard().canActivateProduction(selectedCardIds, selectedExtraPowers)) {
             virtualView.sendError("Cannot afford this production");
-        else playing.getPlayerBoard().activateProduction(selectedCardIds, selectedExtraPowers);
+            return;
+        }
+
+        playing.getPlayerBoard().activateProduction(selectedCardIds, selectedExtraPowers);
         state = State.POSTTURN;
     }
 
     public void playLeaderCard(int cardId){
-        if(state.equals(State.INSERTING) || state == State.INITIALIZING)
-            virtualView.sendError("Cannot play LeaderCard now");
-        else{
-            try {
-                if(!getPlaying().playLeaderCard(cardId))
-                    virtualView.sendError("The player does not meet the requirements");
-            }catch (IllegalStateException | IllegalArgumentException | ElementNotFoundException e){
-                virtualView.sendError(e.getMessage());
-            }
 
+        if(state != State.PRETURN && state != State.POSTTURN){
+            virtualView.sendError("Illegal state command");
+            return;
+        }
+
+        try {
+            if(!playing.playLeaderCard(cardId))
+                virtualView.sendError("The player does not meet the requirements");
+        } catch (IllegalStateException | IllegalArgumentException e){
+            virtualView.sendError(e.getMessage());
         }
     }
 
-    public void discardLeaderCard(int cardId){
-        if(state.equals(State.INSERTING) || state.equals(State.INITIALIZING)){
-            virtualView.sendError("Cannot discard LeaderCard now");
-        }else{
-            try{
-                getPlaying().discardLeaderCard(cardId);
-            }catch (ElementNotFoundException e){
-                virtualView.sendError(e.getMessage());
-            }
+    public void discardLeaderCard(int cardId) {
+
+        if (state != State.PRETURN && state != State.POSTTURN){
+            virtualView.sendError("Illegal state command");
+            return;
+        }
+        try {
+            playing.removeLeaderCard(cardId);
+            if(state == State.INITIALIZING)
+                if (playing.getLeaderCardList().size() == 2)
+                    endTurn();
+            else
+                faithTrack.advance(playing);
+        } catch (ElementNotFoundException e){
+            virtualView.sendError("Leader card not found");
         }
     }
 
-    public void buyandAddCardInSlot(CardColor cardColor, int level, int slotId){
+    public void setLastRound() {
+        this.lastRound = true;
+    }
+
+    public void buyAndAddCardInSlot(CardColor cardColor, int level, int slotId){
 
         if(state != State.INSERTING) virtualView.sendError("Cannot Insert DevCard now");
         else {
@@ -301,12 +326,7 @@ public class Game {
                 virtualView.sendError(e.getMessage());
             }
             developmentCardDecks.drawCard(cardColor, level);
-
         }
-    }
-
-    public void setLastRound(boolean lastRound){
-        this.lastRound = lastRound;
     }
 
     public Player getPlaying() {
@@ -317,7 +337,9 @@ public class Game {
         return marbleBuffer;
     }
 
-    public Optional<SoloRival> getSoloRival() { return Optional.of(soloRival); }
+    public Optional<SoloRival> getSoloRival() {
+        return Optional.of(soloRival);
+    }
 
     public FaithTrack getTrack() {
         return faithTrack;

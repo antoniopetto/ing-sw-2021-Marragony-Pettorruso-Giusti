@@ -19,8 +19,6 @@ public class DiscardMsg implements CommandMsg {
     public void execute(Game game, ClientHandler handler) throws IOException {
         String text;
         UpdateMsg msg;
-        game.discard(marble);
-        msg = new BufferUpdateMsg(marble);
-        handler.writeObject(msg);
+        game.discardMarble(marble);
     }
 }

@@ -1,9 +1,13 @@
 package it.polimi.ingsw.server.model.cards;
 
+import it.polimi.ingsw.server.ClientHandler;
+import it.polimi.ingsw.server.VirtualView;
 import it.polimi.ingsw.server.model.Player;
 import it.polimi.ingsw.server.model.playerboard.Depot;
 import it.polimi.ingsw.server.model.playerboard.Resource;
 import org.junit.Test;
+
+import java.io.IOException;
 
 import static org.junit.Assert.*;
 
@@ -34,6 +38,7 @@ public class ExtraDepotAbilityTest {
     public void activateAbilityTest()
     {
         ExtraDepotAbility ability = new ExtraDepotAbility(Resource.COIN, 2);
+
         Player player = new Player("Test");
         //activates the ability and check that there's an extra depot in player's warehouse with right capacity and constraint
         try {

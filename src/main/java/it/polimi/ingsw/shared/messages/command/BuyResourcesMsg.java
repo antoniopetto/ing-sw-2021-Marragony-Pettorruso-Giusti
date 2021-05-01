@@ -18,7 +18,5 @@ public class BuyResourcesMsg implements CommandMsg {
     @Override
     public void execute(Game game, ClientHandler handler) throws IOException {
         game.buyResources(idLine, isRow);
-        CreateBufferMsg msg = new CreateBufferMsg(game.getMarbleBuffer());
-        handler.writeObject(msg);
     }
 }

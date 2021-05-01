@@ -14,10 +14,9 @@ public class LeaderCardUpdateMsg implements UpdateMsg {
     }
 
     @Override
-    public void execute(SimpleGame model) {
-        for (SimplePlayer player: model.getPlayers()) {
-            if(player.getUsername().equals(this.username))
-                player.activeLeaderCard(cardId);
-        }
+    public void execute(SimpleGame game) {
+        game.getPlayers().stream()
+                .filter(p -> p.getUsername().equals(username)).findAny()
+                .ifPresent(p -> p.activeLeaderCard(cardId));
     }
 }

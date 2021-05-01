@@ -14,8 +14,8 @@ import java.util.List;
  */
 public class MarketBoard {
 
-    private static final int ROWS = 3;
-    private static final int COLUMNS = 4;
+    public static final int ROWS = 3;
+    public static final int COLUMNS = 4;
     private final Marble[][] marbleGrid = new Marble[ROWS][COLUMNS];
     private Marble spareMarble;
 
@@ -33,25 +33,7 @@ public class MarketBoard {
         marbles.addAll(Collections.nCopies(4, Marble.WHITE));
         Collections.shuffle(marbles);
 
-        for (int i = 0; i < marbles.size() - 1; i++)
-            marbleGrid[i / COLUMNS][i % COLUMNS] = marbles.get(i);
-
-        spareMarble = marbles.get(marbles.size() - 1);
-    }
-
-    /**
-     * Constructs the MarketBoard restoring a previous game.
-     *
-     * @param marbles                       The list of input <code>Marble</code>,
-     *                                      ordered row by row, the 13th being the spare one.
-     * @throws IllegalArgumentException     If <code>marbles</code> doesn't contain exactly 13 elements.
-     */
-    public MarketBoard(List<Marble> marbles) {
-
-        if (marbles.size() != ROWS * COLUMNS + 1)
-            throw new IllegalArgumentException("MarketBoard must contain" + ROWS * COLUMNS + 1 + "marbles");
-
-        for (int i = 0; i < marbles.size() - 1; i++)
+        for (int i = 0; i < ROWS*COLUMNS; i++)
             marbleGrid[i / COLUMNS][i % COLUMNS] = marbles.get(i);
 
         spareMarble = marbles.get(marbles.size() - 1);
@@ -63,7 +45,7 @@ public class MarketBoard {
      *
      * @param columnId  The column in which the spare marble gets inserted.
      */
-    public void insertSpareInColumn(int columnId) {
+    private void insertSpareInColumn(int columnId) {
 
         Marble tmp = spareMarble;
         spareMarble = marbleGrid[0][columnId];
@@ -80,7 +62,7 @@ public class MarketBoard {
      *
      * @param rowId   The row in which the spare marble gets inserted.
      */
-    public void insertSpareInRow(int rowId) {
+    private void insertSpareInRow(int rowId) {
 
         Marble tmp = spareMarble;
         spareMarble = marbleGrid[rowId][0];
@@ -90,16 +72,30 @@ public class MarketBoard {
 
     public Marble getSpareMarble() { return spareMarble; }
 
-    public List<Marble> getColumn(int columnId) {
+    public List<Marble> buyColumn(int columnId) {
 
         List<Marble> column = new ArrayList<>();
 
         for (int i = 0; i < ROWS; i++){
             column.add(marbleGrid[i][columnId]);
         }
+
+        insertSpareInColumn(columnId);
         return column;
     }
 
-    public List<Marble> getRow(int rowId) { return Arrays.asList(marbleGrid[rowId].clone()); }
+    public List<Marble> buyRow(int rowId) {
+
+        List<Marble> row = Arrays.asList(marbleGrid[rowId].clone());
+        insertSpareInRow(rowId);
+        return row;
+    }
+
+    public Marble[][] getMarbleGrid(){
+        Marble[][] marbleGrid = new Marble[ROWS][];
+        for (int i = 0; i < ROWS; i++)
+            marbleGrid[i] = this.marbleGrid[i].clone();
+        return marbleGrid;
+    }
 
 }

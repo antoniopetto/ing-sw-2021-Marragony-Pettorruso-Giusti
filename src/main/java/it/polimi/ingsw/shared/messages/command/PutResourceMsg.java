@@ -14,24 +14,24 @@ import java.util.Optional;
 
 public class PutResourceMsg implements CommandMsg {
     private final Marble marble;
-    private final DepotName depotName;
+    private final DepotName depot;
     private final Resource resource;
 
-    public PutResourceMsg(Marble mar, DepotName dep, Resource res)
+    public PutResourceMsg(Marble marble, DepotName depot, Resource resource)
     {
-        if (mar == Marble.WHITE && res == null || mar != Marble.WHITE && res != null)
+        if (marble == Marble.WHITE && resource == null || marble != Marble.WHITE && resource != null)
             throw new IllegalArgumentException();
-        marble = mar;
-        depotName = dep;
-        resource = res;
+        this.marble = marble;
+        this.depot = depot;
+        this.resource = resource;
     }
 
     @Override
     public void execute(Game game, ClientHandler handler) throws IOException {
 
-        boolean result = (marble == Marble.WHITE) ? game.putResource(marble, depotName, resource) :
-                game.putResource(marble, depotName);
-
-        if (result) handler.writeObject(new BufferUpdateMsg(marble));
+        if (marble == Marble.WHITE)
+            game.putResource(marble, depot, resource);
+        else
+            game.putResource(marble, depot);
     }
 }

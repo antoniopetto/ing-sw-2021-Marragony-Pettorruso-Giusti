@@ -18,7 +18,7 @@ public class Player extends AbstractPlayer{
     private final PlayerBoard playerBoard = new PlayerBoard();
     private final Map<Resource, Integer> activeDiscounts = new EnumMap<>(Resource.class);
     private final Set<Resource> whiteMarbleAliases = new HashSet<>();
-    private List<LeaderCard> leaderCardList = new ArrayList<>();
+    private final List<LeaderCard> leaderCardList = new ArrayList<>();
     private VirtualView observer;
 
     public Player(String username){
@@ -28,12 +28,12 @@ public class Player extends AbstractPlayer{
         tiles.add(new PopeFavourTile(4));
     }
 
-    public void setLeaderCards(List<LeaderCard> cards){
-        leaderCardList.addAll(cards);
+    public void setObserver(VirtualView view){
+        observer = view;
     }
 
-    public void removeLeaderCard(int id) throws ElementNotFoundException {
-        leaderCardList.remove(Card.getById(id, leaderCardList));
+    public void setLeaderCards(List<LeaderCard> cards){
+        leaderCardList.addAll(cards);
     }
 
     public String getUsername() { return username; }
@@ -80,31 +80,26 @@ public class Player extends AbstractPlayer{
     public boolean playLeaderCard(int cardId) throws ElementNotFoundException {
 
         LeaderCard card = Card.getById(cardId, leaderCardList);
-        if(card.isPlayed()) throw new IllegalStateException("Card already played");
-        if(card.isPlayable(this))
-        {
+        if(card.isPlayed())
+            throw new IllegalStateException("Card already played");
+        if(card.isPlayable(this)) {
             card.play(this);
             return true;
         }
         else return false;
     }
 
-    /**
-     * This method is used to discard a leader card
-     * @param cardId is the id of the card to discard
-     */
-    public void discardLeaderCard(int cardId) throws ElementNotFoundException {
-        Card.getById(cardId, leaderCardList);
-        leaderCardList.remove(cardId);
-        observer.discardLeaderCardUpdate(cardId);
+    public void removeLeaderCard(int id) throws ElementNotFoundException {
+        leaderCardList.remove(Card.getById(id, leaderCardList));
     }
 
-    public void addCard(DevelopmentCard card, int idSlot){
-        if (canBuyCard(card) && playerBoard.canAddCardInSlot(card, idSlot)){
+    public void addCard(DevelopmentCard card, int slotId){
+        if (canBuyCard(card) && playerBoard.canAddCardInSlot(card, slotId)){
             for (ResourceRequirement req : card.getDiscountedRequirements(activeDiscounts)){
                 playerBoard.pay(req);
             }
-            playerBoard.addCardInSlot(card, idSlot);
+            playerBoard.addCardInSlot(card, slotId);
+            observer.addCardInSlotUpdate(card.getId(), slotId);
         }
         else throw new IllegalArgumentException("Invalid move: can't pay or can't place the selected Development Card");
     }
@@ -120,8 +115,10 @@ public class Player extends AbstractPlayer{
 
     public List<Marble> buyResources(Game game, int idLine , boolean isRow){
         List<Marble> marbleList;
-        if(isRow) marbleList = game.getMarketBoard().getRow(idLine);
-        else marbleList = game.getMarketBoard().getColumn(idLine);
+        if (isRow)
+            marbleList = game.getMarketBoard().buyRow(idLine);
+        else
+            marbleList = game.getMarketBoard().buyColumn(idLine);
 
         return marbleList;
     }
@@ -129,5 +126,9 @@ public class Player extends AbstractPlayer{
     @Override
     public void vaticanReportEffect(int tileNumber) {
         tiles.get(tileNumber).gain();
+    }
+
+    public List<LeaderCard> getLeaderCardList(){
+        return new ArrayList<>(leaderCardList);
     }
 }

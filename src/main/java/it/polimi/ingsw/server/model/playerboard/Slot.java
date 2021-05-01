@@ -16,7 +16,6 @@ public class Slot {
 
     private final Stack<DevelopmentCard> developmentCardList;
     private final int id;
-    private VirtualView observer;
 
     /**
      *Construct a slot
@@ -50,7 +49,6 @@ public class Slot {
     public void addCard(DevelopmentCard dCard){
         if(canAddCard(dCard)){
             this.developmentCardList.add(dCard);
-            observer.addAndBuyCardInSlot(dCard.getId(), getId());
         }
             else throw new IllegalArgumentException("Unable to insert development card in this slot, change destination slot");
     }

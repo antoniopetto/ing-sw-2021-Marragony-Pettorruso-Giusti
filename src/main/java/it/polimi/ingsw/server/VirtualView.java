@@ -8,11 +8,12 @@ import it.polimi.ingsw.server.model.cards.DevelopmentCard;
 import it.polimi.ingsw.server.model.playerboard.Depot;
 import it.polimi.ingsw.server.model.playerboard.DepotName;
 import it.polimi.ingsw.server.model.playerboard.Resource;
+import it.polimi.ingsw.server.model.shared.Marble;
+import it.polimi.ingsw.shared.messages.update.*;
 import it.polimi.ingsw.shared.messages.update.*;
 import it.polimi.ingsw.shared.messages.view.ErrorMsg;
 import it.polimi.ingsw.shared.messages.view.LeaderboardMsg;
 import it.polimi.ingsw.shared.messages.command.CommandMsg;
-
 
 import java.io.IOException;
 import java.util.*;
@@ -21,10 +22,9 @@ public class VirtualView implements Runnable{
 
     private boolean exiting = false;
     private final Game game;
-    private Map<String, ClientHandler> players = new HashMap<>();
+    private final Map<String, ClientHandler> players = new HashMap<>();
 
-    public VirtualView(Map<String, ClientHandler> players)
-    {
+    public VirtualView(Map<String, ClientHandler> players) {
         this.players.putAll(players);
         if (players.size() == 1)
             game = Game.newSinglePlayerGame(players.keySet().iterator().next(), this);
@@ -34,7 +34,7 @@ public class VirtualView implements Runnable{
 
     @Override
     public void run() {
-        while(exiting){
+        while(!exiting){
             try {
                 Object nextMsg = getPlayingHandler().readObject();
                 CommandMsg command = (CommandMsg)nextMsg;
@@ -53,6 +53,7 @@ public class VirtualView implements Runnable{
                 handler.writeObject(msg);
             } catch (IOException e) {
                 e.printStackTrace();
+                exitGame();
             }
         }
     }
@@ -68,15 +69,37 @@ public class VirtualView implements Runnable{
             warehouse.put(depot.getName(), resources);
         }
 
-        WarehouseUpdateMsg msg = new WarehouseUpdateMsg(warehouse, game.getPlaying().getUsername());
+        WarehouseUpdateMsg msg = new WarehouseUpdateMsg(warehouse, getPlayingUsername());
         players.values().forEach(c -> {
             try {
                 c.writeObject(msg);
             } catch (IOException e) {
                 e.printStackTrace();
+                exitGame();
             }
         });
 
+    }
+
+    public void createBuffer(List<Marble> marbleBuffer){
+        try{
+            CreateBufferMsg msg = new CreateBufferMsg(marbleBuffer);
+            getPlayingHandler().writeObject(msg);
+        }
+        catch (IOException e){
+            e.printStackTrace();
+            exitGame();
+        }
+    }
+
+    public void bufferUpdate(Marble marble){
+        try {
+            BufferUpdateMsg msg = new BufferUpdateMsg(marble);
+            getPlayingHandler().writeObject(msg);
+        } catch (IOException e){
+            e.printStackTrace();
+            exitGame();
+        }
     }
 
     public void playLeaderCardUpdate(int cardId) {
@@ -89,7 +112,7 @@ public class VirtualView implements Runnable{
         messageFilter(msg, "The"+ game.getPlaying().getUsername()+ "Player has discarded a development card");
     }
 
-    public void addAndBuyCardInSlot(int cardId, int slotId){
+    public void addCardInSlotUpdate(int cardId, int slotId){
         AddCardInSlotUpdateMsg msg = new AddCardInSlotUpdateMsg(game.getPlaying().getUsername(), cardId, slotId);
         messageFilter(msg, "The"+ game.getPlaying().getUsername()+ "Player has bought a development card");
     }
@@ -123,6 +146,10 @@ public class VirtualView implements Runnable{
         return players.get(game.getPlaying().getUsername());
     }
 
+    private String getPlayingUsername(){
+        return game.getPlaying().getUsername();
+    }
+
     public void endGame(){
         for (Map.Entry<String, ClientHandler> entry : players.entrySet()){
             try{
@@ -131,7 +158,6 @@ public class VirtualView implements Runnable{
             catch (IOException e){
                 e.printStackTrace();
                 System.out.println("Connection dropped");
-                exitGame();
             }
         }
         exitGame();
