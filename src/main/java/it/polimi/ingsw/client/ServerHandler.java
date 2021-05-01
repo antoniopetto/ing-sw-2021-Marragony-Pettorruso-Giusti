@@ -2,8 +2,8 @@ package it.polimi.ingsw.client;
 
 
 import it.polimi.ingsw.client.simplemodel.SimpleGame;
-import it.polimi.ingsw.client.views.View;
-import it.polimi.ingsw.shared.messages.server.ServerMsg;
+import it.polimi.ingsw.client.view.View;
+import it.polimi.ingsw.shared.messages.server.UpdateMsg;
 import it.polimi.ingsw.shared.messages.view.ViewMsg;
 
 import java.io.IOException;
@@ -27,7 +27,6 @@ public class ServerHandler implements Runnable{
     public void run() {
         try {
             output = new ObjectOutputStream(serverSocket.getOutputStream());
-            //output.flush();
             input = new ObjectInputStream(serverSocket.getInputStream());
 
         } catch (IOException e) {
@@ -39,9 +38,9 @@ public class ServerHandler implements Runnable{
             try {
 
                 Object message = input.readObject();
-                if(ServerMsg.class.isInstance(message))
+                if(message instanceof UpdateMsg)
                 {
-                    ServerMsg updateMsg = (ServerMsg)message;
+                    UpdateMsg updateMsg = (UpdateMsg)message;
                     updateMsg.execute(model);
                 }
                 else

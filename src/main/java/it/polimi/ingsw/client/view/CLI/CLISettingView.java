@@ -1,18 +1,20 @@
-package it.polimi.ingsw.client.views.CLI;
+package it.polimi.ingsw.client.view.CLI;
 
 import it.polimi.ingsw.client.ServerHandler;
-import it.polimi.ingsw.client.views.SettingView;
-import it.polimi.ingsw.client.views.View;
+import it.polimi.ingsw.client.view.View;
 
 import java.io.IOException;
 import java.net.Socket;
 import java.util.Scanner;
 
-public class CLISettingView implements SettingView {
+public class CLISettingView{
 
-    private View cliView = new CLIView();
+    private View cliView;
 
-    @Override
+    public CLISettingView(View cliView) {
+        this.cliView = cliView;
+    }
+
     public void execute() {
         Scanner input = new Scanner(System.in);
         String ip;

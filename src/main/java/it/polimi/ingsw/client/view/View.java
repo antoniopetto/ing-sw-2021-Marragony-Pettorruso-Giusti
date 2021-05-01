@@ -1,4 +1,4 @@
-package it.polimi.ingsw.client.views;
+package it.polimi.ingsw.client.view;
 
 import it.polimi.ingsw.client.simplemodel.SimplePlayer;
 import it.polimi.ingsw.server.model.shared.Marble;
@@ -14,4 +14,5 @@ public interface View {
     String getUsername();
     int getNumber();
     void startGame();
+    void startSetting();
 }

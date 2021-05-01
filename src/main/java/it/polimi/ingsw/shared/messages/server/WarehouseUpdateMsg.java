@@ -8,7 +8,7 @@ import it.polimi.ingsw.server.model.playerboard.Resource;
 
 import java.util.Map;
 
-public class WarehouseUpdateMsg implements ServerMsg {
+public class WarehouseUpdateMsg implements UpdateMsg {
 
     private SimpleWarehouse warehouse;
     private String username;

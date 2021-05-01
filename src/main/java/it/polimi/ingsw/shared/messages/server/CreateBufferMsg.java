@@ -5,7 +5,7 @@ import it.polimi.ingsw.server.model.shared.Marble;
 
 import java.util.List;
 
-public class CreateBufferMsg implements ServerMsg {
+public class CreateBufferMsg implements UpdateMsg {
     private List<Marble> marbleBuffer;
 
     public CreateBufferMsg(List<Marble> marbleBuffer) {

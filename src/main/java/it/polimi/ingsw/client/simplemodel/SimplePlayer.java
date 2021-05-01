@@ -1,6 +1,6 @@
 package it.polimi.ingsw.client.simplemodel;
 
-import it.polimi.ingsw.client.views.View;
+import it.polimi.ingsw.client.view.View;
 
 import java.util.Map;
 

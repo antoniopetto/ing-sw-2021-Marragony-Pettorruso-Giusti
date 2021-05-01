@@ -5,7 +5,7 @@ import it.polimi.ingsw.client.simplemodel.SimpleGame;
 import it.polimi.ingsw.client.simplemodel.SimplePlayer;
 import it.polimi.ingsw.server.model.AbstractPlayer;
 
-public class TrackUpdateMsg implements ServerMsg {
+public class TrackUpdateMsg implements UpdateMsg {
     private String player;
     private boolean allBut;
 
@@ -26,7 +26,7 @@ public class TrackUpdateMsg implements ServerMsg {
                     ||(allBut&&!simplePlayer.getUsername().equals(player))) {
                 simplePlayer.advance();
             }
-
+            //TODO change the if clause
         }
     }
 }

@@ -3,7 +3,7 @@ package it.polimi.ingsw.shared.messages.server;
 import it.polimi.ingsw.client.simplemodel.SimpleGame;
 import it.polimi.ingsw.client.simplemodel.SimplePlayer;
 
-public class LeaderCardUpdateMsg implements ServerMsg {
+public class LeaderCardUpdateMsg implements UpdateMsg {
     private String username;
     private int cardId;
 

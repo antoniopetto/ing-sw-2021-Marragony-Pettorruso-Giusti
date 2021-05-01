@@ -1,11 +1,9 @@
 package it.polimi.ingsw.client;
 
-import it.polimi.ingsw.client.views.CLI.CLISettingView;
-import it.polimi.ingsw.client.views.SettingView;
-import it.polimi.ingsw.client.views.GUI.GUISettingView;
+import it.polimi.ingsw.client.view.CLI.CLIView;
+import it.polimi.ingsw.client.view.GUI.GUIView;
+import it.polimi.ingsw.client.view.View;
 
-import java.io.IOException;
-import java.net.Socket;
 import java.util.Scanner;
 
 public class Client {
@@ -30,12 +28,12 @@ public class Client {
                 System.out.println("Invalid input. Try again");
             }
         }
-        SettingView settingView;
+        View view;
         if(choice==1)
-            settingView = new CLISettingView();
+            view = new CLIView();
         else
-            settingView = new GUISettingView();
-        settingView.execute();
+            view = new GUIView();
+        view.startSetting();
     }
 
 }
