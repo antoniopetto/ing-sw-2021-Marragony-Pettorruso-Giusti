@@ -13,7 +13,6 @@ import it.polimi.ingsw.server.model.singleplayer.SoloRival;
 import org.xml.sax.SAXException;
 
 import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.xpath.XPathExpressionException;
 import java.io.IOException;
 import java.util.*;
 
@@ -51,7 +50,6 @@ public class Game {
 
     private Game(String username, VirtualView virtualView) {
 
-        state = State.INITIALIZING;
         this.virtualView = virtualView;
         singlePlayer = true;
         soloRival = new SoloRival();
@@ -63,7 +61,6 @@ public class Game {
 
     private Game(List<String> usernames, VirtualView virtualView) {
 
-        state = State.INITIALIZING;
         this.virtualView = virtualView;
         singlePlayer = false;
         soloRival = null;
@@ -85,7 +82,6 @@ public class Game {
             CardParser cardParser = new CardParser(CONFIG_PATH);
 
             List<DevelopmentCard> developmentCards = cardParser.parseDevelopmentCards();
-
             Collections.shuffle(developmentCards);
             developmentCardDecks = new DevelopmentCardDecks(cardParser.parseDevelopmentCards());
 
@@ -107,8 +103,6 @@ public class Game {
             virtualView.exitGame();
         }
     }
-
-
 
     /**
      * This method is called when <code>playing</code> buys resources from <code>MarketBoard</code>.
@@ -153,7 +147,6 @@ public class Game {
             else throw new IllegalStateException("Wrong method");
         }
         return putResource(marble, depot, resource);
-
     }
 
     /**
@@ -168,11 +161,12 @@ public class Game {
     public boolean putResource(Marble marble, DepotName depot, Resource resource) {
         int listId;
         try{
-            if(!marble.equals(Marble.WHITE)&&!(marble.getResource().equals(resource))) throw new IllegalArgumentException("Wrong request");
-            if(marble.equals(Marble.WHITE)&&!playing.getWhiteMarbleAliases().contains(resource)) throw new IllegalArgumentException("White marble not associated to that resource");
+            if (marble != Marble.WHITE && marble.getResource() != resource)
+                throw new IllegalArgumentException("Wrong request");
+            if (marble == Marble.WHITE && !playing.getWhiteMarbleAliases().contains(resource))
+                throw new IllegalArgumentException("White marble is not associated to that resource");
             listId = findMarble(marble);
-        }catch (Exception e)
-        {
+        } catch (IllegalArgumentException | ElementNotFoundException e) {
             virtualView.sendError(e.getMessage());
             return false;
         }
@@ -193,11 +187,9 @@ public class Game {
             int listId = findMarble(marble);
             marbleBuffer.remove(listId);
             faithTrack.advanceAllBut(playing);
-        }catch (Exception e)
-        {
+        } catch (Exception e) {
             virtualView.sendError(e.getMessage());
         }
-
     }
 
     /**
@@ -227,22 +219,22 @@ public class Game {
             try {
                 playing.getPlayerBoard().getWareHouse().switchDepots(depot1, depot2);
             } catch (Exception e) {
-                virtualView.sendError(e.getMessage());
+                    virtualView.sendError(e.getMessage());
             }
         }
     }
 
-    public void moveDepots( DepotName depotFrom, DepotName depotTo){
+    public void moveDepots(DepotName depotFrom, DepotName depotTo){
 
-        if(!state.equals(State.INSERTING)) virtualView.sendError("Cannot move resources between depots now");
-            else{
-                try{
-                    playing.getPlayerBoard().getWareHouse().moveDepots(depotFrom, depotTo);
-                } catch (IllegalStateException | IllegalArgumentException e){
-                    virtualView.sendError(e.getMessage());
-                }
+        if(!state.equals(State.INSERTING))
+            virtualView.sendError("Cannot move resources between depots now");
+        else{
+            try{
+                playing.getPlayerBoard().getWareHouse().moveDepots(depotFrom, depotTo);
+            } catch (IllegalStateException | IllegalArgumentException e){
+                virtualView.sendError(e.getMessage());
+            }
         }
-
     }
 
     public void endTurn()
@@ -283,11 +275,7 @@ public class Game {
             }catch (IllegalStateException e){
                 virtualView.sendError(e.getMessage());
             }
-
         }
-
-
-
     }
 
     public void setLastRound(boolean lastRound){
