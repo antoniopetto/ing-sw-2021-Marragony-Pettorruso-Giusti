@@ -12,7 +12,7 @@ import java.io.ObjectOutputStream;
 import java.net.Socket;
 
 public class ServerHandler implements Runnable{
-    private Socket serverSocket;
+    private final Socket serverSocket;
     private ObjectInputStream input;
     private ObjectOutputStream output;
     private SimpleGame model;

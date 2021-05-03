@@ -2,6 +2,7 @@ package it.polimi.ingsw.client.view;
 
 import it.polimi.ingsw.client.simplemodel.SimplePlayer;
 import it.polimi.ingsw.server.model.shared.Marble;
+import it.polimi.ingsw.shared.messages.command.CommandMsg;
 
 public interface View {
 
@@ -18,5 +19,5 @@ public interface View {
     void startSetting();
     void showDevCardAllPlayers(int cardId);
     void addCardInSlot(SimplePlayer player, int cardId, int cardSlot);
-
+    CommandMsg selectMove();
 }

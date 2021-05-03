@@ -3,6 +3,7 @@ package it.polimi.ingsw.client.view.GUI;
 import it.polimi.ingsw.client.simplemodel.SimplePlayer;
 import it.polimi.ingsw.client.view.View;
 import it.polimi.ingsw.server.model.shared.Marble;
+import it.polimi.ingsw.shared.messages.command.CommandMsg;
 
 public class GUIView implements View {
     @Override
@@ -63,5 +64,10 @@ public class GUIView implements View {
     @Override
     public void addCardInSlot(SimplePlayer player, int cardId, int cardSlot) {
 
+    }
+
+    @Override
+    public CommandMsg selectMove(){
+        return null;
     }
 }

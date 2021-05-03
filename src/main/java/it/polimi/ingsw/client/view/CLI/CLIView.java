@@ -1,13 +1,20 @@
 package it.polimi.ingsw.client.view.CLI;
 
+import it.polimi.ingsw.client.simplemodel.SimpleCard;
+import it.polimi.ingsw.client.simplemodel.SimpleGame;
 import it.polimi.ingsw.client.simplemodel.SimplePlayer;
 import it.polimi.ingsw.client.view.View;
+import it.polimi.ingsw.server.model.playerboard.Resource;
 import it.polimi.ingsw.server.model.shared.Marble;
+import it.polimi.ingsw.shared.messages.command.BuyResourcesMsg;
+import it.polimi.ingsw.shared.messages.command.CommandMsg;
 
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class CLIView implements View {
     private CLISettingView settingView;
+    private SimpleGame game;
 
     public CLIView() {
         this.settingView = new CLISettingView(this);
@@ -80,5 +87,180 @@ public class CLIView implements View {
 
     }
 
+    @Override
+    public CommandMsg selectMove() {
+        System.out.println("Select your move:");
+        System.out.println("1) Buy resources");
+        System.out.println("2) Buy development card");
+        System.out.println("3) Activate production");
+        System.out.print(">");
+        Scanner input = new Scanner(System.in);
+        int choice = 0;
+        try{
+            choice=input.nextInt();
+            if(choice<1||choice>3) throw new InputMismatchException();
+        }catch (Exception e)
+        {
+            showMessage("Illegal input");
+            selectMove();
+        }
+        switch (choice){
+            case 1 -> {
+                return buyResources();
+            }
+            case 2-> {
+                return buyCard();
+            }
+            case 3->{
+                return activateProduction();
+            }
+            default ->{
+                return null;
+            }
+        }
+    }
 
+    private CommandMsg buyResources(){
+        showMarketBoard();
+        System.out.println("Want to buy a column/row?");
+        System.out.println("1) column");
+        System.out.println("2) row");
+        System.out.print(">");
+        Scanner input = new Scanner(System.in);
+        boolean valid = false;
+        int choice = 0;
+        while(!valid)
+        {
+            try {
+                choice=input.nextInt();
+                if(choice<1||choice>2) throw new InputMismatchException();
+                valid=true;
+            }catch (Exception e)
+            {
+                showMessage("Invalid input");
+            }
+        }
+        boolean isRow;
+        isRow= choice != 1;
+        System.out.println("Insert the number of the " + (isRow? "row:":"column:"));
+        System.out.print(">");
+        valid=false;
+        while (!valid)
+        {
+            try
+            {
+                choice=input.nextInt();
+                int bound = (isRow? 3:4);
+                if(choice<1||choice>bound) throw new InputMismatchException();
+                valid=true;
+            }catch (Exception e)
+            {
+                showMessage("Invalid input");
+            }
+        }
+        return new BuyResourcesMsg(choice-1, isRow);
+    }
+
+    private CommandMsg activateProduction(){
+        return null;
+    }
+
+    private CommandMsg buyCard(){
+        return null;
+    }
+    public void showCardLegend()
+    {
+
+        System.out.println("┌──────────┐");
+        System.out.println(Graphics.ANSI_RED+"              <----Card color and level");
+        System.out.println("              <----Card requirements");
+        System.out.println();
+        System.out.println("              <----Input resources");
+        System.out.println("              <----Output resources");
+        System.out.println("              <----Victory points"+Graphics.ANSI_RESET);
+        System.out.println("└──────────┘");
+
+    }
+    public void showCard(SimpleCard card)
+    {
+        System.out.println("┌──────────┐");
+        //Level and color
+        System.out.println("    "+Graphics.getLevel(card.getColor(), card.getLevel()));
+
+        //requirements
+        String column1Format = "%-2s";    // min 3 characters, left aligned
+        String column2Format = "%-2s";  // min 5 and max 8 characters, left aligned
+        String column3Format = "%2s";   // fixed size 6 characters, right aligned
+        String formatInfo = column1Format + " " + column2Format + " " + column3Format;
+        String[] req = new String[3];
+        int i = 0;
+        for(Resource res: card.getRequirement().keySet())
+        {
+            req[i] = card.getRequirement().get(res)+ " " + Graphics.getResource(res);
+            i++;
+            //System.out.println("│ "+card.getRequirement().get(res)+ " " + Graphics.getResource(res));
+        }
+        for(int j=0; j<3; j++)
+        {
+            if(req[j]==null)
+                req[j]="";
+        }
+        System.out.format(formatInfo, req[0], req[1], req[2]);
+        System.out.println();
+
+        //input
+        System.out.println(Graphics.getCardColor(card.getColor())+"Input:"+Graphics.ANSI_RESET);
+        //System.out.println();
+        String[] input= new String[2];
+        i=0;
+        for(Resource inRes : card.getInput().keySet())
+        {
+            input[i] = card.getInput().get(inRes)+ " " +Graphics.getResource(inRes);
+            i++;
+        }
+        if(input[1]==null) input[1]="";
+        System.out.format(formatInfo, input[0], "", input[1]);
+        System.out.println();
+
+        //output
+        System.out.println(Graphics.getCardColor(card.getColor())+"Output:"+Graphics.ANSI_RESET);
+        String[] output = new String[3];
+        i=0;
+        for(Resource outRes : card.getOutput().keySet())
+        {
+            output[i] = card.getOutput().get(outRes)+ " " +Graphics.getResource(outRes);
+            i++;
+        }
+        for(int j=0; j<3; j++)
+        {
+            if(output[j]==null)
+                output[j]="";
+        }
+
+        System.out.format(formatInfo, output[0], output[1], output[2]);
+        System.out.println();
+
+        //vicotry points
+        System.out.println("     "+Graphics.ANSI_YELLOW+card.getVictoryPoints()+Graphics.ANSI_RESET);
+        System.out.println("└──────────┘");
+    }
+
+    public void showMarketBoard()
+    {
+        Marble[][] marketBoard = game.getMarketBoard();
+        System.out.println("  1 2 3 4");
+        for(int i=0; i<3; i++)
+        {
+            System.out.print((i+1) + " ");
+            for (int j=0; j<4; j++)
+            {
+                System.out.print(Graphics.getMarble(marketBoard[i][j])+" ");
+            }
+            System.out.print("\n");
+        }
+    }
+
+    public void setGame(SimpleGame game) {
+        this.game = game;
+    }
 }

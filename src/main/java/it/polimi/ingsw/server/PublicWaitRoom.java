@@ -1,5 +1,6 @@
 package it.polimi.ingsw.server;
 
+import it.polimi.ingsw.shared.messages.view.NewTurnMessage;
 import it.polimi.ingsw.shared.messages.view.StartGameMsg;
 
 import java.io.IOException;
@@ -25,6 +26,7 @@ public class PublicWaitRoom {
             for (ClientHandler player : players.values())
             {
                 player.writeObject(new StartGameMsg());
+                //player.writeObject(new NewTurnMessage());
             }
             new Thread(new VirtualView(players)).start();
             players.clear();
