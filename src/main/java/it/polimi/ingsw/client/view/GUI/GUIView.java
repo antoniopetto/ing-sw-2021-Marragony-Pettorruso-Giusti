@@ -4,8 +4,16 @@ import it.polimi.ingsw.client.simplemodel.SimplePlayer;
 import it.polimi.ingsw.client.view.View;
 import it.polimi.ingsw.server.model.shared.Marble;
 import it.polimi.ingsw.shared.messages.command.CommandMsg;
+import javafx.application.Application;
 
 public class GUIView implements View {
+
+    private InitializeGame initializeGame;
+
+    public GUIView() {
+        this.initializeGame = new InitializeGame();
+    }
+
     @Override
     public void positionUpdate(SimplePlayer player) {
 
@@ -48,12 +56,11 @@ public class GUIView implements View {
 
     @Override
     public void startGame() {
-
     }
 
     @Override
     public void startSetting() {
-
+        Application.launch(initializeGame.getClass());
     }
 
     @Override
@@ -70,4 +77,5 @@ public class GUIView implements View {
     public CommandMsg selectMove(){
         return null;
     }
+
 }

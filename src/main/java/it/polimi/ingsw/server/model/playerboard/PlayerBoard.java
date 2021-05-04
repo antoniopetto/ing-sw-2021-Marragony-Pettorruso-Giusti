@@ -85,6 +85,7 @@ public class PlayerBoard {
                 try {
                     wareHouse.removeResource(resourceRequirement.getResource());
                     i++;
+
                 }
                 catch (IllegalArgumentException e) {
                     resourceInWareHouse = false;

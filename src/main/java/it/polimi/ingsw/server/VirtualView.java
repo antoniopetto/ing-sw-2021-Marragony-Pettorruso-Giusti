@@ -14,6 +14,7 @@ import it.polimi.ingsw.shared.messages.update.*;
 import it.polimi.ingsw.shared.messages.view.ErrorMsg;
 import it.polimi.ingsw.shared.messages.view.LeaderboardMsg;
 import it.polimi.ingsw.shared.messages.command.CommandMsg;
+import it.polimi.ingsw.shared.messages.view.NewTurnMessage;
 
 import java.io.IOException;
 import java.util.*;
@@ -30,6 +31,8 @@ public class VirtualView implements Runnable{
             game = Game.newSinglePlayerGame(players.keySet().iterator().next(), this);
         else
             game = Game.newRegularGame(new ArrayList<>(players.keySet()), this);
+
+        startPlay();
     }
 
     @Override
@@ -131,6 +134,16 @@ public class VirtualView implements Runnable{
         }
     }
 
+    //NEW
+    public void startPlay(){
+        try{
+            getPlayingHandler().writeObject(new NewTurnMessage());
+
+        }catch (IOException e){
+            System.out.println("Connection dropped");
+            exitGame();
+        }
+    }
 
     public void sendError (String text){
         try {

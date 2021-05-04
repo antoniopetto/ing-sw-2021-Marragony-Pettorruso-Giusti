@@ -59,6 +59,7 @@ public class Game {
         playing = players.get(0);
         faithTrack = new FaithTrack(this, virtualView, List.of(players.get(0), soloRival));
         initCards();
+
     }
 
     private Game(List<String> usernames, VirtualView virtualView) {

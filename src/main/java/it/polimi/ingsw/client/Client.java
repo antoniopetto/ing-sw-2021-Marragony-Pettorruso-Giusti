@@ -2,7 +2,9 @@ package it.polimi.ingsw.client;
 
 import it.polimi.ingsw.client.view.CLI.CLIView;
 import it.polimi.ingsw.client.view.GUI.GUIView;
+import it.polimi.ingsw.client.view.GUI.InitializeGame;
 import it.polimi.ingsw.client.view.View;
+import javafx.application.Application;
 
 import java.util.Scanner;
 
@@ -30,11 +32,14 @@ public class Client {
             }
         }
         View view;
-        if(choice==1)
+        if(choice==1) {
             view = new CLIView();
-        else
+        }
+        else {
             view = new GUIView();
+        }
         view.startSetting();
+
     }
 
 }

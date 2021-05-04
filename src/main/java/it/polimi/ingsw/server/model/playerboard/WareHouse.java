@@ -272,7 +272,7 @@ public class WareHouse {
                                 .get();//gestire warning
 
         this.depotList.get(dName.getPosition()).removeResource();
-
+        observer.warehouseUpdate();
     }
 
     /**
