@@ -39,7 +39,6 @@ public class Client {
             view = new GUIView();
         }
         view.startSetting();
-
     }
 
 }

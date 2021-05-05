@@ -126,6 +126,7 @@ public class VirtualView implements Runnable{
                 if(!map.getKey().equals(game.getPlaying().getUsername())){
                     ErrorMsg errorMsg = new ErrorMsg(text);
                     map.getValue().writeObject(errorMsg);
+                    map.getValue().writeObject(msg);
                 }
                 else map.getValue().writeObject(msg);
             } catch (IOException e) {

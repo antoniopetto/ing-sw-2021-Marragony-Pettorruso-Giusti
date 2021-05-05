@@ -6,12 +6,34 @@ import it.polimi.ingsw.server.model.shared.Marble;
 import it.polimi.ingsw.shared.messages.command.CommandMsg;
 import javafx.application.Application;
 
+import javax.swing.*;
+
 public class GUIView implements View {
 
     private InitializeGame initializeGame;
 
     public GUIView() {
         this.initializeGame = new InitializeGame();
+    }
+
+    private  static volatile String username = null;
+    private  static volatile int nPlayers = 0;
+    private static String Message = null;
+
+    public static String getMessage(){
+        /*
+        if(Message == null) return null;
+        String message = new String(Message);
+        Message = null;*/
+        return Message;
+    }
+
+    public static void setUser(String user){
+        username = user;
+    }
+
+    public static void setPlayers(int players){
+        nPlayers = players;
     }
 
     @Override
@@ -26,7 +48,7 @@ public class GUIView implements View {
 
     @Override
     public void showMessage(String text) {
-
+        Message = text;
     }
 
     @Override
@@ -46,21 +68,28 @@ public class GUIView implements View {
 
     @Override
     public String getUsername() {
-        return null;
+        while (username == null) {
+            Thread.onSpinWait();
+        }
+        return username;
     }
 
     @Override
     public int getNumber() {
-        return 0;
+        while (nPlayers == 0) {
+            Thread.onSpinWait();
+        }
+        return nPlayers;
     }
 
     @Override
     public void startGame() {
+        Message = "Game Started!";
     }
 
     @Override
     public void startSetting() {
-        Application.launch(initializeGame.getClass());
+        Application.launch(InitializeGame.class);
     }
 
     @Override
@@ -77,5 +106,6 @@ public class GUIView implements View {
     public CommandMsg selectMove(){
         return null;
     }
+
 
 }

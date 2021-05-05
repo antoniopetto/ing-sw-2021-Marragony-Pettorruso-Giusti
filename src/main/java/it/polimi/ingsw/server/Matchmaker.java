@@ -22,12 +22,15 @@ public class Matchmaker implements Runnable{
 
                 handler.writeObject(new UsernameRequestMsg());
                 String username = ((UsernameMsg) handler.readObject()).getUsername();
-                if (Server.activeUsernames.contains(username))
+                
+                if (Server.activeUsernames.contains(username)){
                     handler.writeObject(new ErrorMsg("This username is already in use. Try a new one"));
+                }
                 else if (!Pattern.matches(USERNAME_PATTERN, username))
                     handler.writeObject(new ErrorMsg("Illegal characters: username must be a 3-20 characters long string" +
                             "containing alphanumeric or special [._-] characters"));
                 else {
+                    handler.writeObject(new ErrorMsg("Username is OK!"));
                     this.username = username;
                     System.out.println("Client [" + handler.getIP() + "] chooses username " + username);
                     Server.activeUsernames.add(this.username);

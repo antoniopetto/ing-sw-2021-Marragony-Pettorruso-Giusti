@@ -1,5 +1,6 @@
 package it.polimi.ingsw.server;
 
+import it.polimi.ingsw.shared.messages.view.ErrorMsg;
 import it.polimi.ingsw.shared.messages.view.NewTurnMessage;
 import it.polimi.ingsw.shared.messages.view.StartGameMsg;
 
@@ -18,10 +19,14 @@ public class PublicWaitRoom {
 
     public synchronized void add(String username, ClientHandler handler) throws IOException{
 
-        if (players.size() < nPlayers)
+        if (players.size() < nPlayers){
+            //handler.writeObject(new ErrorMsg("Wait other Players"));
             players.put(username, handler);
 
+        }
+
         if (players.size() == nPlayers) {
+
             System.out.println(nPlayers +" players game starting");
             for (ClientHandler player : players.values())
             {

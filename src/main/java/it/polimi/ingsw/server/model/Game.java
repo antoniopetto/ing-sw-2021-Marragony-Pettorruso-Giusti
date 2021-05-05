@@ -260,6 +260,7 @@ public class Game {
                 state = State.PRETURN;
             if (singlePlayer)
                 soloRival.soloTurn(this);
+            virtualView.startPlay();
         }
     }
 
