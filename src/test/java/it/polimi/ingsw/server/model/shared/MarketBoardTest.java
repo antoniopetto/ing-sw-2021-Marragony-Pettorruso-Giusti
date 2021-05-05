@@ -1,5 +1,6 @@
 package it.polimi.ingsw.server.model.shared;
 
+import it.polimi.ingsw.server.VirtualView;
 import org.junit.Test;
 
 import static it.polimi.ingsw.server.model.shared.MarketBoard.COLUMNS;
@@ -8,7 +9,7 @@ import static org.junit.Assert.assertEquals;
 
 public class MarketBoardTest {
 
-    private final MarketBoard marketBoard = new MarketBoard();
+    private final MarketBoard marketBoard = new MarketBoard(null);
 
     @Test
     public void buyColumnTest() {

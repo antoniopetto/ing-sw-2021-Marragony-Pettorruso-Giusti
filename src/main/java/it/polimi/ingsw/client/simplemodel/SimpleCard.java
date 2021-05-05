@@ -15,6 +15,11 @@ public class SimpleCard {
     private Map<Resource, Integer> output;
     private int victoryPoints;
 
+    public SimpleCard(int id) {
+        this.id = id;
+        //TODO parsing
+    }
+
     public int getId() {
         return id;
     }

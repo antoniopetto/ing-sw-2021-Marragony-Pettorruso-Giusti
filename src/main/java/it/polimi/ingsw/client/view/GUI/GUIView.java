@@ -1,5 +1,6 @@
 package it.polimi.ingsw.client.view.GUI;
 
+import it.polimi.ingsw.client.simplemodel.SimpleGame;
 import it.polimi.ingsw.client.simplemodel.SimplePlayer;
 import it.polimi.ingsw.client.view.View;
 import it.polimi.ingsw.server.model.shared.Marble;
@@ -11,9 +12,15 @@ import javax.swing.*;
 public class GUIView implements View {
 
     private InitializeGame initializeGame;
+    private SimpleGame game;
 
     public GUIView() {
         this.initializeGame = new InitializeGame();
+        game = new SimpleGame(this);
+    }
+
+    public SimpleGame getGame() {
+        return game;
     }
 
     private  static volatile String username = null;

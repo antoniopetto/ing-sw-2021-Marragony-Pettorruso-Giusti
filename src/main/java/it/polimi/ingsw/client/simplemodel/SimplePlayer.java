@@ -3,6 +3,7 @@ package it.polimi.ingsw.client.simplemodel;
 import it.polimi.ingsw.client.view.View;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 public class SimplePlayer {
@@ -14,12 +15,22 @@ public class SimplePlayer {
     private boolean[] mydeckLeaderCards;
     private ArrayList<SimpleSlot> slots;
     private int leaderCardPresent;
+    private List<SimpleLeaderCard> leaderCards = new ArrayList<>();
 
-    public SimplePlayer() {
+    public SimplePlayer(String username, int[] cardIds) {
+        this.username=username;
         this.slots = new ArrayList<>();
+        this.position=0;
+        this.warehouse = new SimpleWarehouse();
+        for(int i=0; i<4; i++)
+        {
+            leaderCards.add(new SimpleLeaderCard(cardIds[i]));
+        }
         slots.add(new SimpleSlot());
         slots.add(new SimpleSlot());
         slots.add(new SimpleSlot());
+
+        //old
         leaderCardPresent = 2;
         mydeckLeaderCards = new boolean[leaderCardPresent];
     }
@@ -27,7 +38,6 @@ public class SimplePlayer {
     public void advance()
     {
         position++;
-        view.positionUpdate(this);
     }
 
     public String getUsername() {

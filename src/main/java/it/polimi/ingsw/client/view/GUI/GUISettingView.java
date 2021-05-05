@@ -41,7 +41,7 @@ public class GUISettingView implements Initializable {
         try{
             guiView = new GUIView();
             server = new Socket(serverIP, Integer.parseInt(port));
-            serverHandler = new ServerHandler(server, guiView);
+            serverHandler = new ServerHandler(server, guiView, guiView.getGame());
             new Thread(serverHandler).start();
 
             textError.setText("You are connected to the server!");

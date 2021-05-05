@@ -15,13 +15,13 @@ public class ServerHandler implements Runnable{
     private final Socket serverSocket;
     private ObjectInputStream input;
     private ObjectOutputStream output;
-    private SimpleGame model;
-    private View view;
+    private final SimpleGame model;
+    private final View view;
 
-    public ServerHandler(Socket socket, View view) {
+    public ServerHandler(Socket socket, View view, SimpleGame game) {
         serverSocket=socket;
         this.view=view;
-
+        model = game;
     }
 
     @Override

@@ -9,9 +9,9 @@ import java.util.Scanner;
 
 public class CLISettingView{
 
-    private View cliView;
+    private CLIView cliView;
 
-    public CLISettingView(View cliView) {
+    public CLISettingView(CLIView cliView) {
         this.cliView = cliView;
     }
 
@@ -32,7 +32,7 @@ public class CLISettingView{
             port = input.nextInt();
             try{
                 server = new Socket(ip, port);
-                serverHandler = new ServerHandler(server, cliView);
+                serverHandler = new ServerHandler(server, cliView, cliView.getGame());
                 System.out.println("You are connected to the server!");
                 new Thread(serverHandler).start();
                 reachable=true;

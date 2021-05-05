@@ -1,5 +1,6 @@
 package it.polimi.ingsw.server.model.cards;
 
+
 import java.util.*;
 
 
@@ -107,6 +108,21 @@ public class DevelopmentCardDecks {
                 }
             }
         }
+    }
+
+    public int[][][] getDecksStatus()
+    {
+        int index=0;
+        int[][][] result = new int[3][4][4];
+        for(int i = 0; i<3; i++)
+        {
+            for(int j=0; j<4; j++)
+            {
+                result[i][j] =decks.get(index).getDeckStatus();
+                index++;
+            }
+        }
+        return result;
     }
 
 

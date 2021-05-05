@@ -86,4 +86,14 @@ public class CardDeck {
     {
         return deck.size();
     }
+
+    public int[] getDeckStatus()
+    {
+        int[] result = new int[4];
+        for (int i = 0; i< 4; i++)
+        {
+            result[i] = deck.elementAt(i).getId();
+        }
+        return result;
+    }
 }

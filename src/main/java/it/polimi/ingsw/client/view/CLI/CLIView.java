@@ -16,8 +16,14 @@ public class CLIView implements View {
     private CLISettingView settingView;
     private SimpleGame game;
 
+
     public CLIView() {
         this.settingView = new CLISettingView(this);
+        game = new SimpleGame(this);
+    }
+
+    public SimpleGame getGame() {
+        return game;
     }
 
     @Override

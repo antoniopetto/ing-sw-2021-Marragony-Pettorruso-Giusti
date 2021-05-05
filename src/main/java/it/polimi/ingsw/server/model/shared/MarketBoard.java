@@ -1,5 +1,7 @@
 package it.polimi.ingsw.server.model.shared;
 
+import it.polimi.ingsw.server.VirtualView;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -18,12 +20,13 @@ public class MarketBoard {
     public static final int COLUMNS = 4;
     private final Marble[][] marbleGrid = new Marble[ROWS][COLUMNS];
     private Marble spareMarble;
+    private VirtualView observer;
 
     /**
      * Constructs the MarketBoard filling it with the 13 default game marbles.
      */
-    public MarketBoard() {
-
+    public MarketBoard(VirtualView view) {
+        this.observer=view;
         List<Marble> marbles = new ArrayList<>();
         marbles.addAll(Collections.nCopies(1, Marble.RED));
         marbles.addAll(Collections.nCopies(2, Marble.BLUE));
@@ -81,13 +84,14 @@ public class MarketBoard {
         }
 
         insertSpareInColumn(columnId);
+        observer.marketBoardUpdate();
         return column;
     }
 
     public List<Marble> buyRow(int rowId) {
-
         List<Marble> row = Arrays.asList(marbleGrid[rowId].clone());
         insertSpareInRow(rowId);
+        observer.marketBoardUpdate();
         return row;
     }
 

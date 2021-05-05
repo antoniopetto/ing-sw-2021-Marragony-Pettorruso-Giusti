@@ -1,9 +1,5 @@
 package it.polimi.ingsw.server;
 
-import it.polimi.ingsw.shared.messages.view.ErrorMsg;
-import it.polimi.ingsw.shared.messages.view.NewTurnMessage;
-import it.polimi.ingsw.shared.messages.view.StartGameMsg;
-
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
@@ -28,11 +24,6 @@ public class PublicWaitRoom {
         if (players.size() == nPlayers) {
 
             System.out.println(nPlayers +" players game starting");
-            for (ClientHandler player : players.values())
-            {
-                player.writeObject(new StartGameMsg());
-                //player.writeObject(new NewTurnMessage());
-            }
             new Thread(new VirtualView(players)).start();
             players.clear();
         }

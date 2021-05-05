@@ -1,5 +1,7 @@
 package it.polimi.ingsw.server.model;
 
+import it.polimi.ingsw.client.simplemodel.SimpleLeaderCard;
+import it.polimi.ingsw.client.simplemodel.SimplePlayer;
 import it.polimi.ingsw.server.VirtualView;
 import it.polimi.ingsw.server.model.cards.*;
 import it.polimi.ingsw.server.model.exceptions.ElementNotFoundException;
@@ -34,7 +36,7 @@ public class Game {
     private final VirtualView virtualView;
     private final SoloRival soloRival;
     private final List<Player> players = new ArrayList<>();
-    private final MarketBoard marketBoard = new MarketBoard();
+    private final MarketBoard marketBoard;
     private final FaithTrack faithTrack;
     private final List<Marble> marbleBuffer = new ArrayList<>();
     private DevelopmentCardDecks developmentCardDecks;
@@ -49,7 +51,7 @@ public class Game {
     }
 
     private Game(String username, VirtualView virtualView) {
-
+        this.marketBoard = new MarketBoard(virtualView);
         this.virtualView = virtualView;
         singlePlayer = true;
         soloRival = new SoloRival();
@@ -63,7 +65,7 @@ public class Game {
     }
 
     private Game(List<String> usernames, VirtualView virtualView) {
-
+        this.marketBoard = new MarketBoard(virtualView);
         this.virtualView = virtualView;
         singlePlayer = false;
         soloRival = null;
@@ -330,6 +332,24 @@ public class Game {
             developmentCardDecks.drawCard(cardColor, level);
         }
     }
+
+    public List<SimplePlayer> initializePlayers()
+    {
+        List<SimplePlayer> simplePlayers = new ArrayList<>();
+        for (Player p:players) {
+            int[] cardIds = new int[4];
+            int i = 0;
+            for (LeaderCard lCard:p.getLeaderCardList()) {
+                 cardIds[i] = lCard.getId();
+            }
+            SimplePlayer simplePlayer = new SimplePlayer(p.getUsername(), cardIds);
+            simplePlayers.add(simplePlayer);
+        }
+        return simplePlayers;
+
+    }
+
+
 
     public Player getPlaying() {
         return playing;

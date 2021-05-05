@@ -2,14 +2,10 @@ package it.polimi.ingsw.server;
 
 import it.polimi.ingsw.server.model.AbstractPlayer;
 import it.polimi.ingsw.server.model.Game;
-import it.polimi.ingsw.server.model.Player;
-import it.polimi.ingsw.server.model.cards.CardColor;
-import it.polimi.ingsw.server.model.cards.DevelopmentCard;
 import it.polimi.ingsw.server.model.playerboard.Depot;
 import it.polimi.ingsw.server.model.playerboard.DepotName;
 import it.polimi.ingsw.server.model.playerboard.Resource;
 import it.polimi.ingsw.server.model.shared.Marble;
-import it.polimi.ingsw.shared.messages.update.*;
 import it.polimi.ingsw.shared.messages.update.*;
 import it.polimi.ingsw.shared.messages.view.ErrorMsg;
 import it.polimi.ingsw.shared.messages.view.LeaderboardMsg;
@@ -32,7 +28,7 @@ public class VirtualView implements Runnable{
         else
             game = Game.newRegularGame(new ArrayList<>(players.keySet()), this);
 
-        startPlay();
+        initGame();
     }
 
     @Override
@@ -50,15 +46,8 @@ public class VirtualView implements Runnable{
     }
 
     public void faithTrackUpdate(AbstractPlayer player, boolean allBut){
-        TrackUpdateMsg msg = new TrackUpdateMsg(player, allBut);
-        for (ClientHandler handler: players.values()) {
-            try {
-                handler.writeObject(msg);
-            } catch (IOException e) {
-                e.printStackTrace();
-                exitGame();
-            }
-        }
+        UpdateMsg msg = new TrackUpdateMsg(player, allBut);
+        sendAll(msg);
     }
 
     public void vaticanReportUpdate(){}
@@ -72,7 +61,13 @@ public class VirtualView implements Runnable{
             warehouse.put(depot.getName(), resources);
         }
 
-        WarehouseUpdateMsg msg = new WarehouseUpdateMsg(warehouse, getPlayingUsername());
+        UpdateMsg msg = new WarehouseUpdateMsg(warehouse, getPlayingUsername());
+        sendAll(msg);
+
+    }
+
+    private void sendAll(UpdateMsg msg)
+    {
         players.values().forEach(c -> {
             try {
                 c.writeObject(msg);
@@ -81,6 +76,18 @@ public class VirtualView implements Runnable{
                 exitGame();
             }
         });
+    }
+    public void marketBoardUpdate(){
+        UpdateMsg msg = new MarketBoardUpdate(game.getMarketBoard().getMarbleGrid(), game.getMarketBoard().getSpareMarble());
+        sendAll(msg);
+    }
+
+    private void initGame()
+    {
+        UpdateMsg msg = new GameInitMsg(game.initializePlayers(), game.getDevelopmentCardDecks().getDecksStatus());
+        sendAll(msg);
+        marketBoardUpdate();
+
 
     }
 
