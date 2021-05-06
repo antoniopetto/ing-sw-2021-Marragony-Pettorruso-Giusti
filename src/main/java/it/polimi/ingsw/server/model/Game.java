@@ -262,7 +262,7 @@ public class Game {
                 state = State.PRETURN;
             if (singlePlayer)
                 soloRival.soloTurn(this);
-            virtualView.startPlay();
+            virtualView.startPlay(); //not ok when players select leaderCard (INITIALIZING STATE)
         }
     }
 
@@ -323,7 +323,13 @@ public class Game {
 
         if(state != State.INSERTING) virtualView.sendError("Cannot Insert DevCard now");
         else {
-            DevelopmentCard developmentCard = developmentCardDecks.readTop(cardColor, level);
+            DevelopmentCard developmentCard = null;
+            try {
+                developmentCard = developmentCardDecks.readTop(cardColor, level);
+            }catch (EmptyStackException e) {
+                virtualView.sendError("There are no more DevelopmentCard with that color and level");
+            }
+
             try{
                 getPlaying().addCard(developmentCard,slotId);
             }catch (IllegalArgumentException e){

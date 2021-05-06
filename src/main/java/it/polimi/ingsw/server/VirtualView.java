@@ -2,6 +2,7 @@ package it.polimi.ingsw.server;
 
 import it.polimi.ingsw.server.model.AbstractPlayer;
 import it.polimi.ingsw.server.model.Game;
+import it.polimi.ingsw.server.model.cards.CardColor;
 import it.polimi.ingsw.server.model.playerboard.Depot;
 import it.polimi.ingsw.server.model.playerboard.DepotName;
 import it.polimi.ingsw.server.model.playerboard.Resource;
@@ -77,8 +78,14 @@ public class VirtualView implements Runnable{
             }
         });
     }
+    
     public void marketBoardUpdate(){
         UpdateMsg msg = new MarketBoardUpdate(game.getMarketBoard().getMarbleGrid(), game.getMarketBoard().getSpareMarble());
+        sendAll(msg);
+    }
+
+    public void devcarddecksUpdate(int level, int cardColor,  int cardTop){
+        UpdateMsg msg = new CardDecksUpdateMsg(level,cardColor,cardTop);
         sendAll(msg);
     }
 
@@ -87,8 +94,6 @@ public class VirtualView implements Runnable{
         UpdateMsg msg = new GameInitMsg(game.initializePlayers(), game.getDevelopmentCardDecks().getDecksStatus());
         sendAll(msg);
         marketBoardUpdate();
-
-
     }
 
     public void createBuffer(List<Marble> marbleBuffer){

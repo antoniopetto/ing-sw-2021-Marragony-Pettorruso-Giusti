@@ -17,9 +17,18 @@ public class SimpleLeaderCard {
     private int victoryPoints;
     private Map<Map<CardColor, Integer>, Integer> cardRequirement;
     private Map<Resource, Integer> resourceRequirement;
+    private boolean active = false;
 
     public SimpleLeaderCard(int id) {
         this.id=id;
         //parsing from the config file
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
     }
 }

@@ -35,6 +35,10 @@ public class SimpleGame {
         }
     }
 
+    public void updateDevCardDecks(int level, int cardColor, int deleteCard){
+        devCardDecks[level][cardColor][deleteCard] = null;
+    }
+
     public void setMarbleBuffer(List<Marble> marbles)
     {
         marbleBuffer=marbles;

@@ -1,6 +1,8 @@
 package it.polimi.ingsw.server.model.cards;
 
 
+import it.polimi.ingsw.server.VirtualView;
+
 import java.util.*;
 
 
@@ -10,6 +12,7 @@ import java.util.*;
  */
 public class DevelopmentCardDecks {
     private final List<CardDeck> decks=new ArrayList<>();
+    private VirtualView observer;
 
     /**
      * The constructor creates 12 decks with all the possible combinations of colors and levels and add each card
@@ -46,6 +49,9 @@ public class DevelopmentCardDecks {
         if(level<1||level>3) throw new IllegalArgumentException("Level value not valid");
         for (CardDeck deck : decks) {
             if (deck.properties(color, level)) {
+                    if(deck.size()>0){
+                        observer.devcarddecksUpdate(level-1,color.ordinal(),deck.size()-1 );
+                    }
                     return deck.pop();
             }
         }
