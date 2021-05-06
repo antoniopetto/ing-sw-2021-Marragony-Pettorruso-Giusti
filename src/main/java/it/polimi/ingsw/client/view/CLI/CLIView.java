@@ -2,19 +2,27 @@ package it.polimi.ingsw.client.view.CLI;
 
 import it.polimi.ingsw.client.simplemodel.SimpleCard;
 import it.polimi.ingsw.client.simplemodel.SimpleGame;
+import it.polimi.ingsw.client.simplemodel.SimpleLeaderCard;
 import it.polimi.ingsw.client.simplemodel.SimplePlayer;
 import it.polimi.ingsw.client.view.View;
+import it.polimi.ingsw.server.model.cards.CardColor;
 import it.polimi.ingsw.server.model.playerboard.Resource;
 import it.polimi.ingsw.server.model.shared.Marble;
 import it.polimi.ingsw.shared.messages.command.BuyResourcesMsg;
 import it.polimi.ingsw.shared.messages.command.CommandMsg;
 
 import java.util.InputMismatchException;
+import java.util.Map;
 import java.util.Scanner;
 
 public class CLIView implements View {
     private CLISettingView settingView;
     private SimpleGame game;
+
+    private String column1Format = "%-2s";    // min 3 characters, left aligned
+    private String column2Format = "%-2s";  // min 5 and max 8 characters, left aligned
+    private String column3Format = "%2s";   // fixed size 6 characters, right aligned
+    private String formatInfo = column1Format + " " + column2Format + " " + column3Format;
 
 
     public CLIView() {
@@ -192,28 +200,8 @@ public class CLIView implements View {
         System.out.println("┌──────────┐");
         //Level and color
         System.out.println("    "+Graphics.getLevel(card.getColor(), card.getLevel()));
-
-        //requirements
-        String column1Format = "%-2s";    // min 3 characters, left aligned
-        String column2Format = "%-2s";  // min 5 and max 8 characters, left aligned
-        String column3Format = "%2s";   // fixed size 6 characters, right aligned
-        String formatInfo = column1Format + " " + column2Format + " " + column3Format;
-        String[] req = new String[3];
-        int i = 0;
-        for(Resource res: card.getRequirement().keySet())
-        {
-            req[i] = card.getRequirement().get(res)+ " " + Graphics.getResource(res);
-            i++;
-            //System.out.println("│ "+card.getRequirement().get(res)+ " " + Graphics.getResource(res));
-        }
-        for(int j=0; j<3; j++)
-        {
-            if(req[j]==null)
-                req[j]="";
-        }
-        System.out.format(formatInfo, req[0], req[1], req[2]);
-        System.out.println();
-
+        int i;
+        showRequirements(card.getRequirement());
         //input
         System.out.println(Graphics.getCardColor(card.getColor())+"Input:"+Graphics.ANSI_RESET);
         //System.out.println();
@@ -251,6 +239,25 @@ public class CLIView implements View {
         System.out.println("└──────────┘");
     }
 
+    private void showRequirements(Map<Resource, Integer> requirements)
+    {
+        String[] req = new String[3];
+        int i = 0;
+        for(Resource res: requirements.keySet())
+        {
+            req[i] = requirements.get(res)+ " " + Graphics.getResource(res);
+            i++;
+            //System.out.println("│ "+card.getRequirement().get(res)+ " " + Graphics.getResource(res));
+        }
+        for(int j=0; j<3; j++)
+        {
+            if(req[j]==null)
+                req[j]="";
+        }
+        System.out.format(formatInfo, req[0], req[1], req[2]);
+        System.out.println();
+    }
+
     public void showMarketBoard()
     {
         Marble[][] marketBoard = game.getMarketBoard();
@@ -264,6 +271,36 @@ public class CLIView implements View {
             }
             System.out.print("\n");
         }
+    }
+
+    public void showLeaderCard(SimpleLeaderCard card)
+    {
+        System.out.println("┌──────────┐");
+        if(card.getResourceRequirement()!=null)
+            showRequirements(card.getResourceRequirement());
+        if(!card.isLevelRequired()){ //if the integer represents the number of cards
+            String [] req = new String[2];
+            int i =0;
+            for (CardColor color :card.getCardRequirement().keySet()) {
+                req[i] = Graphics.getCardColor(color)+card.getCardRequirement().get(color) +"■"+Graphics.ANSI_RESET;
+                i++;
+            }
+            if(req[1]==null) req[1]="";
+            System.out.format(formatInfo, req[0], "", req[1]);
+            System.out.println();
+        }
+        else //if the integer represents the level of the card
+        {
+            for (CardColor color:card.getCardRequirement().keySet()) {
+                System.out.println(Graphics.getCardColor(color)+" |"+card.getCardRequirement().get(color)+"|"+Graphics.ANSI_RESET);
+            }
+        }
+        System.out.println(Graphics.getPower(card.getPower(), card.getPowerResource()));
+
+
+        //vicotry points
+        System.out.println("     "+Graphics.ANSI_YELLOW+card.getVictoryPoints()+Graphics.ANSI_RESET);
+        System.out.println("└──────────┘");
     }
 
     public void setGame(SimpleGame game) {

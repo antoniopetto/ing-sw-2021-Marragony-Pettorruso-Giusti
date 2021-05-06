@@ -1,5 +1,6 @@
 package it.polimi.ingsw.client.view.CLI;
 
+import it.polimi.ingsw.client.simplemodel.SimpleLeaderCard;
 import it.polimi.ingsw.server.model.cards.CardColor;
 import it.polimi.ingsw.server.model.playerboard.Resource;
 import it.polimi.ingsw.server.model.shared.Marble;
@@ -89,5 +90,24 @@ public class Graphics {
 
         }
         return result;
+    }
+
+    public static String getPower(SimpleLeaderCard.Power power, Resource res)
+    {
+        switch (power){
+            case DISCOUNT -> {
+                return "-1 "+ getResource(res);
+            }
+            case EXTRADEPOT -> {
+                return "Extra depot: " + getResource(res);
+            }
+            case WHITEMARBLE -> {
+                return ANSI_WHITE+"   ● = "+getResource(res);
+            }
+            case EXTRAPRODUCTION -> {
+                return "1"+getResource(res)+" } "+"1 ? 1"+getResource(Resource.FAITH);
+            }
+        }
+        return null;
     }
 }
