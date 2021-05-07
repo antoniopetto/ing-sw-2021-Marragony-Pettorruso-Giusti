@@ -1,5 +1,6 @@
 package it.polimi.ingsw.client.view;
 
+import it.polimi.ingsw.client.simplemodel.SimpleLeaderCard;
 import it.polimi.ingsw.client.simplemodel.SimplePlayer;
 import it.polimi.ingsw.server.model.shared.Marble;
 import it.polimi.ingsw.messages.command.CommandMsg;
@@ -21,4 +22,5 @@ public interface View {
     void showDevCardAllPlayers(int cardId);
     void addCardInSlot(SimplePlayer player, int cardId, int cardSlot);
     CommandMsg selectMove();
+    void showLeaderCard(SimpleLeaderCard card);
 }

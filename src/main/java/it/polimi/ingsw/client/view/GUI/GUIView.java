@@ -1,6 +1,7 @@
 package it.polimi.ingsw.client.view.GUI;
 
 import it.polimi.ingsw.client.simplemodel.SimpleGame;
+import it.polimi.ingsw.client.simplemodel.SimpleLeaderCard;
 import it.polimi.ingsw.client.simplemodel.SimplePlayer;
 import it.polimi.ingsw.client.view.View;
 import it.polimi.ingsw.server.model.shared.Marble;
@@ -115,6 +116,11 @@ public class GUIView implements View {
     @Override
     public CommandMsg selectMove(){
         return null;
+    }
+
+    @Override
+    public void showLeaderCard(SimpleLeaderCard card) {
+
     }
 
 

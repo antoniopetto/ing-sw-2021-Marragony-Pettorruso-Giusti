@@ -95,9 +95,9 @@ public class Game {
         playing = players.get(0);
         faithTrack = new FaithTrack(this, virtualView, players);
 
-        if (players.get(2) != null)
+        if (players.size()>2)
             faithTrack.advance(players.get(2));
-        if (players.get(3) != null)
+        if (players.size()>3)
             faithTrack.advance(players.get(3));
 
         initCards();
@@ -418,9 +418,16 @@ public class Game {
         for (Player p:players) {
             int[] cardIds = new int[4];
             int i = 0;
+            System.out.println("Leader card ids:");
             for (LeaderCard lCard:p.getLeaderCardList()) {
+                System.out.println(lCard.getId());
                  cardIds[i] = lCard.getId();
+                 i++;
             }
+            System.out.println("Card ids client side: ");
+            for(int j=0; j<4; j++)
+                System.out.println(cardIds[j]);
+            System.out.println("______________");
             SimplePlayer simplePlayer = new SimplePlayer(p.getUsername(), cardIds);
             simplePlayers.add(simplePlayer);
         }

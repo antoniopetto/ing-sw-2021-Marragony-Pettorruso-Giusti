@@ -1,9 +1,10 @@
 package it.polimi.ingsw.client.simplemodel;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SimpleSlot {
+public class SimpleSlot implements Serializable {
 
     private List<SimpleDevelopmentCard> cards;
 

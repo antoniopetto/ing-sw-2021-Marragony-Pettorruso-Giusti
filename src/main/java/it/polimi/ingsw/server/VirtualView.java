@@ -3,6 +3,7 @@ package it.polimi.ingsw.server;
 import it.polimi.ingsw.server.model.AbstractPlayer;
 import it.polimi.ingsw.server.model.Game;
 import it.polimi.ingsw.server.model.cards.CardColor;
+import it.polimi.ingsw.server.model.cards.LeaderCard;
 import it.polimi.ingsw.server.model.playerboard.Depot;
 import it.polimi.ingsw.server.model.playerboard.DepotName;
 import it.polimi.ingsw.server.model.playerboard.Resource;
@@ -29,6 +30,10 @@ public class VirtualView implements Runnable{
         else
             game = Game.newRegularGame(new ArrayList<>(players.keySet()), this);
 
+        //debug
+        for (LeaderCard card: game.getPlaying().getLeaderCardList() ) {
+            System.out.println(card.getId());
+        }
         initGame();
     }
 
