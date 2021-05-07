@@ -5,10 +5,10 @@ import it.polimi.ingsw.client.simplemodel.SimpleGame;
 import it.polimi.ingsw.client.simplemodel.SimpleLeaderCard;
 import it.polimi.ingsw.client.simplemodel.SimplePlayer;
 import it.polimi.ingsw.client.view.View;
+import it.polimi.ingsw.messages.command.BuyResourcesMsg;
 import it.polimi.ingsw.server.model.cards.CardColor;
 import it.polimi.ingsw.server.model.playerboard.Resource;
 import it.polimi.ingsw.server.model.shared.Marble;
-import it.polimi.ingsw.messages.command.BuyResourcesMsg;
 import it.polimi.ingsw.messages.command.CommandMsg;
 
 import java.util.InputMismatchException;
@@ -82,7 +82,7 @@ public class CLIView implements View {
 
     @Override
     public void startGame() {
-        System.out.println(Graphics.ANSI_GREEN+Graphics.TITLE);
+        System.out.println(Graphics.ANSI_GREEN+Graphics.TITLE+Graphics.ANSI_RESET);
         System.out.println("Game started");
     }
 
@@ -278,10 +278,26 @@ public class CLIView implements View {
         System.out.println("┌──────────┐");
         if(card.getResourceRequirements()!=null)
             showRequirements(card.getResourceRequirements());
-
-        //TODO change if(!card.isLevelRequired()){ //if the integer represents the number of cards
-
-        /*    String [] req = new String[2];
+        String[] req = new String[2];
+        int i =0;
+        if(card.getCardRequirements()!=null) {
+            for (CardColor color : card.getCardRequirements().keySet()) {
+                for (Integer level : card.getCardRequirements().get(color).keySet()) {
+                    if (level == null) {
+                        req[i] = Graphics.getCardColor(color) + card.getCardRequirements().get(color).get(level) + "■" + Graphics.ANSI_RESET;
+                        i++;
+                    } else {
+                        req[i] = Graphics.getCardColor(color) + " |" + level + "|" + Graphics.ANSI_RESET;
+                    }
+                }
+            }
+            if (req[1] == null) req[1] = "";
+            System.out.format(formatInfo, req[0], "", req[1]);
+            System.out.println();
+        }
+        /*
+        if(!card.isLevelRequired()){ //if the integer represents the number of cards
+            String [] req = new String[2];
             int i =0;
             for (CardColor color :card.getCardRequirements().keySet()) {
                 req[i] = Graphics.getCardColor(color)+card.getCardRequirements().get(color) +"■"+Graphics.ANSI_RESET;
@@ -297,12 +313,11 @@ public class CLIView implements View {
                 System.out.println(Graphics.getCardColor(color)+" |"+card.getCardRequirements().get(color)+"|"+Graphics.ANSI_RESET);
             }
         }
+         */
         System.out.println(Graphics.getAbility(card.getAbility(), card.getAbilityResource()));
 
 
-         */
-
-        //victory points
+        //vicotry points
         System.out.println("     "+Graphics.ANSI_YELLOW+card.getVictoryPoints()+Graphics.ANSI_RESET);
         System.out.println("└──────────┘");
     }

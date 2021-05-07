@@ -3,10 +3,11 @@ package it.polimi.ingsw.client.simplemodel;
 import it.polimi.ingsw.server.model.playerboard.DepotName;
 import it.polimi.ingsw.server.model.playerboard.Resource;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
-public class SimpleWarehouse {
+public class SimpleWarehouse implements Serializable {
     private Map<DepotName, Map<Resource, Integer>> depots;
 
 
