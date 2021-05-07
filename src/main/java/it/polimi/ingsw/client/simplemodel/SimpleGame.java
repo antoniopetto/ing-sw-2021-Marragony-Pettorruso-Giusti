@@ -4,14 +4,13 @@ import it.polimi.ingsw.client.view.View;
 import it.polimi.ingsw.server.model.shared.Marble;
 
 import java.util.List;
-import java.util.Map;
 
 public class SimpleGame {
     private List<SimplePlayer> players; //the player in first position is the owner
     private List<Marble> marbleBuffer;
     private Marble[][] marketBoard = new Marble[3][4];
     private Marble spareMarble;
-    private SimpleCard[][][] devCardDecks = new SimpleCard[3][4][4];
+    private SimpleDevelopmentCard[][][] devCardDecks = new SimpleDevelopmentCard[3][4][4];
     private View view;
 
     public SimpleGame(View view) {
@@ -19,17 +18,13 @@ public class SimpleGame {
 
     }
 
-    public void startGame(List<SimplePlayer> players, int[][][] cardIds)
-    {
+    public void startGame(List<SimplePlayer> players, int[][][] cardIds) {
         view.startGame();
         this.players = players;
-        for(int i=0; i<3; i++)
-        {
-            for(int j=0; j<4; j++)
-            {
-                for(int k=0; k<4; k++)
-                {
-                    devCardDecks[i][j][k]= new SimpleCard(cardIds[i][j][k]);
+        for(int i=0; i<3; i++) {
+            for(int j=0; j<4; j++) {
+                for(int k=0; k<4; k++) {
+                    devCardDecks[i][j][k]= SimpleDevelopmentCard.parse(cardIds[i][j][k]);
                 }
             }
         }

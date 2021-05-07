@@ -2,7 +2,7 @@ package it.polimi.ingsw.client.view;
 
 import it.polimi.ingsw.client.simplemodel.SimplePlayer;
 import it.polimi.ingsw.server.model.shared.Marble;
-import it.polimi.ingsw.shared.messages.command.CommandMsg;
+import it.polimi.ingsw.messages.command.CommandMsg;
 
 public interface View {
 

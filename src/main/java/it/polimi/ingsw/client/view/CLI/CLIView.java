@@ -1,6 +1,6 @@
 package it.polimi.ingsw.client.view.CLI;
 
-import it.polimi.ingsw.client.simplemodel.SimpleCard;
+import it.polimi.ingsw.client.simplemodel.SimpleDevelopmentCard;
 import it.polimi.ingsw.client.simplemodel.SimpleGame;
 import it.polimi.ingsw.client.simplemodel.SimpleLeaderCard;
 import it.polimi.ingsw.client.simplemodel.SimplePlayer;
@@ -8,8 +8,8 @@ import it.polimi.ingsw.client.view.View;
 import it.polimi.ingsw.server.model.cards.CardColor;
 import it.polimi.ingsw.server.model.playerboard.Resource;
 import it.polimi.ingsw.server.model.shared.Marble;
-import it.polimi.ingsw.shared.messages.command.BuyResourcesMsg;
-import it.polimi.ingsw.shared.messages.command.CommandMsg;
+import it.polimi.ingsw.messages.command.BuyResourcesMsg;
+import it.polimi.ingsw.messages.command.CommandMsg;
 
 import java.util.InputMismatchException;
 import java.util.Map;
@@ -195,13 +195,13 @@ public class CLIView implements View {
         System.out.println("└──────────┘");
 
     }
-    public void showCard(SimpleCard card)
+    public void showCard(SimpleDevelopmentCard card)
     {
         System.out.println("┌──────────┐");
         //Level and color
         System.out.println("    "+Graphics.getLevel(card.getColor(), card.getLevel()));
         int i;
-        showRequirements(card.getRequirement());
+        showRequirements(card.getRequirements());
         //input
         System.out.println(Graphics.getCardColor(card.getColor())+"Input:"+Graphics.ANSI_RESET);
         //System.out.println();
@@ -276,13 +276,13 @@ public class CLIView implements View {
     public void showLeaderCard(SimpleLeaderCard card)
     {
         System.out.println("┌──────────┐");
-        if(card.getResourceRequirement()!=null)
-            showRequirements(card.getResourceRequirement());
+        if(card.getResourceRequirements()!=null)
+            showRequirements(card.getResourceRequirements());
         if(!card.isLevelRequired()){ //if the integer represents the number of cards
             String [] req = new String[2];
             int i =0;
-            for (CardColor color :card.getCardRequirement().keySet()) {
-                req[i] = Graphics.getCardColor(color)+card.getCardRequirement().get(color) +"■"+Graphics.ANSI_RESET;
+            for (CardColor color :card.getCardRequirements().keySet()) {
+                req[i] = Graphics.getCardColor(color)+card.getCardRequirements().get(color) +"■"+Graphics.ANSI_RESET;
                 i++;
             }
             if(req[1]==null) req[1]="";
@@ -291,11 +291,11 @@ public class CLIView implements View {
         }
         else //if the integer represents the level of the card
         {
-            for (CardColor color:card.getCardRequirement().keySet()) {
-                System.out.println(Graphics.getCardColor(color)+" |"+card.getCardRequirement().get(color)+"|"+Graphics.ANSI_RESET);
+            for (CardColor color:card.getCardRequirements().keySet()) {
+                System.out.println(Graphics.getCardColor(color)+" |"+card.getCardRequirements().get(color)+"|"+Graphics.ANSI_RESET);
             }
         }
-        System.out.println(Graphics.getPower(card.getPower(), card.getPowerResource()));
+        System.out.println(Graphics.getAbility(card.getAbility(), card.getAbilityResource()));
 
 
         //vicotry points

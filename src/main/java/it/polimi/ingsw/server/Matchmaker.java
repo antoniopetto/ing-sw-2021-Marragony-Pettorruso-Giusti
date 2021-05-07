@@ -1,6 +1,6 @@
 package it.polimi.ingsw.server;
 
-import it.polimi.ingsw.shared.messages.view.*;
+import it.polimi.ingsw.messages.view.*;
 
 import java.io.IOException;
 import java.net.Socket;

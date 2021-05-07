@@ -27,7 +27,6 @@ public class Game {
         POSTTURN
     }
 
-    private static final String CONFIG_PATH = "resources/config.xml";
     private State state = State.INITIALIZING;
     private boolean lastRound = false;
     private final boolean singlePlayer;
@@ -41,11 +40,24 @@ public class Game {
     private final List<Marble> marbleBuffer = new ArrayList<>();
     private DevelopmentCardDecks developmentCardDecks;
 
-
+    /**
+     * Singleplayer static game constructor.
+     *
+     * @param username      The username of the only player
+     * @param virtualView   The <code>VirtualView</code> used to communicate with the client
+     * @return              The newly created game
+     */
     public static Game newSinglePlayerGame(String username, VirtualView virtualView) {
         return new Game(username, virtualView);
     }
 
+    /**
+     * Static regular game constructor.
+     *
+     * @param usernames     List of the players' usernames
+     * @param virtualView   The <code>VirtualView</code> used to communicate with the clients
+     * @return              The newly created game
+     */
     public static Game newRegularGame(List<String> usernames, VirtualView virtualView) {
         return new Game(usernames, virtualView);
     }
@@ -82,12 +94,18 @@ public class Game {
         Collections.shuffle(players);
         playing = players.get(0);
         faithTrack = new FaithTrack(this, virtualView, players);
+
+        if (players.get(2) != null)
+            faithTrack.advance(players.get(2));
+        if (players.get(3) != null)
+            faithTrack.advance(players.get(3));
+
         initCards();
     }
 
     private void initCards(){
         try {
-            CardParser cardParser = new CardParser(CONFIG_PATH);
+            CardParser cardParser = new CardParser();
 
             List<DevelopmentCard> developmentCards = cardParser.parseDevelopmentCards();
             Collections.shuffle(developmentCards);
@@ -118,6 +136,7 @@ public class Game {
      * it's red the position of <code>playing</code> advances, if it white it checks if there are
      * <code>whiteMarbleAliases</code> in <code>playing</code> and in that case it's added in <code>marbleBuffer</code>.
      * Marbles of all the other colors are added in <code>marbleBuffer</code>.
+     *
      * @param idLine is the id of the line to buy in the <code>MarketBoard</code>
      * @param isRow is a boolean which tells whether the line is a row or a column.
      */
@@ -128,7 +147,7 @@ public class Game {
             return;
         }
 
-        List<Marble> marbles = playing.buyResources(this, idLine, isRow);
+        List<Marble> marbles = playing.buyResources(marketBoard, idLine, isRow);
         for (Marble marble : marbles) {
             if(marble.equals(Marble.RED)) {
                 faithTrack.advance(playing);
@@ -151,8 +170,9 @@ public class Game {
 
     /**
      * This method tries to put the equivalent resource of a marble in a specific depot in the warehouse.
-     * @param marble is the marble selected by the player
-     * @param depot is the depot where the player tries to add the resource
+     *
+     * @param marble    is the marble selected by the player
+     * @param depot     is the depot where the player tries to add the resource
      */
     public void putResource(Marble marble, DepotName depot){
 
@@ -166,6 +186,7 @@ public class Game {
      * This method tries to put a resource in a depot. The method is used when a player has a white marble and more
      * than one leader card with the white marble ability played, so it has to chose a resource from
      * <code>whiteMarbleAliases</code>.
+     *
      * @param marble is the marble selected from <code>marbleBuffer</code>.
      * @param depot is the depot where the player tries to put the resource.
      * @param resource is the resource to put in the depot.
@@ -196,8 +217,10 @@ public class Game {
     }
 
     /**
-     * This method is called when it is not possible to add the equivalent resource of a marble in the warehouse
-     * so the marble is discarded.
+     * Command to discard marble.
+     * This method is called when the playing user chooses not to store the equivalent resource of a marble
+     * in the warehouse, so the marble is discarded, and all the other players advance.
+     *
      * @param marble is the marble to discard
      */
     public void discardMarble(Marble marble)  {
@@ -222,6 +245,12 @@ public class Game {
         }
     }
 
+    /**
+     * Switches the content of two depots of the playing user.
+     *
+     * @param depot1    The first depot to switch
+     * @param depot2    The second depot to switch
+     */
     public void switchDepots(DepotName depot1, DepotName depot2) {
 
         if(state != State.INSERTING){
@@ -235,6 +264,14 @@ public class Game {
         }
     }
 
+    /**
+     * Command to move the content of a depot in another one.
+     * In the warehouse of the playing user, moves the resources of <code>depotFrom</code> into <code>depotTo</code>.
+     * Stops if the destination reaches full capacity, and requires the depots to have matching resources.
+     *
+     * @param depotFrom     The source depot
+     * @param depotTo       The destination depot
+     */
     public void moveDepots(DepotName depotFrom, DepotName depotTo) {
 
         if (!state.equals(State.INSERTING)){
@@ -248,8 +285,15 @@ public class Game {
         }
     }
 
+    /**
+     * Command called by a player when, during PostTurn, decides to end his turn.
+     * It can also be called during initialization, only if the active player has the right number of leader cards (2).
+     * The method also ends the game if we are in the last round and the last player has called the method.
+     * In singleplayer mode, when the player ends his turn this method triggers the SoloRival turn.
+     */
     public void endTurn(){
-        if (state != State.POSTTURN && state != State.INITIALIZING){
+        if (state != State.POSTTURN && state != State.INITIALIZING ||
+                (state == State.INITIALIZING && playing.getLeaderCardList().size() != 2)){
             virtualView.sendError("Illegal state command");
             return;
         }
@@ -266,6 +310,14 @@ public class Game {
         }
     }
 
+    /**
+     * Activates the production power of a set of cards/extra production powers in the active player playerboard.
+     * The player can call this command only if he is in PreTurn, and the command does something only if the entire
+     * set of selected production powers is affordable by the player.
+     *
+     * @param selectedCardIds       Set of ids of the development cards the player wants to activate
+     * @param selectedExtraPowers   Map from index of <code>extraProductionPower</code> to desired concrete i/o resources
+     */
     public void activateProduction(Set<Integer> selectedCardIds, Map<Integer, ProductionPower> selectedExtraPowers){
 
         if (!state.equals(State.PRETURN)) {
@@ -282,6 +334,12 @@ public class Game {
         state = State.POSTTURN;
     }
 
+    /**
+     * Command that activates a <code>LeaderCard</code> of the playing user.
+     * It only works if the card requirements are satisfied and if the game is in the correct state.
+     *
+     * @param cardId        The id of the card to activate
+     */
     public void playLeaderCard(int cardId){
 
         if(state != State.PRETURN && state != State.POSTTURN){
@@ -297,6 +355,11 @@ public class Game {
         }
     }
 
+    /**
+     * Command that discards a <code>LeaderCard</code>, hence making all the other player advance.
+     *
+     * @param cardId        The id of the card to discard
+     */
     public void discardLeaderCard(int cardId) {
 
         if (state != State.PRETURN && state != State.POSTTURN){
@@ -315,10 +378,20 @@ public class Game {
         }
     }
 
+    /**
+     * Activates the last round of the game
+     */
     public void setLastRound() {
         this.lastRound = true;
     }
 
+    /**
+     * Command that makes the current player buy a card and place it in the selected slot in the <code>PlayerBoard</code>
+     *
+     * @param cardColor     The color of the selected <code>CardDeck</code>
+     * @param level         The level of the selected <code>CardDeck</code>
+     * @param slotId        The id of the destination slot
+     */
     public void buyAndAddCardInSlot(CardColor cardColor, int level, int slotId){
 
         if(state != State.INSERTING) virtualView.sendError("Cannot Insert DevCard now");
@@ -339,8 +412,8 @@ public class Game {
         }
     }
 
-    public List<SimplePlayer> initializePlayers()
-    {
+
+    public List<SimplePlayer> initializePlayers() {
         List<SimplePlayer> simplePlayers = new ArrayList<>();
         for (Player p:players) {
             int[] cardIds = new int[4];
@@ -352,17 +425,10 @@ public class Game {
             simplePlayers.add(simplePlayer);
         }
         return simplePlayers;
-
     }
-
-
 
     public Player getPlaying() {
         return playing;
-    }
-
-    public List<Marble> getMarbleBuffer() {
-        return marbleBuffer;
     }
 
     public Optional<SoloRival> getSoloRival() {

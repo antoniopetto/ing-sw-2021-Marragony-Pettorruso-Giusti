@@ -13,12 +13,23 @@ public class CardDiscountAbility implements SpecialAbility{
     private final Resource resource;
     private final int amount;
 
+    /**
+     * Creates an ability with a discount of 1 for a selected <code>resource</code>
+     *
+     *  @param resource         The selected resource
+     */
     public CardDiscountAbility(Resource resource){
         this(resource, 1);
     }
 
-    public CardDiscountAbility(Resource resource, int amount)
-    {
+    /**
+     * Creates an ability with a discount of <code>amount</code> for a selected <code>resource</code>
+     *
+     * @param resource      The selected resource
+     * @param amount        The entity of the discount
+     */
+    public CardDiscountAbility(Resource resource, int amount) {
+
         if(amount<1) throw new IllegalArgumentException();
         if(resource.equals(Resource.FAITH)) throw new IllegalArgumentException();
         this.resource = resource;

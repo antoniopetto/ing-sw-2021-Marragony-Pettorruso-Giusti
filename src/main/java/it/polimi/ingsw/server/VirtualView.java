@@ -7,11 +7,11 @@ import it.polimi.ingsw.server.model.playerboard.Depot;
 import it.polimi.ingsw.server.model.playerboard.DepotName;
 import it.polimi.ingsw.server.model.playerboard.Resource;
 import it.polimi.ingsw.server.model.shared.Marble;
-import it.polimi.ingsw.shared.messages.update.*;
-import it.polimi.ingsw.shared.messages.view.ErrorMsg;
-import it.polimi.ingsw.shared.messages.view.LeaderboardMsg;
-import it.polimi.ingsw.shared.messages.command.CommandMsg;
-import it.polimi.ingsw.shared.messages.view.NewTurnMessage;
+import it.polimi.ingsw.messages.update.*;
+import it.polimi.ingsw.messages.view.ErrorMsg;
+import it.polimi.ingsw.messages.view.LeaderboardMsg;
+import it.polimi.ingsw.messages.command.CommandMsg;
+import it.polimi.ingsw.messages.view.NewTurnMessage;
 
 import java.io.IOException;
 import java.util.*;

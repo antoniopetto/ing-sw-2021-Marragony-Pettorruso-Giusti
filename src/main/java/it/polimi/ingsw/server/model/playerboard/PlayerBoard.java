@@ -85,7 +85,6 @@ public class PlayerBoard {
                 try {
                     wareHouse.removeResource(resourceRequirement.getResource());
                     i++;
-
                 }
                 catch (IllegalArgumentException e) {
                     resourceInWareHouse = false;
@@ -152,7 +151,7 @@ public class PlayerBoard {
         return true;
     }
 
-    public ProductionPower getTotalProductionPower(Set<Integer> selectedCardIds, Map<Integer, ProductionPower> selectedExtraPowers){
+    private ProductionPower getTotalProductionPower(Set<Integer> selectedCardIds, Map<Integer, ProductionPower> selectedExtraPowers){
         Map<Resource, Integer> totalInput = new EnumMap<>(Resource.class);
         Map<Resource, Integer> totalOutput = new EnumMap<>(Resource.class);
         ProductionPower power;

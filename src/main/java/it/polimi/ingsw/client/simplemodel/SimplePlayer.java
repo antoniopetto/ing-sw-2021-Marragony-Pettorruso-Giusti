@@ -23,7 +23,7 @@ public class SimplePlayer {
         this.warehouse = new SimpleWarehouse();
         for(int i=0; i<4; i++)
         {
-            leaderCards.add(new SimpleLeaderCard(cardIds[i]));
+            leaderCards.add(SimpleLeaderCard.parse(i));
         }
         slots.add(new SimpleSlot());
         slots.add(new SimpleSlot());
@@ -31,8 +31,8 @@ public class SimplePlayer {
 
 
         chooseLCards = new ArrayList<>();
-        chooseLCards.add(new SimpleLeaderCard(1));//change
-        chooseLCards.add(new SimpleLeaderCard(1));
+        chooseLCards.add(SimpleLeaderCard.parse(1));//change
+        chooseLCards.add(SimpleLeaderCard.parse(1));
     }
 
     public void advance()

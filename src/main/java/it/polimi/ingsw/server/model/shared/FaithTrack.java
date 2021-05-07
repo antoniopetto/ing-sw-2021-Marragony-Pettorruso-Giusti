@@ -15,6 +15,13 @@ public class FaithTrack {
     private int vaticanReportCounter = 0;
     private final VirtualView virtualView;
 
+    /**
+     * <code>FaithTrack</code> constructor.
+     *
+     * @param game          Game reference
+     * @param virtualView   Virtual view reference, used to send updates
+     * @param players       List of player to place in the track
+     */
     public FaithTrack(Game game, VirtualView virtualView, List<? extends AbstractPlayer> players){
 
         this.game = game;
@@ -56,6 +63,11 @@ public class FaithTrack {
         }
     }
 
+    /**
+     * Activates a vatican report.
+     * Checks what's the next vatican report due in the <code>FaithTrack</code> and activates the tiles of the player
+     * inside the correct vatican report section.
+     */
     public void vaticanReport(){
         vaticanReportCounter++;
         for (AbstractPlayer p : players){
@@ -65,6 +77,12 @@ public class FaithTrack {
         virtualView.vaticanReportUpdate();
     }
 
+    /**
+     * Checks is a player is strictly first.
+     *
+     * @param player        The queried <code>Player</code>
+     * @return              True if <code>player</code> is strictly first, false otherwise
+     */
     public boolean isAbsoluteFirst(AbstractPlayer player){
 
         for(AbstractPlayer p : players)
@@ -73,6 +91,12 @@ public class FaithTrack {
         return true;
     }
 
+    /**
+     * Makes the requested player advance of one position in the <code>FaithTrack</code>.
+     * Triggers <code>Game.setLastRoung()</code> if the player has reached the end of the track
+     *
+     * @param player        The player that is advancing
+     */
     public void advance(AbstractPlayer player){
 
         Position currentPos = player.getPosition();
@@ -89,6 +113,12 @@ public class FaithTrack {
         virtualView.faithTrackUpdate(player, false);
     }
 
+    /**
+     * Makes all the player but one advance of one position in the <code>FaithTrack</code>.
+     * Triggers <code>Game.setLastRoung()</code> if one player has reached the end of the track
+     *
+     * @param excludedPlayer        The player that is not advancing
+     */
     public void advanceAllBut(AbstractPlayer excludedPlayer){
 
         boolean isVaticanReportDue = false;
