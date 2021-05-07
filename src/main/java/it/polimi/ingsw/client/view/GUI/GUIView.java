@@ -52,8 +52,13 @@ public class GUIView implements View {
     }
 
     @Override
-    public void showMessage(String text) {
+    public void showErrorMessage(String text) {
         Message = text;
+    }
+
+    @Override
+    public void showConfirmMessage(String text) {
+
     }
 
     @Override

@@ -9,7 +9,8 @@ public interface View {
 
     void positionUpdate(SimplePlayer player);
     void bufferUpdate(Marble marble);
-    void showMessage(String text);
+    void showErrorMessage(String text);
+    void showConfirmMessage(String text);
     void faceUpLeaderCard(SimplePlayer player, int cardId);
     void discardLeaderCard(SimplePlayer player, int cardId);
     void showLeaderCardAllPlayers(int cardId);

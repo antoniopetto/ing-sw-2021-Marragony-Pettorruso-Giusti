@@ -30,7 +30,7 @@ public class Matchmaker implements Runnable{
                     handler.writeObject(new ErrorMsg("Illegal characters: username must be a 3-20 characters long string" +
                             "containing alphanumeric or special [._-] characters"));
                 else {
-                    handler.writeObject(new ErrorMsg(" "));
+                    handler.writeObject(new ConfirmMsg("The username '" + username + "' is valid! "));
                     this.username = username;
                     System.out.println("Client [" + handler.getIP() + "] chooses username " + username);
                     Server.activeUsernames.add(this.username);

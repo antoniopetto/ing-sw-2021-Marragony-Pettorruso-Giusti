@@ -45,8 +45,14 @@ public class CLIView implements View {
     }
 
     @Override
-    public void showMessage(String text) {
+    public void showErrorMessage(String text) {
         System.out.println(Graphics.ANSI_RED+"ATTENTION!");
+        System.out.println(text);
+    }
+
+    @Override
+    public void showConfirmMessage(String text) {
+        System.out.println(Graphics.ANSI_GREEN+"OK!");
         System.out.println(text);
     }
 
@@ -115,7 +121,7 @@ public class CLIView implements View {
             if(choice<1||choice>3) throw new InputMismatchException();
         }catch (Exception e)
         {
-            showMessage("Illegal input");
+            showErrorMessage("Illegal input");
             selectMove();
         }
         switch (choice){
@@ -151,7 +157,7 @@ public class CLIView implements View {
                 valid=true;
             }catch (Exception e)
             {
-                showMessage("Invalid input");
+                showErrorMessage("Invalid input");
             }
         }
         boolean isRow;
@@ -169,7 +175,7 @@ public class CLIView implements View {
                 valid=true;
             }catch (Exception e)
             {
-                showMessage("Invalid input");
+                showErrorMessage("Invalid input");
             }
         }
         return new BuyResourcesMsg(choice-1, isRow);
