@@ -18,7 +18,7 @@ public class SimpleGame {
 
     }
 
-    public void startGame(List<SimplePlayer> players, int[][][] cardIds) {
+    public void startGame(List<SimplePlayer> players, int[][][] cardIds, String handlerUsername) {
         view.startGame();
         this.players = players;
         for(int i=0; i<3; i++) {
@@ -28,8 +28,16 @@ public class SimpleGame {
                 }
             }
         }
+        /*
         for (SimpleLeaderCard card: players.get(0).getLeaderCards() ) {
             view.showLeaderCard(card);
+        }*/
+        for(SimplePlayer simplePlayer : players) {
+            if (simplePlayer.getUsername().equals(handlerUsername)) {
+                for (SimpleLeaderCard card : simplePlayer.getLeaderCards()) {
+                    view.showLeaderCard(card);
+                }
+            }
         }
     }
 

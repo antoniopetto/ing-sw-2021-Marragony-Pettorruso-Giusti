@@ -1,5 +1,6 @@
 package it.polimi.ingsw.server;
 
+import it.polimi.ingsw.client.simplemodel.SimplePlayer;
 import it.polimi.ingsw.server.model.AbstractPlayer;
 import it.polimi.ingsw.server.model.Game;
 import it.polimi.ingsw.server.model.cards.CardColor;
@@ -96,8 +97,16 @@ public class VirtualView implements Runnable{
 
     private void initGame()
     {
-        UpdateMsg msg = new GameInitMsg(game.initializePlayers(), game.getDevelopmentCardDecks().getDecksStatus());
-        sendAll(msg);
+        List<SimplePlayer> simplePlayerList = game.initializePlayers();
+        int[][][] cardIDs = game.getDevelopmentCardDecks().getDecksStatus();
+        for (Map.Entry<String, ClientHandler> map: players.entrySet()) {
+            try {
+                UpdateMsg msg = new GameInitMsg(simplePlayerList, cardIDs, map.getKey());
+                 map.getValue().writeObject(msg);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
         marketBoardUpdate();
     }
 
@@ -138,6 +147,7 @@ public class VirtualView implements Runnable{
     }
 
     private void messageFilter(UpdateMsg msg, String text){
+
         for (Map.Entry<String, ClientHandler> map: players.entrySet()) {
             try {
                 if(!map.getKey().equals(game.getPlaying().getUsername())){
