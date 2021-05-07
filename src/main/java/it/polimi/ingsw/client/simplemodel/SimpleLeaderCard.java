@@ -26,8 +26,6 @@ public class SimpleLeaderCard {
     private final int victoryPoints;
     private final Map<Resource, Integer> resourceRequirements;
     private final Map<CardColor, Map<Integer, Integer>> cardRequirements;
-    //private Map<CardColor, Integer> cardRequirements;
-    private boolean levelRequired;
 
     private Map<Resource, Integer> resourceRequirement;
     private boolean active = false;
@@ -46,10 +44,6 @@ public class SimpleLeaderCard {
         this.resourceRequirements = resourceRequirements;
         this.ability = ability;
         this.abilityResource = abilityResource;
-    }
-
-    public void setLevelRequired(boolean levelRequired) {
-        this.levelRequired = levelRequired;
     }
 
     public void setResourceRequirement(Map<Resource, Integer> resourceRequirement) {
@@ -82,9 +76,5 @@ public class SimpleLeaderCard {
 
     public Map<Resource, Integer> getResourceRequirements() {
         return resourceRequirement;
-    }
-
-    public boolean isLevelRequired() {
-        return levelRequired;
     }
 }

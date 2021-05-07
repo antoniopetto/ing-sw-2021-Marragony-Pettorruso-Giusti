@@ -169,8 +169,11 @@ public class SimpleCardParser {
             .forEach(i -> {
                 if(resultMap.containsKey(i.getColor()))
                     resultMap.get(i.getColor()).put(i.getLevel(), i.getQuantity());
-                else
-                    resultMap.put(i.getColor(), Map.of(i.getLevel(), i.getQuantity()));
+                else {
+                    Map<Integer, Integer> newValue = new HashMap<>();
+                    newValue.put(i.getLevel(), i.getQuantity());
+                    resultMap.put(i.getColor(), newValue);
+                }
             });
         return resultMap;
     }

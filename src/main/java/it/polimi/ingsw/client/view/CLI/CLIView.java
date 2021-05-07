@@ -278,8 +278,10 @@ public class CLIView implements View {
         System.out.println("┌──────────┐");
         if(card.getResourceRequirements()!=null)
             showRequirements(card.getResourceRequirements());
-        if(!card.isLevelRequired()){ //if the integer represents the number of cards
-            String [] req = new String[2];
+
+        //TODO change if(!card.isLevelRequired()){ //if the integer represents the number of cards
+
+        /*    String [] req = new String[2];
             int i =0;
             for (CardColor color :card.getCardRequirements().keySet()) {
                 req[i] = Graphics.getCardColor(color)+card.getCardRequirements().get(color) +"■"+Graphics.ANSI_RESET;
@@ -298,7 +300,9 @@ public class CLIView implements View {
         System.out.println(Graphics.getAbility(card.getAbility(), card.getAbilityResource()));
 
 
-        //vicotry points
+         */
+
+        //victory points
         System.out.println("     "+Graphics.ANSI_YELLOW+card.getVictoryPoints()+Graphics.ANSI_RESET);
         System.out.println("└──────────┘");
     }
