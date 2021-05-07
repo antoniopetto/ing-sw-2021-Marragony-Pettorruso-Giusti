@@ -7,13 +7,13 @@ import java.util.Map;
 
 public class SimpleDevelopmentCard {
 
-    private final int id;
-    private final int victoryPoints;
-    private final Map<Resource, Integer> requirements;
-    private final CardColor color;
-    private final int level;
-    private final Map<Resource, Integer> input;
-    private final Map<Resource, Integer> output;
+    private  int id;
+    private  int victoryPoints;
+    private  Map<Resource, Integer> requirements;
+    private  CardColor color;
+    private  int level;
+    private  Map<Resource, Integer> input;
+    private  Map<Resource, Integer> output;
 
     private static final SimpleCardParser simpleCardParser = SimpleCardParser.getInstance();
 
@@ -60,4 +60,31 @@ public class SimpleDevelopmentCard {
         return victoryPoints;
     }
 
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public void setVictoryPoints(int victoryPoints) {
+        this.victoryPoints = victoryPoints;
+    }
+
+    public void setRequirements(Map<Resource, Integer> requirements) {
+        this.requirements = requirements;
+    }
+
+    public void setColor(CardColor color) {
+        this.color = color;
+    }
+
+    public void setLevel(int level) {
+        this.level = level;
+    }
+
+    public void setInput(Map<Resource, Integer> input) {
+        this.input = input;
+    }
+
+    public void setOutput(Map<Resource, Integer> output) {
+        this.output = output;
+    }
 }

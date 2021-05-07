@@ -3,6 +3,7 @@ package it.polimi.ingsw.client.simplemodel;
 import it.polimi.ingsw.server.model.cards.CardColor;
 import it.polimi.ingsw.server.model.playerboard.Resource;
 
+import java.io.Serializable;
 import java.util.Map;
 
 /**
@@ -12,7 +13,7 @@ import java.util.Map;
  * <code>levelRequired</code> tells if the integer in the map <code>cardRequirement</code> is the level of the card or the
  * number of cards required.
  */
-public class SimpleLeaderCard {
+public class SimpleLeaderCard implements Serializable {
     public enum Ability {
         CARDDISCOUNT,
         WHITEMARBLE,

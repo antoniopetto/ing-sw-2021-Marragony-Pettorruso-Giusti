@@ -28,6 +28,9 @@ public class SimpleGame {
                 }
             }
         }
+        for (SimpleLeaderCard card: players.get(0).getLeaderCards() ) {
+            view.showLeaderCard(card);
+        }
     }
 
     public void updateDevCardDecks(int level, int cardColor, int deleteCard){

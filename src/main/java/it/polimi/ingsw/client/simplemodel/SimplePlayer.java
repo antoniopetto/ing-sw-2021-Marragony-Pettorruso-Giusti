@@ -2,11 +2,12 @@ package it.polimi.ingsw.client.simplemodel;
 
 import it.polimi.ingsw.client.view.View;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public class SimplePlayer {
+public class SimplePlayer implements Serializable {
     private String username;
     private int position;
     private View view;
@@ -23,7 +24,8 @@ public class SimplePlayer {
         this.warehouse = new SimpleWarehouse();
         for(int i=0; i<4; i++)
         {
-            leaderCards.add(SimpleLeaderCard.parse(i));
+            System.out.println("Card ids: "+ cardIds[i]);
+            leaderCards.add(SimpleLeaderCard.parse(cardIds[i]));
         }
         slots.add(new SimpleSlot());
         slots.add(new SimpleSlot());
@@ -31,8 +33,8 @@ public class SimplePlayer {
 
 
         chooseLCards = new ArrayList<>();
-        chooseLCards.add(SimpleLeaderCard.parse(1));//change
-        chooseLCards.add(SimpleLeaderCard.parse(1));
+        //chooseLCards.add(SimpleLeaderCard.parse(1));//change
+        //chooseLCards.add(SimpleLeaderCard.parse(1));
     }
 
     public void advance()
@@ -76,5 +78,9 @@ public class SimplePlayer {
         }
         view.discardLeaderCard(this, cardId);
         view.showDevCardAllPlayers(cardId);
+    }
+
+    public List<SimpleLeaderCard> getLeaderCards() {
+        return leaderCards;
     }
 }
