@@ -144,9 +144,13 @@ public class SimpleCardParser {
             abilityResource = res.get();
             ability = SimpleLeaderCard.Ability.WHITEMARBLE;
         }
-        res = getChildEnum(Resource.class, "extraProductionAbility", leaderCardNode);
-        if(res.isPresent()) {
-            abilityResource = res.get();
+
+        Optional<Node> powerNode = getChildNode("extraProductionAbility", leaderCardNode);
+        if(powerNode.isPresent()) {
+            abilityResource = getChildNode("input", powerNode.get())
+                .flatMap(i -> getChildNode("resQty", i))
+                .map(this::parseResQty).map(ResQty::getResource)
+                .orElseThrow(() -> new IllegalConfigXMLException("Illegal special production power"));
             ability = SimpleLeaderCard.Ability.EXTRAPRODUCTION;
         }
 
