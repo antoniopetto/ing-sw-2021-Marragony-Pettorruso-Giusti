@@ -28,11 +28,11 @@ public class GUIView implements View {
     private static String Message = null;
 
     public static String getMessage(){
-        /*
+
         if(Message == null) return null;
         String message = new String(Message);
-        Message = null;*/
-        return Message;
+        Message = null;
+        return message;
     }
 
     public static void setUser(String user){

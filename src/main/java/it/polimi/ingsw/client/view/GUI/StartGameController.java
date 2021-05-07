@@ -9,7 +9,7 @@ import javafx.scene.control.TextField;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-public class GUIStartGame implements Initializable {
+public class StartGameController implements Initializable {
 
     @FXML
     private TextField textUsername;
@@ -24,10 +24,17 @@ public class GUIStartGame implements Initializable {
     public void setUsername(ActionEvent actionEvent){
         actionEvent.consume();
         GUIView.setUser(textUsername.getText());
-        while(GUIView.getMessage() == null || GUIView.getMessage().equals("")){
+        while(GUIView.getMessage() == null){
             usernameLabel.setText("");
         }
-        usernameLabel.setText(GUIView.getMessage());
+        if(GUIView.getMessage().equals(" "))
+        {
+            usernameLabel.setText(GUIView.getMessage());
+
+        }
+        else{
+
+        }
 
     }
 

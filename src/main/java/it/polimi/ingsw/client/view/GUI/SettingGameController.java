@@ -19,7 +19,7 @@ import java.net.Socket;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-public class GUISettingView implements Initializable {
+public class SettingGameController implements Initializable {
 
     private GUIView guiView;
     private Socket server;
