@@ -13,50 +13,43 @@ import java.util.Map;
  * number of cards required.
  */
 public class SimpleLeaderCard {
-    public enum Power {
-        DISCOUNT,
+    public enum Ability {
+        CARDDISCOUNT,
         WHITEMARBLE,
         EXTRADEPOT,
         EXTRAPRODUCTION
     }
-    private Resource powerResource;
-    private int id;
-    private int victoryPoints;
-    private Map<CardColor, Integer> cardRequirement;
+
+    private final Ability ability;
+    private final Resource abilityResource;
+    private final int id;
+    private final int victoryPoints;
+    private final Map<Resource, Integer> resourceRequirements;
+    private final Map<CardColor, Map<Integer, Integer>> cardRequirements;
+    //private Map<CardColor, Integer> cardRequirements;
     private boolean levelRequired;
-    private Power power;
 
     private Map<Resource, Integer> resourceRequirement;
     private boolean active = false;
 
+    static final private SimpleCardParser simpleCardParser = SimpleCardParser.getInstance();
 
-    public SimpleLeaderCard(int id) {
-        this.id=id;
-        //parsing from the config file
+    static public SimpleLeaderCard parse(int id) {
+        return simpleCardParser.getSimpleLeaderCard(id);
     }
 
-    public void setPowerResource(Resource powerResource) {
-        this.powerResource = powerResource;
-    }
-
-    public void setId(int id) {
+    public SimpleLeaderCard(int id, int victoryPoints, Map<CardColor, Map<Integer, Integer>> cardRequirements,
+                            Map<Resource, Integer> resourceRequirements, Ability ability, Resource abilityResource){
         this.id = id;
-    }
-
-    public void setVictoryPoints(int victoryPoints) {
         this.victoryPoints = victoryPoints;
-    }
-
-    public void setCardRequirement(Map<CardColor, Integer> cardRequirement) {
-        this.cardRequirement = cardRequirement;
+        this.cardRequirements = cardRequirements;
+        this.resourceRequirements = resourceRequirements;
+        this.ability = ability;
+        this.abilityResource = abilityResource;
     }
 
     public void setLevelRequired(boolean levelRequired) {
         this.levelRequired = levelRequired;
-    }
-
-    public void setPower(Power power) {
-        this.power = power;
     }
 
     public void setResourceRequirement(Map<Resource, Integer> resourceRequirement) {
@@ -67,27 +60,27 @@ public class SimpleLeaderCard {
         this.active = active;
     }
 
-    public Resource getPowerResource() {
-        return powerResource;
+    public Resource getAbilityResource() {
+        return abilityResource;
     }
 
     public int getId() {
         return id;
     }
 
-    public Power getPower() {
-        return power;
+    public Ability getAbility() {
+        return ability;
     }
 
     public int getVictoryPoints() {
         return victoryPoints;
     }
 
-    public Map<CardColor, Integer> getCardRequirement() {
-        return cardRequirement;
+    public Map<CardColor, Map<Integer, Integer>> getCardRequirements() {
+        return cardRequirements;
     }
 
-    public Map<Resource, Integer> getResourceRequirement() {
+    public Map<Resource, Integer> getResourceRequirements() {
         return resourceRequirement;
     }
 

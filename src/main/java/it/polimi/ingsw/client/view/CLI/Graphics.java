@@ -92,10 +92,10 @@ public class Graphics {
         return result;
     }
 
-    public static String getPower(SimpleLeaderCard.Power power, Resource res)
+    public static String getAbility(SimpleLeaderCard.Ability ability, Resource res)
     {
-        switch (power){
-            case DISCOUNT -> {
+        switch (ability){
+            case CARDDISCOUNT -> {
                 return "-1 "+ getResource(res);
             }
             case EXTRADEPOT -> {

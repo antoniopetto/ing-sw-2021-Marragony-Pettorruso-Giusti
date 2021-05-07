@@ -19,6 +19,19 @@ public abstract class Card {
     private final int id;
 
     /**
+     * Card constructor.
+     *
+     * @param id                The card's id
+     * @param victoryPoints     The card's victoryPoints
+     */
+    public Card(int id, int victoryPoints) {
+        this.id = id;
+        if(victoryPoints < 0)
+            throw  new IllegalArgumentException();
+        this.victoryPoints = victoryPoints;
+    }
+
+    /**
      * General parametric method that finds, in a <code>Collection</code> of <code>Identifiable</code> objects, the element with the desired <code>id</code>.
      *
      * @param id                            The <code>id</code> of the element to search.
@@ -36,17 +49,16 @@ public abstract class Card {
         return result;
     }
 
+    /**
+     * Utility method to check if a list of cards contain duplicates ids.
+     *
+     * @param cards     The list of cards
+     * @return          <code>true</code> if there are duplicates <code>false</code> otherwise
+     */
     public static boolean containsDuplicates(List<? extends Card> cards){
 
         Set<Integer> uniqueIds = cards.stream().map(Card::getId).collect(Collectors.toSet());
         return (uniqueIds.size() != cards.size());
-    }
-
-    public Card(int id, int victoryPoints) {
-        this.id = id;
-        if(victoryPoints < 0)
-            throw  new IllegalArgumentException();
-        this.victoryPoints = victoryPoints;
     }
 
     public int getVictoryPoints()

@@ -3,8 +3,8 @@ package it.polimi.ingsw.client;
 
 import it.polimi.ingsw.client.simplemodel.SimpleGame;
 import it.polimi.ingsw.client.view.View;
-import it.polimi.ingsw.shared.messages.update.UpdateMsg;
-import it.polimi.ingsw.shared.messages.view.ViewMsg;
+import it.polimi.ingsw.messages.update.UpdateMsg;
+import it.polimi.ingsw.messages.view.ViewMsg;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;

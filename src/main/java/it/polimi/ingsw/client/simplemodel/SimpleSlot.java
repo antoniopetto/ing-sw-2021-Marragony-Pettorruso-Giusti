@@ -5,13 +5,13 @@ import java.util.List;
 
 public class SimpleSlot {
 
-    private List<SimpleCard> cards;
+    private List<SimpleDevelopmentCard> cards;
 
     public SimpleSlot() {
         cards = new ArrayList<>();
     }
 
     public void addCard(int cardId){
-        cards.add(new SimpleCard(cardId));
+        cards.add(SimpleDevelopmentCard.parse(cardId));
     }
 }

@@ -4,10 +4,8 @@ import it.polimi.ingsw.client.simplemodel.SimpleGame;
 import it.polimi.ingsw.client.simplemodel.SimplePlayer;
 import it.polimi.ingsw.client.view.View;
 import it.polimi.ingsw.server.model.shared.Marble;
-import it.polimi.ingsw.shared.messages.command.CommandMsg;
+import it.polimi.ingsw.messages.command.CommandMsg;
 import javafx.application.Application;
-
-import javax.swing.*;
 
 public class GUIView implements View {
 
