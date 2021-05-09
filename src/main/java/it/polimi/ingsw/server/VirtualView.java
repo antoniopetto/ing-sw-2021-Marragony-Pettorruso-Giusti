@@ -1,9 +1,9 @@
 package it.polimi.ingsw.server;
 
 import it.polimi.ingsw.client.simplemodel.SimplePlayer;
+import it.polimi.ingsw.messages.update.InitChoicesMsg;
 import it.polimi.ingsw.server.model.AbstractPlayer;
 import it.polimi.ingsw.server.model.Game;
-import it.polimi.ingsw.server.model.cards.CardColor;
 import it.polimi.ingsw.server.model.cards.LeaderCard;
 import it.polimi.ingsw.server.model.playerboard.Depot;
 import it.polimi.ingsw.server.model.playerboard.DepotName;
@@ -52,49 +52,6 @@ public class VirtualView implements Runnable{
         }
     }
 
-    public void faithTrackUpdate(AbstractPlayer player, boolean allBut){
-        UpdateMsg msg = new TrackUpdateMsg(player, allBut);
-        sendAll(msg);
-    }
-
-    public void vaticanReportUpdate(){}
-
-    public void warehouseUpdate()
-    {
-        Map<DepotName, Map<Resource, Integer>> warehouse = new HashMap<>();
-        for (Depot depot: game.getPlaying().getPlayerBoard().getWareHouse().getDepots()) {
-            Map<Resource, Integer> resources = new HashMap<>();
-            resources.put(depot.getResource(), depot.getQuantity());
-            warehouse.put(depot.getName(), resources);
-        }
-
-        UpdateMsg msg = new WarehouseUpdateMsg(warehouse, getPlayingUsername());
-        sendAll(msg);
-
-    }
-
-    private void sendAll(UpdateMsg msg)
-    {
-        players.values().forEach(c -> {
-            try {
-                c.writeObject(msg);
-            } catch (IOException e) {
-                e.printStackTrace();
-                exitGame();
-            }
-        });
-    }
-    
-    public void marketBoardUpdate(){
-        UpdateMsg msg = new MarketBoardUpdate(game.getMarketBoard().getMarbleGrid(), game.getMarketBoard().getSpareMarble());
-        sendAll(msg);
-    }
-
-    public void devcarddecksUpdate(int level, int cardColor,  int cardTop){
-        UpdateMsg msg = new CardDecksUpdateMsg(level,cardColor,cardTop);
-        sendAll(msg);
-    }
-
     private void initGame()
     {
         List<SimplePlayer> simplePlayerList = game.initializePlayers();
@@ -102,12 +59,42 @@ public class VirtualView implements Runnable{
         for (Map.Entry<String, ClientHandler> map: players.entrySet()) {
             try {
                 UpdateMsg msg = new GameInitMsg(simplePlayerList, cardIDs, map.getKey());
-                 map.getValue().writeObject(msg);
+                map.getValue().writeObject(msg);
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
+        initChoiches();
         marketBoardUpdate();
+    }
+
+    public void initChoiches(){
+        try {
+            InitChoicesMsg msg = new InitChoicesMsg(getPlayingUsername(), game.turnPosition(getPlayingUsername()));
+            getPlayingHandler().writeObject(msg);
+        } catch (IOException e){
+            e.printStackTrace();
+            exitGame();
+        }
+    }
+
+    //NEW
+    public void startPlay(){
+        try{
+            getPlayingHandler().writeObject(new NewTurnMessage());
+
+        }catch (IOException e){
+            System.out.println("Connection dropped");
+            exitGame();
+        }
+    }
+
+
+
+
+    public void discardLeaderCardUpdate(int cardId){
+        DiscardLeaderCardUpdateMsg msg = new DiscardLeaderCardUpdateMsg(game.getPlaying().getUsername(), cardId);
+        messageFilter(msg, "The"+ game.getPlaying().getUsername()+ "Player has discarded a development card");
     }
 
     public void createBuffer(List<Marble> marbleBuffer){
@@ -131,14 +118,36 @@ public class VirtualView implements Runnable{
         }
     }
 
-    public void playLeaderCardUpdate(int cardId) {
-        LeaderCardUpdateMsg msg = new LeaderCardUpdateMsg(game.getPlaying().getUsername(), cardId);
-        messageFilter(msg, "The"+ game.getPlaying().getUsername()+ "Player plays a LeaderCard");
+
+
+
+
+
+    public void faithTrackUpdate(AbstractPlayer player, boolean allBut){
+        UpdateMsg msg = new TrackUpdateMsg(player, allBut);
+        sendAll(msg);
     }
 
-    public void discardLeaderCardUpdate(int cardId){
-        DiscardLeaderCardUpdateMsg msg = new DiscardLeaderCardUpdateMsg(game.getPlaying().getUsername(), cardId);
-        messageFilter(msg, "The"+ game.getPlaying().getUsername()+ "Player has discarded a development card");
+    public void vaticanReportUpdate(){}
+
+    public void warehouseUpdate()
+    {
+        Map<DepotName, Map<Resource, Integer>> warehouse = new HashMap<>();
+        for (Depot depot: game.getPlaying().getPlayerBoard().getWareHouse().getDepots()) {
+            Map<Resource, Integer> resources = new HashMap<>();
+            resources.put(depot.getResource(), depot.getQuantity());
+            warehouse.put(depot.getName(), resources);
+        }
+
+        UpdateMsg msg = new WarehouseUpdateMsg(warehouse, getPlayingUsername());
+        sendAll(msg);
+
+    }
+
+
+    public void marketBoardUpdate(){
+        UpdateMsg msg = new MarketBoardUpdate(game.getMarketBoard().getMarbleGrid(), game.getMarketBoard().getSpareMarble());
+        sendAll(msg);
     }
 
     public void addCardInSlotUpdate(int cardId, int slotId){
@@ -146,50 +155,20 @@ public class VirtualView implements Runnable{
         messageFilter(msg, "The"+ game.getPlaying().getUsername()+ "Player has bought a development card");
     }
 
-    private void messageFilter(UpdateMsg msg, String text){
-
-        for (Map.Entry<String, ClientHandler> map: players.entrySet()) {
-            try {
-                if(!map.getKey().equals(game.getPlaying().getUsername())){
-                    ErrorMsg errorMsg = new ErrorMsg(text);
-                    map.getValue().writeObject(errorMsg);
-                    map.getValue().writeObject(msg);
-                }
-                else map.getValue().writeObject(msg);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
+    public void devcarddecksUpdate(int level, int cardColor,  int cardTop){
+        UpdateMsg msg = new CardDecksUpdateMsg(level,cardColor,cardTop);
+        sendAll(msg);
     }
 
-    //NEW
-    public void startPlay(){
-        try{
-            getPlayingHandler().writeObject(new NewTurnMessage());
-
-        }catch (IOException e){
-            System.out.println("Connection dropped");
-            exitGame();
-        }
+    public void playLeaderCardUpdate(int cardId) {
+        LeaderCardUpdateMsg msg = new LeaderCardUpdateMsg(game.getPlaying().getUsername(), cardId);
+        messageFilter(msg, "The"+ game.getPlaying().getUsername()+ "Player plays a LeaderCard");
     }
 
-    public void sendError (String text){
-        try {
-            getPlayingHandler().writeObject(new ErrorMsg(text));
-        }
-        catch (IOException e){
-            System.out.println("Connection dropped");
-            exitGame();
-        }
-    }
 
-    private ClientHandler getPlayingHandler(){
-        return players.get(game.getPlaying().getUsername());
-    }
 
-    private String getPlayingUsername(){
-        return game.getPlaying().getUsername();
-    }
+
+
 
     public void endGame(){
         for (Map.Entry<String, ClientHandler> entry : players.entrySet()){
@@ -212,4 +191,61 @@ public class VirtualView implements Runnable{
             entry.getValue().closeConnection();
         }
     }
+
+
+
+
+
+    /**Auxiliary methods */
+
+
+    private void messageFilter(UpdateMsg msg, String text){
+
+        for (Map.Entry<String, ClientHandler> map: players.entrySet()) {
+            try {
+                if(!map.getKey().equals(game.getPlaying().getUsername())){
+                    ErrorMsg errorMsg = new ErrorMsg(text);
+                    map.getValue().writeObject(errorMsg);
+                    map.getValue().writeObject(msg);
+                }
+                else map.getValue().writeObject(msg);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    private void sendAll(UpdateMsg msg)
+    {
+        players.values().forEach(c -> {
+            try {
+                c.writeObject(msg);
+            } catch (IOException e) {
+                e.printStackTrace();
+                exitGame();
+            }
+        });
+    }
+
+    public void sendError (String text){
+        try {
+            getPlayingHandler().writeObject(new ErrorMsg(text));
+        }
+        catch (IOException e){
+            System.out.println("Connection dropped");
+            exitGame();
+        }
+    }
+
+    private ClientHandler getPlayingHandler(){
+        return players.get(game.getPlaying().getUsername());
+    }
+
+    private String getPlayingUsername(){
+        return game.getPlaying().getUsername();
+    }
+
+
+
+
 }

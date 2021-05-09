@@ -37,6 +37,10 @@ public class WareHouse {
         return this.depotList;
     }
 
+    public void setObserver(VirtualView virtualView){
+        observer = virtualView;
+    }
+
     /**
      * Creates a ExtraDepot
      *

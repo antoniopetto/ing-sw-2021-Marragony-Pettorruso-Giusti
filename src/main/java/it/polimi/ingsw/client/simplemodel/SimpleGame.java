@@ -18,9 +18,20 @@ public class SimpleGame {
 
     }
 
+    public View getView() {
+        return view;
+    }
+
+    public List<Marble> getMarbleBuffer() {
+        return marbleBuffer;
+    }
+
     public void startGame(List<SimplePlayer> players, int[][][] cardIds, String handlerUsername) {
         view.startGame();
         this.players = players;
+        for(SimplePlayer player: this.players){
+            player.setView(view);
+        }
         for(int i=0; i<3; i++) {
             for(int j=0; j<4; j++) {
                 for(int k=0; k<4; k++) {
@@ -28,17 +39,19 @@ public class SimpleGame {
                 }
             }
         }
+        try {
+            Thread.sleep(2000);
+        }catch (InterruptedException e){
+            e.printStackTrace();
+        }
         /*
-        for (SimpleLeaderCard card: players.get(0).getLeaderCards() ) {
-            view.showLeaderCard(card);
-        }*/
         for(SimplePlayer simplePlayer : players) {
             if (simplePlayer.getUsername().equals(handlerUsername)) {
                 for (SimpleLeaderCard card : simplePlayer.getLeaderCards()) {
                     view.showLeaderCard(card);
                 }
             }
-        }
+        }*/
     }
 
     public void updateDevCardDecks(int level, int cardColor, int deleteCard){
@@ -48,6 +61,7 @@ public class SimpleGame {
     public void setMarbleBuffer(List<Marble> marbles)
     {
         marbleBuffer=marbles;
+        view.showMarbleBuffer(marbleBuffer);
     }
 
     public void reduceBuffer(Marble marble)

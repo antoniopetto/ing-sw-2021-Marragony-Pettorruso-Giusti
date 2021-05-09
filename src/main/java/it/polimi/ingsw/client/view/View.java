@@ -5,6 +5,8 @@ import it.polimi.ingsw.client.simplemodel.SimplePlayer;
 import it.polimi.ingsw.server.model.shared.Marble;
 import it.polimi.ingsw.messages.command.CommandMsg;
 
+import java.util.List;
+
 public interface View {
 
 
@@ -15,6 +17,7 @@ public interface View {
     void faceUpLeaderCard(SimplePlayer player, int cardId);
     void discardLeaderCard(SimplePlayer player, int cardId);
     void showLeaderCardAllPlayers(int cardId);
+    void showMarbleBuffer(List<Marble> marbleList);
     String getUsername();
     int getNumber();
     void startGame();
@@ -22,5 +25,8 @@ public interface View {
     void showDevCardAllPlayers(int cardId);
     void addCardInSlot(SimplePlayer player, int cardId, int cardSlot);
     CommandMsg selectMove();
-    void showLeaderCard(SimpleLeaderCard card);
+    void showLeaderCard(SimpleLeaderCard card, int counter);
+    int getDiscardLeaderCard(String username);
+    Marble selectedMarble();
+    int selectedDepot();
 }

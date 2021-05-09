@@ -42,7 +42,7 @@ public class ServerHandler implements Runnable{
                 if(message instanceof UpdateMsg)
                 {
                     UpdateMsg updateMsg = (UpdateMsg)message;
-                    updateMsg.execute(model);
+                    updateMsg.execute(model, this);
                 }
                 else
                 {

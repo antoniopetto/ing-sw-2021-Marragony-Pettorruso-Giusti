@@ -1,5 +1,6 @@
 package it.polimi.ingsw.server.model.playerboard;
 
+import it.polimi.ingsw.server.VirtualView;
 import it.polimi.ingsw.server.model.cards.*;
 import it.polimi.ingsw.server.model.exceptions.ElementNotFoundException;
 
@@ -17,6 +18,7 @@ public class PlayerBoard {
     private final WareHouse wareHouse;
     private final List<Slot> slotList;
     private final List<ProductionPower> extraProductionPowers = new ArrayList<>();
+    private VirtualView observer;
 
     /**
      * Constructs the PlayerBoard
@@ -243,5 +245,12 @@ public class PlayerBoard {
         extraProductionPowers.add(productionPower);
     }
 
+    public void setObserver(VirtualView view){
+        observer = view;
+        wareHouse.setObserver(observer);
+        for(Slot slot : slotList){
+            slot.setObserver(view);
+        }
+    }
 }
 

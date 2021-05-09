@@ -2,6 +2,7 @@ package it.polimi.ingsw.server.model;
 
 import it.polimi.ingsw.client.simplemodel.SimpleLeaderCard;
 import it.polimi.ingsw.client.simplemodel.SimplePlayer;
+import it.polimi.ingsw.messages.command.DiscardLeaderCardMsg;
 import it.polimi.ingsw.server.VirtualView;
 import it.polimi.ingsw.server.model.cards.*;
 import it.polimi.ingsw.server.model.exceptions.ElementNotFoundException;
@@ -12,6 +13,7 @@ import it.polimi.ingsw.server.model.shared.FaithTrack;
 import it.polimi.ingsw.server.model.shared.Marble;
 import it.polimi.ingsw.server.model.shared.MarketBoard;
 import it.polimi.ingsw.server.model.singleplayer.SoloRival;
+import javafx.stage.Stage;
 import org.xml.sax.SAXException;
 
 import javax.xml.parsers.ParserConfigurationException;
@@ -88,7 +90,7 @@ public class Game {
         for (String s : usernames){
             Player player = new Player(s);
             player.setObserver(virtualView);
-            players.add(new Player(s));
+            players.add(player);
         }
 
         Collections.shuffle(players);
@@ -127,6 +129,62 @@ public class Game {
             e.printStackTrace();
             System.out.println("Parsing error");
             virtualView.exitGame();
+        }
+    }
+
+    public List<SimplePlayer> initializePlayers() {
+        List<SimplePlayer> simplePlayers = new ArrayList<>();
+        for (Player p:players) {
+            int[] cardIds = new int[4];
+            int i = 0;
+            System.out.println("Leader card ids:");
+            for (LeaderCard lCard:p.getLeaderCardList()) {
+                System.out.println(lCard.getId());
+                cardIds[i] = lCard.getId();
+                i++;
+            }
+            System.out.println("Card ids client side: ");
+            for(int j=0; j<4; j++)
+                System.out.println(cardIds[j]);
+            System.out.println("______________");
+            SimplePlayer simplePlayer = new SimplePlayer(p.getUsername(), cardIds);
+            simplePlayers.add(simplePlayer);
+        }
+        return simplePlayers;
+    }
+
+
+    /**
+     * Command that discards a <code>LeaderCard</code>, hence making all the other player advance.
+     *
+     * @param cardId        The id of the card to discard
+     */
+    public void discardLeaderCard(int cardId) {
+
+        if (state == State.INSERTING){
+            virtualView.sendError("Illegal state command");
+            return;
+        }
+        try {
+            playing.removeLeaderCard(cardId);
+            System.out.println("Stato:" + state);
+            if(state == State.INITIALIZING) {
+                if (playing.getLeaderCardList().size() == 2) {
+                    if (players.size() > 2) {
+                        if (turnPosition(playing.getUsername()) > 1) {
+                            marbleBuffer.add(Marble.BLUE);
+                            marbleBuffer.add(Marble.PURPLE);
+                            marbleBuffer.add(Marble.GREY);
+                            marbleBuffer.add(Marble.YELLOW);
+                            //valutare se aggiungere altre biglie per completare la riga
+                            virtualView.createBuffer(marbleBuffer);
+                        } else endTurn();
+                    } else endTurn();
+                } else virtualView.initChoiches();
+            }else
+                faithTrack.advance(playing);
+        } catch (ElementNotFoundException e){
+            virtualView.sendError("Leader card not found");
         }
     }
 
@@ -193,12 +251,13 @@ public class Game {
      */
     public void putResource(Marble marble, DepotName depot, Resource resource){
 
-        if (state != State.INSERTING) {
+        if (state != State.INSERTING && state != State.INITIALIZING) {
             virtualView.sendError("Illegal state command");
             return;
         }
 
         int listId = marbleBuffer.indexOf(marble);
+
         if (listId == -1 ||
             marble != Marble.WHITE && marble.getResource() != resource ||
             marble == Marble.WHITE && !playing.getWhiteMarbleAliases().contains(resource) ||
@@ -214,6 +273,13 @@ public class Game {
 
         if (marbleBuffer.size() == 0)
             state = State.POSTTURN;
+
+        if(state == State.INITIALIZING){
+            if(turnPosition(playing.getUsername()) == 3) virtualView.createBuffer(marbleBuffer);
+            endTurn();
+            marbleBuffer.clear();
+        }
+
     }
 
     /**
@@ -243,6 +309,57 @@ public class Game {
         if (marbleBuffer.size() == 0){
             state = State.POSTTURN;
         }
+    }
+
+    /**
+     * Command that makes the current player buy a card and place it in the selected slot in the <code>PlayerBoard</code>
+     *
+     * @param cardColor     The color of the selected <code>CardDeck</code>
+     * @param level         The level of the selected <code>CardDeck</code>
+     * @param slotId        The id of the destination slot
+     */
+    public void buyAndAddCardInSlot(CardColor cardColor, int level, int slotId){
+
+        if(state != State.INSERTING) virtualView.sendError("Cannot Insert DevCard now");
+        else {
+            DevelopmentCard developmentCard = null;
+            try {
+                developmentCard = developmentCardDecks.readTop(cardColor, level);
+            }catch (EmptyStackException e) {
+                virtualView.sendError("There are no more DevelopmentCard with that color and level");
+            }
+
+            try{
+                getPlaying().addCard(developmentCard,slotId);
+            }catch (IllegalArgumentException e){
+                virtualView.sendError(e.getMessage());
+            }
+            developmentCardDecks.drawCard(cardColor, level);
+        }
+    }
+
+    /**
+     * Activates the production power of a set of cards/extra production powers in the active player playerboard.
+     * The player can call this command only if he is in PreTurn, and the command does something only if the entire
+     * set of selected production powers is affordable by the player.
+     *
+     * @param selectedCardIds       Set of ids of the development cards the player wants to activate
+     * @param selectedExtraPowers   Map from index of <code>extraProductionPower</code> to desired concrete i/o resources
+     */
+    public void activateProduction(Set<Integer> selectedCardIds, Map<Integer, ProductionPower> selectedExtraPowers){
+
+        if (!state.equals(State.PRETURN)) {
+            virtualView.sendError("Illegal state command");
+            return;
+        }
+
+        if (!playing.getPlayerBoard().canActivateProduction(selectedCardIds, selectedExtraPowers)) {
+            virtualView.sendError("Cannot afford this production");
+            return;
+        }
+
+        playing.getPlayerBoard().activateProduction(selectedCardIds, selectedExtraPowers);
+        state = State.POSTTURN;
     }
 
     /**
@@ -285,54 +402,7 @@ public class Game {
         }
     }
 
-    /**
-     * Command called by a player when, during PostTurn, decides to end his turn.
-     * It can also be called during initialization, only if the active player has the right number of leader cards (2).
-     * The method also ends the game if we are in the last round and the last player has called the method.
-     * In singleplayer mode, when the player ends his turn this method triggers the SoloRival turn.
-     */
-    public void endTurn(){
-        if (state != State.POSTTURN && state != State.INITIALIZING ||
-                (state == State.INITIALIZING && playing.getLeaderCardList().size() != 2)){
-            virtualView.sendError("Illegal state command");
-            return;
-        }
-        int nextIndex = (players.indexOf(playing) + 1) % players.size();
-        if (nextIndex == 0 && lastRound)
-            virtualView.endGame();
-        else{
-            playing = players.get(nextIndex);
-            if (state == State.POSTTURN || nextIndex == 0)
-                state = State.PRETURN;
-            if (singlePlayer)
-                soloRival.soloTurn(this);
-            virtualView.startPlay(); //not ok when players select leaderCard (INITIALIZING STATE)
-        }
-    }
 
-    /**
-     * Activates the production power of a set of cards/extra production powers in the active player playerboard.
-     * The player can call this command only if he is in PreTurn, and the command does something only if the entire
-     * set of selected production powers is affordable by the player.
-     *
-     * @param selectedCardIds       Set of ids of the development cards the player wants to activate
-     * @param selectedExtraPowers   Map from index of <code>extraProductionPower</code> to desired concrete i/o resources
-     */
-    public void activateProduction(Set<Integer> selectedCardIds, Map<Integer, ProductionPower> selectedExtraPowers){
-
-        if (!state.equals(State.PRETURN)) {
-            virtualView.sendError("Illegal state command");
-            return;
-        }
-
-        if (!playing.getPlayerBoard().canActivateProduction(selectedCardIds, selectedExtraPowers)) {
-            virtualView.sendError("Cannot afford this production");
-            return;
-        }
-
-        playing.getPlayerBoard().activateProduction(selectedCardIds, selectedExtraPowers);
-        state = State.POSTTURN;
-    }
 
     /**
      * Command that activates a <code>LeaderCard</code> of the playing user.
@@ -355,27 +425,42 @@ public class Game {
         }
     }
 
-    /**
-     * Command that discards a <code>LeaderCard</code>, hence making all the other player advance.
-     *
-     * @param cardId        The id of the card to discard
-     */
-    public void discardLeaderCard(int cardId) {
 
-        if (state != State.PRETURN && state != State.POSTTURN){
+    /**
+     * Command called by a player when, during PostTurn, decides to end his turn.
+     * It can also be called during initialization, only if the active player has the right number of leader cards (2).
+     * The method also ends the game if we are in the last round and the last player has called the method.
+     * In singleplayer mode, when the player ends his turn this method triggers the SoloRival turn.
+     */
+    public void endTurn(){
+        if (state != State.POSTTURN && state != State.INITIALIZING ||
+                (state == State.INITIALIZING && playing.getLeaderCardList().size() != 2)){
             virtualView.sendError("Illegal state command");
             return;
         }
-        try {
-            playing.removeLeaderCard(cardId);
-            if(state == State.INITIALIZING)
-                if (playing.getLeaderCardList().size() == 2)
-                    endTurn();
-            else
-                faithTrack.advance(playing);
-        } catch (ElementNotFoundException e){
-            virtualView.sendError("Leader card not found");
+        int nextIndex = (players.indexOf(playing) + 1) % players.size();
+
+        if (nextIndex == 0 && lastRound)
+            virtualView.endGame();
+        else{
+            playing = players.get(nextIndex);
+            if ( state == State.POSTTURN  || nextIndex == 0)
+                state = State.PRETURN;
+            if (singlePlayer)
+                soloRival.soloTurn(this);
+
+            if(state == State.INITIALIZING) virtualView.initChoiches();
+            else virtualView.startPlay(); //not ok when players select leaderCard (INITIALIZING STATE)
         }
+    }
+
+
+
+
+    /** Auxiliary methods */
+
+    public Player getPlaying() {
+        return playing;
     }
 
     /**
@@ -383,59 +468,6 @@ public class Game {
      */
     public void setLastRound() {
         this.lastRound = true;
-    }
-
-    /**
-     * Command that makes the current player buy a card and place it in the selected slot in the <code>PlayerBoard</code>
-     *
-     * @param cardColor     The color of the selected <code>CardDeck</code>
-     * @param level         The level of the selected <code>CardDeck</code>
-     * @param slotId        The id of the destination slot
-     */
-    public void buyAndAddCardInSlot(CardColor cardColor, int level, int slotId){
-
-        if(state != State.INSERTING) virtualView.sendError("Cannot Insert DevCard now");
-        else {
-            DevelopmentCard developmentCard = null;
-            try {
-                developmentCard = developmentCardDecks.readTop(cardColor, level);
-            }catch (EmptyStackException e) {
-                virtualView.sendError("There are no more DevelopmentCard with that color and level");
-            }
-
-            try{
-                getPlaying().addCard(developmentCard,slotId);
-            }catch (IllegalArgumentException e){
-                virtualView.sendError(e.getMessage());
-            }
-            developmentCardDecks.drawCard(cardColor, level);
-        }
-    }
-
-
-    public List<SimplePlayer> initializePlayers() {
-        List<SimplePlayer> simplePlayers = new ArrayList<>();
-        for (Player p:players) {
-            int[] cardIds = new int[4];
-            int i = 0;
-            System.out.println("Leader card ids:");
-            for (LeaderCard lCard:p.getLeaderCardList()) {
-                System.out.println(lCard.getId());
-                 cardIds[i] = lCard.getId();
-                 i++;
-            }
-            System.out.println("Card ids client side: ");
-            for(int j=0; j<4; j++)
-                System.out.println(cardIds[j]);
-            System.out.println("______________");
-            SimplePlayer simplePlayer = new SimplePlayer(p.getUsername(), cardIds);
-            simplePlayers.add(simplePlayer);
-        }
-        return simplePlayers;
-    }
-
-    public Player getPlaying() {
-        return playing;
     }
 
     public Optional<SoloRival> getSoloRival() {
@@ -453,4 +485,13 @@ public class Game {
     public DevelopmentCardDecks getDevelopmentCardDecks() {
         return developmentCardDecks;
     }
+
+    public int turnPosition(String playerUsername){
+        for(int i = 0; i < players.size(); i++){
+           if( players.get(i).getUsername().equals(playerUsername) ) return i;
+        }
+        return -1;
+    }
+
+
 }

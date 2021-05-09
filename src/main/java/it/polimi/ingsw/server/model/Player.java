@@ -103,6 +103,7 @@ public class Player extends AbstractPlayer{
      */
     public void removeLeaderCard(int id) throws ElementNotFoundException {
         leaderCardList.remove(Card.getById(id, leaderCardList));
+        observer.discardLeaderCardUpdate(id);
     }
 
     /**
@@ -172,6 +173,7 @@ public class Player extends AbstractPlayer{
 
     public void setObserver(VirtualView view){
         observer = view;
+        playerBoard.setObserver(observer);
     }
 
     public void setLeaderCards(List<LeaderCard> cards){

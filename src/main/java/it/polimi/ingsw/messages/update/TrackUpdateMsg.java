@@ -1,6 +1,7 @@
 package it.polimi.ingsw.messages.update;
 
 
+import it.polimi.ingsw.client.ServerHandler;
 import it.polimi.ingsw.client.simplemodel.SimpleGame;
 import it.polimi.ingsw.client.simplemodel.SimplePlayer;
 import it.polimi.ingsw.server.model.AbstractPlayer;
@@ -17,7 +18,7 @@ public class TrackUpdateMsg implements UpdateMsg {
 
 
     @Override
-    public void execute(SimpleGame model) {
+    public void execute(SimpleGame model, ServerHandler server) {
         for (SimplePlayer simplePlayer:model.getPlayers()) {
             //It has to be modified
             if((simplePlayer.getUsername()==null&&player==null&&!allBut)||

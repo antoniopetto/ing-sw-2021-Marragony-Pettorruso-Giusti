@@ -1,5 +1,6 @@
 package it.polimi.ingsw.messages.update;
 
+import it.polimi.ingsw.client.ServerHandler;
 import it.polimi.ingsw.client.simplemodel.SimpleGame;
 import it.polimi.ingsw.client.simplemodel.SimplePlayer;
 
@@ -18,7 +19,7 @@ public class GameInitMsg implements UpdateMsg{
     }
 
     @Override
-    public void execute(SimpleGame model) {
+    public void execute(SimpleGame model, ServerHandler server) {
         model.startGame(players, cardIDs, handler);
     }
 }

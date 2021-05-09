@@ -1,5 +1,6 @@
 package it.polimi.ingsw.messages.update;
 
+import it.polimi.ingsw.client.ServerHandler;
 import it.polimi.ingsw.client.simplemodel.SimpleGame;
 import it.polimi.ingsw.client.simplemodel.SimplePlayer;
 import it.polimi.ingsw.client.simplemodel.SimpleWarehouse;
@@ -19,7 +20,7 @@ public class WarehouseUpdateMsg implements UpdateMsg {
     }
 
     @Override
-    public void execute(SimpleGame game) {
+    public void execute(SimpleGame game, ServerHandler server) {
         for (SimplePlayer player : game.getPlayers())
             if (player.getUsername().equals(username))
                 player.changeWarehouse(warehouse);

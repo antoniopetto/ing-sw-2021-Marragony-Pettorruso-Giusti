@@ -1,5 +1,6 @@
 package it.polimi.ingsw.messages.update;
 
+import it.polimi.ingsw.client.ServerHandler;
 import it.polimi.ingsw.client.simplemodel.SimpleGame;
 import it.polimi.ingsw.server.model.shared.Marble;
 
@@ -14,7 +15,7 @@ public class MarketBoardUpdate implements UpdateMsg{
     }
 
     @Override
-    public void execute(SimpleGame model) {
+    public void execute(SimpleGame model, ServerHandler server) {
         model.setMarketBoard(marketBoard);
         model.setSpareMarble(spareMarble);
     }

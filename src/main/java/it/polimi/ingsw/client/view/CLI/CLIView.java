@@ -12,6 +12,7 @@ import it.polimi.ingsw.server.model.shared.Marble;
 import it.polimi.ingsw.messages.command.CommandMsg;
 
 import java.util.InputMismatchException;
+import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 
@@ -35,40 +36,8 @@ public class CLIView implements View {
     }
 
     @Override
-    public void positionUpdate(SimplePlayer player) {
-
-    }
-
-    @Override
-    public void bufferUpdate(Marble marble) {
-
-    }
-
-    @Override
-    public void showErrorMessage(String text) {
-        System.out.println(Graphics.ANSI_RED+"ATTENTION!");
-        System.out.println(text);
-    }
-
-    @Override
-    public void showConfirmMessage(String text) {
-        System.out.println(Graphics.ANSI_GREEN+"OK!");
-        System.out.println(text);
-    }
-
-    @Override
-    public void faceUpLeaderCard(SimplePlayer player, int cardId) {
-
-    }
-
-    @Override
-    public void discardLeaderCard(SimplePlayer player, int cardId) {
-
-    }
-
-    @Override
-    public void showLeaderCardAllPlayers(int cardId) {
-
+    public void startSetting() {
+        settingView.execute();
     }
 
     @Override
@@ -92,21 +61,129 @@ public class CLIView implements View {
         System.out.println("Game started");
     }
 
+    public void showLeaderCard(SimpleLeaderCard card, int counter)
+    {
+        System.out.println(Graphics.ANSI_RESET+ counter + ")");
+        System.out.println(Graphics.ANSI_RESET+ "┌──────────┐");
+        if(card.getResourceRequirements()!=null)
+            showRequirements(card.getResourceRequirements());
+        String[] req = new String[2];
+        int i =0;
+        if(card.getCardRequirements()!=null) {
+            for (CardColor color : card.getCardRequirements().keySet()) {
+                for (Integer level : card.getCardRequirements().get(color).keySet()) {
+                    if (level == null) {
+                        req[i] = Graphics.getCardColor(color) + card.getCardRequirements().get(color).get(level) + "■" + Graphics.ANSI_RESET;
+                        i++;
+                    } else {
+                        req[i] = Graphics.getCardColor(color) + " |" + level + "|" + Graphics.ANSI_RESET;
+                    }
+                }
+            }
+            if (req[1] == null) req[1] = "";
+            System.out.format(formatInfo, req[0], "", req[1]);
+            System.out.println();
+        }
+        /*
+        if(!card.isLevelRequired()){ //if the integer represents the number of cards
+            String [] req = new String[2];
+            int i =0;
+            for (CardColor color :card.getCardRequirements().keySet()) {
+                req[i] = Graphics.getCardColor(color)+card.getCardRequirements().get(color) +"■"+Graphics.ANSI_RESET;
+                i++;
+            }
+            if(req[1]==null) req[1]="";
+            System.out.format(formatInfo, req[0], "", req[1]);
+            System.out.println();
+        }
+        else //if the integer represents the level of the card
+        {
+            for (CardColor color:card.getCardRequirements().keySet()) {
+                System.out.println(Graphics.getCardColor(color)+" |"+card.getCardRequirements().get(color)+"|"+Graphics.ANSI_RESET);
+            }
+        }
+         */
+        System.out.println(Graphics.getAbility(card.getAbility(), card.getAbilityResource()));
+
+
+        //vicotry points
+        System.out.println("     "+Graphics.ANSI_YELLOW+card.getVictoryPoints()+Graphics.ANSI_RESET);
+        System.out.println("└──────────┘");
+    }
+
+    public int getDiscardLeaderCard(String username) {
+
+        SimplePlayer player = null;
+        for(SimplePlayer simplePlayer : game.getPlayers()) {
+            if (simplePlayer.getUsername().equals(username)) {
+                player = simplePlayer;
+                simplePlayer.printLeaderCard();
+            }
+        }
+        int position = 0;
+        Scanner input = new Scanner(System.in);
+        System.out.println(Graphics.ANSI_RESET+"Insert leaderCard to discard ( number 1-" + player.getLeaderCards().size() + "):");
+        System.out.print(Graphics.ANSI_CYAN+">");
+        position = input.nextInt();
+        if(position > 4 || position < 1){
+            System.out.println(Graphics.ANSI_RED+"ERROR!");
+            System.out.println("Insert a number between 1-" + player.getLeaderCards().size());
+            getDiscardLeaderCard(username);
+        }
+        return player.chooseLCardToDiscard(position);
+    }
+
+
     @Override
-    public void startSetting() {
-        settingView.execute();
+    public void positionUpdate(SimplePlayer player) {
+
     }
 
     @Override
-    public void showDevCardAllPlayers(int cardId) {
+    public void bufferUpdate(Marble marble) {
 
     }
 
     @Override
-    public void addCardInSlot(SimplePlayer player, int cardId, int cardSlot) {
+    public void faceUpLeaderCard(SimplePlayer player, int cardId) {
 
     }
 
+    @Override
+    public void discardLeaderCard(SimplePlayer player, int cardId) {
+
+    }
+
+    @Override
+    public void showLeaderCardAllPlayers(int cardId) {
+
+    }
+
+    @Override
+    public void showMarbleBuffer(List<Marble> marbleList) {
+        System.out.println("Marble Buffer:");
+        for (Marble marble : marbleList)
+        {
+            System.out.print(Graphics.getMarble(marble)+" ");
+        }
+    }
+
+    @Override
+    public Marble selectedMarble(){
+        Scanner input = new Scanner(System.in);
+        System.out.println("Choose a marble to put in a depot (insert a number between 1-"+ game.getMarbleBuffer().size()+"):");
+        System.out.println(Graphics.ANSI_CYAN+">");
+        int position = input.nextInt();
+        return  game.getMarbleBuffer().get(position-1);
+    }
+
+    @Override
+    public int selectedDepot(){
+        Scanner input = new Scanner(System.in);
+        System.out.println("Choose a depot in which to place the resource( 1->HIGH DEPOT, 2->MEDIUM DEPOT, 3->LOW DEPOT ):");
+        System.out.println(Graphics.ANSI_CYAN+">");
+         return input.nextInt();
+    }
     @Override
     public CommandMsg selectMove() {
         System.out.println("Select your move:");
@@ -279,56 +356,32 @@ public class CLIView implements View {
         }
     }
 
-    public void showLeaderCard(SimpleLeaderCard card)
-    {
-        System.out.println("┌──────────┐");
-        if(card.getResourceRequirements()!=null)
-            showRequirements(card.getResourceRequirements());
-        String[] req = new String[2];
-        int i =0;
-        if(card.getCardRequirements()!=null) {
-            for (CardColor color : card.getCardRequirements().keySet()) {
-                for (Integer level : card.getCardRequirements().get(color).keySet()) {
-                    if (level == null) {
-                        req[i] = Graphics.getCardColor(color) + card.getCardRequirements().get(color).get(level) + "■" + Graphics.ANSI_RESET;
-                        i++;
-                    } else {
-                        req[i] = Graphics.getCardColor(color) + " |" + level + "|" + Graphics.ANSI_RESET;
-                    }
-                }
-            }
-            if (req[1] == null) req[1] = "";
-            System.out.format(formatInfo, req[0], "", req[1]);
-            System.out.println();
-        }
-        /*
-        if(!card.isLevelRequired()){ //if the integer represents the number of cards
-            String [] req = new String[2];
-            int i =0;
-            for (CardColor color :card.getCardRequirements().keySet()) {
-                req[i] = Graphics.getCardColor(color)+card.getCardRequirements().get(color) +"■"+Graphics.ANSI_RESET;
-                i++;
-            }
-            if(req[1]==null) req[1]="";
-            System.out.format(formatInfo, req[0], "", req[1]);
-            System.out.println();
-        }
-        else //if the integer represents the level of the card
-        {
-            for (CardColor color:card.getCardRequirements().keySet()) {
-                System.out.println(Graphics.getCardColor(color)+" |"+card.getCardRequirements().get(color)+"|"+Graphics.ANSI_RESET);
-            }
-        }
-         */
-        System.out.println(Graphics.getAbility(card.getAbility(), card.getAbilityResource()));
+    @Override
+    public void showDevCardAllPlayers(int cardId) {
 
+    }
 
-        //vicotry points
-        System.out.println("     "+Graphics.ANSI_YELLOW+card.getVictoryPoints()+Graphics.ANSI_RESET);
-        System.out.println("└──────────┘");
+    @Override
+    public void addCardInSlot(SimplePlayer player, int cardId, int cardSlot) {
+
+    }
+
+    /**Auxiliary methods */
+
+    @Override
+    public void showErrorMessage(String text) {
+        System.out.println(Graphics.ANSI_RED+"ATTENTION!");
+        System.out.println(text);
+    }
+
+    @Override
+    public void showConfirmMessage(String text) {
+        System.out.println(Graphics.ANSI_GREEN+"OK!");
+        System.out.println(text);
     }
 
     public void setGame(SimpleGame game) {
         this.game = game;
     }
+
 }

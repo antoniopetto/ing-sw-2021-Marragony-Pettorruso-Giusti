@@ -16,6 +16,7 @@ public class Slot {
 
     private final Stack<DevelopmentCard> developmentCardList;
     private final int id;
+    private VirtualView observer;
 
     /**
      *Construct a slot
@@ -69,5 +70,9 @@ public class Slot {
      * @return true if the slot contains no <code>DevelopmentCards</code>
      */
     public boolean isEmpty(){ return this.developmentCardList.size() == 0; }
+
+    public void setObserver(VirtualView virtualView){
+        observer = virtualView;
+    }
 
 }

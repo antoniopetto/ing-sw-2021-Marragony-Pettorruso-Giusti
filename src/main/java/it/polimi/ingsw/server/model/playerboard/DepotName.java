@@ -9,9 +9,11 @@ public enum DepotName {
 
     private final int position;
 
+
     DepotName(int position) {
         this.position = position;
     }
 
     public int getPosition() { return position; }
+
 }

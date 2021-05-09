@@ -8,6 +8,8 @@ import it.polimi.ingsw.server.model.shared.Marble;
 import it.polimi.ingsw.messages.command.CommandMsg;
 import javafx.application.Application;
 
+import java.util.List;
+
 public class GUIView implements View {
 
     private InitializeGame initializeGame;
@@ -78,6 +80,11 @@ public class GUIView implements View {
     }
 
     @Override
+    public void showMarbleBuffer(List<Marble> marbleList) {
+
+    }
+
+    @Override
     public String getUsername() {
         while (username == null) {
             Thread.onSpinWait();
@@ -119,8 +126,23 @@ public class GUIView implements View {
     }
 
     @Override
-    public void showLeaderCard(SimpleLeaderCard card) {
+    public void showLeaderCard(SimpleLeaderCard card, int counter) {
 
+    }
+
+    @Override
+    public int getDiscardLeaderCard(String username) {
+        return 0;
+    }
+
+    @Override
+    public Marble selectedMarble() {
+        return null;
+    }
+
+    @Override
+    public int selectedDepot() {
+        return 0;
     }
 
 

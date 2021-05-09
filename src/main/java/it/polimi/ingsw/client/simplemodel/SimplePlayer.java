@@ -13,7 +13,6 @@ public class SimplePlayer implements Serializable {
     private View view;
     private SimpleWarehouse warehouse;
     private Map<String, SimpleWarehouse> othersWarehouse;
-    private List<SimpleLeaderCard> chooseLCards;
     private ArrayList<SimpleSlot> slots;
     private List<SimpleLeaderCard> leaderCards = new ArrayList<>();
 
@@ -32,9 +31,6 @@ public class SimplePlayer implements Serializable {
         slots.add(new SimpleSlot());
 
 
-        chooseLCards = new ArrayList<>();
-        //chooseLCards.add(SimpleLeaderCard.parse(1));//change
-        //chooseLCards.add(SimpleLeaderCard.parse(1));
     }
 
     public void advance()
@@ -48,6 +44,10 @@ public class SimplePlayer implements Serializable {
 
     public View getView(){return view;}
 
+    public void setView(View view){
+        this.view = view;
+    }
+
     public void changeOthersState(String player, SimpleWarehouse warehouse)
     {
         othersWarehouse.replace(player, warehouse);
@@ -60,7 +60,7 @@ public class SimplePlayer implements Serializable {
 
     public void activeLeaderCard(int cardId){
         for(int i = 0; i < 2; i++) {
-            if ( chooseLCards.get(i).getId() == cardId ) chooseLCards.get(i).setActive(true);
+            if ( leaderCards.get(i).getId() == cardId ) leaderCards.get(i).setActive(true);
         }
         view.faceUpLeaderCard(this, cardId);
         view.showLeaderCardAllPlayers(cardId);
@@ -73,14 +73,26 @@ public class SimplePlayer implements Serializable {
     }
 
     public void discardLeaderCard(int cardId){
-        for(int i = 0; i < 2; i++) {
-            if ( chooseLCards.get(i).getId() == cardId ) chooseLCards.remove(i);
+        for(int i = 0; i < leaderCards.size(); i++) {
+            if ( leaderCards.get(i).getId() == cardId ) leaderCards.remove(i);
         }
-        view.discardLeaderCard(this, cardId);
-        view.showDevCardAllPlayers(cardId);
+        //printLeaderCard(); decidere se far stampare le leaderCard ogni volta che si scarta la carta
+
+    }
+
+    public void printLeaderCard(){
+        int counter = 1;
+        for (SimpleLeaderCard card : getLeaderCards()) {
+            view.showLeaderCard(card, counter);
+            counter++;
+        }
     }
 
     public List<SimpleLeaderCard> getLeaderCards() {
         return leaderCards;
+    }
+
+    public int chooseLCardToDiscard(int position){
+        return leaderCards.get(position-1).getId();
     }
 }

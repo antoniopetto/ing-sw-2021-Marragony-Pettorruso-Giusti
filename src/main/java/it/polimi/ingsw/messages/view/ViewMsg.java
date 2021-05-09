@@ -1,5 +1,6 @@
 package it.polimi.ingsw.messages.view;
 
+import com.sun.javafx.iio.ios.IosDescriptor;
 import it.polimi.ingsw.client.ServerHandler;
 import it.polimi.ingsw.client.view.View;
 
