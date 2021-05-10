@@ -1,12 +1,10 @@
 package it.polimi.ingsw.client.view.CLI;
 
-import it.polimi.ingsw.client.simplemodel.SimpleDevelopmentCard;
-import it.polimi.ingsw.client.simplemodel.SimpleGame;
-import it.polimi.ingsw.client.simplemodel.SimpleLeaderCard;
-import it.polimi.ingsw.client.simplemodel.SimplePlayer;
+import it.polimi.ingsw.client.simplemodel.*;
 import it.polimi.ingsw.client.view.View;
 import it.polimi.ingsw.messages.command.BuyResourcesMsg;
 import it.polimi.ingsw.server.model.cards.CardColor;
+import it.polimi.ingsw.server.model.playerboard.DepotName;
 import it.polimi.ingsw.server.model.playerboard.Resource;
 import it.polimi.ingsw.server.model.shared.Marble;
 import it.polimi.ingsw.messages.command.CommandMsg;
@@ -20,10 +18,10 @@ public class CLIView implements View {
     private CLISettingView settingView;
     private SimpleGame game;
 
-    private String column1Format = "%-2s";    // min 3 characters, left aligned
-    private String column2Format = "%-2s";  // min 5 and max 8 characters, left aligned
-    private String column3Format = "%2s";   // fixed size 6 characters, right aligned
-    private String formatInfo = column1Format + " " + column2Format + " " + column3Format;
+    private final String column1Format = "%-2s";
+    private final String column2Format = "%-2s";
+    private final String column3Format = "%2s";
+    private final String formatInfo = column1Format + " " + column2Format + " " + column3Format;
 
 
     public CLIView() {
@@ -66,7 +64,7 @@ public class CLIView implements View {
 
         System.out.println(Graphics.ANSI_RESET+ "┌──────────┐");
         if(card.getResourceRequirements()!=null)
-            showRequirements(card.getResourceRequirements());
+            showResources(card.getResourceRequirements());
         String[] req = new String[2];
         int i =0;
         if(card.getCardRequirements()!=null) {
@@ -132,15 +130,20 @@ public class CLIView implements View {
             }
         }
         int position = 0;
+        boolean valid = false;
         Scanner input = new Scanner(System.in);
-        System.out.println(Graphics.ANSI_RESET+"Insert leaderCard to discard ( number 1-" + player.getLeaderCards().size() + "):");
-        System.out.print(Graphics.ANSI_CYAN+">");
-        position = input.nextInt();
-        if(position > 4 || position < 1){
-            System.out.println(Graphics.ANSI_RED+"ERROR!");
-            System.out.println("Insert a number between 1-" + player.getLeaderCards().size());
-            getDiscardLeaderCard(username);
+        while(!valid) {
+            System.out.println(Graphics.ANSI_RESET+"Insert leaderCard to discard ( number 1-" + player.getLeaderCards().size() + "):");
+            System.out.print(Graphics.ANSI_CYAN+">"+Graphics.ANSI_RESET);
+            position = input.nextInt();
+            if(position > player.getLeaderCards().size() || position < 1){
+                System.out.println(Graphics.ANSI_RED+"ERROR!");
+                System.out.println("Insert a number between 1-" + player.getLeaderCards().size() + Graphics.ANSI_RESET);
+            }
+            else
+                valid = true;
         }
+
         return player.chooseLCardToDiscard(position);
     }
 
@@ -195,18 +198,22 @@ public class CLIView implements View {
         System.out.println(Graphics.ANSI_CYAN+">");
          return input.nextInt();
     }
+
+
     @Override
     public CommandMsg selectMove() {
         System.out.println("Select your move:");
         System.out.println("1) Buy resources");
         System.out.println("2) Buy development card");
         System.out.println("3) Activate production");
+        System.out.println("4) Play leader card");
+        System.out.println("5) Show...");
         System.out.print(">");
         Scanner input = new Scanner(System.in);
         int choice = 0;
         try{
             choice=input.nextInt();
-            if(choice<1||choice>3) throw new InputMismatchException();
+            if(choice<1||choice>5) throw new InputMismatchException();
         }catch (Exception e)
         {
             showErrorMessage("Illegal input");
@@ -222,9 +229,41 @@ public class CLIView implements View {
             case 3->{
                 return activateProduction();
             }
+            case 5-> {
+                for (SimplePlayer player: game.getPlayers()) {
+                    showWarehouse(player);
+                }
+                return null;
+            }
             default ->{
                 return null;
             }
+        }
+    }
+
+    private void show()
+    {
+        System.out.println("Select what to show: ");
+        int i =0;
+        for (SimplePlayer player: game.getPlayers()) {
+            System.out.println(i+") " + player.getUsername() + "player board");
+            i++;
+        }
+        int j = i+1;
+        System.out.println(j + ") market board");
+        j++;
+        System.out.println(j + ") decks");
+        j++;
+        System.out.println(j + ") faith track");
+    }
+
+    public void showWarehouse(SimplePlayer player)
+    {
+        SimpleWarehouse warehouse = player.getWarehouse();
+        System.out.println(player.getUsername()+" warehouse");
+        for (DepotName depot: warehouse.getDepots().keySet()) {
+            showResources(warehouse.getDepots().get(depot));
+            System.out.println("____________");
         }
     }
 
@@ -295,7 +334,7 @@ public class CLIView implements View {
         //Level and color
         System.out.println("    "+Graphics.getLevel(card.getColor(), card.getLevel()));
         int i;
-        showRequirements(card.getRequirements());
+        showResources(card.getRequirements());
         //input
         System.out.println(Graphics.getCardColor(card.getColor())+"Input:"+Graphics.ANSI_RESET);
         //System.out.println();
@@ -333,13 +372,17 @@ public class CLIView implements View {
         System.out.println("└──────────┘");
     }
 
-    private void showRequirements(Map<Resource, Integer> requirements)
+    private void showResources(Map<Resource, Integer> resources)
     {
+        if(resources==null){
+            System.out.println("Le risorse sono null");
+            return;
+        }
         String[] req = new String[3];
         int i = 0;
-        for(Resource res: requirements.keySet())
+        for(Resource res: resources.keySet())
         {
-            req[i] = requirements.get(res)+ " " + Graphics.getResource(res);
+            req[i] = (resources.get(res)+ " " + Graphics.getResource(res));
             i++;
             //System.out.println("│ "+card.getRequirement().get(res)+ " " + Graphics.getResource(res));
         }
@@ -382,13 +425,13 @@ public class CLIView implements View {
     @Override
     public void showErrorMessage(String text) {
         System.out.println(Graphics.ANSI_RED+"ATTENTION!");
-        System.out.println(text);
+        System.out.println(text+Graphics.ANSI_RESET);
     }
 
     @Override
     public void showConfirmMessage(String text) {
         System.out.println(Graphics.ANSI_GREEN+"OK!");
-        System.out.println(text);
+        System.out.println(text+Graphics.ANSI_RESET);
     }
 
     public void setGame(SimpleGame game) {

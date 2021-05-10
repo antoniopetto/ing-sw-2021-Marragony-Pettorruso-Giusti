@@ -27,4 +27,8 @@ public class SimpleWarehouse implements Serializable {
     {
         depots=newState;
     }
+
+    public Map<DepotName, Map<Resource, Integer>> getDepots() {
+        return depots;
+    }
 }
