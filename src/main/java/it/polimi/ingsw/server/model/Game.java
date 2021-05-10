@@ -1,8 +1,6 @@
 package it.polimi.ingsw.server.model;
 
-import it.polimi.ingsw.client.simplemodel.SimpleLeaderCard;
 import it.polimi.ingsw.client.simplemodel.SimplePlayer;
-import it.polimi.ingsw.messages.command.DiscardLeaderCardMsg;
 import it.polimi.ingsw.server.VirtualView;
 import it.polimi.ingsw.server.model.cards.*;
 import it.polimi.ingsw.server.model.exceptions.ElementNotFoundException;
@@ -13,7 +11,6 @@ import it.polimi.ingsw.server.model.shared.FaithTrack;
 import it.polimi.ingsw.server.model.shared.Marble;
 import it.polimi.ingsw.server.model.shared.MarketBoard;
 import it.polimi.ingsw.server.model.singleplayer.SoloRival;
-import javafx.stage.Stage;
 import org.xml.sax.SAXException;
 
 import javax.xml.parsers.ParserConfigurationException;
@@ -137,16 +134,11 @@ public class Game {
         for (Player p:players) {
             int[] cardIds = new int[4];
             int i = 0;
-            System.out.println("Leader card ids:");
             for (LeaderCard lCard:p.getLeaderCardList()) {
-                System.out.println(lCard.getId());
                 cardIds[i] = lCard.getId();
                 i++;
             }
-            System.out.println("Card ids client side: ");
-            for(int j=0; j<4; j++)
-                System.out.println(cardIds[j]);
-            System.out.println("______________");
+
             SimplePlayer simplePlayer = new SimplePlayer(p.getUsername(), cardIds);
             simplePlayers.add(simplePlayer);
         }
@@ -180,7 +172,7 @@ public class Game {
                             virtualView.createBuffer(marbleBuffer);
                         } else endTurn();
                     } else endTurn();
-                } else virtualView.initChoiches();
+                } else virtualView.initChoices();
             }else
                 faithTrack.advance(playing);
         } catch (ElementNotFoundException e){
@@ -449,7 +441,7 @@ public class Game {
             if (singlePlayer)
                 soloRival.soloTurn(this);
 
-            if(state == State.INITIALIZING) virtualView.initChoiches();
+            if(state == State.INITIALIZING) virtualView.initChoices();
             else virtualView.startPlay(); //not ok when players select leaderCard (INITIALIZING STATE)
         }
     }

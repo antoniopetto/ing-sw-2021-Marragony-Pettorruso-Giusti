@@ -23,7 +23,6 @@ public class SimplePlayer implements Serializable {
         this.warehouse = new SimpleWarehouse();
         for(int i=0; i<4; i++)
         {
-            System.out.println("Card ids: "+ cardIds[i]);
             leaderCards.add(SimpleLeaderCard.parse(cardIds[i]));
         }
         slots.add(new SimpleSlot());
@@ -94,5 +93,9 @@ public class SimplePlayer implements Serializable {
 
     public int chooseLCardToDiscard(int position){
         return leaderCards.get(position-1).getId();
+    }
+
+    public SimpleWarehouse getWarehouse() {
+        return warehouse;
     }
 }

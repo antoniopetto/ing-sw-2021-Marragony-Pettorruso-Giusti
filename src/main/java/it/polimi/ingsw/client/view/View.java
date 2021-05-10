@@ -29,4 +29,6 @@ public interface View {
     int getDiscardLeaderCard(String username);
     Marble selectedMarble();
     int selectedDepot();
+
+
 }

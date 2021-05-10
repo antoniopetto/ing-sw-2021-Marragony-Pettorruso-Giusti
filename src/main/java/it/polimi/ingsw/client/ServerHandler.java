@@ -52,6 +52,7 @@ public class ServerHandler implements Runnable{
 
             } catch (IOException | ClassNotFoundException e) {
                 e.printStackTrace();
+                return;
             }
         }
     }
