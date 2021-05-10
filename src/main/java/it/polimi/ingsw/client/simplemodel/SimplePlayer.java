@@ -80,14 +80,6 @@ public class SimplePlayer implements Serializable {
 
     }
 
-    public void printLeaderCard(){
-        int counter = 1;
-        for (SimpleLeaderCard card : getLeaderCards()) {
-            view.showLeaderCard(card, counter);
-            counter++;
-        }
-    }
-
     public List<SimpleLeaderCard> getLeaderCards() {
         return leaderCards;
     }

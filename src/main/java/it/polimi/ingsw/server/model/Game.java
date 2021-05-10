@@ -167,7 +167,6 @@ public class Game {
         }
         try {
             playing.removeLeaderCard(cardId);
-            System.out.println("Stato:" + state);
             if(state == State.INITIALIZING) {
                 if (playing.getLeaderCardList().size() == 2) {
                     if (players.size() > 2) {
@@ -450,7 +449,7 @@ public class Game {
                 soloRival.soloTurn(this);
 
             if(state == State.INITIALIZING) virtualView.initChoiches();
-            else virtualView.startPlay(); //not ok when players select leaderCard (INITIALIZING STATE)
+            else virtualView.startPlay();
         }
     }
 

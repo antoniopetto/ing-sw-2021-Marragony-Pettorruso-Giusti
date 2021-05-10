@@ -126,7 +126,7 @@ public class GUIView implements View {
     }
 
     @Override
-    public void showLeaderCard(SimpleLeaderCard card, int counter) {
+    public void showLeaderCard(SimpleLeaderCard card) {
 
     }
 
@@ -138,6 +138,11 @@ public class GUIView implements View {
     @Override
     public Marble selectedMarble() {
         return null;
+    }
+
+    @Override
+    public void printLeaderCard(SimplePlayer player) {
+
     }
 
     @Override

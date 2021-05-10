@@ -61,9 +61,9 @@ public class CLIView implements View {
         System.out.println("Game started");
     }
 
-    public void showLeaderCard(SimpleLeaderCard card, int counter)
+    public void showLeaderCard(SimpleLeaderCard card)
     {
-        System.out.println(Graphics.ANSI_RESET+ counter + ")");
+
         System.out.println(Graphics.ANSI_RESET+ "┌──────────┐");
         if(card.getResourceRequirements()!=null)
             showRequirements(card.getResourceRequirements());
@@ -111,13 +111,24 @@ public class CLIView implements View {
         System.out.println("└──────────┘");
     }
 
+    @Override
+    public void printLeaderCard(SimplePlayer player){
+        int counter = 1;
+        for (SimpleLeaderCard card : player.getLeaderCards()) {
+            System.out.println(Graphics.ANSI_RESET+ counter + ")");
+            showLeaderCard(card);
+            counter++;
+        }
+    }
+
+    @Override
     public int getDiscardLeaderCard(String username) {
 
         SimplePlayer player = null;
         for(SimplePlayer simplePlayer : game.getPlayers()) {
             if (simplePlayer.getUsername().equals(username)) {
                 player = simplePlayer;
-                simplePlayer.printLeaderCard();
+                printLeaderCard(player);
             }
         }
         int position = 0;

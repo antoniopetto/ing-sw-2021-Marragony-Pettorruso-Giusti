@@ -25,8 +25,10 @@ public interface View {
     void showDevCardAllPlayers(int cardId);
     void addCardInSlot(SimplePlayer player, int cardId, int cardSlot);
     CommandMsg selectMove();
-    void showLeaderCard(SimpleLeaderCard card, int counter);
+    void showLeaderCard(SimpleLeaderCard card);
     int getDiscardLeaderCard(String username);
     Marble selectedMarble();
+    void printLeaderCard(SimplePlayer player);
     int selectedDepot();
+
 }
