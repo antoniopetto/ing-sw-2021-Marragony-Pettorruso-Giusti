@@ -69,10 +69,6 @@ public class GUIView implements View {
 
     }
 
-    @Override
-    public void discardLeaderCard(SimplePlayer player, int cardId) {
-
-    }
 
     @Override
     public void showLeaderCardAllPlayers(int cardId) {
