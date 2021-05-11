@@ -4,6 +4,7 @@ import it.polimi.ingsw.server.model.cards.CardColor;
 import it.polimi.ingsw.server.model.playerboard.Resource;
 
 import java.io.Serializable;
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -28,7 +29,6 @@ public class SimpleLeaderCard implements Serializable {
     private final Map<Resource, Integer> resourceRequirements;
     private final Map<CardColor, Map<Integer, Integer>> cardRequirements;
 
-    private Map<Resource, Integer> resourceRequirement;
     private boolean active = false;
 
     static final private SimpleCardParser simpleCardParser = SimpleCardParser.getInstance();
@@ -39,16 +39,16 @@ public class SimpleLeaderCard implements Serializable {
 
     public SimpleLeaderCard(int id, int victoryPoints, Map<CardColor, Map<Integer, Integer>> cardRequirements,
                             Map<Resource, Integer> resourceRequirements, Ability ability, Resource abilityResource){
+
+        if(cardRequirements == null || resourceRequirements == null || ability == null || abilityResource == null)
+            throw new IllegalArgumentException();
+
         this.id = id;
         this.victoryPoints = victoryPoints;
-        this.cardRequirements = cardRequirements;
-        this.resourceRequirements = resourceRequirements;
+        this.cardRequirements = new HashMap<>(cardRequirements);
+        this.resourceRequirements = new HashMap<>(resourceRequirements);
         this.ability = ability;
         this.abilityResource = abilityResource;
-    }
-
-    public void setResourceRequirement(Map<Resource, Integer> resourceRequirement) {
-        this.resourceRequirement = resourceRequirement;
     }
 
     public void setActive(boolean active) {
@@ -76,6 +76,6 @@ public class SimpleLeaderCard implements Serializable {
     }
 
     public Map<Resource, Integer> getResourceRequirements() {
-        return resourceRequirement;
+        return resourceRequirements;
     }
 }
