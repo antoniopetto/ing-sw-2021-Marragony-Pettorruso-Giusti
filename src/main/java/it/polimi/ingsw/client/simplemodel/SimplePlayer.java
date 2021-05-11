@@ -87,4 +87,8 @@ public class SimplePlayer implements Serializable {
     public SimpleWarehouse getWarehouse() {
         return warehouse;
     }
+
+    public int getPosition() {
+        return position;
+    }
 }

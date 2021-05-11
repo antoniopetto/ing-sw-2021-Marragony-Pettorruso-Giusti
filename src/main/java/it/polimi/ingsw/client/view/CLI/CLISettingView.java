@@ -16,7 +16,7 @@ public class CLISettingView{
     }
 
     public void execute() {
-        Scanner input = new Scanner(System.in);
+
         String ip;
         int port;
         Socket server;
@@ -24,10 +24,11 @@ public class CLISettingView{
         boolean reachable = false;
         while(!reachable)
         {
+            Scanner input = new Scanner(System.in);
             System.out.println("Server IP address?");
             System.out.print(">");
             ip = input.nextLine();
-            System.out.println("Server port?");
+            System.out.println("Server port? (Default is 7777)");
             System.out.print(">");
             port = input.nextInt();
             try{
@@ -38,7 +39,7 @@ public class CLISettingView{
                 reachable=true;
             }catch(IOException e)
             {
-                System.out.println("Server unreachable, try again.");
+                System.out.println(Graphics.ANSI_RED+"Server unreachable, try again."+Graphics.ANSI_RESET);
             }
         }
 

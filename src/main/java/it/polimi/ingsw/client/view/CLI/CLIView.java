@@ -49,24 +49,42 @@ public class CLIView implements View {
         Scanner input = new Scanner(System.in);
         System.out.println(Graphics.ANSI_RESET+"Insert the number of players for your game:");
         System.out.print(Graphics.ANSI_CYAN+">");
-        return input.nextInt();
+        int result;
+        try{
+            result=input.nextInt();
+            if(result<1||result>4) throw new InputMismatchException();
+        }catch (Exception e)
+        {
+            showErrorMessage("Invalid input");
+            return getNumber();
+        }
+        if (result!=1)
+            System.out.println(Graphics.ANSI_BLUE+"Waiting for other players to join the game..."+Graphics.ANSI_RESET);
+        return result;
     }
 
     @Override
     public void startGame() {
         System.out.println(Graphics.ANSI_GREEN+Graphics.TITLE+Graphics.ANSI_RESET);
-        System.out.println("Game started");
+        System.out.println(Graphics.ANSI_BLUE+"Game started"+Graphics.ANSI_RESET);
+        System.out.println(Graphics.ANSI_YELLOW+"Rules: "+ "https://www.google.com/url?sa=t&rct=j&q=&esrc=s&source=web&cd=&cad=rja&uact=8&ved=2ahUKEwjrp562xsLwAhVQ4YUKHZWMBhcQFjAAegQIAhAD&url=http%3A%2F%2Fboardgame.bg%2Fmasters%2520of%2520renaissance%2520rules.pdf&usg=AOvVaw3zG_mi_quuZtRXse1AERmk"+Graphics.ANSI_RESET);
+        System.out.println("Legend: "
+                +Graphics.getResource(Resource.FAITH)+"-Faith, "
+                +Graphics.getResource(Resource.COIN)+ "-Coin, "
+                +Graphics.getResource(Resource.SERVANT)+ "-Servant, "
+                +Graphics.getResource(Resource.SHIELD)+ "-Shield, "
+                +Graphics.getResource(Resource.STONE)+ "-Stone");
     }
 
     public void showLeaderCard(SimpleLeaderCard card)
     {
 
         System.out.println(Graphics.ANSI_RESET+ "┌──────────┐");
-        if(card.getResourceRequirements()!=null)
+        if(card.getResourceRequirements()!=null &&!card.getResourceRequirements().isEmpty())
             showResources(card.getResourceRequirements());
         String[] req = new String[2];
         int i =0;
-        if(card.getCardRequirements()!=null) {
+        if(card.getCardRequirements()!= null && !card.getCardRequirements().isEmpty()) {
             for (CardColor color : card.getCardRequirements().keySet()) {
                 for (Integer level : card.getCardRequirements().get(color).keySet()) {
                     if (level == null) {
@@ -171,8 +189,17 @@ public class CLIView implements View {
     public int selectedDepot(){
         Scanner input = new Scanner(System.in);
         System.out.println("Choose a depot in which to place the resource( 1->HIGH DEPOT, 2->MEDIUM DEPOT, 3->LOW DEPOT ):");
-        System.out.print(Graphics.ANSI_CYAN+">" + Graphics.ANSI_RESET);
-         return input.nextInt();
+        System.out.print(Graphics.ANSI_CYAN+">"+Graphics.ANSI_RESET);
+        int choice;
+        try{
+            choice=input.nextInt();
+            if(choice<1||choice>3) throw new InputMismatchException();
+        }catch (Exception e)
+        {
+            showErrorMessage("Illegal input");
+            return selectedDepot();
+        }
+        return choice;
     }
 
 
@@ -184,7 +211,7 @@ public class CLIView implements View {
         System.out.println("3) Show...");
         System.out.print(">");
         Scanner input = new Scanner(System.in);
-        int choice = 0;
+        int choice;
         try{
             choice=input.nextInt();
             if(choice<1||choice>3) throw new InputMismatchException();
@@ -304,9 +331,31 @@ public class CLIView implements View {
         showWarehouse(player);
 
     }
-    private void showFaithTrack(){}
+    private void showFaithTrack(){
+        for (SimplePlayer player: game.getPlayers()) {
+            System.out.println(player.getUsername()+" position: "+player.getPosition());
+        }
+        Graphics.showPositions();
+    }
 
-    private void showDevCardDecks() {}
+    private void showDevCardDecks() {
+        SimpleDevelopmentCard[][][] decks = game.getDevCardDecks();
+        for(int row = 0; row<3; row++)
+        {
+
+            for (int col = 0; col<4; col++)
+            {
+                int i = 3;
+                while (decks[row][col][i]==null)
+                {
+                    i--;
+                    if(i<0)break;
+                }
+                if(i>=0)
+                    showCard(decks[row][col][i]);
+            }
+        }
+    }
 
     public void showWarehouse(SimplePlayer player)
     {
@@ -397,6 +446,7 @@ public class CLIView implements View {
     private CommandMsg buyCard(){
         return null;
     }
+    @Deprecated
     public void showCardLegend()
     {
 
@@ -454,10 +504,10 @@ public class CLIView implements View {
         System.out.println("└──────────┘");
     }
 
-    private void showResources(Map<Resource, Integer> resources)
+    public void showResources(Map<Resource, Integer> resources)
     {
-        if(resources==null){
-            System.out.println("Le risorse sono null");
+        if(resources== null ||resources.isEmpty()){
+            System.out.println("");
             return;
         }
         String[] req = new String[3];
@@ -490,6 +540,9 @@ public class CLIView implements View {
             }
             System.out.print("\n");
         }
+        System.out.print("Spare marble: ");
+        System.out.print(Graphics.getMarble(game.getSpareMarble()));
+        System.out.print("\n");
     }
 
     @Override

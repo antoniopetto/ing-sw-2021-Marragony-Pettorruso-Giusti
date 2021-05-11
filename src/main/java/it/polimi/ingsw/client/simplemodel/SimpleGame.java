@@ -87,4 +87,8 @@ public class SimpleGame {
     public String getThisPlayer() {
         return thisPlayer;
     }
+
+    public SimpleDevelopmentCard[][][] getDevCardDecks() {
+        return devCardDecks;
+    }
 }
