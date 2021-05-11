@@ -1,5 +1,6 @@
 package it.polimi.ingsw.client.view;
 
+import it.polimi.ingsw.client.simplemodel.SimpleGame;
 import it.polimi.ingsw.client.simplemodel.SimpleLeaderCard;
 import it.polimi.ingsw.client.simplemodel.SimplePlayer;
 import it.polimi.ingsw.server.model.shared.Marble;
@@ -15,7 +16,7 @@ public interface View {
     void showErrorMessage(String text);
     void showConfirmMessage(String text);
     void faceUpLeaderCard(int cardId);
-
+    SimpleGame getGame();
     void showMarbleBuffer(List<Marble> marbleList);
     String getUsername();
     int getNumber();

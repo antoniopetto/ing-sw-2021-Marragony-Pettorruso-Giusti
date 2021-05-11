@@ -18,7 +18,7 @@ public class TrackUpdateMsg implements UpdateMsg {
 
 
     @Override
-    public void execute(SimpleGame model, ServerHandler server) {
+    public void execute(SimpleGame model) {
         for (SimplePlayer simplePlayer:model.getPlayers()) {
             //It has to be modified
             if((simplePlayer.getUsername()==null&&player==null&&!allBut)||

@@ -1,10 +1,9 @@
 package it.polimi.ingsw.server;
 
 import it.polimi.ingsw.client.simplemodel.SimplePlayer;
-import it.polimi.ingsw.messages.update.InitChoicesMsg;
+import it.polimi.ingsw.messages.view.InitChoicesMsg;
 import it.polimi.ingsw.server.model.AbstractPlayer;
 import it.polimi.ingsw.server.model.Game;
-import it.polimi.ingsw.server.model.cards.LeaderCard;
 import it.polimi.ingsw.server.model.playerboard.Depot;
 import it.polimi.ingsw.server.model.playerboard.DepotName;
 import it.polimi.ingsw.server.model.playerboard.Resource;
@@ -147,8 +146,8 @@ public class VirtualView implements Runnable{
     }
 
     public void addCardInSlotUpdate(int cardId, int slotId){
-        AddCardInSlotUpdateMsg msg = new AddCardInSlotUpdateMsg(game.getPlaying().getUsername(), cardId, slotId);
-        messageFilter(msg, "The player '"+ game.getPlaying().getUsername()+ "' has bought a development card");
+        AddCardInSlotUpdateMsg msg = new AddCardInSlotUpdateMsg(getPlayingUsername(), cardId, slotId);
+        messageFilter(msg, "The player '"+ getPlayingUsername()+ "' has bought a development card");
     }
 
     public void devcarddecksUpdate(int level, int cardColor,  int cardTop){
@@ -157,8 +156,8 @@ public class VirtualView implements Runnable{
     }
 
     public void playLeaderCardUpdate(int cardId) {
-        LeaderCardUpdateMsg msg = new LeaderCardUpdateMsg(game.getPlaying().getUsername(), cardId);
-        messageFilter(msg, "The player '"+ game.getPlaying().getUsername()+ "' plays a LeaderCard");
+        LeaderCardUpdateMsg msg = new LeaderCardUpdateMsg(getPlayingUsername(), cardId);
+        messageFilter(msg, "The player '"+ getPlayingUsername()+ "' plays a LeaderCard");
     }
 
 

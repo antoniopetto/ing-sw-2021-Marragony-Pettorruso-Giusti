@@ -8,5 +8,5 @@ import java.io.Serializable;
 
 public interface UpdateMsg extends Serializable {
 
-    void execute(SimpleGame model, ServerHandler server) throws IOException;
+    void execute(SimpleGame model);
 }

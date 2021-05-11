@@ -20,6 +20,7 @@ public class GUIView implements View {
         game = new SimpleGame(this);
     }
 
+    @Override
     public SimpleGame getGame() {
         return game;
     }

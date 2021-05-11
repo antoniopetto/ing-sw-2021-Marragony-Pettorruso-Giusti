@@ -20,7 +20,7 @@ public class WarehouseUpdateMsg implements UpdateMsg {
     }
 
     @Override
-    public void execute(SimpleGame game, ServerHandler server) {
+    public void execute(SimpleGame game) {
         for (SimplePlayer player : game.getPlayers())
             if (player.getUsername().equals(username))
                 player.changeWarehouse(warehouse);

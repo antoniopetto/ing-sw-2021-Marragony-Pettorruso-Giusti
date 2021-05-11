@@ -12,7 +12,7 @@ public class BufferUpdateMsg implements UpdateMsg {
     }
 
     @Override
-    public void execute(SimpleGame model, ServerHandler server) {
+    public void execute(SimpleGame model) {
         model.reduceBuffer(marble);
         model.getPlayers().get(0).getView().bufferUpdate(marble);
 

@@ -15,7 +15,7 @@ public class MarketBoardUpdate implements UpdateMsg{
     }
 
     @Override
-    public void execute(SimpleGame model, ServerHandler server) {
+    public void execute(SimpleGame model) {
         model.setMarketBoard(marketBoard);
         model.setSpareMarble(spareMarble);
     }

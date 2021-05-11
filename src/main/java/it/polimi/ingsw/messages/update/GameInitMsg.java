@@ -19,7 +19,7 @@ public class GameInitMsg implements UpdateMsg{
     }
 
     @Override
-    public void execute(SimpleGame model, ServerHandler server) {
+    public void execute(SimpleGame model) {
         model.startGame(players, cardIDs, handler);
     }
 }

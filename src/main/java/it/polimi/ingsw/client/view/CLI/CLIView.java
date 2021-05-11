@@ -2,14 +2,11 @@ package it.polimi.ingsw.client.view.CLI;
 
 import it.polimi.ingsw.client.simplemodel.*;
 import it.polimi.ingsw.client.view.View;
-import it.polimi.ingsw.messages.command.BuyResourcesMsg;
-import it.polimi.ingsw.messages.command.DiscardLeaderCardMsg;
-import it.polimi.ingsw.messages.command.PlayLeaderCardMsg;
+import it.polimi.ingsw.messages.command.*;
 import it.polimi.ingsw.server.model.cards.CardColor;
 import it.polimi.ingsw.server.model.playerboard.DepotName;
 import it.polimi.ingsw.server.model.playerboard.Resource;
 import it.polimi.ingsw.server.model.shared.Marble;
-import it.polimi.ingsw.messages.command.CommandMsg;
 
 import java.util.*;
 
@@ -28,6 +25,7 @@ public class CLIView implements View {
         game = new SimpleGame(this);
     }
 
+    @Override
     public SimpleGame getGame() {
         return game;
     }
@@ -444,7 +442,11 @@ public class CLIView implements View {
     }
 
     private CommandMsg buyCard(){
-        return null;
+
+        showDevCardDecks(); //add in an SimpleLeaderCard List --> card selection via an index and use it to access a leader card
+        //TODO select Card
+
+        return new BuyandAddCardInSlotMsg(CardColor.BLUE, 1, 2); //momentaneo
     }
     @Deprecated
     public void showCardLegend()
@@ -579,5 +581,7 @@ public class CLIView implements View {
 
             return null;
     }
+
+
 
 }
