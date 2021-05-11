@@ -120,18 +120,28 @@ public class CLIView implements View {
     }
 
     @Override
-    public int getDiscardLeaderCard(String username) {
+    public int getDiscardedLeaderCard(String username) {
 
         SimplePlayer player = null;
+        boolean valid = false;
+
         for(SimplePlayer simplePlayer : game.getPlayers()) {
             if (simplePlayer.getUsername().equals(username)) {
                 player = simplePlayer;
-                printLeaderCard(player);
+
+                if(player.getLeaderCards().isEmpty()){
+                    valid = true;
+                    showErrorMessage("All leaderCards have already been discarded");
+                }
+                else printLeaderCard(player);
+
+                break;
             }
         }
+
         int position = 0;
-        boolean valid = false;
         Scanner input = new Scanner(System.in);
+
         while(!valid) {
             System.out.println(Graphics.ANSI_RESET+"Insert leaderCard to discard ( number 1-" + player.getLeaderCards().size() + "):");
             System.out.print(Graphics.ANSI_CYAN+">"+Graphics.ANSI_RESET);
@@ -186,7 +196,7 @@ public class CLIView implements View {
     public Marble selectedMarble(){
         Scanner input = new Scanner(System.in);
         System.out.println("Choose a marble to put in a depot (insert a number between 1-"+ game.getMarbleBuffer().size()+"):");
-        System.out.println(Graphics.ANSI_CYAN+">");
+        System.out.print(Graphics.ANSI_CYAN+">");
         int position = input.nextInt();
         return  game.getMarbleBuffer().get(position-1);
     }
@@ -195,7 +205,7 @@ public class CLIView implements View {
     public int selectedDepot(){
         Scanner input = new Scanner(System.in);
         System.out.println("Choose a depot in which to place the resource( 1->HIGH DEPOT, 2->MEDIUM DEPOT, 3->LOW DEPOT ):");
-        System.out.println(Graphics.ANSI_CYAN+">");
+        System.out.print(Graphics.ANSI_CYAN+">");
          return input.nextInt();
     }
 
@@ -206,7 +216,7 @@ public class CLIView implements View {
         System.out.println("1) Buy resources");
         System.out.println("2) Buy development card");
         System.out.println("3) Activate production");
-        System.out.println("4) Play leader card");
+        System.out.println("4) Play / Discard leader card");
         System.out.println("5) Show...");
         System.out.print(">");
         Scanner input = new Scanner(System.in);
@@ -228,6 +238,9 @@ public class CLIView implements View {
             }
             case 3->{
                 return activateProduction();
+            }
+            case 4->{
+                return leaderCardAction();
             }
             case 5-> {
                 for (SimplePlayer player: game.getPlayers()) {
@@ -312,6 +325,21 @@ public class CLIView implements View {
         return null;
     }
 
+    private CommandMsg leaderCardAction(){
+
+        System.out.println("Select an action:");
+        System.out.println("1)Play a LeaderCard");
+        System.out.println("2)Discard a LeaderCard");
+        System.out.print(">");
+        Scanner input = new Scanner(System.in);
+        int choice = input.nextInt();
+
+        if(choice == 1){
+            return;
+        }else if(choice == 2) return;
+
+
+    }
     private CommandMsg buyCard(){
         return null;
     }

@@ -23,7 +23,7 @@ public class CreateBufferMsg implements UpdateMsg {
         DepotName depot = null;
         int selectedDepot = model.getView().selectedDepot();
         for(DepotName depotName : DepotName.values()){
-            if(depotName.getPosition() == selectedDepot ){
+            if(depotName.getPosition() == (selectedDepot-1) ){
                 depot = depotName;
                 break;
             }

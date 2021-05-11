@@ -23,7 +23,7 @@ public class InitChoicesMsg implements UpdateMsg {
 
     @Override
     public void execute(SimpleGame model, ServerHandler server) throws IOException  {
-        int cardId = model.getView().getDiscardLeaderCard(username);
+        int cardId = model.getView().getDiscardedLeaderCard(username);
         DiscardLeaderCardMsg msg = new DiscardLeaderCardMsg(cardId);
         server.writeObject(msg);
 

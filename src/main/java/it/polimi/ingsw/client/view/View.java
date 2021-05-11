@@ -26,7 +26,7 @@ public interface View {
     void addCardInSlot(SimplePlayer player, int cardId, int cardSlot);
     CommandMsg selectMove();
     void showLeaderCard(SimpleLeaderCard card);
-    int getDiscardLeaderCard(String username);
+    int getDiscardedLeaderCard(String username);
     Marble selectedMarble();
     void printLeaderCard(SimplePlayer player);
     int selectedDepot();

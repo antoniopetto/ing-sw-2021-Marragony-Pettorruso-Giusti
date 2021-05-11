@@ -131,7 +131,7 @@ public class GUIView implements View {
     }
 
     @Override
-    public int getDiscardLeaderCard(String username) {
+    public int getDiscardedLeaderCard(String username) {
         return 0;
     }
 
