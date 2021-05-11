@@ -9,10 +9,7 @@ import it.polimi.ingsw.server.model.playerboard.Resource;
 import it.polimi.ingsw.server.model.shared.Marble;
 import it.polimi.ingsw.messages.command.CommandMsg;
 
-import java.util.InputMismatchException;
-import java.util.List;
-import java.util.Map;
-import java.util.Scanner;
+import java.util.*;
 
 public class CLIView implements View {
     private CLISettingView settingView;
@@ -82,25 +79,6 @@ public class CLIView implements View {
             System.out.format(formatInfo, req[0], "", req[1]);
             System.out.println();
         }
-        /*
-        if(!card.isLevelRequired()){ //if the integer represents the number of cards
-            String [] req = new String[2];
-            int i =0;
-            for (CardColor color :card.getCardRequirements().keySet()) {
-                req[i] = Graphics.getCardColor(color)+card.getCardRequirements().get(color) +"■"+Graphics.ANSI_RESET;
-                i++;
-            }
-            if(req[1]==null) req[1]="";
-            System.out.format(formatInfo, req[0], "", req[1]);
-            System.out.println();
-        }
-        else //if the integer represents the level of the card
-        {
-            for (CardColor color:card.getCardRequirements().keySet()) {
-                System.out.println(Graphics.getCardColor(color)+" |"+card.getCardRequirements().get(color)+"|"+Graphics.ANSI_RESET);
-            }
-        }
-         */
         System.out.println(Graphics.getAbility(card.getAbility(), card.getAbilityResource()));
 
 
@@ -173,10 +151,7 @@ public class CLIView implements View {
 
     }
 
-    @Override
-    public void discardLeaderCard(SimplePlayer player, int cardId) {
 
-    }
 
     @Override
     public void showLeaderCardAllPlayers(int cardId) {
@@ -212,63 +187,132 @@ public class CLIView implements View {
 
     @Override
     public CommandMsg selectMove() {
-        System.out.println("Select your move:");
-        System.out.println("1) Buy resources");
-        System.out.println("2) Buy development card");
-        System.out.println("3) Activate production");
-        System.out.println("4) Play / Discard leader card");
-        System.out.println("5) Show...");
+        System.out.println("Select what to do:");
+        System.out.println("1) Normal action");
+        System.out.println("2) Leader card action");
+        System.out.println("3) Show...");
         System.out.print(">");
         Scanner input = new Scanner(System.in);
         int choice = 0;
         try{
             choice=input.nextInt();
-            if(choice<1||choice>5) throw new InputMismatchException();
+            if(choice<1||choice>3) throw new InputMismatchException();
         }catch (Exception e)
         {
             showErrorMessage("Illegal input");
-            selectMove();
+            return selectMove();
         }
         switch (choice){
             case 1 -> {
-                return buyResources();
+                System.out.println("Select the action:");
+                System.out.println("1) Buy resources");
+                System.out.println("2) Buy development card");
+                System.out.println("3) Activate production");
+                System.out.println("4) Back...");
+                try{
+                    choice=input.nextInt();
+                    if(choice<1||choice>4) throw new InputMismatchException();
+                }catch (Exception e)
+                {
+                    showErrorMessage("Illegal input");
+                    return selectMove();
+                }
+                switch (choice)
+                {
+                    case 1 -> {
+                        return buyResources();
+                    }
+                    case 2 -> {
+                        return buyCard();
+                    }
+                    case 3 -> {
+                        return activateProduction();
+                    }
+                    case 4 -> {
+                        return selectMove();
+                    }
+                }
             }
             case 2-> {
-                return buyCard();
+                System.out.println("Select what to do: ");
+                System.out.println("1) Play leader card");
+                System.out.println("2) Discard leader card");
+                System.out.println("3) Back...");
+                try{
+                    choice=input.nextInt();
+                    if(choice<1||choice>3) throw new InputMismatchException();
+                }catch (Exception e)
+                {
+                    showErrorMessage("Illegal input");
+                    return selectMove();
+                }
+                switch (choice) {
+                    case 1 -> { return playLeaderCard();}
+                    case 2 -> {return discardLeaderCard();}
+                    case 3-> {return selectMove();}
+                }
             }
             case 3->{
-                return activateProduction();
-            }
-            case 4->{
-                return leaderCardAction();
-            }
-            case 5-> {
-                for (SimplePlayer player: game.getPlayers()) {
-                    showWarehouse(player);
-                }
-                return null;
+                show();
+                return selectMove();
             }
             default ->{
                 return null;
             }
         }
+        return null;
     }
 
+    private CommandMsg playLeaderCard(){
+        return null;
+    }
     private void show()
     {
         System.out.println("Select what to show: ");
-        int i =0;
+        System.out.println("1) market board");
+        System.out.println("2) decks");
+        System.out.println("3) faith track");
+        Map<Integer, String> players = new HashMap<>();
+        int i =4;
         for (SimplePlayer player: game.getPlayers()) {
-            System.out.println(i+") " + player.getUsername() + "player board");
+            System.out.println(i + ") " + player.getUsername() + " player board");
+            players.put(i, player.getUsername());
             i++;
         }
-        int j = i+1;
-        System.out.println(j + ") market board");
-        j++;
-        System.out.println(j + ") decks");
-        j++;
-        System.out.println(j + ") faith track");
+        Scanner input = new Scanner(System.in);
+        int choice = 0;
+        try{
+            choice=input.nextInt();
+            if(choice<1||choice>=i) throw new InputMismatchException();
+        }catch (Exception e)
+        {
+            showErrorMessage("Invalid input");
+            show();
+        }
+        switch (choice) {
+            case 1 -> showMarketBoard();
+            case 2-> showDevCardDecks();
+            case 3 -> showFaithTrack();
+            default -> showPlayerBoard(players.get(choice));
+        }
     }
+    private void showPlayerBoard(String name)
+    {
+        SimplePlayer player = null;
+        for (SimplePlayer p: game.getPlayers()) {
+            if(p.getUsername().equals(name))
+            {
+                player = p;
+                break;
+            }
+        }
+        if(player==null) throw new IllegalStateException();
+        showWarehouse(player);
+
+    }
+    private void showFaithTrack(){}
+
+    private void showDevCardDecks() {}
 
     public void showWarehouse(SimplePlayer player)
     {
@@ -280,6 +324,9 @@ public class CLIView implements View {
         }
     }
 
+    private CommandMsg discardLeaderCard(){
+        return null;
+    }
     private CommandMsg buyResources(){
         showMarketBoard();
         System.out.println("Want to buy a column/row?");
@@ -325,21 +372,6 @@ public class CLIView implements View {
         return null;
     }
 
-    private CommandMsg leaderCardAction(){
-
-        System.out.println("Select an action:");
-        System.out.println("1)Play a LeaderCard");
-        System.out.println("2)Discard a LeaderCard");
-        System.out.print(">");
-        Scanner input = new Scanner(System.in);
-        int choice = input.nextInt();
-
-        if(choice == 1){
-            return;
-        }else if(choice == 2) return;
-
-
-    }
     private CommandMsg buyCard(){
         return null;
     }
