@@ -60,19 +60,6 @@ public class Graphics {
     {
         String result = getCardColor(color);
         result+="■" + level+ "■" +ANSI_RESET;
-        /*
-            switch (level){
-            case 1 -> {
-                result+="❶"+ANSI_RESET;
-            }
-            case 2-> {
-                result+="❷"+ANSI_RESET;
-            }
-            case 3-> {
-                result+="❸"+ANSI_RESET;
-            }
-        }
-         */
 
         return result;
     }

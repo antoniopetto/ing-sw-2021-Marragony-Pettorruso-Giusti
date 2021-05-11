@@ -12,6 +12,7 @@ public class SimpleGame {
     private Marble spareMarble;
     private SimpleDevelopmentCard[][][] devCardDecks = new SimpleDevelopmentCard[3][4][4];
     private View view;
+    private String thisPlayer;
 
     public SimpleGame(View view) {
         this.view = view;
@@ -29,6 +30,7 @@ public class SimpleGame {
     public void startGame(List<SimplePlayer> players, int[][][] cardIds, String handlerUsername) {
         view.startGame();
         this.players = players;
+        thisPlayer=handlerUsername;
         for(SimplePlayer player: this.players){
             player.setView(view);
         }
@@ -44,14 +46,7 @@ public class SimpleGame {
         }catch (InterruptedException e){
             e.printStackTrace();
         }
-        /*
-        for(SimplePlayer simplePlayer : players) {
-            if (simplePlayer.getUsername().equals(handlerUsername)) {
-                for (SimpleLeaderCard card : simplePlayer.getLeaderCards()) {
-                    view.showLeaderCard(card);
-                }
-            }
-        }*/
+
     }
 
     public void updateDevCardDecks(int level, int cardColor, int deleteCard){

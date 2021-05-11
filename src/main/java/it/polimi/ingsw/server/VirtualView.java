@@ -31,10 +31,6 @@ public class VirtualView implements Runnable{
         else
             game = Game.newRegularGame(new ArrayList<>(players.keySet()), this);
 
-        //debug
-        for (LeaderCard card: game.getPlaying().getLeaderCardList() ) {
-            System.out.println(card.getId());
-        }
         initGame();
     }
 
@@ -64,11 +60,11 @@ public class VirtualView implements Runnable{
                 e.printStackTrace();
             }
         }
-        initChoiches();
+        initChoices();
         marketBoardUpdate();
     }
 
-    public void initChoiches(){
+    public void initChoices(){
         try {
             InitChoicesMsg msg = new InitChoicesMsg(getPlayingUsername(), game.turnPosition(getPlayingUsername()));
             getPlayingHandler().writeObject(msg);
@@ -94,7 +90,7 @@ public class VirtualView implements Runnable{
 
     public void discardLeaderCardUpdate(int cardId){
         DiscardLeaderCardUpdateMsg msg = new DiscardLeaderCardUpdateMsg(game.getPlaying().getUsername(), cardId);
-        messageFilter(msg, "The"+ game.getPlaying().getUsername()+ "Player has discarded a development card");
+        messageFilter(msg, "The player '"+ game.getPlaying().getUsername()+ "' has discarded a leader card");
     }
 
     public void createBuffer(List<Marble> marbleBuffer){
@@ -152,7 +148,7 @@ public class VirtualView implements Runnable{
 
     public void addCardInSlotUpdate(int cardId, int slotId){
         AddCardInSlotUpdateMsg msg = new AddCardInSlotUpdateMsg(game.getPlaying().getUsername(), cardId, slotId);
-        messageFilter(msg, "The"+ game.getPlaying().getUsername()+ "Player has bought a development card");
+        messageFilter(msg, "The player '"+ game.getPlaying().getUsername()+ "' has bought a development card");
     }
 
     public void devcarddecksUpdate(int level, int cardColor,  int cardTop){
@@ -162,7 +158,7 @@ public class VirtualView implements Runnable{
 
     public void playLeaderCardUpdate(int cardId) {
         LeaderCardUpdateMsg msg = new LeaderCardUpdateMsg(game.getPlaying().getUsername(), cardId);
-        messageFilter(msg, "The"+ game.getPlaying().getUsername()+ "Player plays a LeaderCard");
+        messageFilter(msg, "The player '"+ game.getPlaying().getUsername()+ "' plays a LeaderCard");
     }
 
 

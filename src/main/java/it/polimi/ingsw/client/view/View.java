@@ -15,7 +15,6 @@ public interface View {
     void showErrorMessage(String text);
     void showConfirmMessage(String text);
     void faceUpLeaderCard(SimplePlayer player, int cardId);
-    void discardLeaderCard(SimplePlayer player, int cardId);
     void showLeaderCardAllPlayers(int cardId);
     void showMarbleBuffer(List<Marble> marbleList);
     String getUsername();
@@ -29,4 +28,6 @@ public interface View {
     int getDiscardLeaderCard(String username);
     Marble selectedMarble();
     int selectedDepot();
+
+
 }
