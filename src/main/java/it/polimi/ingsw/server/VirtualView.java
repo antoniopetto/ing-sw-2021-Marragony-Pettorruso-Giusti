@@ -66,7 +66,7 @@ public class VirtualView implements Runnable{
 
     public void initChoices(){
         try {
-            InitChoicesMsg msg = new InitChoicesMsg(getPlayingUsername(), game.turnPosition(getPlayingUsername()));
+            InitChoicesMsg msg = new InitChoicesMsg();
             getPlayingHandler().writeObject(msg);
         } catch (IOException e){
             e.printStackTrace();
@@ -89,8 +89,8 @@ public class VirtualView implements Runnable{
 
 
     public void discardLeaderCardUpdate(int cardId){
-        DiscardLeaderCardUpdateMsg msg = new DiscardLeaderCardUpdateMsg(game.getPlaying().getUsername(), cardId);
-        messageFilter(msg, "The player '"+ game.getPlaying().getUsername()+ "' has discarded a leader card");
+        DiscardLeaderCardUpdateMsg msg = new DiscardLeaderCardUpdateMsg(getPlayingUsername(), cardId);
+        messageFilter(msg, "The player '"+ getPlayingUsername()+ "' has discarded a leader card");
     }
 
     public void createBuffer(List<Marble> marbleBuffer){
@@ -202,9 +202,8 @@ public class VirtualView implements Runnable{
                 if(!map.getKey().equals(game.getPlaying().getUsername())){
                     ErrorMsg errorMsg = new ErrorMsg(text);
                     map.getValue().writeObject(errorMsg);
-                    map.getValue().writeObject(msg);
                 }
-                else map.getValue().writeObject(msg);
+                map.getValue().writeObject(msg);
             } catch (IOException e) {
                 e.printStackTrace();
             }

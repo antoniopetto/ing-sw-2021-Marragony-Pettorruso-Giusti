@@ -65,15 +65,10 @@ public class GUIView implements View {
     }
 
     @Override
-    public void faceUpLeaderCard(SimplePlayer player, int cardId) {
+    public void faceUpLeaderCard(int cardId) {
 
     }
 
-
-    @Override
-    public void showLeaderCardAllPlayers(int cardId) {
-
-    }
 
     @Override
     public void showMarbleBuffer(List<Marble> marbleList) {
@@ -127,7 +122,7 @@ public class GUIView implements View {
     }
 
     @Override
-    public int getDiscardedLeaderCard(String username) {
+    public int getDiscardedLeaderCard() {
         return 0;
     }
 

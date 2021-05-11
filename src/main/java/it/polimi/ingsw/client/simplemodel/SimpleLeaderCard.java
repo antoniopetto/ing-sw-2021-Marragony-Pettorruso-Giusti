@@ -55,6 +55,10 @@ public class SimpleLeaderCard implements Serializable {
         this.active = active;
     }
 
+    public boolean isActive() {
+        return active;
+    }
+
     public Resource getAbilityResource() {
         return abilityResource;
     }

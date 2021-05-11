@@ -85,6 +85,7 @@ public class Player extends AbstractPlayer{
      */
     public boolean playLeaderCard(int cardId) throws ElementNotFoundException {
 
+        if(cardId == 0) throw new IllegalArgumentException("There are no leader cards");
         LeaderCard card = Card.getById(cardId, leaderCardList);
         if(card.isPlayed())
             throw new IllegalStateException("Card already played");
@@ -102,8 +103,11 @@ public class Player extends AbstractPlayer{
      * @throws ElementNotFoundException     If the if doesn't correspond to any of the players cards
      */
     public void removeLeaderCard(int id) throws ElementNotFoundException {
-        leaderCardList.remove(Card.getById(id, leaderCardList));
-        observer.discardLeaderCardUpdate(id);
+        if(id == 0) throw new IllegalArgumentException("All leaderCards have already been discarded");
+            else {
+            leaderCardList.remove(Card.getById(id, leaderCardList));
+            observer.discardLeaderCardUpdate(id);
+        }
     }
 
     /**

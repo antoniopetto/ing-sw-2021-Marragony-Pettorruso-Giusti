@@ -58,11 +58,10 @@ public class SimplePlayer implements Serializable {
     }
 
     public void activeLeaderCard(int cardId){
-        for(int i = 0; i < 2; i++) {
+        for(int i = 0; i < leaderCards.size(); i++) {
             if ( leaderCards.get(i).getId() == cardId ) leaderCards.get(i).setActive(true);
         }
-        view.faceUpLeaderCard(this, cardId);
-        view.showLeaderCardAllPlayers(cardId);
+        view.faceUpLeaderCard(cardId);
     }
 
     public void insertCardInSlot(int cardId, int slotId){
@@ -75,15 +74,13 @@ public class SimplePlayer implements Serializable {
         for(int i = 0; i < leaderCards.size(); i++) {
             if ( leaderCards.get(i).getId() == cardId ) leaderCards.remove(i);
         }
-        //printLeaderCard(); decidere se far stampare le leaderCard ogni volta che si scarta la carta
-
     }
 
     public List<SimpleLeaderCard> getLeaderCards() {
         return leaderCards;
     }
 
-    public int chooseLCardToDiscard(int position){
+    public int chooseLeaderCard(int position){
         return leaderCards.get(position-1).getId();
     }
 

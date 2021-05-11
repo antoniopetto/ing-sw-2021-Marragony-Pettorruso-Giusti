@@ -83,4 +83,8 @@ public class SimpleGame {
     public Marble getSpareMarble() {
         return spareMarble;
     }
+
+    public String getThisPlayer() {
+        return thisPlayer;
+    }
 }

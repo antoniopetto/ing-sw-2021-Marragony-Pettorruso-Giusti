@@ -14,8 +14,8 @@ public interface View {
     void bufferUpdate(Marble marble);
     void showErrorMessage(String text);
     void showConfirmMessage(String text);
-    void faceUpLeaderCard(SimplePlayer player, int cardId);
-    void showLeaderCardAllPlayers(int cardId);
+    void faceUpLeaderCard(int cardId);
+
     void showMarbleBuffer(List<Marble> marbleList);
     String getUsername();
     int getNumber();
@@ -25,7 +25,7 @@ public interface View {
     void addCardInSlot(SimplePlayer player, int cardId, int cardSlot);
     CommandMsg selectMove();
     void showLeaderCard(SimpleLeaderCard card);
-    int getDiscardedLeaderCard(String username);
+    int getDiscardedLeaderCard();
     Marble selectedMarble();
     void printLeaderCard(SimplePlayer player);
     int selectedDepot();

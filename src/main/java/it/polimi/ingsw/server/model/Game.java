@@ -161,8 +161,8 @@ public class Game {
             playing.removeLeaderCard(cardId);
             if(state == State.INITIALIZING) {
                 if (playing.getLeaderCardList().size() == 2) {
-                    if (players.size() > 2) {
-                        if (turnPosition(playing.getUsername()) > 1) {
+                    if (players.size() > 1) {
+                        if (turnPosition(playing.getUsername()) > 0) {
                             marbleBuffer.add(Marble.BLUE);
                             marbleBuffer.add(Marble.PURPLE);
                             marbleBuffer.add(Marble.GREY);
@@ -172,10 +172,16 @@ public class Game {
                         } else endTurn();
                     } else endTurn();
                 } else virtualView.initChoices();
-            }else
+            }else{
+                virtualView.startPlay();
                 faithTrack.advance(playing);
+            }
         } catch (ElementNotFoundException e){
             virtualView.sendError("Leader card not found");
+            virtualView.startPlay();
+        } catch (IllegalArgumentException e){
+            virtualView.sendError(e.getMessage());
+            virtualView.startPlay();
         }
     }
 
@@ -311,8 +317,8 @@ public class Game {
      */
     public void buyAndAddCardInSlot(CardColor cardColor, int level, int slotId){
 
-        if(state != State.INSERTING) virtualView.sendError("Cannot Insert DevCard now");
-        else {
+        if(state != State.PRETURN) virtualView.sendError("Cannot Insert DevCard now");
+
             DevelopmentCard developmentCard = null;
             try {
                 developmentCard = developmentCardDecks.readTop(cardColor, level);
@@ -326,7 +332,7 @@ public class Game {
                 virtualView.sendError(e.getMessage());
             }
             developmentCardDecks.drawCard(cardColor, level);
-        }
+            state = State.POSTTURN;
     }
 
     /**
@@ -411,7 +417,7 @@ public class Game {
         try {
             if(!playing.playLeaderCard(cardId))
                 virtualView.sendError("The player does not meet the requirements");
-        } catch (IllegalStateException | IllegalArgumentException e){
+        } catch (IllegalStateException | IllegalArgumentException  | ElementNotFoundException e){
             virtualView.sendError(e.getMessage());
         }
     }
