@@ -63,6 +63,29 @@ public class Graphics {
 
         return result;
     }
+    public static void showPositions()
+    {
+        System.out.println("Important positions:");
+        System.out.println("(The number indicates the victory points, blue color indicates vatican report positions, red indicates pope space)");
+        System.out.print("  3-" +Graphics.ANSI_YELLOW+"(1)"+Graphics.ANSI_RESET);
+        System.out.print(Graphics.ANSI_BLUE+"  5");
+        System.out.print("  6-"+Graphics.ANSI_YELLOW+"(2)");
+        System.out.print(Graphics.ANSI_BLUE+"  7");
+        System.out.print(Graphics.ANSI_RED+"  8"+Graphics.ANSI_RESET);
+        System.out.print("  9-" +Graphics.ANSI_YELLOW+"(4)"+Graphics.ANSI_RESET);
+        System.out.print(Graphics.ANSI_BLUE+"  12-"+Graphics.ANSI_YELLOW+"(6)"+Graphics.ANSI_BLUE);
+        System.out.print("  13");
+        System.out.print("  14");
+        System.out.print("  15-" +Graphics.ANSI_YELLOW+"(9)"+Graphics.ANSI_RESET);
+        System.out.print(Graphics.ANSI_RED+"  16"+Graphics.ANSI_RESET);
+        System.out.print("  18-" +Graphics.ANSI_YELLOW+"(12)"+Graphics.ANSI_RESET);
+        System.out.print(Graphics.ANSI_BLUE+"  19");
+        System.out.print("  20");
+        System.out.print("  21-" +Graphics.ANSI_YELLOW+"(16)"+Graphics.ANSI_RESET);
+        System.out.print(Graphics.ANSI_BLUE+"  22");
+        System.out.print("  23");
+        System.out.print(Graphics.ANSI_RED+"  24-"+Graphics.ANSI_YELLOW+"(20)\n"+Graphics.ANSI_RESET);
+    }
 
     public static String getMarble(Marble marble)
     {
