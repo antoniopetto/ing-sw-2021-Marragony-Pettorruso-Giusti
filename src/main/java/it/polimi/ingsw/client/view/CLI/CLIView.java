@@ -8,6 +8,7 @@ import it.polimi.ingsw.server.model.playerboard.DepotName;
 import it.polimi.ingsw.server.model.playerboard.Resource;
 import it.polimi.ingsw.server.model.shared.Marble;
 
+import java.sql.SQLOutput;
 import java.util.*;
 
 public class CLIView implements View {
@@ -137,7 +138,7 @@ public class CLIView implements View {
         Scanner input = new Scanner(System.in);
 
         while(!valid) {
-            System.out.println(Graphics.ANSI_RESET+"Insert leaderCard to discard ( number 1-" + player.getLeaderCards().size() + "):");
+            System.out.println(Graphics.ANSI_RESET+"Choose leaderCard to discard ( number 1-" + player.getLeaderCards().size() + "):");
             System.out.print(Graphics.ANSI_CYAN+">"+Graphics.ANSI_RESET);
             position = input.nextInt();
             if(position > player.getLeaderCards().size() || position < 1){
@@ -160,12 +161,6 @@ public class CLIView implements View {
     public void bufferUpdate(Marble marble) {
 
     }
-
-    @Override
-    public void faceUpLeaderCard(int cardId) {
-
-    }
-
 
     @Override
     public void showMarbleBuffer(List<Marble> marbleList) {
@@ -269,9 +264,11 @@ public class CLIView implements View {
                 System.out.println("2) Discard leader card");
                 System.out.println("3) Show my leader cards");
                 System.out.println("4) Back...");
+                System.out.print(Graphics.ANSI_CYAN+">"+Graphics.ANSI_RESET);
+
                 try{
                     choice=input.nextInt();
-                    if(choice<1||choice>3) throw new InputMismatchException();
+                    if(choice<1||choice>4) throw new InputMismatchException();
                 }catch (Exception e)
                 {
                     showErrorMessage("Illegal input");
@@ -312,6 +309,7 @@ public class CLIView implements View {
             players.put(i, player.getUsername());
             i++;
         }
+        System.out.print(Graphics.ANSI_CYAN+">"+Graphics.ANSI_RESET);
         Scanner input = new Scanner(System.in);
         int choice = 0;
         try{
@@ -329,6 +327,7 @@ public class CLIView implements View {
             default -> showPlayerBoard(players.get(choice));
         }
     }
+
     private void showPlayerBoard(String name)
     {
         SimplePlayer player = null;
@@ -402,7 +401,7 @@ public class CLIView implements View {
 
             while(!valid) {
                 Scanner input = new Scanner(System.in);
-                System.out.println(Graphics.ANSI_RESET+"Insert leaderCard to play ( number 1-" + player.getLeaderCards().size() + "):");
+                System.out.println(Graphics.ANSI_RESET+"Choose leaderCard to play ( number 1-" + player.getLeaderCards().size() + "):");
                 System.out.print(Graphics.ANSI_CYAN+">"+Graphics.ANSI_RESET);
                 position = input.nextInt();
 
@@ -463,11 +462,44 @@ public class CLIView implements View {
     }
 
     private CommandMsg buyCard(){
+        boolean valid = false;
+        showDevCardDecks();
+        int position = 0;
+        Scanner input = new Scanner(System.in);
 
-        showDevCardDecks(); //add in an SimpleLeaderCard List --> card selection via an index and use it to access a leader card
-        //TODO select Card
+        while(!valid) {
 
-        return new BuyandAddCardInSlotMsg(CardColor.BLUE, 1, 2); //momentaneo
+            System.out.println(Graphics.ANSI_RESET+"Choose developmentCard to but ( number 1-" + game.getDevCardDecks().size() + "):");
+            System.out.print(Graphics.ANSI_CYAN+">"+Graphics.ANSI_RESET);
+             position = input.nextInt();
+
+            if(position > game.getDevCardDecks().size() || position < 1){
+                showErrorMessage("Insert a number between 1-" + game.getDevCardDecks().size());
+            }
+            else valid = true;
+
+        }
+
+        valid = false;
+
+        int slotId = 0;
+        while(!valid){
+
+            System.out.println(Graphics.ANSI_RESET+"Choose slot in which to insert the developmentCard( number 1-" +findPlayer(game.getThisPlayer()).getSlots().size() + "):");
+            System.out.print(Graphics.ANSI_CYAN+">"+Graphics.ANSI_RESET);
+            slotId = input.nextInt();
+
+            if(slotId > findPlayer(game.getThisPlayer()).getSlots().size() || slotId < 1){
+                showErrorMessage("Insert a number between 1-" + findPlayer(game.getThisPlayer()).getSlots().size());
+            }
+            else valid = true;
+
+        }
+
+        CardColor cardColor = game.getDevCardDecks().get(position-1).getColor();
+        int level =  game.getDevCardDecks().get(position-1).getLevel();
+
+        return new BuyandAddCardInSlotMsg(cardColor, level, slotId);
     }
     @Deprecated
     public void showCardLegend()
@@ -568,15 +600,7 @@ public class CLIView implements View {
         System.out.print("\n");
     }
 
-    @Override
-    public void showDevCardAllPlayers(int cardId) {
 
-    }
-
-    @Override
-    public void addCardInSlot(SimplePlayer player, int cardId, int cardSlot) {
-
-    }
 
     /**Auxiliary methods */
 

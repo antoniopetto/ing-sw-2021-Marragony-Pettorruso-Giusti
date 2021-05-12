@@ -1,6 +1,7 @@
 package it.polimi.ingsw.client.simplemodel;
 
 import it.polimi.ingsw.client.view.View;
+import it.polimi.ingsw.server.model.cards.CardColor;
 import it.polimi.ingsw.server.model.shared.Marble;
 
 import java.util.ArrayList;
@@ -50,8 +51,14 @@ public class SimpleGame {
 
     }
 
-    public void updateDevCardDecks(int level, int cardColor, int deleteCard){
-        devCardDecks[level][cardColor][deleteCard] = null;
+    public void updateDevCardDecks(int level, CardColor cardColor, int deleteCard){
+
+        for(int i = 0; i < 4; i++)
+        {
+            if(devCardDecks[level][i][deleteCard].getColor().equals(cardColor)){
+                devCardDecks[level][i][deleteCard] = null;
+            }
+        }
     }
 
     public void setMarbleBuffer(List<Marble> marbles)

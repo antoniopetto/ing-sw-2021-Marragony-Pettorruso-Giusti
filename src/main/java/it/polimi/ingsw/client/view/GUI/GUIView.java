@@ -65,10 +65,7 @@ public class GUIView implements View {
 
     }
 
-    @Override
-    public void faceUpLeaderCard(int cardId) {
 
-    }
 
 
     @Override
@@ -102,15 +99,7 @@ public class GUIView implements View {
         Application.launch(InitializeGame.class);
     }
 
-    @Override
-    public void showDevCardAllPlayers(int cardId) {
 
-    }
-
-    @Override
-    public void addCardInSlot(SimplePlayer player, int cardId, int cardSlot) {
-
-    }
 
     @Override
     public CommandMsg selectMove(boolean postTurn){

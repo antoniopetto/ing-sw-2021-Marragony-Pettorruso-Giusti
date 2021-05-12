@@ -2,21 +2,22 @@ package it.polimi.ingsw.messages.update;
 
 import it.polimi.ingsw.client.ServerHandler;
 import it.polimi.ingsw.client.simplemodel.SimpleGame;
+import it.polimi.ingsw.server.model.cards.CardColor;
 
 public class CardDecksUpdateMsg implements UpdateMsg {
 
     private int level;
-    private int color;
+    private CardColor cardColor;
     private int cardTop;
 
-    public CardDecksUpdateMsg(int level, int color, int cardTop) {
+    public CardDecksUpdateMsg(int level, CardColor cardColor, int cardTop) {
         this.level = level;
-        this.color = color;
+        this.cardColor = cardColor;
         this.cardTop = cardTop;
     }
 
     @Override
     public void execute(SimpleGame model) {
-        model.updateDevCardDecks(level,color,cardTop);
+        model.updateDevCardDecks(level,cardColor,cardTop);
     }
 }

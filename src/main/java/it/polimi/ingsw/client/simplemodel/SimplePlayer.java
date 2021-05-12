@@ -63,15 +63,12 @@ public class SimplePlayer implements Serializable {
         for(int i = 0; i < leaderCards.size(); i++) {
             if ( leaderCards.get(i).getId() == cardId ) leaderCards.get(i).setActive(true);
         }
-        view.faceUpLeaderCard(cardId);
     }
 
     public void insertCardInSlot(int cardId, int slotId){
-
-        slots.get(slotId).addCard(cardId);
-        view.addCardInSlot(this, cardId, slotId);
-        view.showDevCardAllPlayers(cardId);
-
+        for(SimpleSlot slot : slots){
+            if(slot.getId() == slotId) slot.addCard(cardId);
+        }
     }
 
     public void discardLeaderCard(int cardId){

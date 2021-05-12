@@ -15,15 +15,12 @@ public interface View {
     void bufferUpdate(Marble marble);
     void showErrorMessage(String text);
     void showConfirmMessage(String text);
-    void faceUpLeaderCard(int cardId);
     SimpleGame getGame();
     void showMarbleBuffer(List<Marble> marbleList);
     String getUsername();
     int getNumber();
     void startGame();
     void startSetting();
-    void showDevCardAllPlayers(int cardId);
-    void addCardInSlot(SimplePlayer player, int cardId, int cardSlot);
     CommandMsg selectMove(boolean postTurn);
     void showLeaderCard(SimpleLeaderCard card);
     int getDiscardedLeaderCard();

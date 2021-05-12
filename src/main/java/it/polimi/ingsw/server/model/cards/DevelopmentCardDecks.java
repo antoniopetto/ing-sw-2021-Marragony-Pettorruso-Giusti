@@ -50,7 +50,7 @@ public class DevelopmentCardDecks {
         for (CardDeck deck : decks) {
             if (deck.properties(color, level)) {
                     if(deck.size()>0){
-                        observer.devcarddecksUpdate(level-1,color.ordinal(),deck.size()-1 );
+                        observer.devcarddecksUpdate((level-1), color ,deck.size()-1 );
                     }
                     return deck.pop();
             }

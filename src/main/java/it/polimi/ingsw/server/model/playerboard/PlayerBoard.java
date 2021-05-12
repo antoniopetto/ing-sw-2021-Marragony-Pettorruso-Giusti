@@ -29,9 +29,9 @@ public class PlayerBoard {
         this.wareHouse = new WareHouse();
         this.slotList = new ArrayList<>();
 
-        this.slotList.add( new Slot(0));
         this.slotList.add( new Slot(1));
         this.slotList.add( new Slot(2));
+        this.slotList.add( new Slot(3));
     }
 
     public WareHouse getWareHouse() { return wareHouse; }

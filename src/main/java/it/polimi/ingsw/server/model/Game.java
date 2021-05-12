@@ -152,7 +152,8 @@ public class Game {
      * @param cardId        The id of the card to discard
      */
     public void discardLeaderCard(int cardId) {
-
+        boolean isPostTurn = false;
+        if(state.equals(State.POSTTURN)) isPostTurn = true;
         if (state == State.INSERTING){
             virtualView.sendError("Illegal state command");
             return;
@@ -173,15 +174,15 @@ public class Game {
                     } else endTurn();
                 } else virtualView.initChoices();
             }else{
-                virtualView.startPlay();
                 faithTrack.advance(playing);
+                virtualView.startPlay(isPostTurn);
             }
         } catch (ElementNotFoundException e){
             virtualView.sendError("Leader card not found");
-            virtualView.startPlay();
+            virtualView.startPlay(isPostTurn);
         } catch (IllegalArgumentException e){
             virtualView.sendError(e.getMessage());
-            virtualView.startPlay();
+            virtualView.startPlay(isPostTurn);
         }
     }
 
@@ -324,15 +325,19 @@ public class Game {
                 developmentCard = developmentCardDecks.readTop(cardColor, level);
             }catch (EmptyStackException e) {
                 virtualView.sendError("There are no more DevelopmentCard with that color and level");
+                virtualView.startPlay(false);
             }
 
             try{
                 getPlaying().addCard(developmentCard,slotId);
             }catch (IllegalArgumentException e){
                 virtualView.sendError(e.getMessage());
+                virtualView.startPlay(false);
             }
+
             developmentCardDecks.drawCard(cardColor, level);
             state = State.POSTTURN;
+            virtualView.startPlay(true);
     }
 
     /**
@@ -415,11 +420,13 @@ public class Game {
         }
 
         try {
-            if(!playing.playLeaderCard(cardId))
-                virtualView.sendError("The player does not meet the requirements");
+            if(!playing.playLeaderCard(cardId)) virtualView.sendError("The player does not meet the requirements");
+
         } catch (IllegalStateException | IllegalArgumentException  | ElementNotFoundException e){
             virtualView.sendError(e.getMessage());
         }
+        if(state.equals(State.POSTTURN)) virtualView.startPlay(true);
+            else virtualView.startPlay(false);
     }
 
 
@@ -447,7 +454,7 @@ public class Game {
                 soloRival.soloTurn(this);
 
             if(state == State.INITIALIZING) virtualView.initChoices();
-            else virtualView.startPlay(); //not ok when players select leaderCard (INITIALIZING STATE)
+             else virtualView.startPlay(false); //not ok when players select leaderCard (INITIALIZING STATE)
         }
     }
 

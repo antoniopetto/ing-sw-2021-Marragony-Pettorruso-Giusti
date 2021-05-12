@@ -4,6 +4,7 @@ import it.polimi.ingsw.client.simplemodel.SimplePlayer;
 import it.polimi.ingsw.messages.view.*;
 import it.polimi.ingsw.server.model.AbstractPlayer;
 import it.polimi.ingsw.server.model.Game;
+import it.polimi.ingsw.server.model.cards.CardColor;
 import it.polimi.ingsw.server.model.playerboard.Depot;
 import it.polimi.ingsw.server.model.playerboard.DepotName;
 import it.polimi.ingsw.server.model.playerboard.Resource;
@@ -70,10 +71,10 @@ public class VirtualView implements Runnable{
         }
     }
 
-    //NEW
-    public void startPlay(){
+
+    public void startPlay(boolean isPostTurn){
         try{
-            getPlayingHandler().writeObject(new NewTurnMessage(false));
+            getPlayingHandler().writeObject(new NewTurnMessage(isPostTurn));
             for (String player: players.keySet()) {
                 if(!player.equals(getPlayingUsername()))
                     players.get(player).writeObject(new TextMessage(getPlayingUsername()+ " is playing the turn..."));
@@ -157,8 +158,8 @@ public class VirtualView implements Runnable{
         messageFilter(msg, "The player '"+ getPlayingUsername()+ "' has bought a development card");
     }
 
-    public void devcarddecksUpdate(int level, int cardColor,  int cardTop){
-        UpdateMsg msg = new CardDecksUpdateMsg(level,cardColor,cardTop);
+    public void devcarddecksUpdate(int level, CardColor cardcolor, int cardTop){
+        UpdateMsg msg = new CardDecksUpdateMsg(level,cardcolor,cardTop);
         sendAll(msg);
     }
 
