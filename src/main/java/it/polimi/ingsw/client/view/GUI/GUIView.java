@@ -32,7 +32,7 @@ public class GUIView implements View {
     public static String getMessage(){
 
         if(Message == null) return null;
-        String message = new String(Message);
+        String message = Message;
         Message = null;
         return message;
     }
@@ -113,7 +113,7 @@ public class GUIView implements View {
     }
 
     @Override
-    public CommandMsg selectMove(){
+    public CommandMsg selectMove(boolean postTurn){
         return null;
     }
 
@@ -133,7 +133,7 @@ public class GUIView implements View {
     }
 
     @Override
-    public void printLeaderCard(SimplePlayer player) {
+    public void printLeaderCards(SimplePlayer player) {
 
     }
 

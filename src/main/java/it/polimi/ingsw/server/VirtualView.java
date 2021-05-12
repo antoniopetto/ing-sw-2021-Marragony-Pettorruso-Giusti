@@ -76,7 +76,7 @@ public class VirtualView implements Runnable{
     //NEW
     public void startPlay(){
         try{
-            getPlayingHandler().writeObject(new NewTurnMessage());
+            getPlayingHandler().writeObject(new NewTurnMessage(false));
 
         }catch (IOException e){
             System.out.println("Connection dropped");
@@ -130,7 +130,8 @@ public class VirtualView implements Runnable{
         Map<DepotName, Map<Resource, Integer>> warehouse = new HashMap<>();
         for (Depot depot: game.getPlaying().getPlayerBoard().getWareHouse().getDepots()) {
             Map<Resource, Integer> resources = new HashMap<>();
-            resources.put(depot.getResource(), depot.getQuantity());
+            if(depot.getResource()!=null)
+                resources.put(depot.getResource(), depot.getQuantity());
             warehouse.put(depot.getName(), resources);
         }
 

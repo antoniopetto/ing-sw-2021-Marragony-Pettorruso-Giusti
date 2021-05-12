@@ -24,11 +24,11 @@ public interface View {
     void startSetting();
     void showDevCardAllPlayers(int cardId);
     void addCardInSlot(SimplePlayer player, int cardId, int cardSlot);
-    CommandMsg selectMove();
+    CommandMsg selectMove(boolean postTurn);
     void showLeaderCard(SimpleLeaderCard card);
     int getDiscardedLeaderCard();
     Marble selectedMarble();
-    void printLeaderCard(SimplePlayer player);
+    void printLeaderCards(SimplePlayer player);
     int selectedDepot();
 
 }

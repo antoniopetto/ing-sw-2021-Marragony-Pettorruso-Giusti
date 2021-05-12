@@ -72,7 +72,9 @@ public class CLIView implements View {
                 +Graphics.getResource(Resource.SERVANT)+ "-Servant, "
                 +Graphics.getResource(Resource.SHIELD)+ "-Shield, "
                 +Graphics.getResource(Resource.STONE)+ "-Stone");
+        System.out.println(Graphics.ANSI_CYAN+"Waiting for your turn to chose the leader cards..."+Graphics.ANSI_RESET);
     }
+
 
     public void showLeaderCard(SimpleLeaderCard card)
     {
@@ -106,14 +108,14 @@ public class CLIView implements View {
     }
 
     @Override
-    public void printLeaderCard(SimplePlayer player){
+    public void printLeaderCards(SimplePlayer player){
         int counter = 1;
-        boolean showallCard = false;
-        if(player.getUsername().equals(game.getThisPlayer())) showallCard = true;
+        boolean showallCards = false;
+        if(player.getUsername().equals(game.getThisPlayer())) showallCards = true;
 
         for (SimpleLeaderCard card : player.getLeaderCards()) {
-            System.out.println(Graphics.ANSI_RESET+ counter + ")");
-            if(showallCard || card.isActive()) {
+            if(showallCards || card.isActive()) {
+                System.out.println(Graphics.ANSI_RESET+ counter + ")");
                 showLeaderCard(card);
                 counter++;
             }
@@ -123,13 +125,13 @@ public class CLIView implements View {
     @Override
     public int getDiscardedLeaderCard() {
 
-        SimplePlayer player = null;
+        SimplePlayer player;
         boolean valid = false;
 
         player = findPlayer(game.getThisPlayer());
 
         if(player.getLeaderCards().isEmpty())return 0;
-            else printLeaderCard(player);
+            else printLeaderCards(player);
 
             int position = 0;
         Scanner input = new Scanner(System.in);
@@ -200,11 +202,15 @@ public class CLIView implements View {
         return choice;
     }
 
-
     @Override
-    public CommandMsg selectMove() {
+    public CommandMsg selectMove(boolean postTurn) {
+        String firstAction;
+        if(!postTurn)
+            firstAction="Normal action";
+        else
+            firstAction="End turn";
         System.out.println("Select what to do:");
-        System.out.println("1) Normal action");
+        System.out.println("1) "+ firstAction);
         System.out.println("2) Leader card action");
         System.out.println("3) Show...");
         System.out.print(">");
@@ -216,10 +222,13 @@ public class CLIView implements View {
         }catch (Exception e)
         {
             showErrorMessage("Illegal input");
-            return selectMove();
+            return selectMove(postTurn);
         }
         switch (choice){
             case 1 -> {
+                if(postTurn)
+                    return new EndTurnMsg();
+                else
                 System.out.println("Select the action:");
                 System.out.println("1) Buy resources");
                 System.out.println("2) Buy development card");
@@ -231,7 +240,7 @@ public class CLIView implements View {
                 }catch (Exception e)
                 {
                     showErrorMessage("Illegal input");
-                    return selectMove();
+                    return selectMove(postTurn);
                 }
                 switch (choice)
                 {
@@ -245,7 +254,7 @@ public class CLIView implements View {
                         return activateProduction();
                     }
                     case 4 -> {
-                        return selectMove();
+                        return selectMove(postTurn);
                     }
                 }
             }
@@ -261,21 +270,21 @@ public class CLIView implements View {
                 }catch (Exception e)
                 {
                     showErrorMessage("Illegal input");
-                    return selectMove();
+                    return selectMove(postTurn);
                 }
                 switch (choice) {
                     case 1 -> { return playLeaderCard();}
                     case 2 -> { return discardLeaderCard(); }
                     case 3 -> {
-                        printLeaderCard(findPlayer(game.getThisPlayer()));
-                        return selectMove();
+                        printLeaderCards(findPlayer(game.getThisPlayer()));
+                        return selectMove(postTurn);
                     }
-                    case 4 -> { return selectMove(); }
+                    case 4 -> { return selectMove(postTurn); }
                 }
             }
             case 3->{
                 show();
-                return selectMove();
+                return selectMove(postTurn);
             }
             default ->{
                 return null;
@@ -327,6 +336,8 @@ public class CLIView implements View {
         }
         if(player==null) throw new IllegalStateException();
         showWarehouse(player);
+        System.out.println(Graphics.ANSI_BLUE+"Leader cards:"+Graphics.ANSI_RESET);
+        printLeaderCards(player);
 
     }
     private void showFaithTrack(){
@@ -366,7 +377,7 @@ public class CLIView implements View {
         int cardId = 0;
 
         if(!player.getLeaderCards().isEmpty()){
-            printLeaderCard(player);
+            printLeaderCards(player);
 
             boolean valid = false;
             int position = 0;
