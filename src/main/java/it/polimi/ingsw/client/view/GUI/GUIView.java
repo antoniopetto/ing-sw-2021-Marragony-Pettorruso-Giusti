@@ -142,5 +142,10 @@ public class GUIView implements View {
         return 0;
     }
 
+    @Override
+    public void showStatusMessage(String text) {
+
+    }
+
 
 }

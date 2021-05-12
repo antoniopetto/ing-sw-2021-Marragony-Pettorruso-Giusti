@@ -1,9 +1,11 @@
 package it.polimi.ingsw.client.simplemodel;
 
 import it.polimi.ingsw.client.view.View;
+import it.polimi.ingsw.server.model.playerboard.Resource;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -12,8 +14,8 @@ public class SimplePlayer implements Serializable {
     private int position;
     private View view;
     private SimpleWarehouse warehouse;
-    private Map<String, SimpleWarehouse> othersWarehouse;
     private ArrayList<SimpleSlot> slots;
+    private Map<Resource, Integer> strongbox = new HashMap<>();
     private List<SimpleLeaderCard> leaderCards = new ArrayList<>();
 
     public SimplePlayer(String username, int[] cardIds) {
@@ -25,11 +27,15 @@ public class SimplePlayer implements Serializable {
         {
             leaderCards.add(SimpleLeaderCard.parse(cardIds[i]));
         }
-        slots.add(new SimpleSlot());
-        slots.add(new SimpleSlot());
-        slots.add(new SimpleSlot());
+        slots.add(new SimpleSlot(1));
+        slots.add(new SimpleSlot(2));
+        slots.add(new SimpleSlot(3));
 
 
+    }
+
+    public Map<Resource, Integer> getStrongbox() {
+        return strongbox;
     }
 
     public void advance()
@@ -47,10 +53,6 @@ public class SimplePlayer implements Serializable {
         this.view = view;
     }
 
-    public void changeOthersState(String player, SimpleWarehouse warehouse)
-    {
-        othersWarehouse.replace(player, warehouse);
-    }
 
     public void changeWarehouse(SimpleWarehouse warehouse)
     {
@@ -92,5 +94,14 @@ public class SimplePlayer implements Serializable {
 
     public int getPosition() {
         return position;
+    }
+
+    public void changeStrongbox(Map<Resource, Integer> strongbox)
+    {
+        this.strongbox=strongbox;
+    }
+
+    public ArrayList<SimpleSlot> getSlots() {
+        return slots;
     }
 }

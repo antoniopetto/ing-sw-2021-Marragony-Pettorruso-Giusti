@@ -1,5 +1,7 @@
 package it.polimi.ingsw.server.model.playerboard;
 
+import it.polimi.ingsw.server.VirtualView;
+
 import java.util.EnumMap;
 import java.util.Map;
 
@@ -12,6 +14,7 @@ import java.util.Map;
 public class StrongBox {
 
     private final Map<Resource, Integer> content;
+    private VirtualView observer;
 
     /**
      * Constructs the StrongBox
@@ -37,6 +40,7 @@ public class StrongBox {
         if(content.containsKey(r))
             content.replace(r, content.get(r)+quantity);
             else content.put(r, quantity);
+        observer.strongBoxUpdate();
     }
 
     /**
@@ -50,6 +54,7 @@ public class StrongBox {
                 else if(getQuantity(r)==1) content.remove(r);
                     else if(getQuantity(r) == 0)
                         throw new IllegalArgumentException("In StrongBox there is no Resource r");
+            observer.strongBoxUpdate();
     }
 
     /**
@@ -62,4 +67,12 @@ public class StrongBox {
                             .reduce(0, Integer::sum);
     }
 
+    public void setObserver(VirtualView observer)
+    {
+        this.observer=observer;
+    }
+
+    public Map<Resource, Integer> getContent() {
+        return content;
+    }
 }

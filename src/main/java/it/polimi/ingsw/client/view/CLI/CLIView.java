@@ -17,7 +17,7 @@ public class CLIView implements View {
     private final String column1Format = "%-2s";
     private final String column2Format = "%-2s";
     private final String column3Format = "%2s";
-    private final String formatInfo = column1Format + " " + column2Format + " " + column3Format;
+    private final String formatInfo = column1Format + " " + column2Format + " " + column3Format+ " "+ column3Format;
 
 
     public CLIView() {
@@ -96,7 +96,7 @@ public class CLIView implements View {
                 }
             }
             if (req[1] == null) req[1] = "";
-            System.out.format(formatInfo, req[0], "", req[1]);
+            System.out.format(formatInfo, req[0], "", req[1], "");
             System.out.println();
         }
         System.out.println(Graphics.getAbility(card.getAbility(), card.getAbilityResource()));
@@ -200,6 +200,11 @@ public class CLIView implements View {
             return selectedDepot();
         }
         return choice;
+    }
+
+    @Override
+    public void showStatusMessage(String text) {
+        System.out.println(Graphics.ANSI_BLUE+text+Graphics.ANSI_RESET);
     }
 
     @Override
@@ -336,8 +341,21 @@ public class CLIView implements View {
         }
         if(player==null) throw new IllegalStateException();
         showWarehouse(player);
+        System.out.println(Graphics.ANSI_BLUE+"Strongbox:"+Graphics.ANSI_RESET);
+        System.out.println("----------------");
+        showResources(player.getStrongbox());
+        System.out.println("----------------");
         System.out.println(Graphics.ANSI_BLUE+"Leader cards:"+Graphics.ANSI_RESET);
         printLeaderCards(player);
+        System.out.println(Graphics.ANSI_BLUE+"Slots:"+Graphics.ANSI_RESET);
+        for (SimpleSlot slot:player.getSlots()) {
+            System.out.println("Slot "+slot.getId()+":");
+            for (SimpleDevelopmentCard card:slot.getCards()) {
+                showCard(card);
+            }
+            System.out.println("-------------------");
+        }
+
 
     }
     private void showFaithTrack(){
@@ -483,7 +501,7 @@ public class CLIView implements View {
             i++;
         }
         if(input[1]==null) input[1]="";
-        System.out.format(formatInfo, input[0], "", input[1]);
+        System.out.format(formatInfo, input[0], "", input[1], "");
         System.out.println();
 
         //output
@@ -501,7 +519,7 @@ public class CLIView implements View {
                 output[j]="";
         }
 
-        System.out.format(formatInfo, output[0], output[1], output[2]);
+        System.out.format(formatInfo, output[0], output[1], output[2], "");
         System.out.println();
 
         //vicotry points
@@ -515,20 +533,20 @@ public class CLIView implements View {
             System.out.println("");
             return;
         }
-        String[] req = new String[3];
+        String[] req = new String[4];
         int i = 0;
         for(Resource res: resources.keySet())
         {
             req[i] = (resources.get(res)+ " " + Graphics.getResource(res));
             i++;
-            //System.out.println("│ "+card.getRequirement().get(res)+ " " + Graphics.getResource(res));
+
         }
-        for(int j=0; j<3; j++)
+        for(int j=0; j<4; j++)
         {
             if(req[j]==null)
                 req[j]="";
         }
-        System.out.format(formatInfo, req[0], req[1], req[2]);
+        System.out.format(formatInfo, req[0], req[1], req[2], req[3]);
         System.out.println();
     }
 
@@ -567,6 +585,7 @@ public class CLIView implements View {
         System.out.println(Graphics.ANSI_RED+"ATTENTION!");
         System.out.println(text+Graphics.ANSI_RESET);
     }
+
 
     @Override
     public void showConfirmMessage(String text) {

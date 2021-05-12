@@ -248,6 +248,7 @@ public class PlayerBoard {
     public void setObserver(VirtualView view){
         observer = view;
         wareHouse.setObserver(observer);
+        strongBox.setObserver(observer);
         for(Slot slot : slotList){
             slot.setObserver(view);
         }

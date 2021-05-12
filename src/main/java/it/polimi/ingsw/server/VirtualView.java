@@ -1,7 +1,7 @@
 package it.polimi.ingsw.server;
 
 import it.polimi.ingsw.client.simplemodel.SimplePlayer;
-import it.polimi.ingsw.messages.view.InitChoicesMsg;
+import it.polimi.ingsw.messages.view.*;
 import it.polimi.ingsw.server.model.AbstractPlayer;
 import it.polimi.ingsw.server.model.Game;
 import it.polimi.ingsw.server.model.playerboard.Depot;
@@ -9,10 +9,7 @@ import it.polimi.ingsw.server.model.playerboard.DepotName;
 import it.polimi.ingsw.server.model.playerboard.Resource;
 import it.polimi.ingsw.server.model.shared.Marble;
 import it.polimi.ingsw.messages.update.*;
-import it.polimi.ingsw.messages.view.ErrorMsg;
-import it.polimi.ingsw.messages.view.LeaderboardMsg;
 import it.polimi.ingsw.messages.command.CommandMsg;
-import it.polimi.ingsw.messages.view.NewTurnMessage;
 
 import java.io.IOException;
 import java.util.*;
@@ -77,7 +74,10 @@ public class VirtualView implements Runnable{
     public void startPlay(){
         try{
             getPlayingHandler().writeObject(new NewTurnMessage(false));
-
+            for (String player: players.keySet()) {
+                if(!player.equals(getPlayingUsername()))
+                    players.get(player).writeObject(new TextMessage(getPlayingUsername()+ " is playing the turn..."));
+            }
         }catch (IOException e){
             System.out.println("Connection dropped");
             exitGame();
@@ -140,6 +140,12 @@ public class VirtualView implements Runnable{
 
     }
 
+    public void strongBoxUpdate()
+    {
+        Map<Resource, Integer> strongbox = game.getPlaying().getPlayerBoard().getStrongBox().getContent();
+        UpdateMsg msg = new StrongBoxUpdateMsg(strongbox, getPlayingUsername());
+        sendAll(msg);
+    }
 
     public void marketBoardUpdate(){
         UpdateMsg msg = new MarketBoardUpdate(game.getMarketBoard().getMarbleGrid(), game.getMarketBoard().getSpareMarble());

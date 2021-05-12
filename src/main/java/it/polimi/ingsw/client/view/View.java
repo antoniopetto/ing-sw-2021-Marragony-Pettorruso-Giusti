@@ -30,5 +30,6 @@ public interface View {
     Marble selectedMarble();
     void printLeaderCards(SimplePlayer player);
     int selectedDepot();
+    void showStatusMessage(String text);
 
 }

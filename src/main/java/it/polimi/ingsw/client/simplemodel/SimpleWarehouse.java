@@ -11,6 +11,7 @@ public class SimpleWarehouse implements Serializable {
     private Map<DepotName, Map<Resource, Integer>> depots;
 
 
+
     public SimpleWarehouse()
     {
         depots=new HashMap<>();
