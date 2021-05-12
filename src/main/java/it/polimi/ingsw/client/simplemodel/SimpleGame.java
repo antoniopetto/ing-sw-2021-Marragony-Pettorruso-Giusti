@@ -3,6 +3,7 @@ package it.polimi.ingsw.client.simplemodel;
 import it.polimi.ingsw.client.view.View;
 import it.polimi.ingsw.server.model.shared.Marble;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class SimpleGame {
@@ -88,7 +89,27 @@ public class SimpleGame {
         return thisPlayer;
     }
 
-    public SimpleDevelopmentCard[][][] getDevCardDecks() {
-        return devCardDecks;
+    public List<SimpleDevelopmentCard> getDevCardDecks() {
+        SimpleDevelopmentCard[][][] decks = devCardDecks;
+        List<SimpleDevelopmentCard> result = new ArrayList<>();
+        for(int row = 0; row<3; row++)
+        {
+
+            for (int col = 0; col<4; col++)
+            {
+                int i = 3;
+                while (decks[row][col][i]==null)
+                {
+                    i--;
+                    if(i<0)break;
+                }
+                if(i>=0)
+                {
+                    result.add(decks[row][col][i]);
+                }
+
+            }
+        }
+        return result;
     }
 }

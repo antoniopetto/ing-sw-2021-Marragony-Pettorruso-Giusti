@@ -336,22 +336,14 @@ public class CLIView implements View {
         Graphics.showPositions();
     }
 
+    /**
+     * This method shows the top cards of the development card decks. The first index of the array is the level of the deck,
+     * the second index is the color and the third is the position of the cards in the deck.
+     */
     private void showDevCardDecks() {
-        SimpleDevelopmentCard[][][] decks = game.getDevCardDecks();
-        for(int row = 0; row<3; row++)
-        {
-
-            for (int col = 0; col<4; col++)
-            {
-                int i = 3;
-                while (decks[row][col][i]==null)
-                {
-                    i--;
-                    if(i<0)break;
-                }
-                if(i>=0)
-                    showCard(decks[row][col][i]);
-            }
+        for (SimpleDevelopmentCard card: game.getDevCardDecks()) {
+            System.out.println((game.getDevCardDecks().indexOf(card)+1)+")");
+            showCard(card);
         }
     }
 
