@@ -112,8 +112,8 @@ public class GUIView implements View {
     }
 
     @Override
-    public int getDiscardedLeaderCard() {
-        return 0;
+    public CommandMsg discardLeaderCard() {
+        return null;
     }
 
     @Override

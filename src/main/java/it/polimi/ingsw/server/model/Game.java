@@ -157,6 +157,7 @@ public class Game {
 
         if (state == State.INSERTING){
             virtualView.sendError("Illegal state command");
+            virtualView.endAction(isPostTurn);
             return;
         }
         try {
@@ -176,14 +177,14 @@ public class Game {
                 } else virtualView.initChoices();
             }else{
                 faithTrack.advance(playing);
-                virtualView.startPlay(isPostTurn);
+                virtualView.endAction(isPostTurn);
             }
         } catch (ElementNotFoundException e){
             virtualView.sendError("Leader card not found");
-            virtualView.startPlay(isPostTurn);
+            virtualView.endAction(isPostTurn);
         } catch (IllegalArgumentException e){
             virtualView.sendError(e.getMessage());
-            virtualView.startPlay(isPostTurn);
+            virtualView.endAction(isPostTurn);
         }
     }
 
@@ -319,8 +320,10 @@ public class Game {
      */
     public void buyAndAddCardInSlot(CardColor cardColor, int level, int slotId){
 
+
         if(state != State.PRETURN) {
             virtualView.sendError("Cannot Insert DevCard now");
+            virtualView.endAction(false);
             return;
         }
 
@@ -329,7 +332,7 @@ public class Game {
                 developmentCard = developmentCardDecks.readTop(cardColor, level);
             }catch (EmptyStackException e) {
                 virtualView.sendError("There are no more DevelopmentCard with that color and level");
-                virtualView.startPlay(false);
+                virtualView.endAction(false);
                 return;
             }
 
@@ -337,13 +340,14 @@ public class Game {
                 getPlaying().addCard(developmentCard,slotId);
             }catch (IllegalArgumentException e){
                 virtualView.sendError(e.getMessage());
-                virtualView.startPlay(false);
+                virtualView.endAction(false);
                 return;
             }
 
             developmentCardDecks.drawCard(cardColor, level);
             state = State.POSTTURN;
-            virtualView.startPlay(true);
+
+            virtualView.endAction(true);
     }
 
     /**
@@ -422,6 +426,7 @@ public class Game {
 
         if(state != State.PRETURN && state != State.POSTTURN){
             virtualView.sendError("Illegal state command");
+            virtualView.endAction(false);
             return;
         }
 
@@ -433,8 +438,8 @@ public class Game {
         } catch (IllegalStateException | IllegalArgumentException  | ElementNotFoundException e){
             virtualView.sendError(e.getMessage());
         }
-        if(state.equals(State.POSTTURN)) virtualView.startPlay(true);
-            else virtualView.startPlay(false);
+        if(state.equals(State.POSTTURN)) virtualView.endAction(true);
+            else virtualView.endAction(false);
     }
 
 
@@ -462,7 +467,7 @@ public class Game {
                 soloRival.soloTurn(this);
 
             if(state == State.INITIALIZING) virtualView.initChoices();
-             else virtualView.startPlay(false); //not ok when players select leaderCard (INITIALIZING STATE)
+             else virtualView.startPlay();
         }
     }
 

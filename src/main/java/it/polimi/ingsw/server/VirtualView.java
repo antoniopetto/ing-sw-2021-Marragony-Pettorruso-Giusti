@@ -72,9 +72,9 @@ public class VirtualView implements Runnable{
     }
 
 
-    public void startPlay(boolean isPostTurn){
+    public void startPlay(){
         try{
-            getPlayingHandler().writeObject(new NewTurnMessage(isPostTurn));
+            getPlayingHandler().writeObject(new TurnMessage(false));
             for (String player: players.keySet()) {
                 if(!player.equals(getPlayingUsername()))
                     players.get(player).writeObject(new TextMessage(getPlayingUsername()+ " is playing the turn..."));
@@ -86,6 +86,16 @@ public class VirtualView implements Runnable{
     }
 
 
+    public void endAction(boolean isPostTurn){
+        try{
+            getPlayingHandler().writeObject(new TurnMessage(isPostTurn));
+
+        }catch (IOException e){
+            System.out.println("Connection dropped");
+            exitGame();
+        }
+
+    }
 
 
     public void discardLeaderCardUpdate(int cardId){

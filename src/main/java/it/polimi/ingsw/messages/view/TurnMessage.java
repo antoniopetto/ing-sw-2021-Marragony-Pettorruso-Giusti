@@ -6,10 +6,10 @@ import it.polimi.ingsw.messages.command.CommandMsg;
 
 import java.io.IOException;
 
-public class NewTurnMessage implements ViewMsg{
+public class TurnMessage implements ViewMsg{
 
     private boolean postTurn;
-    public NewTurnMessage(boolean postTurn)
+    public TurnMessage(boolean postTurn)
     {
         this.postTurn=postTurn;
     }

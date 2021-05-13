@@ -145,14 +145,14 @@ public class CLIView implements View {
      * @return the id of the card to discard
      */
     @Override
-    public int getDiscardedLeaderCard() {
+    public CommandMsg discardLeaderCard() {
 
         SimplePlayer player;
         boolean valid = false;
 
         player = findPlayer(game.getThisPlayer());
 
-        if(player.getLeaderCards().isEmpty())return 0;
+        if(player.getLeaderCards().isEmpty())return new DiscardLeaderCardMsg(0);
             else printLeaderCards(player);
 
             int position = 0;
@@ -169,7 +169,7 @@ public class CLIView implements View {
                 valid = true;
         }
 
-        return player.chooseLeaderCard(position);
+        return new DiscardLeaderCardMsg(player.chooseLeaderCard(position));
     }
 
 
@@ -431,11 +431,6 @@ public class CLIView implements View {
             showResources(warehouse.getDepots().get(depot));
             System.out.println("____________");
         }
-    }
-
-
-    private CommandMsg discardLeaderCard(){
-        return new DiscardLeaderCardMsg(getDiscardedLeaderCard());
     }
 
     private CommandMsg playLeaderCard(){
