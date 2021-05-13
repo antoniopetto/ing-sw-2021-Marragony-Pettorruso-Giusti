@@ -44,6 +44,10 @@ public class CLIView implements View {
         return input.nextLine();
     }
 
+    /**
+     * In this method the player insert the number of players for the game wanted.
+     * @return the number of players.
+     */
     public int getNumber(){
         Scanner input = new Scanner(System.in);
         System.out.println(Graphics.ANSI_RESET+"Insert the number of players for your game:");
@@ -62,6 +66,10 @@ public class CLIView implements View {
         return result;
     }
 
+    /**
+     * This method shows the title of the game, the link where to download the rulebook as pdf and the legend of the graphic
+     * symbols used as resources
+     */
     @Override
     public void startGame() {
         System.out.println(Graphics.ANSI_GREEN+Graphics.TITLE+Graphics.ANSI_RESET);
@@ -73,10 +81,13 @@ public class CLIView implements View {
                 +Graphics.getResource(Resource.SERVANT)+ "-Servant, "
                 +Graphics.getResource(Resource.SHIELD)+ "-Shield, "
                 +Graphics.getResource(Resource.STONE)+ "-Stone");
-        System.out.println(Graphics.ANSI_CYAN+"Waiting for your turn to chose the leader cards..."+Graphics.ANSI_RESET);
+        System.out.println(Graphics.ANSI_CYAN+"Waiting for your turn to choose the leader cards..."+Graphics.ANSI_RESET);
     }
 
-
+    /**
+     * This method shows a leader card
+     * @param card is the card to show
+     */
     public void showLeaderCard(SimpleLeaderCard card)
     {
 
@@ -108,6 +119,11 @@ public class CLIView implements View {
         System.out.println("└──────────┘");
     }
 
+    /**
+     * This method shows all the leader cards played by <code>player</code>. if <code>player</code> is the player
+     * who is playing, it shows also the leader cards not played yet.
+     * @param player is the player whose leader cards are shown.
+     */
     @Override
     public void printLeaderCards(SimplePlayer player){
         int counter = 1;
@@ -123,6 +139,11 @@ public class CLIView implements View {
         }
     }
 
+    /**
+     * This method is used when a player wants to discard a leader card. Its leader cards are shown and it chooses
+     * the card to discard.
+     * @return the id of the card to discard
+     */
     @Override
     public int getDiscardedLeaderCard() {
 
@@ -171,15 +192,32 @@ public class CLIView implements View {
         }
     }
 
+    /**
+     * This method is used to ask the player to choose a marble to put in a depot.
+     * @return the marble chosen
+     */
     @Override
     public Marble selectedMarble(){
         Scanner input = new Scanner(System.in);
         System.out.println("Choose a marble to put in a depot (insert a number between 1-"+ game.getMarbleBuffer().size()+"):");
         System.out.print(Graphics.ANSI_CYAN+">");
-        int position = input.nextInt();
+        int position;
+        try{
+            position = input.nextInt();
+            if(position<1||position>4) throw new InputMismatchException();
+        }catch (Exception e)
+        {
+            showErrorMessage("Illegal input");
+            return selectedMarble();
+        }
+
         return  game.getMarbleBuffer().get(position-1);
     }
 
+    /**
+     * This method is used to ask the player to choose a depot in which to place the selected resource
+     * @return the number of the depot chosen
+     */
     @Override
     public int selectedDepot(){
         Scanner input = new Scanner(System.in);
@@ -202,6 +240,13 @@ public class CLIView implements View {
         System.out.println(Graphics.ANSI_BLUE+text+Graphics.ANSI_RESET);
     }
 
+    /**
+     * This method is used during the turn to ask the player to choose the action to do.
+     * @param postTurn is a boolean which tells if the fame is in post turn state (when true) or not. When in post
+     *                 turn the first action that can be done is to end the turn, while if not in post turn the first action
+     *                 possible is a normal action.
+     * @return the command msg of the action chosen.
+     */
     @Override
     public CommandMsg selectMove(boolean postTurn) {
         String firstAction;
@@ -295,7 +340,10 @@ public class CLIView implements View {
         return null;
     }
 
-
+    /**
+     * This method shows graphic parts of the game required by the player. It works client side only, accessing the
+     * simple model without communication with the server.
+     */
     private void show()
     {
         System.out.println("Select what to show: ");
@@ -384,6 +432,7 @@ public class CLIView implements View {
             System.out.println("____________");
         }
     }
+
 
     private CommandMsg discardLeaderCard(){
         return new DiscardLeaderCardMsg(getDiscardedLeaderCard());

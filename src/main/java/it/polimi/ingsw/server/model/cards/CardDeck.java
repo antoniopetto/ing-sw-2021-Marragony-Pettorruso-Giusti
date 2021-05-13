@@ -87,12 +87,21 @@ public class CardDeck {
         return deck.size();
     }
 
+    /**
+     * @return an array with the ids of the cards in the deck. In the empty positions of the array the id is set to 0;
+     */
     public int[] getDeckStatus()
     {
         int[] result = new int[4];
         for (int i = 0; i< 4; i++)
         {
-            result[i] = deck.elementAt(i).getId();
+            try{
+                result[i] = deck.elementAt(i).getId();
+            }catch(ArrayIndexOutOfBoundsException e)
+            {
+                result[i]=0;
+            }
+
         }
         return result;
     }
