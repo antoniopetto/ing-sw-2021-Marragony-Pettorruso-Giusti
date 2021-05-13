@@ -154,6 +154,7 @@ public class Game {
     public void discardLeaderCard(int cardId) {
         boolean isPostTurn = false;
         if(state.equals(State.POSTTURN)) isPostTurn = true;
+
         if (state == State.INSERTING){
             virtualView.sendError("Illegal state command");
             return;
@@ -318,7 +319,10 @@ public class Game {
      */
     public void buyAndAddCardInSlot(CardColor cardColor, int level, int slotId){
 
-        if(state != State.PRETURN) virtualView.sendError("Cannot Insert DevCard now");
+        if(state != State.PRETURN) {
+            virtualView.sendError("Cannot Insert DevCard now");
+            return;
+        }
 
             DevelopmentCard developmentCard = null;
             try {
@@ -326,6 +330,7 @@ public class Game {
             }catch (EmptyStackException e) {
                 virtualView.sendError("There are no more DevelopmentCard with that color and level");
                 virtualView.startPlay(false);
+                return;
             }
 
             try{
@@ -333,6 +338,7 @@ public class Game {
             }catch (IllegalArgumentException e){
                 virtualView.sendError(e.getMessage());
                 virtualView.startPlay(false);
+                return;
             }
 
             developmentCardDecks.drawCard(cardColor, level);
@@ -420,7 +426,9 @@ public class Game {
         }
 
         try {
-            if(!playing.playLeaderCard(cardId)) virtualView.sendError("The player does not meet the requirements");
+            if(!playing.playLeaderCard(cardId)) {
+                virtualView.sendError("The player does not meet the requirements");
+            }
 
         } catch (IllegalStateException | IllegalArgumentException  | ElementNotFoundException e){
             virtualView.sendError(e.getMessage());
