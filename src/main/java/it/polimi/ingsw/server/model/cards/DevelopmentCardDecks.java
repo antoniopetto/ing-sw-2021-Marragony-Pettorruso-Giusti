@@ -49,7 +49,7 @@ public class DevelopmentCardDecks {
         if(level<1||level>3) throw new IllegalArgumentException("Level value not valid");
         for (CardDeck deck : decks) {
             if (deck.properties(color, level)) {
-                    if(deck.size()>0){
+                    if(deck.size()>0&&observer!=null){
                         observer.devcarddecksUpdate((level-1), color ,deck.size()-1 );
                     }
                     return deck.pop();
@@ -116,13 +116,17 @@ public class DevelopmentCardDecks {
         }
     }
 
+    /**
+     * @return the ids of the cards in the decks. The first index is the color (0-Green,
+     * 1-Blue, 2-Yellow, 3-Purple), the second is the level and the third is the position of the card in the deck.
+     */
     public int[][][] getDecksStatus()
     {
         int index=0;
-        int[][][] result = new int[3][4][4];
-        for(int i = 0; i<3; i++)
+        int[][][] result = new int[4][3][4];
+        for(int i = 0; i<4; i++)
         {
-            for(int j=0; j<4; j++)
+            for(int j=0; j<3; j++)
             {
                 result[i][j] =decks.get(index).getDeckStatus();
                 index++;

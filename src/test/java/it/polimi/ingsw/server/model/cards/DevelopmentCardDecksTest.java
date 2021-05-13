@@ -143,5 +143,14 @@ public class DevelopmentCardDecksTest {
         decks.discard(CardColor.GREEN);
         assertTrue(true);
     }
+
+    @Test
+    public void getDecksStatusTest()
+    {
+        int[][][] result = decks.getDecksStatus();
+        assertEquals(11, result[0][1][0]);
+        assertEquals(9, result[3][2][0]);
+        assertEquals(0, result[3][2][3]);
+    }
 }
 

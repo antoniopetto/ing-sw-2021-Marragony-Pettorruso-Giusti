@@ -12,7 +12,7 @@ public class SimpleGame {
     private List<Marble> marbleBuffer;
     private Marble[][] marketBoard = new Marble[3][4];
     private Marble spareMarble;
-    private SimpleDevelopmentCard[][][] devCardDecks = new SimpleDevelopmentCard[3][4][4];
+    private SimpleDevelopmentCard[][][] devCardDecks = new SimpleDevelopmentCard[4][3][4];
     private View view;
     private String thisPlayer;
 
@@ -36,8 +36,8 @@ public class SimpleGame {
         for(SimplePlayer player: this.players){
             player.setView(view);
         }
-        for(int i=0; i<3; i++) {
-            for(int j=0; j<4; j++) {
+        for(int i=0; i<4; i++) {
+            for(int j=0; j<3; j++) {
                 for(int k=0; k<4; k++) {
                     devCardDecks[i][j][k]= SimpleDevelopmentCard.parse(cardIds[i][j][k]);
                 }
@@ -55,8 +55,8 @@ public class SimpleGame {
 
         for(int i = 0; i < 4; i++)
         {
-            if(devCardDecks[level][i][deleteCard].getColor().equals(cardColor)){
-                devCardDecks[level][i][deleteCard] = null;
+            if(devCardDecks[i][level][deleteCard].getColor().equals(cardColor)){
+                devCardDecks[i][level][deleteCard] = null;
             }
         }
     }
@@ -99,10 +99,10 @@ public class SimpleGame {
     public List<SimpleDevelopmentCard> getDevCardDecks() {
         SimpleDevelopmentCard[][][] decks = devCardDecks;
         List<SimpleDevelopmentCard> result = new ArrayList<>();
-        for(int row = 0; row<3; row++)
+        for(int row = 0; row<4; row++)
         {
 
-            for (int col = 0; col<4; col++)
+            for (int col = 0; col<3; col++)
             {
                 int i = 3;
                 while (decks[row][col][i]==null)
