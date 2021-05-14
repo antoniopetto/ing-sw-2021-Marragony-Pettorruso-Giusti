@@ -15,6 +15,5 @@ public class BufferUpdateMsg implements UpdateMsg {
     public void execute(SimpleGame model) {
         model.reduceBuffer(marble);
         model.getPlayers().get(0).getView().bufferUpdate(marble);
-
     }
 }

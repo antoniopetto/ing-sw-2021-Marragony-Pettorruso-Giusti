@@ -6,8 +6,8 @@ import it.polimi.ingsw.client.simplemodel.SimplePlayer;
 
 public class DiscardLeaderCardUpdateMsg implements UpdateMsg{
 
-    private String username;
-    private int cardId;
+    private final String username;
+    private final int cardId;
 
     public DiscardLeaderCardUpdateMsg(String username, int cardId) {
         this.username = username;
@@ -15,8 +15,8 @@ public class DiscardLeaderCardUpdateMsg implements UpdateMsg{
     }
 
     @Override
-    public void execute(SimpleGame model) {
-        for (SimplePlayer player: model.getPlayers()) {
+    public void execute(SimpleGame game) {
+        for (SimplePlayer player: game.getPlayers()) {
             if(player.getUsername().equals(this.username))
                 player.discardLeaderCard(cardId);
         }

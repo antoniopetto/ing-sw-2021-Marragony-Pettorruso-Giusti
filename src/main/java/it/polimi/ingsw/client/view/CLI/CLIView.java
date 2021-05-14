@@ -187,6 +187,7 @@ public class CLIView implements View {
         for (Marble marble : marbleList) {
             System.out.print(Graphics.getMarble(marble)+" ");
         }
+        System.out.println();
     }
 
     /**
