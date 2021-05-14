@@ -7,8 +7,6 @@ import it.polimi.ingsw.server.model.cards.CardColor;
 import it.polimi.ingsw.server.model.playerboard.DepotName;
 import it.polimi.ingsw.server.model.playerboard.Resource;
 import it.polimi.ingsw.server.model.shared.Marble;
-
-import java.sql.SQLOutput;
 import java.util.*;
 
 public class CLIView implements View {

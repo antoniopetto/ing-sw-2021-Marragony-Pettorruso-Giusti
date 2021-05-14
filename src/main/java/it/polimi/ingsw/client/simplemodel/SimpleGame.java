@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SimpleGame {
-    private List<SimplePlayer> players; //the player in first position is the owner
+    private List<SimplePlayer> players;
     private List<Marble> marbleBuffer;
     private Marble[][] marketBoard = new Marble[3][4];
     private Marble spareMarble;

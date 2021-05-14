@@ -109,8 +109,7 @@ public class FaithTrack {
             if (player.getPosition().getNumber() == LAST_POSITION)
                 game.setLastRound();
         }
-        //fix TrackUpdateMsg
-        //virtualView.faithTrackUpdate(player, false);
+        virtualView.faithTrackUpdate(player, false);
     }
 
     /**
