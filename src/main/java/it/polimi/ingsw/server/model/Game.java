@@ -93,12 +93,12 @@ public class Game {
         Collections.shuffle(players);
         playing = players.get(0);
         faithTrack = new FaithTrack(this, virtualView, players);
-
+        /*
         if (players.size()>2)
             faithTrack.advance(players.get(2));
         if (players.size()>3)
             faithTrack.advance(players.get(3));
-
+        */
         initCards();
     }
 
@@ -172,6 +172,10 @@ public class Game {
                             marbleBuffer.add(Marble.YELLOW);
                             //valutare se aggiungere altre biglie per completare la riga
                             virtualView.createBuffer(marbleBuffer);
+                            if(players.size()>2){
+                                if(turnPosition(playing.getUsername())>1)
+                                    faithTrack.advance(playing);
+                            }
                         } else endTurn();
                     } else endTurn();
                 } else virtualView.initChoices();

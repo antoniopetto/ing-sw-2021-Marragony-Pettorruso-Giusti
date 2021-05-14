@@ -20,14 +20,15 @@ public class TrackUpdateMsg implements UpdateMsg {
     @Override
     public void execute(SimpleGame model) {
         for (SimplePlayer simplePlayer:model.getPlayers()) {
-            //It has to be modified
-            if((simplePlayer.getUsername()==null&&player==null&&!allBut)||
-                    (allBut&&simplePlayer.getUsername()!=null && player == null )||
-                    (!allBut&&simplePlayer.getUsername().equals(player))
-                    ||(allBut&&!simplePlayer.getUsername().equals(player))) {
-                simplePlayer.advance();
+            if(!allBut)
+            {
+                if(simplePlayer.getUsername().equals(player))
+                    simplePlayer.advance();
             }
-            //TODO change the if clause
+            else {
+                if (!simplePlayer.getUsername().equals(player))
+                    simplePlayer.advance();
+            }
         }
     }
 }
