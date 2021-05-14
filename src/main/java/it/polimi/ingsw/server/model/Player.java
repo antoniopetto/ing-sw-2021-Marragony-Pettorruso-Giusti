@@ -81,6 +81,7 @@ public class Player extends AbstractPlayer{
 
     public void clearWhiteMarbleAlias(){
         whiteMarbleAliases.clear();
+        observer.whiteMarbleAliasUpdate(username, whiteMarbleAliases);
     }
 
     public void addAllWhiteMarbleAlias(){
@@ -88,6 +89,7 @@ public class Player extends AbstractPlayer{
         whiteMarbleAliases.add(Resource.SERVANT);
         whiteMarbleAliases.add(Resource.SHIELD);
         whiteMarbleAliases.add(Resource.COIN);
+        observer.whiteMarbleAliasUpdate(username, whiteMarbleAliases);
     }
 
     /**

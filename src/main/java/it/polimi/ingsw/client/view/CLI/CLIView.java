@@ -125,7 +125,8 @@ public class CLIView implements View {
     public void printLeaderCards(SimplePlayer player){
         int counter = 1;
         boolean showallCards = false;
-        if(player.getUsername().equals(game.getThisPlayer())) showallCards = true;
+        if(player.getUsername().equals(game.getThisPlayer().getUsername()))
+            showallCards = true;
 
         for (SimpleLeaderCard card : player.getLeaderCards()) {
             if(showallCards || card.isActive()) {
@@ -149,10 +150,13 @@ public class CLIView implements View {
 
         player = game.getThisPlayer();
 
-        if(player.getLeaderCards().isEmpty())
+        if(player.getLeaderCards().isEmpty()){
             return new DiscardLeaderCardMsg(0);
-        else
+        }
+        else{
             printLeaderCards(player);
+        }
+
 
         int position = 0;
 
@@ -252,7 +256,7 @@ public class CLIView implements View {
         System.out.println("Cast the white marble into one of the following resources:");
         List<Resource> aliases = new ArrayList<>(game.getThisPlayer().getWhiteMarbleAliases());
         for (int i = 1; i <= aliases.size(); i++){
-            System.out.println(i + ") " + aliases.get(i));
+            System.out.println(i + ") " + aliases.get(i - 1));
         }
         System.out.print(">");
         try {
