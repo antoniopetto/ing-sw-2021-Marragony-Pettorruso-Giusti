@@ -13,7 +13,6 @@ import java.util.List;
 public interface View {
 
     void positionUpdate(SimplePlayer player);
-    void bufferUpdate(Marble marble);
     void showErrorMessage(String text);
     void showConfirmMessage(String text);
     SimpleGame getGame();

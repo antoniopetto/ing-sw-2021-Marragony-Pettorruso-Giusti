@@ -52,10 +52,6 @@ public class GUIView implements View {
 
     }
 
-    @Override
-    public void bufferUpdate(Marble marble) {
-
-    }
 
     @Override
     public void showErrorMessage(String text) {

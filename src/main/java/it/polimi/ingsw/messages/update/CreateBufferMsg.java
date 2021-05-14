@@ -9,13 +9,14 @@ import it.polimi.ingsw.server.model.playerboard.DepotName;
 import it.polimi.ingsw.server.model.shared.Marble;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class CreateBufferMsg implements UpdateMsg {
     private List<Marble> marbleBuffer;
 
     public CreateBufferMsg(List<Marble> marbleBuffer) {
-        this.marbleBuffer = marbleBuffer;
+        this.marbleBuffer = new ArrayList<>(marbleBuffer);
     }
 
     @Override

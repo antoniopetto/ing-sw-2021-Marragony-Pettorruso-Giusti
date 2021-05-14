@@ -177,12 +177,7 @@ public class CLIView implements View {
 
     @Override
     public void positionUpdate(SimplePlayer player) {
-
-    }
-
-    @Override
-    public void bufferUpdate(Marble marble) {
-
+        //TODO delete
     }
 
     @Override
@@ -521,7 +516,6 @@ public class CLIView implements View {
                 showErrorMessage("Invalid input");
             }
         }
-        System.out.println("Fine metodo nella cli");
         return new BuyResourcesMsg(choice-1, isRow);
     }
 

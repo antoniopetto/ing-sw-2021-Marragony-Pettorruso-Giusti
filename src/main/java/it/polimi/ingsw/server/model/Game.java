@@ -226,6 +226,7 @@ public class Game {
         }
         else{
             state = State.POSTTURN;
+            virtualView.endAction(true);
         }
 
     }
