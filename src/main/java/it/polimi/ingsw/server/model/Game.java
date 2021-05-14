@@ -177,6 +177,7 @@ public class Game {
                         marbleBuffer.add(Marble.WHITE);
                     virtualView.createBuffer(marbleBuffer);
                     virtualView.requestPutResource();
+                    if(position>=2) faithTrack.advance(playing);
                 }
             }
         } catch (ElementNotFoundException e){
@@ -220,10 +221,13 @@ public class Game {
 
         if(marbleBuffer.size() > 0){
             virtualView.createBuffer(marbleBuffer);
+            virtualView.requestPutResource();
             state = State.INSERTING;
         }
-        else
+        else{
             state = State.POSTTURN;
+        }
+
     }
 
     /**
@@ -274,7 +278,10 @@ public class Game {
         if (marbleBuffer.size() > 0)
             virtualView.requestPutResource();
         else if (state == State.INSERTING)
+        {
             state = State.POSTTURN;
+            virtualView.endAction(true);
+        }
         else if (state == State.INITIALIZING){
             playing.clearWhiteMarbleAlias();
             endTurn();
@@ -466,7 +473,11 @@ public class Game {
                 soloRival.soloTurn(this);
 
             if(state == State.INITIALIZING)
+               {
+                String text = playing.getUsername()+" is choosing the leader cards...";
+                virtualView.messageFilter(null, text);
                 virtualView.requestDiscardLeaderCard();
+            }
             else
                 virtualView.startPlay();
         }

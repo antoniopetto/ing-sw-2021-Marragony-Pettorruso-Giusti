@@ -18,7 +18,6 @@ public class WhiteMarbleAliasUpdateMsg implements UpdateMsg{
     }
 
     public void execute(SimpleGame game){
-        System.out.print("added aliases");
         for (SimplePlayer player: game.getPlayers()) {
             if(player.getUsername().equals(this.username))
                 player.setWhiteMarbleAliases(aliases);

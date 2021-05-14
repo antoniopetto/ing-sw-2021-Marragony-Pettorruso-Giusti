@@ -202,7 +202,7 @@ public class CLIView implements View {
     public Marble selectMarble(){
         showMarbleBuffer(game.getMarbleBuffer());
         System.out.println("Choose a marble to put in a depot (insert a number between 1-" + game.getMarbleBuffer().size() + "):");
-        System.out.print(Graphics.ANSI_CYAN+">");
+        System.out.print(Graphics.ANSI_CYAN+">"+Graphics.ANSI_RESET);
         int position;
         try{
             position = input.nextInt();
@@ -521,6 +521,7 @@ public class CLIView implements View {
                 showErrorMessage("Invalid input");
             }
         }
+        System.out.println("Fine metodo nella cli");
         return new BuyResourcesMsg(choice-1, isRow);
     }
 

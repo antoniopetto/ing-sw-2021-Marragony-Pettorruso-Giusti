@@ -210,14 +210,15 @@ public class VirtualView implements Runnable{
 
     /**Auxiliary methods */
 
-    private void messageFilter(UpdateMsg msg, String text) {
+    public void messageFilter(UpdateMsg msg, String text) {
         for (Map.Entry<String, ClientHandler> map: players.entrySet()) {
             try {
                 if(!map.getKey().equals(game.getPlaying().getUsername())){
-                    ErrorMsg errorMsg = new ErrorMsg(text);
-                    map.getValue().writeObject(errorMsg);
+                    TextMsg textMsg = new TextMsg(text);
+                    map.getValue().writeObject(textMsg);
                 }
-                map.getValue().writeObject(msg);
+                if(msg!=null)
+                    map.getValue().writeObject(msg);
             } catch (IOException e) {
                 e.printStackTrace();
             }
