@@ -14,9 +14,12 @@ public class PutResourceMsg implements CommandMsg {
     private final DepotName depot;
     private final Resource resource;
 
-    public PutResourceMsg(Marble marble, DepotName depot, Resource resource)
-    {
-        if (marble == Marble.WHITE && resource == null || marble != Marble.WHITE && resource != null)
+    public PutResourceMsg(Marble marble, DepotName depot){
+        this(marble, depot, null);
+    }
+
+    public PutResourceMsg(Marble marble, DepotName depot, Resource resource) {
+        if (depot == null || marble == Marble.WHITE && resource == null || marble != Marble.WHITE && resource != null)
             throw new IllegalArgumentException();
         this.marble = marble;
         this.depot = depot;

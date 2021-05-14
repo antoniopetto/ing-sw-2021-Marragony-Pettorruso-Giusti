@@ -21,29 +21,21 @@ public class Server {
         publicRooms[2] = new PublicWaitRoom(3);
         publicRooms[3] = new PublicWaitRoom(4);
         ServerSocket socket;
-        System.out.println("Default port is 7777. Want to change it?");
-        System.out.println("1) Yes");
-        System.out.println("2) No");
+        System.out.println("Default port is 7777. Do you want to change it? [y/N]");
         System.out.print(">");
         Scanner input = new Scanner(System.in);
-        int choice;
-        boolean valid = false;
-        while(!valid)
-        {
-            try {
-                choice = input.nextInt();
-                if(choice<1||choice>2) throw new InputMismatchException();
-                if(choice == 1)
-                {
-                    System.out.println("Insert port number: ");
-                    System.out.print(">");
-                    SOCKET_PORT = input.nextInt();
-                }
-                valid=true;
-            }catch (Exception e)
-            {
-                System.out.println("Invalid input");
+        while(true){
+            String choice = input.nextLine();
+            if(choice.equals("") || choice.equalsIgnoreCase("n"))
+                break;
+            else if(choice.equalsIgnoreCase("y")) {
+                System.out.println("Insert port number: ");
+                System.out.print(">");
+                SOCKET_PORT = input.nextInt();
+                break;
             }
+            else
+                System.out.println("Invalid input");
         }
         try{
             socket = new ServerSocket(SOCKET_PORT);
@@ -55,7 +47,6 @@ public class Server {
         }
         System.out.println("Server ready to accept connections!");
         while (true){
-
             try{
                 Socket clientSocket = socket.accept();
                 System.out.println(">>>>New connection with client [" + clientSocket.getInetAddress()+"]");

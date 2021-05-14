@@ -1,5 +1,6 @@
 package it.polimi.ingsw.server.model;
 
+import it.polimi.ingsw.messages.update.WhiteMarbleAliasUpdateMsg;
 import it.polimi.ingsw.server.VirtualView;
 import it.polimi.ingsw.server.model.cards.*;
 import it.polimi.ingsw.server.model.cards.LeaderCard;
@@ -75,6 +76,18 @@ public class Player extends AbstractPlayer{
      */
     public void addWhiteMarbleAlias(Resource resource) {
         whiteMarbleAliases.add(resource);
+        observer.whiteMarbleAliasUpdate(username, whiteMarbleAliases);
+    }
+
+    public void clearWhiteMarbleAlias(){
+        whiteMarbleAliases.clear();
+    }
+
+    public void addAllWhiteMarbleAlias(){
+        whiteMarbleAliases.add(Resource.STONE);
+        whiteMarbleAliases.add(Resource.SERVANT);
+        whiteMarbleAliases.add(Resource.SHIELD);
+        whiteMarbleAliases.add(Resource.COIN);
     }
 
     /**

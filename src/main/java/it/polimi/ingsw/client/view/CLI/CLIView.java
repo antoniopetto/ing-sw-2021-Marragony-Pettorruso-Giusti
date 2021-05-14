@@ -4,19 +4,22 @@ import it.polimi.ingsw.client.simplemodel.*;
 import it.polimi.ingsw.client.view.View;
 import it.polimi.ingsw.messages.command.*;
 import it.polimi.ingsw.server.model.cards.CardColor;
+import it.polimi.ingsw.server.model.cards.ProductionPower;
 import it.polimi.ingsw.server.model.playerboard.DepotName;
 import it.polimi.ingsw.server.model.playerboard.Resource;
 import it.polimi.ingsw.server.model.shared.Marble;
+
 import java.util.*;
 
 public class CLIView implements View {
     private CLISettingView settingView;
     private SimpleGame game;
 
+    private final Scanner input = new Scanner(System.in);
     private final String column1Format = "%-2s";
     private final String column2Format = "%-2s";
     private final String column3Format = "%2s";
-    private final String formatInfo = column1Format + " " + column2Format + " " + column3Format+ " "+ column3Format;
+    private final String formatInfo = column1Format + " " + column2Format + " " + column3Format + " " + column3Format;
 
 
     public CLIView() {
@@ -36,7 +39,6 @@ public class CLIView implements View {
 
     @Override
     public String getUsername() {
-        Scanner input = new Scanner(System.in);
         System.out.println(Graphics.ANSI_RESET+"Insert your username:");
         System.out.print(Graphics.ANSI_CYAN+">");
         return input.nextLine();
@@ -47,7 +49,6 @@ public class CLIView implements View {
      * @return the number of players.
      */
     public int getNumber(){
-        Scanner input = new Scanner(System.in);
         System.out.println(Graphics.ANSI_RESET+"Insert the number of players for your game:");
         System.out.print(Graphics.ANSI_CYAN+">");
         int result;
@@ -86,9 +87,7 @@ public class CLIView implements View {
      * This method shows a leader card
      * @param card is the card to show
      */
-    public void showLeaderCard(SimpleLeaderCard card)
-    {
-
+    public void showLeaderCard(SimpleLeaderCard card) {
         System.out.println(Graphics.ANSI_RESET+ "┌──────────┐");
         if(card.getResourceRequirements()!=null &&!card.getResourceRequirements().isEmpty())
             showResources(card.getResourceRequirements());
@@ -148,13 +147,14 @@ public class CLIView implements View {
         SimplePlayer player;
         boolean valid = false;
 
-        player = findPlayer(game.getThisPlayer());
+        player = game.getThisPlayer();
 
-        if(player.getLeaderCards().isEmpty())return new DiscardLeaderCardMsg(0);
-            else printLeaderCards(player);
+        if(player.getLeaderCards().isEmpty())
+            return new DiscardLeaderCardMsg(0);
+        else
+            printLeaderCards(player);
 
-            int position = 0;
-        Scanner input = new Scanner(System.in);
+        int position = 0;
 
         while(!valid) {
             System.out.println(Graphics.ANSI_RESET+"Choose leaderCard to discard ( number 1-" + player.getLeaderCards().size() + "):");
@@ -184,8 +184,7 @@ public class CLIView implements View {
     @Override
     public void showMarbleBuffer(List<Marble> marbleList) {
         System.out.println("Marble Buffer:");
-        for (Marble marble : marbleList)
-        {
+        for (Marble marble : marbleList) {
             System.out.print(Graphics.getMarble(marble)+" ");
         }
     }
@@ -195,21 +194,19 @@ public class CLIView implements View {
      * @return the marble chosen
      */
     @Override
-    public Marble selectedMarble(){
-        Scanner input = new Scanner(System.in);
-        System.out.println("Choose a marble to put in a depot (insert a number between 1-"+ game.getMarbleBuffer().size()+"):");
+    public Marble selectMarble(){
+        showMarbleBuffer(game.getMarbleBuffer());
+        System.out.println("Choose a marble to put in a depot (insert a number between 1-" + game.getMarbleBuffer().size() + "):");
         System.out.print(Graphics.ANSI_CYAN+">");
         int position;
         try{
             position = input.nextInt();
-            if(position<1||position>4) throw new InputMismatchException();
-        }catch (Exception e)
-        {
+            if(position < 1 || position > 4) throw new InputMismatchException();
+        }catch (Exception e) {
             showErrorMessage("Illegal input");
-            return selectedMarble();
+            return selectMarble();
         }
-
-        return  game.getMarbleBuffer().get(position-1);
+        return  game.getMarbleBuffer().get(position - 1);
     }
 
     /**
@@ -217,20 +214,56 @@ public class CLIView implements View {
      * @return the number of the depot chosen
      */
     @Override
-    public int selectedDepot(){
-        Scanner input = new Scanner(System.in);
-        System.out.println("Choose a depot in which to place the resource( 1->HIGH DEPOT, 2->MEDIUM DEPOT, 3->LOW DEPOT ):");
+    public DepotName selectDepot(){
+        showWarehouse(game.getThisPlayer());
+        System.out.println("Choose a depot in which to place the resource:");
+        for (DepotName depot: DepotName.values()){
+            if (game.getThisPlayer().getWarehouse().getDepots().containsKey(depot))
+                System.out.println(depot.getPosition() + ") " + depot);
+        }
         System.out.print(Graphics.ANSI_CYAN+">"+Graphics.ANSI_RESET);
-        int choice;
+        DepotName choice;
         try{
-            choice=input.nextInt();
-            if(choice<1||choice>3) throw new InputMismatchException();
-        }catch (Exception e)
-        {
+            int intChoice = input.nextInt();
+            if (intChoice == 0)
+                choice = DepotName.HIGH;
+            else if (intChoice == 1)
+                choice = DepotName.MEDIUM;
+            else if (intChoice == 2)
+                choice = DepotName.LOW;
+            else if (intChoice == 3)
+                choice = DepotName.FIRST_EXTRA;
+            else if (intChoice == 4)
+                choice = DepotName.SECOND_EXTRA;
+            else
+                throw new InputMismatchException();
+            if(!game.getThisPlayer().getWarehouse().getDepots().containsKey(choice))
+                throw new InputMismatchException();
+        } catch (Exception e) {
             showErrorMessage("Illegal input");
-            return selectedDepot();
+            return selectDepot();
         }
         return choice;
+    }
+
+    public Resource selectResource(){
+
+        System.out.println("Cast the white marble into one of the following resources:");
+        List<Resource> aliases = new ArrayList<>(game.getThisPlayer().getWhiteMarbleAliases());
+        for (int i = 1; i <= aliases.size(); i++){
+            System.out.println(i + ") " + aliases.get(i));
+        }
+        System.out.print(">");
+        try {
+            int choice = input.nextInt();
+            if (choice < 1 || choice > aliases.size())
+                throw new InputMismatchException();
+            return aliases.get(choice - 1);
+        }
+        catch (InputMismatchException e){
+            showErrorMessage("Illegal input");
+            return selectResource();
+        }
     }
 
     @Override
@@ -253,15 +286,14 @@ public class CLIView implements View {
         else
             firstAction="End turn";
         System.out.println("Select what to do:");
-        System.out.println("1) "+ firstAction);
+        System.out.println("1) " + firstAction);
         System.out.println("2) Leader card action");
         System.out.println("3) Show...");
         System.out.print(">");
-        Scanner input = new Scanner(System.in);
         int choice;
         try{
-            choice=input.nextInt();
-            if(choice<1||choice>3) throw new InputMismatchException();
+            choice = input.nextInt();
+            if(choice < 1 || choice > 3) throw new InputMismatchException();
         }catch (Exception e)
         {
             showErrorMessage("Illegal input");
@@ -277,16 +309,14 @@ public class CLIView implements View {
                 System.out.println("2) Buy development card");
                 System.out.println("3) Activate production");
                 System.out.println("4) Back...");
-                try{
-                    choice=input.nextInt();
-                    if(choice<1||choice>4) throw new InputMismatchException();
-                }catch (Exception e)
-                {
+                try {
+                    choice = input.nextInt();
+                    if(choice < 1 || choice > 4) throw new InputMismatchException();
+                } catch (Exception e) {
                     showErrorMessage("Illegal input");
                     return selectMove(postTurn);
                 }
-                switch (choice)
-                {
+                switch (choice) {
                     case 1 -> {
                         return buyResources();
                     }
@@ -307,13 +337,12 @@ public class CLIView implements View {
                 System.out.println("2) Discard leader card");
                 System.out.println("3) Show my leader cards");
                 System.out.println("4) Back...");
-                System.out.print(Graphics.ANSI_CYAN+">"+Graphics.ANSI_RESET);
+                System.out.print(Graphics.ANSI_CYAN + ">" + Graphics.ANSI_RESET);
 
                 try{
-                    choice=input.nextInt();
-                    if(choice<1||choice>4) throw new InputMismatchException();
-                }catch (Exception e)
-                {
+                    choice = input.nextInt();
+                    if (choice < 1 || choice > 4) throw new InputMismatchException();
+                } catch (Exception e) {
                     showErrorMessage("Illegal input");
                     return selectMove(postTurn);
                 }
@@ -321,7 +350,7 @@ public class CLIView implements View {
                     case 1 -> { return playLeaderCard();}
                     case 2 -> { return discardLeaderCard(); }
                     case 3 -> {
-                        printLeaderCards(findPlayer(game.getThisPlayer()));
+                        printLeaderCards(game.getThisPlayer());
                         return selectMove(postTurn);
                     }
                     case 4 -> { return selectMove(postTurn); }
@@ -342,8 +371,7 @@ public class CLIView implements View {
      * This method shows graphic parts of the game required by the player. It works client side only, accessing the
      * simple model without communication with the server.
      */
-    private void show()
-    {
+    private void show() {
         System.out.println("Select what to show: ");
         System.out.println("1) market board");
         System.out.println("2) decks");
@@ -356,7 +384,6 @@ public class CLIView implements View {
             i++;
         }
         System.out.print(Graphics.ANSI_CYAN+">"+Graphics.ANSI_RESET);
-        Scanner input = new Scanner(System.in);
         int choice = 0;
         try{
             choice=input.nextInt();
@@ -374,17 +401,15 @@ public class CLIView implements View {
         }
     }
 
-    private void showPlayerBoard(String name)
-    {
+    private void showPlayerBoard(String name) {
         SimplePlayer player = null;
         for (SimplePlayer p: game.getPlayers()) {
-            if(p.getUsername().equals(name))
-            {
+            if(p.getUsername().equals(name)) {
                 player = p;
                 break;
             }
         }
-        if(player==null) throw new IllegalStateException();
+        if(player == null) throw new IllegalStateException();
         showWarehouse(player);
         System.out.println(Graphics.ANSI_BLUE+"Strongbox:"+Graphics.ANSI_RESET);
         System.out.println("----------------");
@@ -400,9 +425,8 @@ public class CLIView implements View {
             }
             System.out.println("-------------------");
         }
-
-
     }
+
     private void showFaithTrack(){
         for (SimplePlayer player: game.getPlayers()) {
             System.out.println(player.getUsername()+" position: "+player.getPosition());
@@ -421,8 +445,7 @@ public class CLIView implements View {
         }
     }
 
-    public void showWarehouse(SimplePlayer player)
-    {
+    public void showWarehouse(SimplePlayer player) {
         SimpleWarehouse warehouse = player.getWarehouse();
         System.out.println(player.getUsername()+" warehouse");
         for (DepotName depot: warehouse.getDepots().keySet()) {
@@ -432,7 +455,7 @@ public class CLIView implements View {
     }
 
     private CommandMsg playLeaderCard(){
-        SimplePlayer player = findPlayer(game.getThisPlayer());
+        SimplePlayer player = game.getThisPlayer();
         int cardId = 0;
 
         if(!player.getLeaderCards().isEmpty()){
@@ -442,7 +465,6 @@ public class CLIView implements View {
             int position = 0;
 
             while(!valid) {
-                Scanner input = new Scanner(System.in);
                 System.out.println(Graphics.ANSI_RESET+"Choose leaderCard to play ( number 1-" + player.getLeaderCards().size() + "):");
                 System.out.print(Graphics.ANSI_CYAN+">"+Graphics.ANSI_RESET);
                 position = input.nextInt();
@@ -459,22 +481,20 @@ public class CLIView implements View {
     }
 
     private CommandMsg buyResources(){
+
         showMarketBoard();
         System.out.println("Want to buy a column/row?");
         System.out.println("1) column");
         System.out.println("2) row");
         System.out.print(">");
-        Scanner input = new Scanner(System.in);
         boolean valid = false;
         int choice = 0;
-        while(!valid)
-        {
+        while(!valid) {
             try {
                 choice=input.nextInt();
                 if(choice<1||choice>2) throw new InputMismatchException();
                 valid=true;
-            }catch (Exception e)
-            {
+            } catch (Exception e) {
                 showErrorMessage("Invalid input");
             }
         }
@@ -500,14 +520,47 @@ public class CLIView implements View {
     }
 
     private CommandMsg activateProduction(){
-        return null;
+
+        SimplePlayer player = game.getThisPlayer();
+        Set<Integer> selectedCardIds = new HashSet<>();
+        Map<Integer, ProductionPower > selectedExtraPowers = new HashMap<>();
+
+        System.out.println("Active production powers");
+
+        for (SimpleSlot slot : player.getSlots()) {
+            System.out.println("Slot n." + slot.getId());
+            int size = slot.getCards().size();
+            if (size >= 1){
+                showCard(slot.getCards().get(size - 1));
+            }
+        }
+
+        while(true){
+            System.out.println("Do you want to add a power to activate? [Y/n]");
+            System.out.print(">");
+            String keepGoing = input.nextLine();
+            if(keepGoing.equals("") || keepGoing.equalsIgnoreCase("y")) {
+                System.out.println("From which slot?");
+                int choice = input.nextInt();
+                if (choice >= 1 && choice <= 3){
+                    int size = player.getSlots().get(choice - 1).getCards().size();
+                    if (size > 0){
+                        selectedCardIds.add(player.getSlots().get(choice - 1).getCards().get(size - 1).getId());
+                    }
+                }
+            }
+            else if(keepGoing.equalsIgnoreCase("n")) {
+                break;
+            }
+        }
+
+        return new ActivateProductionMsg(selectedCardIds, selectedExtraPowers);
     }
 
     private CommandMsg buyCard(){
         boolean valid = false;
         showDevCardDecks();
         int position = 0;
-        Scanner input = new Scanner(System.in);
 
         while(!valid) {
 
@@ -527,12 +580,12 @@ public class CLIView implements View {
         int slotId = 0;
         while(!valid){
 
-            System.out.println(Graphics.ANSI_RESET+"Choose slot in which to insert the developmentCard( number 1-" +findPlayer(game.getThisPlayer()).getSlots().size() + "):");
+            System.out.println(Graphics.ANSI_RESET+"Choose slot in which to insert the developmentCard( number 1-" + game.getThisPlayer().getSlots().size() + "):");
             System.out.print(Graphics.ANSI_CYAN+">"+Graphics.ANSI_RESET);
             slotId = input.nextInt();
 
-            if(slotId > findPlayer(game.getThisPlayer()).getSlots().size() || slotId < 1){
-                showErrorMessage("Insert a number between 1-" + findPlayer(game.getThisPlayer()).getSlots().size());
+            if(slotId > game.getThisPlayer().getSlots().size() || slotId < 1){
+                showErrorMessage("Insert a number between 1-" + game.getThisPlayer().getSlots().size());
             }
             else valid = true;
 
@@ -543,9 +596,9 @@ public class CLIView implements View {
 
         return new BuyandAddCardInSlotMsg(cardColor, level, slotId);
     }
+
     @Deprecated
-    public void showCardLegend()
-    {
+    public void showCardLegend() {
 
         System.out.println("┌──────────┐");
         System.out.println(Graphics.ANSI_RED+"              <----Card color and level");
@@ -557,43 +610,14 @@ public class CLIView implements View {
         System.out.println("└──────────┘");
 
     }
-    public void showCard(SimpleDevelopmentCard card)
-    {
+
+    public void showCard(SimpleDevelopmentCard card) {
         System.out.println("┌──────────┐");
         //Level and color
         System.out.println("    "+Graphics.getLevel(card.getColor(), card.getLevel()));
         int i;
         showResources(card.getRequirements());
-        //input
-        System.out.println(Graphics.getCardColor(card.getColor())+"Input:"+Graphics.ANSI_RESET);
-        //System.out.println();
-        String[] input= new String[2];
-        i=0;
-        for(Resource inRes : card.getInput().keySet())
-        {
-            input[i] = card.getInput().get(inRes)+ " " +Graphics.getResource(inRes);
-            i++;
-        }
-        if(input[1]==null) input[1]="";
-        System.out.format(formatInfo, input[0], "", input[1], "");
-        System.out.println();
-
-        //output
-        System.out.println(Graphics.getCardColor(card.getColor())+"Output:"+Graphics.ANSI_RESET);
-        String[] output = new String[3];
-        i=0;
-        for(Resource outRes : card.getOutput().keySet())
-        {
-            output[i] = card.getOutput().get(outRes)+ " " +Graphics.getResource(outRes);
-            i++;
-        }
-        for(int j=0; j<3; j++)
-        {
-            if(output[j]==null)
-                output[j]="";
-        }
-
-        System.out.format(formatInfo, output[0], output[1], output[2], "");
+        showProductionPower(card.getColor(), card.getInput(), card.getOutput());
         System.out.println();
 
         //vicotry points
@@ -601,9 +625,35 @@ public class CLIView implements View {
         System.out.println("└──────────┘");
     }
 
-    public void showResources(Map<Resource, Integer> resources)
-    {
-        if(resources== null ||resources.isEmpty()){
+    public void showProductionPower(CardColor color, Map<Resource, Integer> input, Map<Resource, Integer> output){
+        System.out.println(Graphics.getCardColor(color)+"Input:"+Graphics.ANSI_RESET);
+        String[] inputString = new String[2];
+        int i = 0;
+        for(Resource inRes : input.keySet()) {
+            inputString[i] = input.get(inRes) +  " " + Graphics.getResource(inRes);
+            i++;
+        }
+        if(inputString[1]==null) inputString[1]="";
+        System.out.format(formatInfo, inputString[0], "", inputString[1], "");
+        System.out.println();
+
+        System.out.println(Graphics.getCardColor(color) + "Output:" + Graphics.ANSI_RESET);
+        String[] outputString = new String[3];
+        i=0;
+        for(Resource outRes : output.keySet()) {
+            outputString[i] = output.get(outRes) + " " + Graphics.getResource(outRes);
+            i++;
+        }
+        for(int j=0; j<3; j++) {
+            if(outputString[j]==null)
+                outputString[j]="";
+        }
+
+        System.out.format(formatInfo, outputString[0], outputString[1], outputString[2], "");
+    }
+
+    public void showResources(Map<Resource, Integer> resources) {
+        if(resources == null ||resources.isEmpty()){
             System.out.println("");
             return;
         }
@@ -624,8 +674,7 @@ public class CLIView implements View {
         System.out.println();
     }
 
-    public void showMarketBoard()
-    {
+    public void showMarketBoard() {
         Marble[][] marketBoard = game.getMarketBoard();
         System.out.println("  1 2 3 4");
         for(int i=0; i<3; i++)
@@ -642,10 +691,6 @@ public class CLIView implements View {
         System.out.print("\n");
     }
 
-
-
-    /**Auxiliary methods */
-
     @Override
     public void showErrorMessage(String text) {
         System.out.println(Graphics.ANSI_RED+"ATTENTION!");
@@ -659,17 +704,10 @@ public class CLIView implements View {
         System.out.println(text+Graphics.ANSI_RESET);
     }
 
-    public void setGame(SimpleGame game) {
-        this.game = game;
-    }
-
     public SimplePlayer findPlayer(String username){
         for(SimplePlayer simplePlayer : game.getPlayers())
             if (simplePlayer.getUsername().equals(username)) return simplePlayer;
 
             return null;
     }
-
-
-
 }

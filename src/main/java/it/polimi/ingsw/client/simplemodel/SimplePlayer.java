@@ -4,34 +4,29 @@ import it.polimi.ingsw.client.view.View;
 import it.polimi.ingsw.server.model.playerboard.Resource;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class SimplePlayer implements Serializable {
-    private String username;
+    private final String username;
     private int position;
     private View view;
     private SimpleWarehouse warehouse;
-    private ArrayList<SimpleSlot> slots;
+    private final ArrayList<SimpleSlot> slots;
     private Map<Resource, Integer> strongbox = new HashMap<>();
-    private List<SimpleLeaderCard> leaderCards = new ArrayList<>();
+    private final List<SimpleLeaderCard> leaderCards = new ArrayList<>();
+    private final Set<Resource> whiteMarbleAliases = new HashSet<>();
 
-    public SimplePlayer(String username, int[] cardIds) {
-        this.username=username;
+    public SimplePlayer(String username, List<Integer> cardIds) {
+        this.username = username;
         this.slots = new ArrayList<>();
-        this.position=0;
+        this.position = 0;
         this.warehouse = new SimpleWarehouse();
-        for(int i=0; i<4; i++)
-        {
-            leaderCards.add(SimpleLeaderCard.parse(cardIds[i]));
-        }
+
+        cardIds.forEach(cardId -> leaderCards.add(SimpleLeaderCard.parse(cardId)));
+
         slots.add(new SimpleSlot(1));
         slots.add(new SimpleSlot(2));
         slots.add(new SimpleSlot(3));
-
-
     }
 
     public Map<Resource, Integer> getStrongbox() {
@@ -52,7 +47,6 @@ public class SimplePlayer implements Serializable {
     public void setView(View view){
         this.view = view;
     }
-
 
     public void changeWarehouse(SimpleWarehouse warehouse)
     {
@@ -100,5 +94,14 @@ public class SimplePlayer implements Serializable {
 
     public ArrayList<SimpleSlot> getSlots() {
         return slots;
+    }
+
+    public void setWhiteMarbleAliases(Set<Resource> aliases){
+        whiteMarbleAliases.clear();
+        whiteMarbleAliases.addAll(aliases);
+    }
+
+    public Set<Resource> getWhiteMarbleAliases(){
+        return whiteMarbleAliases;
     }
 }

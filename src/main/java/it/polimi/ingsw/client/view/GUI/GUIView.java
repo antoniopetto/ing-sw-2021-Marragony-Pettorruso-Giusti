@@ -4,6 +4,8 @@ import it.polimi.ingsw.client.simplemodel.SimpleGame;
 import it.polimi.ingsw.client.simplemodel.SimpleLeaderCard;
 import it.polimi.ingsw.client.simplemodel.SimplePlayer;
 import it.polimi.ingsw.client.view.View;
+import it.polimi.ingsw.server.model.playerboard.DepotName;
+import it.polimi.ingsw.server.model.playerboard.Resource;
 import it.polimi.ingsw.server.model.shared.Marble;
 import it.polimi.ingsw.messages.command.CommandMsg;
 import javafx.application.Application;
@@ -117,7 +119,7 @@ public class GUIView implements View {
     }
 
     @Override
-    public Marble selectedMarble() {
+    public Marble selectMarble() {
         return null;
     }
 
@@ -127,9 +129,11 @@ public class GUIView implements View {
     }
 
     @Override
-    public int selectedDepot() {
-        return 0;
+    public DepotName selectDepot() {
+        return DepotName.HIGH;
     }
+
+    public Resource selectResource(){ return Resource.COIN;}
 
     @Override
     public void showStatusMessage(String text) {

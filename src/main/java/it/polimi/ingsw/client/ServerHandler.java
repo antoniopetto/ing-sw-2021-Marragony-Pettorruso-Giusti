@@ -29,27 +29,21 @@ public class ServerHandler implements Runnable{
         try {
             output = new ObjectOutputStream(serverSocket.getOutputStream());
             input = new ObjectInputStream(serverSocket.getInputStream());
-
         } catch (IOException e) {
             System.out.println("Error getting the streams");
             return;
         }
-        while(true)
-        {
+        while(true) {
             try {
-
                 Object message = input.readObject();
-                if(message instanceof UpdateMsg)
-                {
+                if(message instanceof UpdateMsg) {
                     UpdateMsg updateMsg = (UpdateMsg)message;
                     updateMsg.execute(model);
                 }
-                else
-                {
+                else {
                     ViewMsg viewMsg = (ViewMsg)message;
                     viewMsg.changeView(view, this);
                 }
-
             } catch (IOException | ClassNotFoundException e) {
                 e.printStackTrace();
                 return;

@@ -10,8 +10,6 @@ import java.util.Map;
 public class SimpleWarehouse implements Serializable {
     private Map<DepotName, Map<Resource, Integer>> depots;
 
-
-
     public SimpleWarehouse()
     {
         depots=new HashMap<>();
@@ -26,7 +24,7 @@ public class SimpleWarehouse implements Serializable {
 
     public void setWarehouse(Map<DepotName, Map<Resource, Integer>> newState)
     {
-        depots=newState;
+        depots = newState;
     }
 
     public Map<DepotName, Map<Resource, Integer>> getDepots() {

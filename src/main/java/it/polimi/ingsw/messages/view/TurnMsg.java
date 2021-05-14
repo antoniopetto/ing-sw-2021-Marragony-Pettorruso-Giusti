@@ -6,13 +6,13 @@ import it.polimi.ingsw.messages.command.CommandMsg;
 
 import java.io.IOException;
 
-public class TurnMessage implements ViewMsg{
+public class TurnMsg implements ViewMsg{
 
-    private boolean postTurn;
-    public TurnMessage(boolean postTurn)
-    {
-        this.postTurn=postTurn;
+    private final boolean postTurn;
+    public TurnMsg(boolean postTurn) {
+        this.postTurn = postTurn;
     }
+
     @Override
     public void changeView(View view, ServerHandler server) throws IOException {
         CommandMsg msg = view.selectMove(postTurn);

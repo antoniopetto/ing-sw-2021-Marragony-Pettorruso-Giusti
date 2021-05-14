@@ -6,10 +6,10 @@ import it.polimi.ingsw.client.view.View;
 
 import java.io.IOException;
 
-public class TextMessage implements ViewMsg {
+public class TextMsg implements ViewMsg {
     private String text;
 
-    public TextMessage(String text) {
+    public TextMsg(String text) {
         this.text = text;
     }
 

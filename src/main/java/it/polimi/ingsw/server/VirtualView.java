@@ -45,25 +45,25 @@ public class VirtualView implements Runnable{
         }
     }
 
-    private void initGame()
-    {
-        List<SimplePlayer> simplePlayerList = game.initializePlayers();
+    private void initGame() {
+        List<SimplePlayer> simplePlayerList = game.getSimplePlayers();
         int[][][] cardIDs = game.getDevelopmentCardDecks().getDecksStatus();
-        for (Map.Entry<String, ClientHandler> map: players.entrySet()) {
-            try {
-                UpdateMsg msg = new GameInitMsg(simplePlayerList, cardIDs, map.getKey());
-                map.getValue().writeObject(msg);
-            } catch (IOException e) {
+        for (SimplePlayer player : simplePlayerList){
+            try{
+                UpdateMsg msg = new GameInitMsg(simplePlayerList, cardIDs, player);
+                players.get(player.getUsername()).writeObject(msg);
+            }
+            catch (IOException e){
                 e.printStackTrace();
             }
         }
-        initChoices();
+        requestDiscardLeaderCard();
         marketBoardUpdate();
     }
 
-    public void initChoices(){
+    public void requestDiscardLeaderCard(){
         try {
-            InitChoicesMsg msg = new InitChoicesMsg();
+            DiscardLeaderRequestMsg msg = new DiscardLeaderRequestMsg();
             getPlayingHandler().writeObject(msg);
         } catch (IOException e){
             e.printStackTrace();
@@ -74,10 +74,10 @@ public class VirtualView implements Runnable{
 
     public void startPlay(){
         try{
-            getPlayingHandler().writeObject(new TurnMessage(false));
+            getPlayingHandler().writeObject(new TurnMsg(false));
             for (String player: players.keySet()) {
                 if(!player.equals(getPlayingUsername()))
-                    players.get(player).writeObject(new TextMessage(getPlayingUsername()+ " is playing the turn..."));
+                    players.get(player).writeObject(new TextMsg(getPlayingUsername()+ " is playing the turn..."));
             }
         }catch (IOException e){
             System.out.println("Connection dropped");
@@ -88,15 +88,13 @@ public class VirtualView implements Runnable{
 
     public void endAction(boolean isPostTurn){
         try{
-            getPlayingHandler().writeObject(new TurnMessage(isPostTurn));
+            getPlayingHandler().writeObject(new TurnMsg(isPostTurn));
 
         }catch (IOException e){
             System.out.println("Connection dropped");
             exitGame();
         }
-
     }
-
 
     public void discardLeaderCardUpdate(int cardId){
         DiscardLeaderCardUpdateMsg msg = new DiscardLeaderCardUpdateMsg(getPlayingUsername(), cardId);
@@ -106,6 +104,17 @@ public class VirtualView implements Runnable{
     public void createBuffer(List<Marble> marbleBuffer){
         try{
             CreateBufferMsg msg = new CreateBufferMsg(marbleBuffer);
+            getPlayingHandler().writeObject(msg);
+        }
+        catch (IOException e){
+            e.printStackTrace();
+            exitGame();
+        }
+    }
+
+    public void requestPutResource(){
+        try{
+            PutResourceRequestMsg msg = new PutResourceRequestMsg();
             getPlayingHandler().writeObject(msg);
         }
         catch (IOException e){
@@ -125,10 +134,6 @@ public class VirtualView implements Runnable{
     }
 
 
-
-
-
-
     public void faithTrackUpdate(AbstractPlayer player, boolean allBut){
         UpdateMsg msg = new TrackUpdateMsg(player, allBut);
         sendAll(msg);
@@ -136,8 +141,7 @@ public class VirtualView implements Runnable{
 
     public void vaticanReportUpdate(){}
 
-    public void warehouseUpdate()
-    {
+    public void warehouseUpdate() {
         Map<DepotName, Map<Resource, Integer>> warehouse = new HashMap<>();
         for (Depot depot: game.getPlaying().getPlayerBoard().getWareHouse().getDepots()) {
             Map<Resource, Integer> resources = new HashMap<>();
@@ -151,8 +155,7 @@ public class VirtualView implements Runnable{
 
     }
 
-    public void strongBoxUpdate()
-    {
+    public void strongBoxUpdate() {
         Map<Resource, Integer> strongbox = game.getPlaying().getPlayerBoard().getStrongBox().getContent();
         UpdateMsg msg = new StrongBoxUpdateMsg(strongbox, getPlayingUsername());
         sendAll(msg);
@@ -168,7 +171,7 @@ public class VirtualView implements Runnable{
         messageFilter(msg, "The player '"+ getPlayingUsername()+ "' has bought a development card");
     }
 
-    public void devcarddecksUpdate(int level, CardColor cardcolor, int cardTop){
+    public void devCardDecksUpdate(int level, CardColor cardcolor, int cardTop){
         UpdateMsg msg = new CardDecksUpdateMsg(level,cardcolor,cardTop);
         sendAll(msg);
     }
@@ -178,10 +181,10 @@ public class VirtualView implements Runnable{
         messageFilter(msg, "The player '"+ getPlayingUsername()+ "' plays a LeaderCard");
     }
 
-
-
-
-
+    public void whiteMarbleAliasUpdate(String username, Set<Resource> aliases){
+        WhiteMarbleAliasUpdateMsg msg = new WhiteMarbleAliasUpdateMsg(username, aliases);
+        sendAll(msg);
+    }
 
     public void endGame(){
         for (Map.Entry<String, ClientHandler> entry : players.entrySet()){
@@ -205,15 +208,9 @@ public class VirtualView implements Runnable{
         }
     }
 
-
-
-
-
     /**Auxiliary methods */
 
-
-    private void messageFilter(UpdateMsg msg, String text){
-
+    private void messageFilter(UpdateMsg msg, String text) {
         for (Map.Entry<String, ClientHandler> map: players.entrySet()) {
             try {
                 if(!map.getKey().equals(game.getPlaying().getUsername())){
@@ -227,8 +224,7 @@ public class VirtualView implements Runnable{
         }
     }
 
-    private void sendAll(UpdateMsg msg)
-    {
+    private void sendAll(UpdateMsg msg) {
         players.values().forEach(c -> {
             try {
                 c.writeObject(msg);

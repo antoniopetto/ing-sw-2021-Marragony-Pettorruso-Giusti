@@ -9,7 +9,6 @@ public enum DepotName {
 
     private final int position;
 
-
     DepotName(int position) {
         this.position = position;
     }

@@ -1,7 +1,6 @@
 package it.polimi.ingsw.messages.update;
 
 import it.polimi.ingsw.client.ServerHandler;
-import it.polimi.ingsw.client.simplemodel.SimpleGame;
 import it.polimi.ingsw.client.view.View;
 import it.polimi.ingsw.messages.command.PutResourceMsg;
 import it.polimi.ingsw.messages.view.ViewMsg;
@@ -18,23 +17,8 @@ public class CreateBufferMsg implements ViewMsg {
         this.marbleBuffer = marbleBuffer;
     }
 
-
-
     @Override
     public void changeView(View view, ServerHandler server) throws IOException {
         view.getGame().setMarbleBuffer(marbleBuffer);
-        Marble marble = view.selectedMarble();
-        DepotName depot = null;
-        int selectedDepot = view.selectedDepot();
-        for(DepotName depotName : DepotName.values()){
-            if(depotName.getPosition() == selectedDepot-1 ){
-                depot = depotName;
-                break;
-            }
-        }
-
-        //gestione situazione in cui la biglia è bianca
-        PutResourceMsg msg = new PutResourceMsg(marble, depot, null);
-        server.writeObject(msg);
     }
 }

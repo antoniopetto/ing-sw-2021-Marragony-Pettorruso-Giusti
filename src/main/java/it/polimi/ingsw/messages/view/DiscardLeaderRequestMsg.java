@@ -12,9 +12,7 @@ import it.polimi.ingsw.messages.view.ViewMsg;
 
 import java.io.IOException;
 
-public class InitChoicesMsg implements ViewMsg {
-
-
+public class DiscardLeaderRequestMsg implements ViewMsg {
 
     @Override
     public void changeView(View view, ServerHandler server) throws IOException {

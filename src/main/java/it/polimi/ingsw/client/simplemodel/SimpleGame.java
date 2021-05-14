@@ -12,9 +12,9 @@ public class SimpleGame {
     private List<Marble> marbleBuffer;
     private Marble[][] marketBoard = new Marble[3][4];
     private Marble spareMarble;
-    private SimpleDevelopmentCard[][][] devCardDecks = new SimpleDevelopmentCard[4][3][4];
-    private View view;
-    private String thisPlayer;
+    private final SimpleDevelopmentCard[][][] devCardDecks = new SimpleDevelopmentCard[4][3][4];
+    private final View view;
+    private SimplePlayer thisPlayer;
 
     public SimpleGame(View view) {
         this.view = view;
@@ -29,11 +29,13 @@ public class SimpleGame {
         return marbleBuffer;
     }
 
-    public void startGame(List<SimplePlayer> players, int[][][] cardIds, String handlerUsername) {
+    public void startGame(List<SimplePlayer> players, int[][][] cardIds, SimplePlayer thisPlayer) {
         view.startGame();
         this.players = players;
-        thisPlayer=handlerUsername;
-        for(SimplePlayer player: this.players){
+        this.thisPlayer = thisPlayer;
+
+        //TODO What is the view used for in the simplePlayers?
+        for(SimplePlayer player : players){
             player.setView(view);
         }
         for(int i=0; i<4; i++) {
@@ -61,10 +63,8 @@ public class SimpleGame {
         }
     }
 
-    public void setMarbleBuffer(List<Marble> marbles)
-    {
-        marbleBuffer=marbles;
-        view.showMarbleBuffer(marbleBuffer);
+    public void setMarbleBuffer(List<Marble> marbles) {
+        marbleBuffer = marbles;
     }
 
     public void reduceBuffer(Marble marble)
@@ -92,29 +92,24 @@ public class SimpleGame {
         return spareMarble;
     }
 
-    public String getThisPlayer() {
+    public SimplePlayer getThisPlayer() {
         return thisPlayer;
     }
 
     public List<SimpleDevelopmentCard> getDevCardDecks() {
         SimpleDevelopmentCard[][][] decks = devCardDecks;
         List<SimpleDevelopmentCard> result = new ArrayList<>();
-        for(int row = 0; row<4; row++)
-        {
+        for(int row = 0; row<4; row++) {
 
-            for (int col = 0; col<3; col++)
-            {
+            for (int col = 0; col<3; col++) {
                 int i = 3;
-                while (decks[row][col][i]==null)
-                {
+                while (decks[row][col][i]==null) {
                     i--;
                     if(i<0)break;
                 }
-                if(i>=0)
-                {
+                if(i>=0) {
                     result.add(decks[row][col][i]);
                 }
-
             }
         }
         return result;

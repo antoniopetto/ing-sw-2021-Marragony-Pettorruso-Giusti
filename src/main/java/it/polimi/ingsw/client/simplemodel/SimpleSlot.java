@@ -6,8 +6,8 @@ import java.util.List;
 
 public class SimpleSlot implements Serializable {
 
-    private List<SimpleDevelopmentCard> cards;
-    private int id;
+    private final List<SimpleDevelopmentCard> cards;
+    private final int id;
 
     public SimpleSlot(int id) {
         this.id=id;

@@ -22,8 +22,7 @@ public class CLISettingView{
         Socket server;
         ServerHandler serverHandler;
         boolean reachable = false;
-        while(!reachable)
-        {
+        while(!reachable) {
             Scanner input = new Scanner(System.in);
             System.out.println("Server IP address?");
             System.out.print(">");
@@ -42,8 +41,5 @@ public class CLISettingView{
                 System.out.println(Graphics.ANSI_RED+"Server unreachable, try again."+Graphics.ANSI_RESET);
             }
         }
-
-
     }
-
 }
