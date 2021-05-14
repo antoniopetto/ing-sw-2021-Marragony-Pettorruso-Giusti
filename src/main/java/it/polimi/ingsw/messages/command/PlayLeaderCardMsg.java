@@ -15,4 +15,11 @@ public class PlayLeaderCardMsg implements CommandMsg {
     public void execute(Game game, ClientHandler handler) {
         game.playLeaderCard(this.cardId);
     }
+
+    @Override
+    public String toString() {
+        return "PlayLeaderCardMsg{" +
+                "cardId=" + cardId +
+                '}';
+    }
 }

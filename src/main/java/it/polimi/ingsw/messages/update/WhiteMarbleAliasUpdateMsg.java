@@ -23,4 +23,12 @@ public class WhiteMarbleAliasUpdateMsg implements UpdateMsg{
                 player.setWhiteMarbleAliases(aliases);
         }
     }
+
+    @Override
+    public String toString() {
+        return "WhiteMarbleAliasUpdateMsg{" +
+                "username='" + username + '\'' +
+                ", aliases=" + aliases +
+                '}';
+    }
 }

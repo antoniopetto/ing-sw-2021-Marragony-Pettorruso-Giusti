@@ -18,4 +18,12 @@ public class LeaderCardUpdateMsg implements UpdateMsg {
                 .filter(p -> p.getUsername().equals(username)).findAny()
                 .ifPresent(p -> p.activeLeaderCard(cardId));
     }
+
+    @Override
+    public String toString() {
+        return "LeaderCardUpdateMsg{" +
+                "username='" + username + '\'' +
+                ", cardId=" + cardId +
+                '}';
+    }
 }

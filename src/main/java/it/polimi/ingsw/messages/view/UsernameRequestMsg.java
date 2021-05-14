@@ -13,4 +13,9 @@ public class UsernameRequestMsg implements ViewMsg{
         UsernameMsg message = new UsernameMsg(username);
         handler.writeObject(message);
     }
+
+    @Override
+    public String toString() {
+        return "UsernameRequestMsg{}";
+    }
 }

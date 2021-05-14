@@ -13,6 +13,7 @@ public class Client {
     public static void main(String[] args) {
 
         Scanner input = new Scanner(System.in);
+
         boolean valid = false;
         System.out.println("Please select how to play:");
         System.out.println("1) CLI");
@@ -22,7 +23,7 @@ public class Client {
         while(!valid){
             try{
                 choice = input.nextInt();
-                if(choice!=1&&choice!=2) throw new Exception();
+                if(choice != 1 && choice != 2) throw new Exception();
                 valid=true;
             }catch (Exception e )
             {

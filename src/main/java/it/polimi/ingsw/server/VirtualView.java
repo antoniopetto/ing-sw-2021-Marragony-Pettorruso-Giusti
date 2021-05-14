@@ -37,6 +37,7 @@ public class VirtualView implements Runnable{
             try {
                 Object nextMsg = getPlayingHandler().readObject();
                 CommandMsg command = (CommandMsg)nextMsg;
+                System.out.println(command);
                 command.execute(game, getPlayingHandler());
             } catch (IOException | ClassNotFoundException e) {
                 e.printStackTrace();

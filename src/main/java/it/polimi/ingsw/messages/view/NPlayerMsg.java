@@ -17,4 +17,10 @@ public class NPlayerMsg implements Serializable {
         return nPlayers;
     }
 
+    @Override
+    public String toString() {
+        return "NPlayerMsg{" +
+                "nPlayers=" + nPlayers +
+                '}';
+    }
 }

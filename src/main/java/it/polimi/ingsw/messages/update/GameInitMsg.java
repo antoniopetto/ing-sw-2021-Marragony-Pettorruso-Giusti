@@ -4,6 +4,7 @@ import it.polimi.ingsw.client.ServerHandler;
 import it.polimi.ingsw.client.simplemodel.SimpleGame;
 import it.polimi.ingsw.client.simplemodel.SimplePlayer;
 
+import java.util.Arrays;
 import java.util.List;
 
 public class GameInitMsg implements UpdateMsg{
@@ -23,5 +24,14 @@ public class GameInitMsg implements UpdateMsg{
     @Override
     public void execute(SimpleGame game) {
         game.startGame(players, cardIDs, thisPlayer);
+    }
+
+    @Override
+    public String toString() {
+        return "GameInitMsg{" +
+                "players=" + players +
+                ", cardIDs=" + Arrays.toString(cardIDs) +
+                ", thisPlayer=" + thisPlayer +
+                '}';
     }
 }

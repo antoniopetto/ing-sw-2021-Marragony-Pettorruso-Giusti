@@ -9,4 +9,9 @@ public class LeaderboardMsg implements ViewMsg{
     public void changeView(View view, ServerHandler handler) {
 
     }
+
+    @Override
+    public String toString() {
+        return "LeaderboardMsg{}";
+    }
 }

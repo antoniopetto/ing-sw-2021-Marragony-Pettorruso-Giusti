@@ -18,4 +18,12 @@ public class BuyResourcesMsg implements CommandMsg {
     public void execute(Game game, ClientHandler handler) throws IOException {
         game.buyResources(idLine, isRow);
     }
+
+    @Override
+    public String toString() {
+        return "BuyResourcesMsg{" +
+                "idLine=" + idLine +
+                ", isRow=" + isRow +
+                '}';
+    }
 }

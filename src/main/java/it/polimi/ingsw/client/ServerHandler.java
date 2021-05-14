@@ -36,6 +36,7 @@ public class ServerHandler implements Runnable{
         while(true) {
             try {
                 Object message = input.readObject();
+                System.out.println(message);
                 if(message instanceof UpdateMsg) {
                     UpdateMsg updateMsg = (UpdateMsg)message;
                     updateMsg.execute(model);

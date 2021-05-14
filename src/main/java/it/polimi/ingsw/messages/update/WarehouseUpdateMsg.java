@@ -25,4 +25,12 @@ public class WarehouseUpdateMsg implements UpdateMsg {
             if (player.getUsername().equals(username))
                 player.changeWarehouse(warehouse);
     }
+
+    @Override
+    public String toString() {
+        return "WarehouseUpdateMsg{" +
+                "warehouse=" + warehouse +
+                ", username='" + username + '\'' +
+                '}';
+    }
 }

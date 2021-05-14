@@ -15,4 +15,11 @@ public class BufferUpdateMsg implements UpdateMsg {
     public void execute(SimpleGame model) {
         model.reduceBuffer(marble);
     }
+
+    @Override
+    public String toString() {
+        return "BufferUpdateMsg{" +
+                "marble=" + marble +
+                '}';
+    }
 }

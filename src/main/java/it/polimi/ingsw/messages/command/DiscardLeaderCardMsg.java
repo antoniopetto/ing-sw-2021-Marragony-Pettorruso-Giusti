@@ -15,4 +15,11 @@ public class DiscardLeaderCardMsg implements CommandMsg {
     public void execute(Game game, ClientHandler handler) {
         game.discardLeaderCard(cardId);
     }
+
+    @Override
+    public String toString() {
+        return "DiscardLeaderCardMsg{" +
+                "cardId=" + cardId +
+                '}';
+    }
 }

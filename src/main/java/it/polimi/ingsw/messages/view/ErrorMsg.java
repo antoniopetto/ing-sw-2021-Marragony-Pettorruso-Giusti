@@ -11,9 +11,15 @@ public class ErrorMsg implements ViewMsg {
         this.text = text;
     }
 
-
     @Override
     public void changeView(View view, ServerHandler handler) {
         view.showErrorMessage(text);
+    }
+
+    @Override
+    public String toString() {
+        return "ErrorMsg{" +
+                "text='" + text + '\'' +
+                '}';
     }
 }

@@ -20,4 +20,12 @@ public class MoveDepotsMsg implements CommandMsg {
     public void execute(Game game, ClientHandler handler) throws IOException {
         game.moveDepots(depotFrom,depotTo);
     }
+
+    @Override
+    public String toString() {
+        return "MoveDepotsMsg{" +
+                "depotFrom=" + depotFrom +
+                ", depotTo=" + depotTo +
+                '}';
+    }
 }

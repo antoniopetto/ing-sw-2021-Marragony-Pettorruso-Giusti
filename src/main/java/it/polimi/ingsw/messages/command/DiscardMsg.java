@@ -20,4 +20,11 @@ public class DiscardMsg implements CommandMsg {
         UpdateMsg msg;
         game.discardMarble(marble);
     }
+
+    @Override
+    public String toString() {
+        return "DiscardMsg{" +
+                "marble=" + marble +
+                '}';
+    }
 }

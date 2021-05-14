@@ -20,4 +20,13 @@ public class CardDecksUpdateMsg implements UpdateMsg {
     public void execute(SimpleGame model) {
         model.updateDevCardDecks(level,cardColor,cardTop);
     }
+
+    @Override
+    public String toString() {
+        return "CardDecksUpdateMsg{" +
+                "level=" + level +
+                ", cardColor=" + cardColor +
+                ", cardTop=" + cardTop +
+                '}';
+    }
 }
