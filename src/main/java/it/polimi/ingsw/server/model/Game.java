@@ -269,6 +269,7 @@ public class Game {
             !playing.getPlayerBoard().getWareHouse().isInsertable(depot, resource)) {
 
             virtualView.sendError("Illegal putResource request");
+            virtualView.requestPutResource();
             return;
         }
 
@@ -373,6 +374,7 @@ public class Game {
 
         if (!playing.getPlayerBoard().canActivateProduction(selectedCardIds, selectedExtraPowers)) {
             virtualView.sendError("Cannot afford this production");
+            virtualView.nextAction(false);
             return;
         }
 

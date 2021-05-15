@@ -76,13 +76,18 @@ public class CLIView implements View {
         System.out.println(Graphics.ANSI_GREEN+Graphics.TITLE+Graphics.ANSI_RESET);
         System.out.println(Graphics.ANSI_BLUE+"Game started"+Graphics.ANSI_RESET);
         System.out.println(Graphics.ANSI_YELLOW+"Rules: "+ "https://www.google.com/url?sa=t&rct=j&q=&esrc=s&source=web&cd=&cad=rja&uact=8&ved=2ahUKEwjrp562xsLwAhVQ4YUKHZWMBhcQFjAAegQIAhAD&url=http%3A%2F%2Fboardgame.bg%2Fmasters%2520of%2520renaissance%2520rules.pdf&usg=AOvVaw3zG_mi_quuZtRXse1AERmk"+Graphics.ANSI_RESET);
+        showLegend();
+        System.out.println(Graphics.ANSI_CYAN+"Waiting for your turn to choose the leader cards..."+Graphics.ANSI_RESET);
+    }
+
+    public void showLegend()
+    {
         System.out.println("Legend: "
                 +Graphics.getResource(Resource.FAITH)+"-Faith, "
                 +Graphics.getResource(Resource.COIN)+ "-Coin, "
                 +Graphics.getResource(Resource.SERVANT)+ "-Servant, "
                 +Graphics.getResource(Resource.SHIELD)+ "-Shield, "
                 +Graphics.getResource(Resource.STONE)+ "-Stone");
-        System.out.println(Graphics.ANSI_CYAN+"Waiting for your turn to choose the leader cards..."+Graphics.ANSI_RESET);
     }
 
     /**
@@ -203,7 +208,7 @@ public class CLIView implements View {
         int position;
         try{
             position = input.nextInt();
-            if(position < 1 || position > 4) throw new InputMismatchException();
+            if(position < 1 || position > game.getMarbleBuffer().size()) throw new InputMismatchException();
         }catch (Exception e) {
             showErrorMessage("Illegal input");
             return selectMarble();
@@ -408,6 +413,7 @@ public class CLIView implements View {
      */
     private void show() {
         System.out.println("Select what to show: ");
+        System.out.println("0) resources legend");
         System.out.println("1) market board");
         System.out.println("2) decks");
         System.out.println("3) faith track");
@@ -422,13 +428,14 @@ public class CLIView implements View {
         int choice = 0;
         try{
             choice=input.nextInt();
-            if(choice<1||choice>=i) throw new InputMismatchException();
+            if(choice<0||choice>=i) throw new InputMismatchException();
         }catch (Exception e)
         {
             showErrorMessage("Invalid input");
             show();
         }
         switch (choice) {
+            case 0-> showLegend();
             case 1 -> showMarketBoard();
             case 2-> showDevCardDecks();
             case 3 -> showFaithTrack();
@@ -483,7 +490,10 @@ public class CLIView implements View {
     public void showWarehouse(SimplePlayer player) {
         SimpleWarehouse warehouse = player.getWarehouse();
         System.out.println(player.getUsername()+" warehouse");
-        for (DepotName depot: warehouse.getDepots().keySet()) {
+        DepotName depot;
+        for (DepotName depotName : warehouse.getDepots().keySet()) {
+            depot = depotName;
+            System.out.println(depot.toString());
             showResources(warehouse.getDepots().get(depot));
             System.out.println("____________");
         }
@@ -733,14 +743,14 @@ public class CLIView implements View {
     private CommandMsg buyResources(){
 
         showMarketBoard();
-        System.out.println("Want to buy a column/row?");
-        System.out.println("1) column");
-        System.out.println("2) row");
-        System.out.print(">");
         boolean valid = false;
         int choice = 0;
         while(!valid) {
             try {
+                System.out.println("Want to buy a column/row?");
+                System.out.println("1) column");
+                System.out.println("2) row");
+                System.out.print(">");
                 choice=input.nextInt();
                 if(choice<1||choice>2) throw new InputMismatchException();
                 valid=true;

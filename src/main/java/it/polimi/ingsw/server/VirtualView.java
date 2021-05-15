@@ -155,7 +155,7 @@ public class VirtualView implements Runnable{
     public void vaticanReportUpdate(){}
 
     public void warehouseUpdate() {
-        Map<DepotName, Map<Resource, Integer>> warehouse = new HashMap<>();
+        Map<DepotName, Map<Resource, Integer>> warehouse = new LinkedHashMap<>();
         for (Depot depot: game.getPlaying().getPlayerBoard().getWareHouse().getDepots()) {
             Map<Resource, Integer> resources = new HashMap<>();
             if(depot.getResource()!=null)

@@ -5,14 +5,14 @@ import it.polimi.ingsw.server.model.playerboard.Resource;
 
 import java.io.Serializable;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 public class SimpleWarehouse implements Serializable {
-    private Map<DepotName, Map<Resource, Integer>> depots;
+    private Map<DepotName, Map<Resource, Integer>> depots=new LinkedHashMap<>();
 
     public SimpleWarehouse()
     {
-        depots=new HashMap<>();
         depots.put(DepotName.HIGH, null);
         depots.put(DepotName.MEDIUM, null);
         depots.put(DepotName.LOW, null);
