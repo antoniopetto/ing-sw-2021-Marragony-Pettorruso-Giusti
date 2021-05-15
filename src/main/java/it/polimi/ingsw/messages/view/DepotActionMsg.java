@@ -12,4 +12,9 @@ public class DepotActionMsg implements ViewMsg{
         CommandMsg msg = view.depotMove();
         server.writeObject(msg);
     }
+
+    @Override
+    public String toString() {
+        return "DepotActionMsg{}";
+    }
 }

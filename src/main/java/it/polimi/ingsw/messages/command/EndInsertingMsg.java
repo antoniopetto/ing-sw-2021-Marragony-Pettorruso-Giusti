@@ -10,4 +10,9 @@ public class EndInsertingMsg implements CommandMsg {
     public void execute(Game game, ClientHandler handler) throws IOException {
         game.endInserting();
     }
+
+    @Override
+    public String toString() {
+        return "EndInsertingMsg{}";
+    }
 }
