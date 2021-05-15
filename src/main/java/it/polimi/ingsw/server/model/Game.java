@@ -459,7 +459,7 @@ public class Game {
 
     public void manageMarble(boolean insert){
         if(insert) virtualView.requestPutResource();
-            //inserire il discard
+            //inserire il discard direttamente qui
     }
 
     /**
