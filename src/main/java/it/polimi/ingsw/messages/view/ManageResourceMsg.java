@@ -6,15 +6,15 @@ import it.polimi.ingsw.messages.command.CommandMsg;
 
 import java.io.IOException;
 
-public class DepotActionMsg implements ViewMsg{
+public class ManageResourceMsg implements ViewMsg{
     @Override
     public void changeView(View view, ServerHandler server) throws IOException {
-        CommandMsg msg = view.depotMove();
+        CommandMsg msg = view.manageResource();
         server.writeObject(msg);
     }
 
     @Override
     public String toString() {
-        return "DepotActionMsg{}";
+        return "ManageResourceMsg{}";
     }
 }

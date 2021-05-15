@@ -5,12 +5,10 @@ import it.polimi.ingsw.client.view.View;
 import it.polimi.ingsw.messages.command.*;
 import it.polimi.ingsw.server.model.cards.CardColor;
 import it.polimi.ingsw.server.model.cards.ProductionPower;
-import it.polimi.ingsw.server.model.playerboard.Depot;
 import it.polimi.ingsw.server.model.playerboard.DepotName;
 import it.polimi.ingsw.server.model.playerboard.Resource;
 import it.polimi.ingsw.server.model.shared.Marble;
 
-import java.sql.SQLOutput;
 import java.util.*;
 
 public class CLIView implements View {
@@ -370,30 +368,34 @@ public class CLIView implements View {
         return null;
     }
 
-    public CommandMsg depotMove(){
+    public CommandMsg manageResource(){
         System.out.println("Select a depot action: ");
-        System.out.println("1) End depot action");
-        System.out.println("2) Change Depots");
-        System.out.println("3) Show...");
+        System.out.println("1) Insert resource in depot");
+        System.out.println("2) Discard resource");
+        System.out.println("3) Change Depots");
+        System.out.println("4) Show...");
         int choice;
         try{
             choice = input.nextInt();
-            if(choice < 1 || choice > 3) throw new InputMismatchException();
+            if(choice < 1 || choice > 4) throw new InputMismatchException();
         }catch (Exception e)
         {
             showErrorMessage("Illegal input");
-            return depotMove();
+            return manageResource();
         }
         switch (choice){
             case 1 ->{
-                return new EndInsertingMsg();
+                return new ManageMarbleMsg(true);
             }
             case 2 ->{
-                return changeDepots();
+                return  new ManageMarbleMsg(false);
             }
             case 3 ->{
+                return changeDepots();
+            }
+            case 4 ->{
                 show();
-                return depotMove();
+                return manageResource();
             }
             default ->{
                 return null;

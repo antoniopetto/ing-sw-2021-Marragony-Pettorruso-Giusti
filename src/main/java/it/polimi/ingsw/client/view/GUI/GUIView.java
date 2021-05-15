@@ -106,7 +106,7 @@ public class GUIView implements View {
     }
 
     @Override
-    public CommandMsg depotMove(){
+    public CommandMsg manageResource(){
         return null;
     }
     @Override

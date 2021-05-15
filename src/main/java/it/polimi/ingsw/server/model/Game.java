@@ -222,11 +222,12 @@ public class Game {
 
         if(marbleBuffer.size() > 0){
             virtualView.createBuffer(marbleBuffer);
-            virtualView.requestPutResource();
             state = State.INSERTING;
+            virtualView.manageResource();
         }
         else{
-            virtualView.depotAction();
+            state = State.POSTTURN;
+            virtualView.nextAction(true);
         }
 
     }
@@ -277,10 +278,11 @@ public class Game {
         virtualView.bufferUpdate(marble);
 
         if (marbleBuffer.size() > 0)
-            virtualView.requestPutResource();
+            virtualView.manageResource();
         else if (state == State.INSERTING)
         {
-            virtualView.depotAction();
+            state = State.POSTTURN;
+            virtualView.nextAction(true);
         }
         else if (state == State.INITIALIZING){
             playing.clearWhiteMarbleAlias();
@@ -453,9 +455,9 @@ public class Game {
             else virtualView.nextAction(false);
     }
 
-    public void endInserting(){
-        state = State.POSTTURN;
-        virtualView.nextAction(true);
+    public void manageMarble(boolean insert){
+        if(insert) virtualView.requestPutResource();
+            //inserire il discard
     }
 
     /**

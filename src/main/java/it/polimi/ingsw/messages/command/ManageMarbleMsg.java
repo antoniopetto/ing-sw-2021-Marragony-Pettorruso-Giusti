@@ -5,14 +5,21 @@ import it.polimi.ingsw.server.model.Game;
 
 import java.io.IOException;
 
-public class EndInsertingMsg implements CommandMsg {
+public class ManageMarbleMsg implements CommandMsg {
+
+    private boolean insert;
+
+    public ManageMarbleMsg(boolean insert) {
+        this.insert = insert;
+    }
+
     @Override
     public void execute(Game game, ClientHandler handler) throws IOException {
-        game.endInserting();
+        game.manageMarble(insert);
     }
 
     @Override
     public String toString() {
-        return "EndInsertingMsg{}";
+        return "ManageMarbleMsg{}";
     }
 }

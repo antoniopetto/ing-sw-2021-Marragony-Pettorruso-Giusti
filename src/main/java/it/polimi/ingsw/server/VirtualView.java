@@ -99,7 +99,17 @@ public class VirtualView implements Runnable{
 
     public void depotAction(){
         try{
-            getPlayingHandler().writeObject(new DepotActionMsg());
+            getPlayingHandler().writeObject(new ManageResourceMsg());
+
+        }catch (IOException e){
+            System.out.println("Connection dropped");
+            exitGame();
+        }
+    }
+
+    public void manageResource(){
+        try{
+            getPlayingHandler().writeObject(new ManageResourceMsg());
 
         }catch (IOException e){
             System.out.println("Connection dropped");
@@ -135,6 +145,7 @@ public class VirtualView implements Runnable{
             exitGame();
         }
     }
+
 
     public void bufferUpdate(Marble marble){
         try {
