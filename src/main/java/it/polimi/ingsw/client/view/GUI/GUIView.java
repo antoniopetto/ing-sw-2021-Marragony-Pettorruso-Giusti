@@ -9,7 +9,6 @@ import it.polimi.ingsw.server.model.playerboard.Resource;
 import it.polimi.ingsw.server.model.shared.Marble;
 import it.polimi.ingsw.messages.command.CommandMsg;
 import javafx.application.Application;
-import javafx.scene.web.HTMLEditorSkin;
 
 import java.util.List;
 

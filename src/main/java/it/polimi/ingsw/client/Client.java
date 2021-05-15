@@ -12,16 +12,18 @@ public class Client {
 
     public static void main(String[] args) {
 
-        Scanner input = new Scanner(System.in);
+
 
         boolean valid = false;
-        System.out.println("Please select how to play:");
-        System.out.println("1) CLI");
-        System.out.println("2) GUI");
-        System.out.print(">");
+
         int choice=0;
         while(!valid){
             try{
+                System.out.println("Please select how to play:");
+                System.out.println("1) CLI");
+                System.out.println("2) GUI");
+                System.out.print(">");
+                Scanner input = new Scanner(System.in);
                 choice = input.nextInt();
                 if(choice != 1 && choice != 2) throw new Exception();
                 valid=true;
