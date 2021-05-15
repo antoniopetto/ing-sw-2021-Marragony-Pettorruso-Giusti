@@ -22,4 +22,13 @@ public class BuyandAddCardInSlotMsg implements CommandMsg {
     public void execute(Game game, ClientHandler handler) throws IOException {
         game.buyAndAddCardInSlot(cardColor,level, slotId);
     }
+
+    @Override
+    public String toString() {
+        return "BuyandAddCardInSlotMsg{" +
+                "cardColor=" + cardColor +
+                ", level=" + level +
+                ", slotId=" + slotId +
+                '}';
+    }
 }

@@ -19,4 +19,12 @@ public class SwitchDepotsMsg implements CommandMsg {
 
         game.switchDepots(depot1, depot2);
     }
+
+    @Override
+    public String toString() {
+        return "SwitchDepotsMsg{" +
+                "depot1=" + depot1 +
+                ", depot2=" + depot2 +
+                '}';
+    }
 }

@@ -24,4 +24,13 @@ public class AddCardInSlotUpdateMsg implements UpdateMsg {
                 player.insertCardInSlot(cardId, slotId);
         }
     }
+
+    @Override
+    public String toString() {
+        return "AddCardInSlotUpdateMsg{" +
+                "username='" + username + '\'' +
+                ", cardId=" + cardId +
+                ", slotId=" + slotId +
+                '}';
+    }
 }

@@ -21,4 +21,12 @@ public class DiscardLeaderCardUpdateMsg implements UpdateMsg{
                 player.discardLeaderCard(cardId);
         }
     }
+
+    @Override
+    public String toString() {
+        return "DiscardLeaderCardUpdateMsg{" +
+                "username='" + username + '\'' +
+                ", cardId=" + cardId +
+                '}';
+    }
 }

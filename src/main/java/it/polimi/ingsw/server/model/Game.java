@@ -90,7 +90,8 @@ public class Game {
             players.add(player);
         }
 
-        Collections.shuffle(players);
+        //TODO return to random when ready to release
+        // Collections.shuffle(players);
         playing = players.get(0);
         faithTrack = new FaithTrack(this, virtualView, players);
         /*

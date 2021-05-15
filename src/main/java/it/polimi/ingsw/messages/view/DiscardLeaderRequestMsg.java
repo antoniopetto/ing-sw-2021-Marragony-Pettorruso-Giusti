@@ -19,4 +19,9 @@ public class DiscardLeaderRequestMsg implements ViewMsg {
         CommandMsg msg = view.discardLeaderCard();
         server.writeObject(msg);
     }
+
+    @Override
+    public String toString() {
+        return "DiscardLeaderRequestMsg{}";
+    }
 }

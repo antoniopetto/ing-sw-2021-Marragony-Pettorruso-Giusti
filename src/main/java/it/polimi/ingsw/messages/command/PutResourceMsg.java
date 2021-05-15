@@ -34,4 +34,13 @@ public class PutResourceMsg implements CommandMsg {
         else
             game.putResource(marble, depot);
     }
+
+    @Override
+    public String toString() {
+        return "PutResourceMsg{" +
+                "marble=" + marble +
+                ", depot=" + depot +
+                ", resource=" + resource +
+                '}';
+    }
 }

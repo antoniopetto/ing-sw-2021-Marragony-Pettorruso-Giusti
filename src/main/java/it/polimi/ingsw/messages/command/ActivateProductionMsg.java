@@ -22,4 +22,12 @@ public class ActivateProductionMsg implements CommandMsg{
     public void execute(Game game, ClientHandler clientHandler){
         game.activateProduction(selectedCardIds, selectedExtraPowers);
     }
+
+    @Override
+    public String toString() {
+        return "ActivateProductionMsg{" +
+                "selectedCardIds=" + selectedCardIds +
+                ", selectedExtraPowers=" + selectedExtraPowers +
+                '}';
+    }
 }

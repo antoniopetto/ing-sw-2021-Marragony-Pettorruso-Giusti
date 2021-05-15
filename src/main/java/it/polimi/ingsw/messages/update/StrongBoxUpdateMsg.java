@@ -21,4 +21,12 @@ public class StrongBoxUpdateMsg implements UpdateMsg{
             if (player.getUsername().equals(username))
                 player.changeStrongbox(strongbox);
     }
+
+    @Override
+    public String toString() {
+        return "StrongBoxUpdateMsg{" +
+                "strongbox=" + strongbox +
+                ", username='" + username + '\'' +
+                '}';
+    }
 }

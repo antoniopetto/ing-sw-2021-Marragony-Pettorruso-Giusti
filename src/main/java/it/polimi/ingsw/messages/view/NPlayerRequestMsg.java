@@ -22,4 +22,9 @@ public class NPlayerRequestMsg implements ViewMsg {
             }
         }
     }
+
+    @Override
+    public String toString() {
+        return "NPlayerRequestMsg{}";
+    }
 }

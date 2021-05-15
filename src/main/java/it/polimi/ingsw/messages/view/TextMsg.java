@@ -17,4 +17,11 @@ public class TextMsg implements ViewMsg {
     public void changeView(View view, ServerHandler server) throws IOException {
         view.showStatusMessage(text);
     }
+
+    @Override
+    public String toString() {
+        return "TextMsg{" +
+                "text='" + text + '\'' +
+                '}';
+    }
 }

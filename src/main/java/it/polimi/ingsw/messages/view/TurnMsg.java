@@ -22,4 +22,11 @@ public class TurnMsg implements ViewMsg{
         CommandMsg msg = view.selectMove(postTurn);
         server.writeObject(msg);
     }
+
+    @Override
+    public String toString() {
+        return "TurnMsg{" +
+                "postTurn=" + postTurn +
+                '}';
+    }
 }

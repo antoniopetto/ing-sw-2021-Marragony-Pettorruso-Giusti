@@ -31,4 +31,12 @@ public class TrackUpdateMsg implements UpdateMsg {
             }
         }
     }
+
+    @Override
+    public String toString() {
+        return "TrackUpdateMsg{" +
+                "player='" + player + '\'' +
+                ", allBut=" + allBut +
+                '}';
+    }
 }

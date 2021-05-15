@@ -9,4 +9,9 @@ public class EndTurnMsg implements CommandMsg{
     public void execute(Game game, ClientHandler handler) throws IOException {
         game.endTurn();
     }
+
+    @Override
+    public String toString() {
+        return "EndTurnMsg{}";
+    }
 }

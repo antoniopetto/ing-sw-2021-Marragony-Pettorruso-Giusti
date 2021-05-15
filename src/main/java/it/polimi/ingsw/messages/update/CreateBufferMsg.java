@@ -23,4 +23,11 @@ public class CreateBufferMsg implements UpdateMsg {
     public void execute(SimpleGame model) {
         model.setMarbleBuffer(marbleBuffer);
     }
+
+    @Override
+    public String toString() {
+        return "CreateBufferMsg{" +
+                "marbleBuffer=" + marbleBuffer +
+                '}';
+    }
 }
