@@ -5,10 +5,12 @@ import it.polimi.ingsw.client.view.View;
 import it.polimi.ingsw.messages.command.*;
 import it.polimi.ingsw.server.model.cards.CardColor;
 import it.polimi.ingsw.server.model.cards.ProductionPower;
+import it.polimi.ingsw.server.model.playerboard.Depot;
 import it.polimi.ingsw.server.model.playerboard.DepotName;
 import it.polimi.ingsw.server.model.playerboard.Resource;
 import it.polimi.ingsw.server.model.shared.Marble;
 
+import java.sql.SQLOutput;
 import java.util.*;
 
 public class CLIView implements View {
@@ -281,6 +283,7 @@ public class CLIView implements View {
     @Override
     public CommandMsg selectMove(boolean postTurn) {
         String firstAction;
+        int i;
         if(!postTurn)
             firstAction="Normal action";
         else
@@ -357,14 +360,46 @@ public class CLIView implements View {
                 }
             }
             case 3->{
-                show();
-                return selectMove(postTurn);
+                    show();
+                    return selectMove(postTurn);
             }
             default ->{
                 return null;
             }
         }
         return null;
+    }
+
+    public CommandMsg depotMove(){
+        System.out.println("Select a depot action: ");
+        System.out.println("1) End depot action");
+        System.out.println("2) Change Depots");
+        System.out.println("3) Show...");
+        int choice;
+        try{
+            choice = input.nextInt();
+            if(choice < 1 || choice > 3) throw new InputMismatchException();
+        }catch (Exception e)
+        {
+            showErrorMessage("Illegal input");
+            return depotMove();
+        }
+        switch (choice){
+            case 1 ->{
+                return new EndInsertingMsg();
+            }
+            case 2 ->{
+                return changeDepots();
+            }
+            case 3 ->{
+                show();
+                return depotMove();
+            }
+            default ->{
+                return null;
+            }
+        }
+
     }
 
     /**
@@ -451,6 +486,221 @@ public class CLIView implements View {
         for (DepotName depot: warehouse.getDepots().keySet()) {
             showResources(warehouse.getDepots().get(depot));
             System.out.println("____________");
+        }
+    }
+
+    public CommandMsg changeDepots(){
+        int depot1 = 0;
+        int depot2 = 0;
+        DepotName depotName1;
+        DepotName depotName2;
+
+        for(int counter = 0; counter < 2; counter++) {
+            if(counter == 0){
+                    depot1 = printDepotSelection(1, 1, 0);
+                }else depot2 = printDepotSelection(0, 2, depot1);
+
+        }
+        depotName1 = chooseDepotName(depot1, true);
+        depotName2 = chooseDepotName(depot2, depot1);
+
+        if(depotName1 == DepotName.FIRST_EXTRA || depotName1 == DepotName.SECOND_EXTRA
+            || depotName2 == DepotName.FIRST_EXTRA || depotName2 == DepotName.SECOND_EXTRA){
+            return new MoveDepotsMsg(depotName1, depotName2);
+        }else return new SwitchDepotsMsg(depotName1,depotName2);
+
+    }
+
+    private int printDepotSelection(int position, int depotnr, int depotChoose){
+
+        boolean nonValid = true;
+        int choose = 0;
+        int pos = position +2;
+        for(SimpleLeaderCard leaderCard : game.getThisPlayer().getLeaderCards()){
+            if(leaderCard.isActive())
+            {
+                if(leaderCard.getAbility() == SimpleLeaderCard.Ability.EXTRADEPOT)  pos++;
+            }
+        }
+        while (nonValid) {
+            System.out.println("Choose " + depotnr + " depot");
+            switch (depotChoose){
+                case 0 ->{
+                    System.out.println("1) HIGH");
+                    System.out.println("2) MEDIUM");
+                    System.out.println("3) LOW");
+                    if(pos > 3){
+                        System.out.println("4) FIRST EXTRA-DEPOT");
+                    }
+                    if(pos > 4){
+                        System.out.println("5) SECOND EXTRA-DEPOT");
+                    }
+                }
+                case 1 ->{
+                    System.out.println("1) MEDIUM");
+                    System.out.println("2) LOW");
+                    if(pos > 2){
+                        System.out.println("3) FIRST EXTRA-DEPOT");
+                    }
+                    if(pos > 3){
+                        System.out.println("4) SECOND EXTRA-DEPOT");
+                    }
+                }
+                case 2 ->{
+                    System.out.println("1) HIGH");
+                    System.out.println("2) LOW");
+                    if(pos > 2){
+                        System.out.println("3) FIRST EXTRA-DEPOT");
+                    }
+                    if(pos > 3){
+                        System.out.println("4) SECOND EXTRA-DEPOT");
+                    }
+                }
+                case 3 ->{
+                    System.out.println("1) HIGH");
+                    System.out.println("2) MEDIUM");
+                    if(pos > 2){
+                        System.out.println("3) FIRST EXTRA-DEPOT");
+                    }
+                    if(pos > 3){
+                        System.out.println("4) SECOND EXTRA-DEPOT");
+                    }
+                }
+                case 4 ->{
+                    System.out.println("1) HIGH");
+                    System.out.println("2) MEDIUM");
+                    System.out.println("3) LOW");
+                    if(pos > 3){
+                        System.out.println("4) SECOND EXTRA-DEPOT");
+                    }
+                }
+                case 5 ->{
+                    System.out.println("1) HIGH");
+                    System.out.println("2) MEDIUM");
+                    System.out.println("3) LOW");
+                    if(pos > 3){
+                        System.out.println("4) FIRST EXTRA-DEPOT");
+                    }
+                }
+            }
+            System.out.print(">");
+
+            choose = input.nextInt();
+
+            if (choose > pos || choose < 1) {
+                showErrorMessage("Insert a number between 1-" + pos);
+            } else nonValid = false;
+
+        }
+        return choose;
+
+    }
+
+    private DepotName chooseDepotName(int depotNumber, int previousDepot){
+           if(previousDepot == 1){
+               switch (depotNumber){
+                   case 1 ->{
+                       return DepotName.MEDIUM;
+                   }
+                   case 2 ->{
+                       return DepotName.LOW;
+                   }
+                   case 3 ->{
+                       return DepotName.FIRST_EXTRA;
+                   }
+                   case 4 ->{
+                       return DepotName.SECOND_EXTRA;
+                   }
+                   default -> { return  null;}
+               }
+           }else if ( previousDepot == 2){
+               switch (depotNumber){
+                   case 1 ->{
+                       return DepotName.HIGH;
+                   }
+                   case 2 ->{
+                       return DepotName.LOW;
+                   }
+                   case 3 ->{
+                       return DepotName.FIRST_EXTRA;
+                   }
+                   case 4 ->{
+                       return DepotName.SECOND_EXTRA;
+                   }
+                   default -> { return  null;}
+               }
+           } else if( previousDepot == 3){
+               switch (depotNumber){
+                   case 1 ->{
+                       return DepotName.HIGH;
+                   }
+                   case 2 ->{
+                       return DepotName.MEDIUM;
+                   }
+                   case 3 ->{
+                       return DepotName.FIRST_EXTRA;
+                   }
+                   case 4 ->{
+                       return DepotName.SECOND_EXTRA;
+                   }
+                   default -> { return  null;}
+               }
+
+           } else if ( previousDepot == 4){
+               switch (depotNumber){
+                   case 1 ->{
+                       return DepotName.HIGH;
+                   }
+                   case 2 ->{
+                       return DepotName.MEDIUM;
+                   }
+                   case 3 ->{
+                       return DepotName.LOW;
+                   }
+                   case 4 ->{
+                       return DepotName.SECOND_EXTRA;
+                   }
+                   default -> { return  null;}
+               }
+           } else if ( previousDepot == 5){
+               switch (depotNumber){
+                   case 1 ->{
+                       return DepotName.HIGH;
+                   }
+                   case 2 ->{
+                       return DepotName.MEDIUM;
+                   }
+                   case 3 ->{
+                       return DepotName.LOW;
+                   }
+                   case 4 ->{
+                       return DepotName.FIRST_EXTRA;
+                   }
+                   default -> { return  null;}
+               }
+           }
+        return null;
+    }
+
+    private DepotName chooseDepotName(int depotNumber, boolean isFirst){
+
+        switch (depotNumber){
+            case 1 ->{
+                return DepotName.HIGH;
+            }
+            case 2 ->{
+                return DepotName.MEDIUM;
+            }
+            case 3 ->{
+                return DepotName.LOW;
+            }
+            case 4 ->{
+                return DepotName.FIRST_EXTRA;
+            }
+            case 5 ->{
+                return DepotName.SECOND_EXTRA;
+            }
+            default -> { return  null;}
         }
     }
 

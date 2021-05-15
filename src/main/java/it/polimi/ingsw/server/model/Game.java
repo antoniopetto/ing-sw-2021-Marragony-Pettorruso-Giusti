@@ -152,7 +152,7 @@ public class Game {
 
         if (state == State.INSERTING){
             virtualView.sendError("Illegal state command");
-            virtualView.endAction(isPostTurn);
+            virtualView.nextAction(isPostTurn);
             return;
         }
 
@@ -161,7 +161,7 @@ public class Game {
 
             if (state != State.INITIALIZING) {
                 faithTrack.advance(playing);
-                virtualView.endAction(isPostTurn);
+                virtualView.nextAction(isPostTurn);
             }
             else if (playing.getLeaderCardList().size() > 2) {
                 virtualView.requestDiscardLeaderCard();
@@ -182,10 +182,10 @@ public class Game {
             }
         } catch (ElementNotFoundException e){
             virtualView.sendError("Leader card not found");
-            virtualView.endAction(isPostTurn);
+            virtualView.nextAction(isPostTurn);
         } catch (IllegalArgumentException e){
             virtualView.sendError(e.getMessage());
-            virtualView.endAction(isPostTurn);
+            virtualView.nextAction(isPostTurn);
         }
     }
 
@@ -225,8 +225,7 @@ public class Game {
             state = State.INSERTING;
         }
         else{
-            state = State.POSTTURN;
-            virtualView.endAction(true);
+            virtualView.depotAction();
         }
 
     }
@@ -280,8 +279,7 @@ public class Game {
             virtualView.requestPutResource();
         else if (state == State.INSERTING)
         {
-            state = State.POSTTURN;
-            virtualView.endAction(true);
+            virtualView.depotAction();
         }
         else if (state == State.INITIALIZING){
             playing.clearWhiteMarbleAlias();
@@ -330,7 +328,7 @@ public class Game {
 
         if(state != State.PRETURN) {
             virtualView.sendError("Cannot Insert DevCard now");
-            virtualView.endAction(false);
+            virtualView.nextAction(false);
             return;
         }
 
@@ -339,7 +337,7 @@ public class Game {
                 developmentCard = developmentCardDecks.readTop(cardColor, level);
             }catch (EmptyStackException e) {
                 virtualView.sendError("There are no more DevelopmentCard with that color and level");
-                virtualView.endAction(false);
+                virtualView.nextAction(false);
                 return;
             }
 
@@ -347,14 +345,14 @@ public class Game {
                 getPlaying().addCard(developmentCard,slotId);
             }catch (IllegalArgumentException e){
                 virtualView.sendError(e.getMessage());
-                virtualView.endAction(false);
+                virtualView.nextAction(false);
                 return;
             }
 
             developmentCardDecks.drawCard(cardColor, level);
             state = State.POSTTURN;
 
-            virtualView.endAction(true);
+            virtualView.nextAction(true);
     }
 
     /**
@@ -391,6 +389,7 @@ public class Game {
 
         if(state != State.INSERTING){
             virtualView.sendError("Illegal state command");
+            virtualView.nextAction(false);
             return;
         }
         try {
@@ -398,6 +397,7 @@ public class Game {
         } catch (Exception e) {
             virtualView.sendError(e.getMessage());
         }
+        virtualView.depotAction();
     }
 
     /**
@@ -412,6 +412,7 @@ public class Game {
 
         if (!state.equals(State.INSERTING)){
             virtualView.sendError("Illegal state command");
+            virtualView.nextAction(false);
             return;
         }
         try{
@@ -419,6 +420,8 @@ public class Game {
         } catch (IllegalStateException | IllegalArgumentException e) {
             virtualView.sendError(e.getMessage());
         }
+
+        virtualView.depotAction();
     }
 
 
@@ -433,7 +436,7 @@ public class Game {
 
         if(state != State.PRETURN && state != State.POSTTURN){
             virtualView.sendError("Illegal state command");
-            virtualView.endAction(false);
+            virtualView.nextAction(false);
             return;
         }
 
@@ -445,10 +448,14 @@ public class Game {
         } catch (IllegalStateException | IllegalArgumentException  | ElementNotFoundException e){
             virtualView.sendError(e.getMessage());
         }
-        if(state.equals(State.POSTTURN)) virtualView.endAction(true);
-            else virtualView.endAction(false);
+        if(state.equals(State.POSTTURN)) virtualView.nextAction(true);
+            else virtualView.nextAction(false);
     }
 
+    public void endInserting(){
+        state = State.POSTTURN;
+        virtualView.nextAction(true);
+    }
 
     /**
      * Command called by a player when, during PostTurn, decides to end his turn.
@@ -511,6 +518,10 @@ public class Game {
 
     public DevelopmentCardDecks getDevelopmentCardDecks() {
         return developmentCardDecks;
+    }
+
+    public void setState(State state) {
+        this.state = state;
     }
 
     public int turnPosition(String playerUsername){

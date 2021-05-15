@@ -22,6 +22,7 @@ public interface View {
     void startGame();
     void startSetting();
     CommandMsg selectMove(boolean postTurn);
+    CommandMsg depotMove();
     void showLeaderCard(SimpleLeaderCard card);
     CommandMsg discardLeaderCard();
     Marble selectMarble();

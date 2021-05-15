@@ -86,7 +86,7 @@ public class VirtualView implements Runnable{
     }
 
 
-    public void endAction(boolean isPostTurn){
+    public void nextAction(boolean isPostTurn){
         try{
             getPlayingHandler().writeObject(new TurnMsg(isPostTurn));
 
@@ -95,6 +95,18 @@ public class VirtualView implements Runnable{
             exitGame();
         }
     }
+
+    public void depotAction(){
+        try{
+            getPlayingHandler().writeObject(new DepotActionMsg());
+
+        }catch (IOException e){
+            System.out.println("Connection dropped");
+            exitGame();
+        }
+    }
+
+
 
     public void discardLeaderCardUpdate(int cardId){
         DiscardLeaderCardUpdateMsg msg = new DiscardLeaderCardUpdateMsg(getPlayingUsername(), cardId);
