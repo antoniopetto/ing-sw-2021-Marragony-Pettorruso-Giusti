@@ -40,7 +40,8 @@ public class StrongBox {
         if(content.containsKey(r))
             content.replace(r, content.get(r)+quantity);
             else content.put(r, quantity);
-        observer.strongBoxUpdate();
+        if(observer!=null)
+            observer.strongBoxUpdate();
     }
 
     /**
@@ -54,7 +55,8 @@ public class StrongBox {
                 else if(getQuantity(r)==1) content.remove(r);
                     else if(getQuantity(r) == 0)
                         throw new IllegalArgumentException("In StrongBox there is no Resource r");
-            observer.strongBoxUpdate();
+            if(observer!=null)
+                    observer.strongBoxUpdate();
     }
 
     /**

@@ -58,7 +58,7 @@ public class SimpleGame {
 
         for(int i = 0; i < 4; i++)
         {
-            if(devCardDecks[i][level][deleteCard].getColor().equals(cardColor)){
+            if(devCardDecks[i][level][deleteCard]!=null&&devCardDecks[i][level][deleteCard].getColor().equals(cardColor)){
                 devCardDecks[i][level][deleteCard] = null;
             }
         }

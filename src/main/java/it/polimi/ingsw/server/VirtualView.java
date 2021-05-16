@@ -169,7 +169,7 @@ public class VirtualView implements Runnable{
         Map<DepotName, Map<Resource, Integer>> warehouse = new LinkedHashMap<>();
         for (Depot depot: game.getPlaying().getPlayerBoard().getWareHouse().getDepots()) {
             Map<Resource, Integer> resources = new HashMap<>();
-            if(depot.getResource()!=null)
+            if(depot.getResource()!=null&&depot.getQuantity()!=0)
                 resources.put(depot.getResource(), depot.getQuantity());
             warehouse.put(depot.getName(), resources);
         }

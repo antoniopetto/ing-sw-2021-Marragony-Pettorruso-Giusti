@@ -3,6 +3,7 @@ package it.polimi.ingsw.server.model.cards;
 import it.polimi.ingsw.server.model.Player;
 import it.polimi.ingsw.server.model.playerboard.Resource;
 import org.junit.Test;
+import org.mockito.internal.matchers.Null;
 
 import static org.junit.Assert.*;
 
@@ -14,7 +15,16 @@ public class WhiteMarbleAbilityTest {
     {
         ability = new WhiteMarbleAbility(Resource.COIN);
         Player player = new Player("Test");
-        ability.activateAbility(player);
+        try {
+            ability.activateAbility(player);
+        }catch (NullPointerException e)
+        {
+            assertTrue(true);
+        }catch (Exception e)
+        {
+            fail();
+        }
+
         assertTrue(player.getWhiteMarbleAliases().contains(Resource.COIN));
     }
 }
