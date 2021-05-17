@@ -30,6 +30,6 @@ public class PutResourceRequestMsg implements ViewMsg {
 
     @Override
     public String toString() {
-        return "PutResourceRequestMsg{}";
+        return "PutResourceRequestMsg{} ";
     }
 }
