@@ -109,7 +109,7 @@ public class Game {
 
             List<DevelopmentCard> developmentCards = cardParser.parseDevelopmentCards();
             Collections.shuffle(developmentCards);
-            developmentCardDecks = new DevelopmentCardDecks(cardParser.parseDevelopmentCards());
+            developmentCardDecks = new DevelopmentCardDecks(cardParser.parseDevelopmentCards(), virtualView);
 
             List<LeaderCard> leaderCards = cardParser.parseLeaderCards();
             Collections.shuffle(leaderCards);

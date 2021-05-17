@@ -39,7 +39,7 @@ public class DevelopmentCardDecksTest {
         cards.add(new DevelopmentCard(13,0, 1, CardColor.BLUE, requirements,power));
         cards.add(new DevelopmentCard(14,0, 1, CardColor.BLUE, requirements,power));
         cards.add(new DevelopmentCard(15,0, 1, CardColor.BLUE, requirements,power));
-        decks = new DevelopmentCardDecks(cards);
+        decks = new DevelopmentCardDecks(cards, null);
     }
     @After
     public void tearDown()
@@ -51,7 +51,7 @@ public class DevelopmentCardDecksTest {
     {
         try
         {
-            DevelopmentCardDecks decks1 = new DevelopmentCardDecks(cards);
+            DevelopmentCardDecks decks1 = new DevelopmentCardDecks(cards, null);
         }catch(IllegalStateException e)
         {
             fail();
@@ -60,7 +60,7 @@ public class DevelopmentCardDecksTest {
         cards.add(new DevelopmentCard(16,0, 1, CardColor.BLUE, requirements, power));
         try
         {
-            DevelopmentCardDecks decks2 = new DevelopmentCardDecks(cards);
+            DevelopmentCardDecks decks2 = new DevelopmentCardDecks(cards, null);
             fail();
         }catch (IllegalStateException e)
         {

@@ -20,7 +20,7 @@ public class DevelopmentCardDecks {
      * @param cards is a list of development cards which have to be divided in different decks.
      * @throws IllegalStateException if more than 4 cards in <code>cards</code> belong to a deck
      */
-    public DevelopmentCardDecks(List<DevelopmentCard> cards)  throws IllegalStateException{
+    public DevelopmentCardDecks(List<DevelopmentCard> cards, VirtualView observer)  throws IllegalStateException{
         decks.add(new CardDeck(1, CardColor.GREEN));
         decks.add(new CardDeck(2, CardColor.GREEN));
         decks.add(new CardDeck(3, CardColor.GREEN));
@@ -36,6 +36,7 @@ public class DevelopmentCardDecks {
         for (CardDeck deck: decks) {
                 cards.stream().filter(deck::belongs).forEach(deck::add);
         }
+        this.observer=observer;
     }
 
     /**
@@ -134,6 +135,4 @@ public class DevelopmentCardDecks {
         }
         return result;
     }
-
-
 }
