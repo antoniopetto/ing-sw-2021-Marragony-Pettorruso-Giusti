@@ -201,7 +201,7 @@ public class CLIView implements View {
     @Override
     public Marble selectMarble(){
         showMarbleBuffer(game.getMarbleBuffer());
-        System.out.println("Choose a marble to put in a depot (insert a number between 1-" + game.getMarbleBuffer().size() + "):");
+        System.out.println("Choose a marble to put in a depot (insert number 1" + (game.getMarbleBuffer().size() == 1 ? "):" : "-" + game.getMarbleBuffer().size() + "):"));
         System.out.print(Graphics.ANSI_CYAN+">"+Graphics.ANSI_RESET);
         int position;
         try{
@@ -390,13 +390,43 @@ public class CLIView implements View {
         }
         switch (choice){
             case 1 ->{
-                return new ManageMarbleMsg(true);
+                boolean valid = false;
+                String choose = "";
+                while (!valid) {
+                    System.out.println("Are you sure to insert a marble in Warehouse? (y/n) ");
+                    choose = input.next();
+                        if (!choose.equals("n") && !choose.equals("y") && !choose.equals("N") && !choose.equals("Y")) showErrorMessage("Illegal input");
+                            else valid = true;
+                    }
+                if(choose.equals("n") || choose.equals("N")) return  manageResource();
+                    else return new ManageMarbleMsg(true);
+
             }
             case 2 ->{
-                return  new ManageMarbleMsg(false);
+                boolean valid = false;
+                String choose = "";
+                while (!valid) {
+                    System.out.println("Are you sure to discard a marble? (y/n) ");
+                    choose = input.next();
+                    if (!choose.equals("n") && !choose.equals("y") && !choose.equals("N") && !choose.equals("Y")) showErrorMessage("Illegal input");
+                    else valid = true;
+                }
+                if(choose.equals("n") || choose.equals("N")) return  manageResource();
+                else return  new ManageMarbleMsg(false);
+
             }
             case 3 ->{
-                return changeDepots();
+                boolean valid = false;
+                String choose = "";
+                while (!valid) {
+                    System.out.println("Are you sure to switch depots? (y/n) ");
+                    choose = input.next();
+                    if (!choose.equals("n") && !choose.equals("y") && !choose.equals("N") && !choose.equals("Y")) showErrorMessage("Illegal input");
+                        else valid = true;
+                }
+                if(choose.equals("n") || choose.equals("N")) return  manageResource();
+                    else return changeDepots();
+
             }
             case 4 ->{
                 show();
@@ -507,6 +537,7 @@ public class CLIView implements View {
         DepotName depotName1;
         DepotName depotName2;
 
+
         for(int counter = 0; counter < 2; counter++) {
             if(counter == 0){
                     depot1 = printDepotSelection(1, 1, 0);
@@ -534,6 +565,9 @@ public class CLIView implements View {
                 if(leaderCard.getAbility() == SimpleLeaderCard.Ability.EXTRADEPOT)  pos++;
             }
         }
+
+        showWarehouse(game.getThisPlayer());
+
         while (nonValid) {
             System.out.println("Choose " + depotnr + " depot");
             switch (depotChoose){
