@@ -1,6 +1,5 @@
 package it.polimi.ingsw.messages.command;
 
-import it.polimi.ingsw.server.ClientHandler;
 import it.polimi.ingsw.server.model.Game;
 import it.polimi.ingsw.server.model.cards.ProductionPower;
 
@@ -15,11 +14,11 @@ public class ActivateProductionMsg implements CommandMsg{
     private final Map<Integer, ProductionPower> selectedExtraPowers;
 
     public ActivateProductionMsg(Set<Integer> selectedCardIds, Map<Integer, ProductionPower> selectedExtraPowers){
-        this.selectedCardIds = new HashSet<Integer>(selectedCardIds);
+        this.selectedCardIds = new HashSet<>(selectedCardIds);
         this.selectedExtraPowers = new HashMap<>(selectedExtraPowers);
     }
 
-    public void execute(Game game, ClientHandler clientHandler){
+    public void execute(Game game){
         game.activateProduction(selectedCardIds, selectedExtraPowers);
     }
 

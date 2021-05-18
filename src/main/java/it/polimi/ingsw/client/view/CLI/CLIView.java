@@ -44,13 +44,17 @@ public class CLIView implements View {
 
         System.out.println(text + " (" + min + "-" + max + ")");
         System.out.print(Graphics.ANSI_CYAN+">"+Graphics.ANSI_RESET);
-        int result = input.nextInt();
-        if (result < min || result > max) {
+        int result;
+        try {
+            result = input.nextInt();
+            if (result < min || result > max) throw new InputMismatchException();
+        }catch (Exception e)
+        {
             showErrorMessage("Invalid input");
+            input.nextLine();
             return askNumber(text, min, max);
         }
-        else
-            return result;
+        return result;
     }
 
     /**
@@ -183,15 +187,16 @@ public class CLIView implements View {
 
         showWarehouse(game.getThisPlayer());
         Map<DepotName, Map<Resource, Integer>> depots = game.getThisPlayer().getWarehouse().getDepots();
+
         int intChoice = askChoice("Choose a depot in which to place the resource:",
-                                        depots.keySet().stream().map(Enum::name).toArray(String[]::new));
+                depots.keySet().stream().map(Enum::name).toArray(String[]::new));
         DepotName choice;
         if (intChoice == 1)         choice = DepotName.HIGH;
         else if (intChoice == 2)    choice = DepotName.MEDIUM;
         else if (intChoice == 3)    choice = DepotName.LOW;
         else if (intChoice == 4)    choice = DepotName.FIRST_EXTRA;
         else                        choice = DepotName.SECOND_EXTRA;
-
+        //TODO deve tornare null da qualche parte
         return choice;
     }
 
@@ -647,13 +652,18 @@ public class CLIView implements View {
                 System.out.println("Want to buy a column/row?");
                 System.out.println("1) column");
                 System.out.println("2) row");
+                System.out.println("3) back...");
                 System.out.print(">");
                 choice=input.nextInt();
-                if(choice<1||choice>2) throw new InputMismatchException();
+                if(choice<1||choice>3) throw new InputMismatchException();
                 valid=true;
             } catch (Exception e) {
                 showErrorMessage("Invalid input");
             }
+        }
+        if(choice==3)
+        {
+            return new GoBackMsg(GoBackMsg.State.BEGIN_TURN);
         }
         boolean isRow;
         isRow= choice != 1;

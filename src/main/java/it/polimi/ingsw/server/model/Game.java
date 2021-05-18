@@ -1,6 +1,7 @@
 package it.polimi.ingsw.server.model;
 
 import it.polimi.ingsw.client.simplemodel.SimplePlayer;
+import it.polimi.ingsw.messages.command.GoBackMsg;
 import it.polimi.ingsw.server.VirtualView;
 import it.polimi.ingsw.server.model.cards.*;
 import it.polimi.ingsw.server.model.exceptions.ElementNotFoundException;
@@ -293,6 +294,21 @@ public class Game {
         }
 
     }
+    public void goBack(GoBackMsg.State state)
+    {
+
+        switch (state)
+        {
+            case BEGIN_TURN -> virtualView.nextAction(false);
+            case MANAGE_RESOURCES ->
+                    {
+                        if(this.state==State.INITIALIZING)
+                            virtualView.requestPutResource();
+                        else
+                            virtualView.manageResource();
+                    }
+        }
+    }
 
     /**
      * Command to discard marble.
@@ -341,7 +357,7 @@ public class Game {
             return;
         }
 
-            DevelopmentCard developmentCard = null;
+            DevelopmentCard developmentCard;
             try {
                 developmentCard = developmentCardDecks.readTop(cardColor, level);
             }catch (EmptyStackException e) {
@@ -458,8 +474,7 @@ public class Game {
         } catch (IllegalStateException | IllegalArgumentException  | ElementNotFoundException e){
             virtualView.sendError(e.getMessage());
         }
-        if(state.equals(State.POSTTURN)) virtualView.nextAction(true);
-            else virtualView.nextAction(false);
+        virtualView.nextAction(state.equals(State.POSTTURN));
     }
 
     /**

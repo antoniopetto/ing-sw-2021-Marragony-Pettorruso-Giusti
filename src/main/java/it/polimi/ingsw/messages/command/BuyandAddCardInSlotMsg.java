@@ -1,6 +1,5 @@
 package it.polimi.ingsw.messages.command;
 
-import it.polimi.ingsw.server.ClientHandler;
 import it.polimi.ingsw.server.model.Game;
 import it.polimi.ingsw.server.model.cards.CardColor;
 
@@ -19,7 +18,7 @@ public class BuyandAddCardInSlotMsg implements CommandMsg {
     }
 
     @Override
-    public void execute(Game game, ClientHandler handler) throws IOException {
+    public void execute(Game game) {
         game.buyAndAddCardInSlot(cardColor,level, slotId);
     }
 

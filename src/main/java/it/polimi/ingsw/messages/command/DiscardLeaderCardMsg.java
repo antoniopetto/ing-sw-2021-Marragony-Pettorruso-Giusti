@@ -1,6 +1,5 @@
 package it.polimi.ingsw.messages.command;
 
-import it.polimi.ingsw.server.ClientHandler;
 import it.polimi.ingsw.server.model.Game;
 
 public class DiscardLeaderCardMsg implements CommandMsg {
@@ -12,7 +11,7 @@ public class DiscardLeaderCardMsg implements CommandMsg {
     }
 
     @Override
-    public void execute(Game game, ClientHandler handler) {
+    public void execute(Game game) {
         game.discardLeaderCard(cardId);
     }
 

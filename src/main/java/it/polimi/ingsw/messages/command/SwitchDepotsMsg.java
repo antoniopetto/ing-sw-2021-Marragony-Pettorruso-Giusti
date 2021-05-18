@@ -1,6 +1,5 @@
 package it.polimi.ingsw.messages.command;
 
-import it.polimi.ingsw.server.ClientHandler;
 import it.polimi.ingsw.server.model.Game;
 import it.polimi.ingsw.server.model.playerboard.DepotName;
 
@@ -15,7 +14,7 @@ public class SwitchDepotsMsg implements CommandMsg {
         this.depot2=depot2;
     }
     @Override
-    public void execute(Game game, ClientHandler handler){
+    public void execute(Game game){
 
         game.switchDepots(depot1, depot2);
     }
