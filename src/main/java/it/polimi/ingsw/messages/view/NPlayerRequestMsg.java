@@ -11,7 +11,7 @@ public class NPlayerRequestMsg implements ViewMsg {
         while(!valid)
         {
             try{
-                int number = view.getNumber();
+                int number = view.getNumberOfPlayers();
                 NPlayerMsg msg = new NPlayerMsg(number);
                 handler.writeObject(msg);
                 valid=true;

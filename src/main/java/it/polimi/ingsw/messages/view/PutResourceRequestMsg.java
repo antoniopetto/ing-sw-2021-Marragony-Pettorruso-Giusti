@@ -2,6 +2,7 @@ package it.polimi.ingsw.messages.view;
 
 import it.polimi.ingsw.client.ServerHandler;
 import it.polimi.ingsw.client.view.View;
+import it.polimi.ingsw.messages.command.CommandMsg;
 import it.polimi.ingsw.messages.command.DiscardLeaderCardMsg;
 import it.polimi.ingsw.messages.command.PutResourceMsg;
 import it.polimi.ingsw.server.model.playerboard.DepotName;
@@ -14,17 +15,16 @@ public class PutResourceRequestMsg implements ViewMsg {
 
     @Override
     public void changeView(View view, ServerHandler server) throws IOException {
+
+        CommandMsg msg;
         Marble selectedMarble = view.selectMarble();
         DepotName selectedDepot = view.selectDepot();
-
-        PutResourceMsg msg;
-        if (selectedMarble.equals(Marble.WHITE)) {
+        if (selectedMarble == Marble.WHITE) {
             Resource selectedResource = view.selectResource();
             msg = new PutResourceMsg(selectedMarble, selectedDepot, selectedResource);
         }
         else
             msg = new PutResourceMsg(selectedMarble, selectedDepot);
-
         server.writeObject(msg);
     }
 

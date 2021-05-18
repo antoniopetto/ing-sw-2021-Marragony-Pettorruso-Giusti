@@ -2,6 +2,8 @@ package it.polimi.ingsw.server.model.cards;
 
 import it.polimi.ingsw.server.model.playerboard.Resource;
 
+import java.io.Serial;
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -12,7 +14,7 @@ import java.util.stream.Stream;
  * the player uses the power it checks if it has the resources in the input maps and it receives the resources in the
  * output map
  */
-public class ProductionPower {
+public class ProductionPower implements Serializable {
     private final Map<Resource, Integer> input;
     private final Map<Resource, Integer> output;
     private final int agnosticInput;

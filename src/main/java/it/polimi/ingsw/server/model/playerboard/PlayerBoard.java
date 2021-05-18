@@ -146,7 +146,14 @@ public class PlayerBoard {
     }
 
     public boolean canActivateProduction(Set<Integer> selectedCardIds, Map<Integer, ProductionPower> selectedExtraPowers){
-        ProductionPower totalProductionPower = getTotalProductionPower(selectedCardIds, selectedExtraPowers);
+        ProductionPower totalProductionPower;
+        try{
+            totalProductionPower = getTotalProductionPower(selectedCardIds, selectedExtraPowers);
+        }
+        catch (IllegalArgumentException e){
+            System.out.println(e.getMessage());
+            return false;
+        }
         for(Map.Entry<Resource, Integer> entry : totalProductionPower.getInput().entrySet())
             if (!isAffordable(new ResourceRequirement(entry.getKey(), entry.getValue())))
                 return false;
@@ -243,6 +250,9 @@ public class PlayerBoard {
     public void addExtraProductionPower(ProductionPower productionPower) {
 
         extraProductionPowers.add(productionPower);
+        // if it's the base production power, the client game is not yet initialized so we can't update
+        if (extraProductionPowers.size() != 1)
+            observer.extraPowerUpdate(productionPower);
     }
 
     public void setObserver(VirtualView view){

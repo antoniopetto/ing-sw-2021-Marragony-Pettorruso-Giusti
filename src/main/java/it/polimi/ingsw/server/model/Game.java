@@ -7,6 +7,7 @@ import it.polimi.ingsw.server.model.exceptions.ElementNotFoundException;
 import it.polimi.ingsw.server.model.exceptions.IllegalConfigXMLException;
 import it.polimi.ingsw.server.model.playerboard.DepotName;
 import it.polimi.ingsw.server.model.playerboard.Resource;
+import it.polimi.ingsw.server.model.playerboard.Slot;
 import it.polimi.ingsw.server.model.shared.FaithTrack;
 import it.polimi.ingsw.server.model.shared.Marble;
 import it.polimi.ingsw.server.model.shared.MarketBoard;
@@ -132,12 +133,14 @@ public class Game {
 
     public List<SimplePlayer> getSimplePlayers() {
         List<SimplePlayer> simplePlayers = new ArrayList<>();
-        for (Player p : players) {
-            List<Integer> cardIds = new ArrayList<>();
-            for (LeaderCard card : p.getLeaderCardList())
-                cardIds.add(card.getId());
-
-            simplePlayers.add(new SimplePlayer(p.getUsername(), cardIds));
+        for (Player player : players) {
+            List<Integer> leaderCardIds = new ArrayList<>();
+            for (LeaderCard card : player.getLeaderCardList())
+                leaderCardIds.add(card.getId());
+            SimplePlayer simplePlayer = new SimplePlayer(player.getUsername(), leaderCardIds);
+            //adding the base production power
+            simplePlayer.addExtraProductionPower(player.getPlayerBoard().getExtraProductionPowers().get(0));
+            simplePlayers.add(simplePlayer);
         }
         return simplePlayers;
     }
@@ -280,8 +283,7 @@ public class Game {
 
         if (marbleBuffer.size() > 0)
             virtualView.manageResource();
-        else if (state == State.INSERTING)
-        {
+        else if (state == State.INSERTING) {
             state = State.POSTTURN;
             virtualView.nextAction(true);
         }
@@ -316,8 +318,11 @@ public class Game {
         faithTrack.advanceAllBut(playing);
         virtualView.bufferUpdate(marble);
 
-        if (marbleBuffer.size() == 0){
+        if (marbleBuffer.size() > 0)
+            virtualView.manageResource();
+        else {
             state = State.POSTTURN;
+            virtualView.nextAction(true);
         }
     }
 
@@ -455,11 +460,6 @@ public class Game {
         }
         if(state.equals(State.POSTTURN)) virtualView.nextAction(true);
             else virtualView.nextAction(false);
-    }
-
-    public void manageMarble(boolean insert){
-        if(insert) virtualView.requestPutResource();
-            //inserire il discard direttamente qui
     }
 
     /**

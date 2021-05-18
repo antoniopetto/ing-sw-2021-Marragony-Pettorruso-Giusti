@@ -12,13 +12,12 @@ import java.util.List;
 
 public interface View {
 
-    void positionUpdate(SimplePlayer player);
     void showErrorMessage(String text);
     void showConfirmMessage(String text);
     SimpleGame getGame();
     void showMarbleBuffer(List<Marble> marbleList);
     String getUsername();
-    int getNumber();
+    int getNumberOfPlayers();
     void startGame();
     void startSetting();
     CommandMsg selectMove(boolean postTurn);

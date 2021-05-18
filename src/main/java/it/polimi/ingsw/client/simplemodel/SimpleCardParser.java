@@ -35,7 +35,7 @@ public class SimpleCardParser {
     private static final String CONFIG_PATH = "src/main/resources/cards/config.xml";
     private static SimpleCardParser instance;
 
-    private final List<SimpleDevelopmentCard> simpleDevelopmentCards;
+    private final List<SimpleDevCard> simpleDevCards;
     private final List<SimpleLeaderCard> simpleLeaderCards;
 
     public static SimpleCardParser getInstance(){
@@ -44,9 +44,9 @@ public class SimpleCardParser {
         return instance;
     }
 
-    public SimpleDevelopmentCard getSimpleDevelopmentCard(int id){
+    public SimpleDevCard getSimpleDevelopmentCard(int id){
 
-        for (SimpleDevelopmentCard devCard : simpleDevelopmentCards){
+        for (SimpleDevCard devCard : simpleDevCards){
             if (devCard.getId() == id)
                 return devCard;
         }
@@ -73,7 +73,7 @@ public class SimpleCardParser {
             config = getChildNode("config", dom)
                     .orElseThrow(() -> new IllegalConfigXMLException("Missing root config node"));
 
-            simpleDevelopmentCards = parseSimpleDevelopmentCards();
+            simpleDevCards = parseSimpleDevelopmentCards();
             simpleLeaderCards = parseSimpleLeaderCards();
 
         } catch (IOException | ParserConfigurationException | SAXException e){
@@ -81,7 +81,7 @@ public class SimpleCardParser {
         }
     }
 
-    public List<SimpleDevelopmentCard> parseSimpleDevelopmentCards(){
+    public List<SimpleDevCard> parseSimpleDevelopmentCards(){
 
         NodeList devCardNodes = getChildrenByName("developmentCard", config);
         if (devCardNodes.getLength() != 48)
@@ -99,7 +99,7 @@ public class SimpleCardParser {
                 .mapToObj(i -> parseLeaderCard(leaderCardNodes.item(i))).collect(toList());
     }
 
-    private SimpleDevelopmentCard parseDevCard(Node devCardNode){
+    private SimpleDevCard parseDevCard(Node devCardNode){
 
         int id = getAttributeInteger("id", devCardNode)
                 .orElseThrow(() -> new IllegalConfigXMLException("Missing development card id"));
@@ -115,7 +115,7 @@ public class SimpleCardParser {
                 .orElseThrow(() -> new IllegalConfigXMLException("Development card" + id + ": missing production power"));
         Map<Resource, Integer> input = getChildNode("input", powerNode).map(this::parseResQtyMap).orElse(new HashMap<>());
         Map<Resource, Integer> output = getChildNode("output", powerNode).map(this::parseResQtyMap).orElse(new HashMap<>());
-        return new SimpleDevelopmentCard(id, points, color, level, resReqs, input, output);
+        return new SimpleDevCard(id, points, color, level, resReqs, input, output);
     }
 
     private SimpleLeaderCard parseLeaderCard(Node leaderCardNode){

@@ -1,6 +1,7 @@
 package it.polimi.ingsw.client.simplemodel;
 
 import it.polimi.ingsw.client.view.View;
+import it.polimi.ingsw.server.model.cards.ProductionPower;
 import it.polimi.ingsw.server.model.playerboard.Resource;
 
 import java.io.Serializable;
@@ -14,6 +15,7 @@ public class SimplePlayer implements Serializable {
     private final ArrayList<SimpleSlot> slots;
     private Map<Resource, Integer> strongbox = new HashMap<>();
     private final List<SimpleLeaderCard> leaderCards = new ArrayList<>();
+    private final List<ProductionPower> extraProductionPowers = new ArrayList<>();
     private final Set<Resource> whiteMarbleAliases = new HashSet<>();
 
     public SimplePlayer(String username, List<Integer> cardIds) {
@@ -92,7 +94,7 @@ public class SimplePlayer implements Serializable {
         this.strongbox=strongbox;
     }
 
-    public ArrayList<SimpleSlot> getSlots() {
+    public List<SimpleSlot> getSlots() {
         return slots;
     }
 
@@ -103,5 +105,13 @@ public class SimplePlayer implements Serializable {
 
     public Set<Resource> getWhiteMarbleAliases(){
         return whiteMarbleAliases;
+    }
+
+    public void addExtraProductionPower(ProductionPower power){
+        extraProductionPowers.add(power);
+    }
+
+    public List<ProductionPower> getExtraProductionPowers(){
+        return extraProductionPowers;
     }
 }

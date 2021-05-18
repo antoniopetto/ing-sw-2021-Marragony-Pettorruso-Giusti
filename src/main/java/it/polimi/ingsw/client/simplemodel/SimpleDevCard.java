@@ -5,7 +5,7 @@ import it.polimi.ingsw.server.model.playerboard.Resource;
 
 import java.util.Map;
 
-public class SimpleDevelopmentCard {
+public class SimpleDevCard {
 
     private  int id;
     private  int victoryPoints;
@@ -17,12 +17,12 @@ public class SimpleDevelopmentCard {
 
     private static final SimpleCardParser simpleCardParser = SimpleCardParser.getInstance();
 
-    public static SimpleDevelopmentCard parse(int id){
+    public static SimpleDevCard parse(int id){
         return simpleCardParser.getSimpleDevelopmentCard(id);
     }
 
-    public SimpleDevelopmentCard(int id, int victoryPoints, CardColor color, int level, Map<Resource, Integer> requirements,
-                                 Map<Resource, Integer> input, Map<Resource, Integer> output) {
+    public SimpleDevCard(int id, int victoryPoints, CardColor color, int level, Map<Resource, Integer> requirements,
+                         Map<Resource, Integer> input, Map<Resource, Integer> output) {
         this.id = id;
         this.victoryPoints = victoryPoints;
         this.requirements = requirements;

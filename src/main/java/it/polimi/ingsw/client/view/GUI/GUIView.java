@@ -48,12 +48,6 @@ public class GUIView implements View {
     }
 
     @Override
-    public void positionUpdate(SimplePlayer player) {
-
-    }
-
-
-    @Override
     public void showErrorMessage(String text) {
         Message = text;
     }
@@ -80,7 +74,7 @@ public class GUIView implements View {
     }
 
     @Override
-    public int getNumber() {
+    public int getNumberOfPlayers() {
         while (nPlayers == 0) {
             Thread.onSpinWait();
         }

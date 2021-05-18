@@ -9,10 +9,9 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 public class SimpleWarehouse implements Serializable {
-    private Map<DepotName, Map<Resource, Integer>> depots=new LinkedHashMap<>();
+    private Map<DepotName, Map<Resource, Integer>> depots = new LinkedHashMap<>();
 
-    public SimpleWarehouse()
-    {
+    public SimpleWarehouse() {
         depots.put(DepotName.HIGH, null);
         depots.put(DepotName.MEDIUM, null);
         depots.put(DepotName.LOW, null);

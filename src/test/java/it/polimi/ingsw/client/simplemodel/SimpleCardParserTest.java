@@ -1,10 +1,7 @@
 package it.polimi.ingsw.client.simplemodel;
 
 import it.polimi.ingsw.server.model.playerboard.Resource;
-import org.junit.Before;
 import org.junit.Test;
-
-import static org.junit.Assert.*;
 
 public class SimpleCardParserTest {
 
@@ -15,7 +12,7 @@ public class SimpleCardParserTest {
 
     @Test
     public void getDevCardTest(){
-        SimpleDevelopmentCard devCard = SimpleDevelopmentCard.parse(47);
+        SimpleDevCard devCard = SimpleDevCard.parse(47);
     }
 
     @Test

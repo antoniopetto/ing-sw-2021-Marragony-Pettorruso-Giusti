@@ -10,10 +10,11 @@ import it.polimi.ingsw.server.model.playerboard.Resource;
 import it.polimi.ingsw.server.model.shared.Marble;
 
 import java.util.*;
+import java.util.stream.Stream;
 
 public class CLIView implements View {
-    private CLISettingView settingView;
-    private SimpleGame game;
+    private final CLISettingView settingView;
+    private final SimpleGame game;
 
     private final Scanner input = new Scanner(System.in);
     private final String column1Format = "%-2s";
@@ -21,21 +22,16 @@ public class CLIView implements View {
     private final String column3Format = "%2s";
     private final String formatInfo = column1Format + " " + column2Format + " " + column3Format + " " + column3Format;
 
-
     public CLIView() {
         this.settingView = new CLISettingView(this);
         game = new SimpleGame(this);
     }
 
     @Override
-    public SimpleGame getGame() {
-        return game;
-    }
+    public SimpleGame getGame() { return game; }
 
     @Override
-    public void startSetting() {
-        settingView.execute();
-    }
+    public void startSetting() { settingView.execute(); }
 
     @Override
     public String getUsername() {
@@ -44,25 +40,27 @@ public class CLIView implements View {
         return input.nextLine();
     }
 
+    private int askNumber(String text, int min, int max){
+
+        System.out.println(text + " (" + min + "-" + max + ")");
+        System.out.print(Graphics.ANSI_CYAN+">"+Graphics.ANSI_RESET);
+        int result = input.nextInt();
+        if (result < min || result > max) {
+            showErrorMessage("Invalid input");
+            return askNumber(text, min, max);
+        }
+        else
+            return result;
+    }
+
     /**
      * In this method the player insert the number of players for the game wanted.
      * @return the number of players.
      */
-    public int getNumber(){
-        System.out.println(Graphics.ANSI_RESET+"Insert the number of players for your game:");
-        System.out.print(Graphics.ANSI_CYAN+">");
-        int result;
-        try{
-            result=input.nextInt();
-            if(result<1||result>4) throw new InputMismatchException();
-        }catch (Exception e)
-        {
-            showErrorMessage("Invalid input");
-            return getNumber();
-        }
-        if (result!=1)
-            System.out.println(Graphics.ANSI_BLUE+"Waiting for other players to join the game..."+Graphics.ANSI_RESET);
-        return result;
+    public int getNumberOfPlayers(){
+        int choice = askNumber("Insert the number of players for your game", 1, 4);
+        System.out.println(Graphics.ANSI_BLUE+"Waiting for other players to join the game..."+Graphics.ANSI_RESET);
+        return choice;
     }
 
     /**
@@ -94,10 +92,10 @@ public class CLIView implements View {
      */
     public void showLeaderCard(SimpleLeaderCard card) {
         System.out.println(Graphics.ANSI_RESET+ "┌──────────┐");
-        if(card.getResourceRequirements()!=null &&!card.getResourceRequirements().isEmpty())
+        if (card.getResourceRequirements() != null && !card.getResourceRequirements().isEmpty())
             showResources(card.getResourceRequirements());
         String[] req = new String[2];
-        int i =0;
+        int i = 0;
         if(card.getCardRequirements()!= null && !card.getCardRequirements().isEmpty()) {
             for (CardColor color : card.getCardRequirements().keySet()) {
                 for (Integer level : card.getCardRequirements().get(color).keySet()) {
@@ -115,8 +113,6 @@ public class CLIView implements View {
         }
         System.out.println(Graphics.getAbility(card.getAbility(), card.getAbilityResource()));
 
-
-        //vicotry points
         System.out.println("     "+Graphics.ANSI_YELLOW+card.getVictoryPoints()+Graphics.ANSI_RESET);
         System.out.println("└──────────┘");
     }
@@ -129,12 +125,10 @@ public class CLIView implements View {
     @Override
     public void printLeaderCards(SimplePlayer player){
         int counter = 1;
-        boolean showallCards = false;
-        if(player.getUsername().equals(game.getThisPlayer().getUsername()))
-            showallCards = true;
+        boolean showAllCards = player.getUsername().equals(game.getThisPlayer().getUsername());
 
         for (SimpleLeaderCard card : player.getLeaderCards()) {
-            if(showallCards || card.isActive()) {
+            if(showAllCards || card.isActive()) {
                 System.out.println(Graphics.ANSI_RESET+ counter + ")");
                 showLeaderCard(card);
                 counter++;
@@ -150,39 +144,14 @@ public class CLIView implements View {
     @Override
     public CommandMsg discardLeaderCard() {
 
-        SimplePlayer player;
-        boolean valid = false;
-
-        player = game.getThisPlayer();
-
-        if(player.getLeaderCards().isEmpty()){
+        SimplePlayer player = game.getThisPlayer();
+        if(player.getLeaderCards().isEmpty())
             return new DiscardLeaderCardMsg(0);
-        }
-        else{
+        else
             printLeaderCards(player);
-        }
 
-
-        int position = 0;
-
-        while(!valid) {
-            System.out.println(Graphics.ANSI_RESET+"Choose leaderCard to discard ( number 1-" + player.getLeaderCards().size() + "):");
-            System.out.print(Graphics.ANSI_CYAN+">"+Graphics.ANSI_RESET);
-            position = input.nextInt();
-            if(position > player.getLeaderCards().size() || position < 1){
-                showErrorMessage("Insert a number between 1-" + player.getLeaderCards().size());
-            }
-            else
-                valid = true;
-        }
-
-        return new DiscardLeaderCardMsg(player.chooseLeaderCard(position));
-    }
-
-
-    @Override
-    public void positionUpdate(SimplePlayer player) {
-        //TODO delete
+        int choice = askNumber("Choose leaderCard to discard", 1, player.getLeaderCards().size());
+        return new DiscardLeaderCardMsg(player.chooseLeaderCard(choice));
     }
 
     @Override
@@ -201,17 +170,8 @@ public class CLIView implements View {
     @Override
     public Marble selectMarble(){
         showMarbleBuffer(game.getMarbleBuffer());
-        System.out.println("Choose a marble to put in a depot (insert number 1" + (game.getMarbleBuffer().size() == 1 ? "):" : "-" + game.getMarbleBuffer().size() + "):"));
-        System.out.print(Graphics.ANSI_CYAN+">"+Graphics.ANSI_RESET);
-        int position;
-        try{
-            position = input.nextInt();
-            if(position < 1 || position > game.getMarbleBuffer().size()) throw new InputMismatchException();
-        }catch (Exception e) {
-            showErrorMessage("Illegal input");
-            return selectMarble();
-        }
-        return  game.getMarbleBuffer().get(position - 1);
+        int choice = askNumber("Choose a marble", 1, game.getMarbleBuffer().size());
+        return  game.getMarbleBuffer().get(choice - 1);
     }
 
     /**
@@ -220,55 +180,28 @@ public class CLIView implements View {
      */
     @Override
     public DepotName selectDepot(){
+
         showWarehouse(game.getThisPlayer());
-        System.out.println("Choose a depot in which to place the resource:");
-        for (DepotName depot: DepotName.values()){
-            if (game.getThisPlayer().getWarehouse().getDepots().containsKey(depot))
-                System.out.println(depot.getPosition() + ") " + depot);
-        }
-        System.out.print(Graphics.ANSI_CYAN+">"+Graphics.ANSI_RESET);
+        Map<DepotName, Map<Resource, Integer>> depots = game.getThisPlayer().getWarehouse().getDepots();
+        int intChoice = askChoice("Choose a depot in which to place the resource:",
+                                        depots.keySet().stream().map(Enum::name).toArray(String[]::new));
         DepotName choice;
-        try{
-            int intChoice = input.nextInt();
-            if (intChoice == 0)
-                choice = DepotName.HIGH;
-            else if (intChoice == 1)
-                choice = DepotName.MEDIUM;
-            else if (intChoice == 2)
-                choice = DepotName.LOW;
-            else if (intChoice == 3)
-                choice = DepotName.FIRST_EXTRA;
-            else if (intChoice == 4)
-                choice = DepotName.SECOND_EXTRA;
-            else
-                throw new InputMismatchException();
-            if(!game.getThisPlayer().getWarehouse().getDepots().containsKey(choice))
-                throw new InputMismatchException();
-        } catch (Exception e) {
-            showErrorMessage("Illegal input");
-            return selectDepot();
-        }
+        if (intChoice == 1)         choice = DepotName.HIGH;
+        else if (intChoice == 2)    choice = DepotName.MEDIUM;
+        else if (intChoice == 3)    choice = DepotName.LOW;
+        else if (intChoice == 4)    choice = DepotName.FIRST_EXTRA;
+        else                        choice = DepotName.SECOND_EXTRA;
+
         return choice;
     }
 
     public Resource selectResource(){
 
-        System.out.println("Cast the white marble into one of the following resources:");
         List<Resource> aliases = new ArrayList<>(game.getThisPlayer().getWhiteMarbleAliases());
-        for (int i = 1; i <= aliases.size(); i++){
-            System.out.println(i + ") " + aliases.get(i - 1));
-        }
-        System.out.print(">");
-        try {
-            int choice = input.nextInt();
-            if (choice < 1 || choice > aliases.size())
-                throw new InputMismatchException();
-            return aliases.get(choice - 1);
-        }
-        catch (InputMismatchException e){
-            showErrorMessage("Illegal input");
-            return selectResource();
-        }
+        int choice = askChoice("Cast the white marble into one of the following resources:",
+                                aliases.stream().map(Enum::name).toArray(String[]::new));
+
+        return aliases.get(choice - 1);
     }
 
     @Override
@@ -285,158 +218,111 @@ public class CLIView implements View {
      */
     @Override
     public CommandMsg selectMove(boolean postTurn) {
-        String firstAction;
-        int i;
-        if(!postTurn)
-            firstAction="Normal action";
-        else
-            firstAction="End turn";
-        System.out.println("Select what to do:");
-        System.out.println("1) " + firstAction);
-        System.out.println("2) Leader card action");
-        System.out.println("3) Show...");
-        System.out.print(">");
-        int choice;
-        try{
-            choice = input.nextInt();
-            if(choice < 1 || choice > 3) throw new InputMismatchException();
-        }catch (Exception e)
-        {
-            showErrorMessage("Illegal input");
-            return selectMove(postTurn);
-        }
-        switch (choice){
-            case 1 -> {
-                if(postTurn)
-                    return new EndTurnMsg();
-                else
-                System.out.println("Select the action:");
-                System.out.println("1) Buy resources");
-                System.out.println("2) Buy development card");
-                System.out.println("3) Activate production");
-                System.out.println("4) Back...");
-                try {
-                    choice = input.nextInt();
-                    if(choice < 1 || choice > 4) throw new InputMismatchException();
-                } catch (Exception e) {
-                    showErrorMessage("Illegal input");
-                    return selectMove(postTurn);
-                }
-                switch (choice) {
-                    case 1 -> {
-                        return buyResources();
-                    }
-                    case 2 -> {
-                        return buyCard();
-                    }
-                    case 3 -> {
-                        return activateProduction();
-                    }
-                    case 4 -> {
-                        return selectMove(postTurn);
-                    }
-                }
-            }
-            case 2-> {
-                System.out.println("Select what to do: ");
-                System.out.println("1) Play leader card");
-                System.out.println("2) Discard leader card");
-                System.out.println("3) Show my leader cards");
-                System.out.println("4) Back...");
-                System.out.print(Graphics.ANSI_CYAN + ">" + Graphics.ANSI_RESET);
 
-                try{
-                    choice = input.nextInt();
-                    if (choice < 1 || choice > 4) throw new InputMismatchException();
-                } catch (Exception e) {
-                    showErrorMessage("Illegal input");
-                    return selectMove(postTurn);
-                }
-                switch (choice) {
-                    case 1 -> { return playLeaderCard();}
-                    case 2 -> { return discardLeaderCard(); }
-                    case 3 -> {
-                        printLeaderCards(game.getThisPlayer());
-                        return selectMove(postTurn);
-                    }
-                    case 4 -> { return selectMove(postTurn); }
-                }
+        int choice = askChoice("Select action: ", postTurn ? "EndTurn" : "Normal action", "Leader card action", "Show...");
+        if (choice == 1) {
+            if(postTurn)
+                return new EndTurnMsg();
+            else {
+                int secondChoice = askChoice("Select action: ","Buy resources", "Buy development card", "Activate production", "Back...");
+                if (secondChoice == 1)
+                    return buyResources();
+                else if (secondChoice == 2)
+                    return buyCard();
+                else if (secondChoice == 3)
+                    return activateProduction(new HashSet<>(), new HashMap<>());
+                else if (secondChoice == 4)
+                    return selectMove(false);
             }
-            case 3->{
-                    show();
-                    return selectMove(postTurn);
+        }
+        else if (choice == 2) {
+            int secondChoice = askChoice("Select action:", "Play leader card", "Discard leader card", "Show my leader cards", "Back...");
+            if (secondChoice == 1)
+                return playLeaderCard();
+            else if (secondChoice == 2)
+                return discardLeaderCard();
+            else if (secondChoice == 3){
+                printLeaderCards(game.getThisPlayer());
+                return selectMove(postTurn);
             }
-            default ->{
-                return null;
-            }
+            else
+                return selectMove(postTurn);
+        }
+        else if (choice == 3){
+            show();
+            return selectMove(postTurn);
         }
         return null;
     }
 
-    public CommandMsg manageResource(){
-        System.out.println("Select a depot action: ");
-        System.out.println("1) Insert resource in depot");
-        System.out.println("2) Discard resource");
-        System.out.println("3) Change Depots");
-        System.out.println("4) Show...");
-        int choice;
-        try{
-            choice = input.nextInt();
-            if(choice < 1 || choice > 4) throw new InputMismatchException();
-        }catch (Exception e)
-        {
+    public int askChoice (String text, String... options){
+
+        if (options == null)
+            throw new IllegalArgumentException();
+
+        System.out.println(text);
+        for (int i = 0; i < options.length; i++)
+            System.out.println(i+1 + ")" + options[i]);
+        System.out.print(">");
+
+        int choice = input.nextInt();
+        if (choice < 1 || choice > options.length){
             showErrorMessage("Illegal input");
+            return askChoice(text, options);
+        }
+        else
+            return choice;
+    }
+
+    public String askString (String text, String... options){
+        return options[askChoice(text, options) - 1];
+    }
+
+    private boolean askYesNo(String text, boolean defaultYes) {
+        System.out.println(text + (defaultYes ? " (Y/n)" : " (y/N)"));
+        System.out.print(">");
+        String choice = input.nextLine();
+        if (choice.equalsIgnoreCase("y") || (choice.equals("") && defaultYes))
+            return true;
+        else if(choice.equalsIgnoreCase("n") || choice.equals(""))
+            return false;
+        else {
+            System.out.println("Invalid input");
+            return askYesNo(text, defaultYes);
+        }
+    }
+
+    public CommandMsg manageResource(){
+
+        CommandMsg msg;
+        showMarbleBuffer(game.getMarbleBuffer());
+        int choice = askChoice("Select action", "Insert resource in depot", "Discard resource", "Rearrange Depots", "Show...");
+
+        if (choice == 1){
+            Marble selectedMarble = selectMarble();
+            DepotName selectedDepot = selectDepot();
+            if (selectedMarble == Marble.WHITE) {
+                Resource selectedResource = selectResource();
+                msg = new PutResourceMsg(selectedMarble, selectedDepot, selectedResource);
+            }
+            else
+                msg = new PutResourceMsg(selectedMarble, selectedDepot);
+        }
+        else if (choice == 2){
+            Marble selectedMarble = selectMarble();
+            msg = new DiscardMarbleMsg(selectedMarble);
+        }
+        else if (choice == 3)
+            msg = changeDepots();
+        else{
+            show();
             return manageResource();
         }
-        switch (choice){
-            case 1 ->{
-                boolean valid = false;
-                String choose = "";
-                while (!valid) {
-                    System.out.println("Are you sure to insert a marble in Warehouse? (y/n) ");
-                    choose = input.next();
-                        if (!choose.equals("n") && !choose.equals("y") && !choose.equals("N") && !choose.equals("Y")) showErrorMessage("Illegal input");
-                            else valid = true;
-                    }
-                if(choose.equals("n") || choose.equals("N")) return  manageResource();
-                    else return new ManageMarbleMsg(true);
 
-            }
-            case 2 ->{
-                boolean valid = false;
-                String choose = "";
-                while (!valid) {
-                    System.out.println("Are you sure to discard a marble? (y/n) ");
-                    choose = input.next();
-                    if (!choose.equals("n") && !choose.equals("y") && !choose.equals("N") && !choose.equals("Y")) showErrorMessage("Illegal input");
-                    else valid = true;
-                }
-                if(choose.equals("n") || choose.equals("N")) return  manageResource();
-                else return  new ManageMarbleMsg(false);
-
-            }
-            case 3 ->{
-                boolean valid = false;
-                String choose = "";
-                while (!valid) {
-                    System.out.println("Are you sure to switch depots? (y/n) ");
-                    choose = input.next();
-                    if (!choose.equals("n") && !choose.equals("y") && !choose.equals("N") && !choose.equals("Y")) showErrorMessage("Illegal input");
-                        else valid = true;
-                }
-                if(choose.equals("n") || choose.equals("N")) return  manageResource();
-                    else return changeDepots();
-
-            }
-            case 4 ->{
-                show();
-                return manageResource();
-            }
-            default ->{
-                return null;
-            }
-        }
-
+        if (askYesNo("Confirm operation?", true))
+            return msg;
+        else
+            return manageResource();
     }
 
     /**
@@ -444,45 +330,22 @@ public class CLIView implements View {
      * simple model without communication with the server.
      */
     private void show() {
-        System.out.println("Select what to show: ");
-        System.out.println("0) resources legend");
-        System.out.println("1) market board");
-        System.out.println("2) decks");
-        System.out.println("3) faith track");
-        Map<Integer, String> players = new HashMap<>();
-        int i =4;
-        for (SimplePlayer player: game.getPlayers()) {
-            System.out.println(i + ") " + player.getUsername() + " player board");
-            players.put(i, player.getUsername());
-            i++;
-        }
-        System.out.print(Graphics.ANSI_CYAN+">"+Graphics.ANSI_RESET);
-        int choice = 0;
-        try{
-            choice=input.nextInt();
-            if(choice<0||choice>=i) throw new InputMismatchException();
-        }catch (Exception e)
-        {
-            showErrorMessage("Invalid input");
-            show();
-        }
+        String[] fixed = new String[] {"Resources legend", "Market board", "Decks", "Faith track"};
+        String[] mutable = game.getPlayers().stream().map(i -> i.getUsername() + "'s playerboard").toArray(String[]::new);
+        String[] options = Stream.concat(Arrays.stream(fixed), Arrays.stream(mutable)).toArray(String[]::new);
+        int choice = askChoice("Select what to show:", options);
+
         switch (choice) {
-            case 0-> showLegend();
-            case 1 -> showMarketBoard();
-            case 2-> showDevCardDecks();
-            case 3 -> showFaithTrack();
-            default -> showPlayerBoard(players.get(choice));
+            case 1-> showLegend();
+            case 2 -> showMarketBoard();
+            case 3-> showDevCardDecks();
+            case 4 -> showFaithTrack();
+            default -> showPlayerBoard(game.getPlayers().get(choice - 5));
         }
     }
 
-    private void showPlayerBoard(String name) {
-        SimplePlayer player = null;
-        for (SimplePlayer p: game.getPlayers()) {
-            if(p.getUsername().equals(name)) {
-                player = p;
-                break;
-            }
-        }
+    private void showPlayerBoard(SimplePlayer player) {
+
         if(player == null) throw new IllegalStateException();
         showWarehouse(player);
         System.out.println(Graphics.ANSI_BLUE+"Strongbox:"+Graphics.ANSI_RESET);
@@ -494,7 +357,7 @@ public class CLIView implements View {
         System.out.println(Graphics.ANSI_BLUE+"Slots:"+Graphics.ANSI_RESET);
         for (SimpleSlot slot:player.getSlots()) {
             System.out.println("Slot "+slot.getId()+":");
-            for (SimpleDevelopmentCard card:slot.getCards()) {
+            for (SimpleDevCard card:slot.getCards()) {
                 showCard(card);
             }
             System.out.println("-------------------");
@@ -513,7 +376,7 @@ public class CLIView implements View {
      * the second index is the color and the third is the position of the cards in the deck.
      */
     private void showDevCardDecks() {
-        for (SimpleDevelopmentCard card: game.getDevCardDecks()) {
+        for (SimpleDevCard card: game.getDevCardDecks()) {
             System.out.println((game.getDevCardDecks().indexOf(card)+1)+")");
             showCard(card);
         }
@@ -531,37 +394,36 @@ public class CLIView implements View {
         }
     }
 
+    //TODO refactor
     public CommandMsg changeDepots(){
+
+        showWarehouse(game.getThisPlayer());
         int depot1 = 0;
         int depot2 = 0;
-        DepotName depotName1;
-        DepotName depotName2;
 
-
-        for(int counter = 0; counter < 2; counter++) {
-            if(counter == 0){
-                    depot1 = printDepotSelection(1, 1, 0);
-                }else depot2 = printDepotSelection(0, 2, depot1);
-
+        for (int i = 0; i < 2; i++) {
+            if(i == 0)
+                depot1 = printDepotSelection(1, 1, 0);
+            else
+                depot2 = printDepotSelection(0, 2, depot1);
         }
-        depotName1 = chooseDepotName(depot1, true);
-        depotName2 = chooseDepotName(depot2, depot1);
+        DepotName depotName1 = chooseDepotName(depot1, true);
+        DepotName depotName2 = chooseDepotName(depot2, depot1);
 
-        if(depotName1 == DepotName.FIRST_EXTRA || depotName1 == DepotName.SECOND_EXTRA
+        if (depotName1 == DepotName.FIRST_EXTRA || depotName1 == DepotName.SECOND_EXTRA
             || depotName2 == DepotName.FIRST_EXTRA || depotName2 == DepotName.SECOND_EXTRA){
             return new MoveDepotsMsg(depotName1, depotName2);
         }else return new SwitchDepotsMsg(depotName1,depotName2);
 
     }
 
-    private int printDepotSelection(int position, int depotnr, int depotChoose){
+    private int printDepotSelection(int position, int depotNr, int depotChoose){
 
         boolean nonValid = true;
         int choose = 0;
         int pos = position +2;
         for(SimpleLeaderCard leaderCard : game.getThisPlayer().getLeaderCards()){
-            if(leaderCard.isActive())
-            {
+            if(leaderCard.isActive()) {
                 if(leaderCard.getAbility() == SimpleLeaderCard.Ability.EXTRADEPOT)  pos++;
             }
         }
@@ -569,7 +431,7 @@ public class CLIView implements View {
         showWarehouse(game.getThisPlayer());
 
         while (nonValid) {
-            System.out.println("Choose " + depotnr + " depot");
+            System.out.println("Choose " + depotNr + " depot");
             switch (depotChoose){
                 case 0 ->{
                     System.out.println("1) HIGH");
@@ -639,7 +501,6 @@ public class CLIView implements View {
 
         }
         return choose;
-
     }
 
     private DepotName chooseDepotName(int depotNumber, int previousDepot){
@@ -815,42 +676,94 @@ public class CLIView implements View {
         return new BuyResourcesMsg(choice-1, isRow);
     }
 
-    private CommandMsg activateProduction(){
+    private CommandMsg activateProduction(Set<Integer> selectedCardIds, Map<Integer, ProductionPower> selectedExtraPowers){
 
-        SimplePlayer player = game.getThisPlayer();
-        Set<Integer> selectedCardIds = new HashSet<>();
-        Map<Integer, ProductionPower > selectedExtraPowers = new HashMap<>();
+        if (selectedCardIds == null || selectedExtraPowers == null)
+            throw new IllegalArgumentException();
 
-        System.out.println("Active production powers");
+        int choice = askChoice("Select action:", "Select development card", "Select special production power", "Reset", "Confirm", "Back...");
 
-        for (SimpleSlot slot : player.getSlots()) {
-            System.out.println("Slot n." + slot.getId());
-            int size = slot.getCards().size();
-            if (size >= 1){
-                showCard(slot.getCards().get(size - 1));
-            }
+        if (choice == 1) {
+            selectDevCard().map(selectedCardIds::add);
+            return activateProduction(selectedCardIds, selectedExtraPowers);
+        }
+        else if (choice == 2){
+            Map.Entry<Integer, ProductionPower> extraPower = selectExtraPower();
+            selectedExtraPowers.put(extraPower.getKey(), extraPower.getValue());
+            return activateProduction(selectedCardIds, selectedExtraPowers);
+        }
+        else if (choice == 3)
+            return activateProduction(new HashSet<>(), new HashMap<>());
+        else if (choice == 4)
+            return new ActivateProductionMsg(selectedCardIds, selectedExtraPowers);
+
+        return selectMove(false);
+    }
+
+    private Optional<Integer> selectDevCard() {
+
+        SimpleDevCard[] availableCards = game.getThisPlayer().getSlots().stream()
+                .map(SimpleSlot::getLastCard).flatMap(Optional::stream).toArray(SimpleDevCard[]::new);
+        if (availableCards.length == 0){
+            showErrorMessage("No available cards");
+            return Optional.empty();
         }
 
-        while(true){
-            System.out.println("Do you want to add a power to activate? [Y/n]");
-            System.out.print(">");
-            String keepGoing = input.nextLine();
-            if(keepGoing.equals("") || keepGoing.equalsIgnoreCase("y")) {
-                System.out.println("From which slot?");
-                int choice = input.nextInt();
-                if (choice >= 1 && choice <= 3){
-                    int size = player.getSlots().get(choice - 1).getCards().size();
-                    if (size > 0){
-                        selectedCardIds.add(player.getSlots().get(choice - 1).getCards().get(size - 1).getId());
-                    }
-                }
-            }
-            else if(keepGoing.equalsIgnoreCase("n")) {
-                break;
-            }
+        System.out.println("Available cards:");
+        for (int i = 0; i < availableCards.length; i++) {
+            System.out.println(i + 1 + ")");
+            showCard(availableCards[i]);
         }
+        int choice = askNumber("Select development card", 1, availableCards.length);
+        return Optional.of(availableCards[choice - 1].getId());
+    }
 
-        return new ActivateProductionMsg(selectedCardIds, selectedExtraPowers);
+    private Map.Entry<Integer, ProductionPower> selectExtraPower() {
+
+        System.out.println("Available extra powers:");
+        List<ProductionPower> availablePowers = game.getThisPlayer().getExtraProductionPowers();
+        if (availablePowers.size() == 0)
+            throw new IllegalStateException();
+
+        for (int i = 0; i < availablePowers.size(); i++){
+            System.out.println(i + 1 + ")");
+            showRealProductionPower(availablePowers.get(i));
+        }
+        int choice = askNumber("Select power",1, availablePowers.size());
+        ProductionPower chosenPower = availablePowers.get(choice - 1);
+        Map<Resource, Integer> realInput = chosenPower.getInput();
+        Map<Resource, Integer> realOutput = chosenPower.getOutput();
+        for (int i = 0; i < chosenPower.getAgnosticInput(); i++){
+            Resource inputChoice = Resource.valueOf(askString("Choose an input resource:", "COIN", "SERVANT", "SHIELD", "STONE"));
+            if (!realInput.containsKey(inputChoice))
+                realInput.put(inputChoice, 1);
+            else
+                realInput.put(inputChoice, realInput.get(inputChoice) + 1);
+        }
+        for (int i = 0; i < chosenPower.getAgnosticOutput(); i++){
+            Resource outputChoice = Resource.valueOf(askString("Choose an output resource", "COIN", "SERVANT", "SHIELD", "STONE"));
+            if (!realOutput.containsKey(outputChoice))
+                realOutput.put(outputChoice, 1);
+            else
+                realOutput.put(outputChoice, realInput.get(outputChoice) + 1);
+        }
+        return new AbstractMap.SimpleEntry<>(choice - 1, new ProductionPower(realInput, realOutput));
+    }
+
+    private void showRealProductionPower(ProductionPower power){
+
+        System.out.println("Input:");
+        System.out.print(power.getAgnosticInput() + " ?");
+        for (Map.Entry<Resource, Integer> entry : power.getInput().entrySet())
+            System.out.print(", " + entry.getValue() + Graphics.getResource(entry.getKey()));
+        System.out.println();
+
+        System.out.println("Output:");
+        System.out.print(power.getAgnosticOutput() + " ?");
+        for (Map.Entry<Resource, Integer> entry : power.getOutput().entrySet())
+            System.out.print(", " + entry.getValue() + Graphics.getResource(entry.getKey()));
+        System.out.println();
+        System.out.println();
     }
 
     private CommandMsg buyCard(){
@@ -860,7 +773,8 @@ public class CLIView implements View {
 
         while(!valid) {
 
-            System.out.println(Graphics.ANSI_RESET+"Choose developmentCard to but ( number 1-" + game.getDevCardDecks().size() + "):");
+            //TODO use ask method
+            System.out.println(Graphics.ANSI_RESET+"Choose developmentCard to buy (number 1-" + game.getDevCardDecks().size() + "):");
             System.out.print(Graphics.ANSI_CYAN+">"+Graphics.ANSI_RESET);
              position = input.nextInt();
 
@@ -868,9 +782,7 @@ public class CLIView implements View {
                 showErrorMessage("Insert a number between 1-" + game.getDevCardDecks().size());
             }
             else valid = true;
-
         }
-
         valid = false;
 
         int slotId = 0;
@@ -884,9 +796,7 @@ public class CLIView implements View {
                 showErrorMessage("Insert a number between 1-" + game.getThisPlayer().getSlots().size());
             }
             else valid = true;
-
         }
-
         CardColor cardColor = game.getDevCardDecks().get(position-1).getColor();
         int level =  game.getDevCardDecks().get(position-1).getLevel();
 
@@ -907,16 +817,15 @@ public class CLIView implements View {
 
     }
 
-    public void showCard(SimpleDevelopmentCard card) {
+    public void showCard(SimpleDevCard card) {
         System.out.println("┌──────────┐");
         //Level and color
         System.out.println("    "+Graphics.getLevel(card.getColor(), card.getLevel()));
-        int i;
         showResources(card.getRequirements());
         showProductionPower(card.getColor(), card.getInput(), card.getOutput());
         System.out.println();
 
-        //vicotry points
+        //victory points
         System.out.println("     "+Graphics.ANSI_YELLOW+card.getVictoryPoints()+Graphics.ANSI_RESET);
         System.out.println("└──────────┘");
     }
@@ -950,7 +859,7 @@ public class CLIView implements View {
 
     public void showResources(Map<Resource, Integer> resources) {
         if(resources == null ||resources.isEmpty()){
-            System.out.println("");
+            System.out.println();
             return;
         }
         String[] req = new String[4];
@@ -998,12 +907,5 @@ public class CLIView implements View {
     public void showConfirmMessage(String text) {
         System.out.println(Graphics.ANSI_GREEN+"OK!");
         System.out.println(text+Graphics.ANSI_RESET);
-    }
-
-    public SimplePlayer findPlayer(String username){
-        for(SimplePlayer simplePlayer : game.getPlayers())
-            if (simplePlayer.getUsername().equals(username)) return simplePlayer;
-
-            return null;
     }
 }

@@ -5,7 +5,6 @@ import it.polimi.ingsw.server.model.cards.CardColor;
 import it.polimi.ingsw.server.model.shared.Marble;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 public class SimpleGame {
@@ -13,7 +12,7 @@ public class SimpleGame {
     private List<Marble> marbleBuffer;
     private Marble[][] marketBoard = new Marble[3][4];
     private Marble spareMarble;
-    private final SimpleDevelopmentCard[][][] devCardDecks = new SimpleDevelopmentCard[4][3][4];
+    private final SimpleDevCard[][][] devCardDecks = new SimpleDevCard[4][3][4];
     private final View view;
     private SimplePlayer thisPlayer;
 
@@ -42,7 +41,7 @@ public class SimpleGame {
         for(int i=0; i<4; i++) {
             for(int j=0; j<3; j++) {
                 for(int k=0; k<4; k++) {
-                    devCardDecks[i][j][k]= SimpleDevelopmentCard.parse(cardIds[i][j][k]);
+                    devCardDecks[i][j][k]= SimpleDevCard.parse(cardIds[i][j][k]);
                 }
             }
         }
@@ -97,9 +96,9 @@ public class SimpleGame {
         return thisPlayer;
     }
 
-    public List<SimpleDevelopmentCard> getDevCardDecks() {
-        SimpleDevelopmentCard[][][] decks = devCardDecks;
-        List<SimpleDevelopmentCard> result = new ArrayList<>();
+    public List<SimpleDevCard> getDevCardDecks() {
+        SimpleDevCard[][][] decks = devCardDecks;
+        List<SimpleDevCard> result = new ArrayList<>();
         for(int row = 0; row<4; row++) {
 
             for (int col = 0; col<3; col++) {

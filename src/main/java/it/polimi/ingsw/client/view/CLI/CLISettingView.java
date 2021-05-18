@@ -18,7 +18,7 @@ public class CLISettingView{
     public void execute() {
 
         String ip;
-        int port;
+        int port = 7777;
         Socket server;
         ServerHandler serverHandler;
         boolean reachable = false;
@@ -27,17 +27,28 @@ public class CLISettingView{
             System.out.println("Server IP address?");
             System.out.print(">");
             ip = input.nextLine();
-            System.out.println("Server port? (Default is 7777)");
+
+            System.out.println("Default port is 7777. Do you want to change it? [y/N]");
             System.out.print(">");
-            port = input.nextInt();
+            while(true) {
+                String choice = input.nextLine();
+                if (choice.equals("") || choice.equalsIgnoreCase("n"))
+                    break;
+                else if (choice.equalsIgnoreCase("y")) {
+                    System.out.println("Insert port number: ");
+                    System.out.print(">");
+                    port = input.nextInt();
+                    break;
+                } else
+                    System.out.println("Invalid input");
+            }
             try{
                 server = new Socket(ip, port);
                 serverHandler = new ServerHandler(server, cliView, cliView.getGame());
                 System.out.println("You are connected to the server!");
                 new Thread(serverHandler).start();
                 reachable=true;
-            }catch(IOException e)
-            {
+            } catch(IOException e) {
                 System.out.println(Graphics.ANSI_RED+"Server unreachable, try again."+Graphics.ANSI_RESET);
             }
         }

@@ -5,6 +5,7 @@ import it.polimi.ingsw.messages.view.*;
 import it.polimi.ingsw.server.model.AbstractPlayer;
 import it.polimi.ingsw.server.model.Game;
 import it.polimi.ingsw.server.model.cards.CardColor;
+import it.polimi.ingsw.server.model.cards.ProductionPower;
 import it.polimi.ingsw.server.model.playerboard.Depot;
 import it.polimi.ingsw.server.model.playerboard.DepotName;
 import it.polimi.ingsw.server.model.playerboard.Resource;
@@ -90,7 +91,6 @@ public class VirtualView implements Runnable{
     public void nextAction(boolean isPostTurn){
         try{
             getPlayingHandler().writeObject(new TurnMsg(isPostTurn));
-
         }catch (IOException e){
             System.out.println("Connection dropped");
             exitGame();
@@ -100,7 +100,6 @@ public class VirtualView implements Runnable{
     public void depotAction(){
         try{
             getPlayingHandler().writeObject(new ManageResourceMsg());
-
         }catch (IOException e){
             System.out.println("Connection dropped");
             exitGame();
@@ -110,14 +109,11 @@ public class VirtualView implements Runnable{
     public void manageResource(){
         try{
             getPlayingHandler().writeObject(new ManageResourceMsg());
-
         }catch (IOException e){
             System.out.println("Connection dropped");
             exitGame();
         }
     }
-
-
 
     public void discardLeaderCardUpdate(int cardId){
         DiscardLeaderCardUpdateMsg msg = new DiscardLeaderCardUpdateMsg(getPlayingUsername(), cardId);
@@ -157,6 +153,10 @@ public class VirtualView implements Runnable{
         }
     }
 
+    public void extraPowerUpdate(ProductionPower power){
+        UpdateMsg msg = new ExtraPowerUpdateMsg(getPlayingUsername(), power);
+        sendAll(msg);
+    }
 
     public void faithTrackUpdate(AbstractPlayer player, boolean allBut){
         UpdateMsg msg = new TrackUpdateMsg(player, allBut);
@@ -176,7 +176,6 @@ public class VirtualView implements Runnable{
 
         UpdateMsg msg = new WarehouseUpdateMsg(warehouse, getPlayingUsername());
         sendAll(msg);
-
     }
 
     public void strongBoxUpdate() {
@@ -277,8 +276,5 @@ public class VirtualView implements Runnable{
     private String getPlayingUsername(){
         return game.getPlaying().getUsername();
     }
-
-
-
 
 }

@@ -1,5 +1,6 @@
 package it.polimi.ingsw.server.model;
 
+import it.polimi.ingsw.client.simplemodel.SimplePlayer;
 import it.polimi.ingsw.messages.update.WhiteMarbleAliasUpdateMsg;
 import it.polimi.ingsw.server.VirtualView;
 import it.polimi.ingsw.server.model.cards.*;
@@ -11,6 +12,7 @@ import it.polimi.ingsw.server.model.shared.MarketBoard;
 import it.polimi.ingsw.server.model.shared.PopeFavourTile;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class Player extends AbstractPlayer{
 

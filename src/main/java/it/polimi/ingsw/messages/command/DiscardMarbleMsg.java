@@ -7,17 +7,15 @@ import it.polimi.ingsw.messages.update.UpdateMsg;
 
 import java.io.IOException;
 
-public class DiscardMsg implements CommandMsg {
+public class DiscardMarbleMsg implements CommandMsg {
     private Marble marble;
 
-    public DiscardMsg(Marble marble) {
+    public DiscardMarbleMsg(Marble marble) {
         this.marble = marble;
     }
 
     @Override
     public void execute(Game game, ClientHandler handler) throws IOException {
-        String text;
-        UpdateMsg msg;
         game.discardMarble(marble);
     }
 
