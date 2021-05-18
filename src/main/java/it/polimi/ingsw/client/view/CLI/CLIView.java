@@ -763,7 +763,7 @@ public class CLIView implements View {
         CardColor cardColor = game.getDevCardDecks().get(position-1).getColor();
         int level =  game.getDevCardDecks().get(position-1).getLevel();
 
-        return new BuyAndAddCardInSlotMsg(cardColor, level, slotId-1);
+        return new BuyAndAddCardInSlotMsg(cardColor, level, slotId);
     }
 
     @Deprecated

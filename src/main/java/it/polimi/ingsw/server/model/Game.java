@@ -401,6 +401,7 @@ public class Game {
 
         playing.getPlayerBoard().activateProduction(selectedCardIds, selectedExtraPowers);
         state = State.POSTTURN;
+        virtualView.nextAction(true);
     }
 
     /**
