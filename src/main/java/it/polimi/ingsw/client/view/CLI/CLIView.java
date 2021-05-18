@@ -754,40 +754,16 @@ public class CLIView implements View {
     }
 
     private CommandMsg buyCard(){
-        boolean valid = false;
+
         showDevCardDecks();
-        int position = 0;
+        int position = askNumber("Choose developement card to buy", 1, game.getDevCardDecks().size());
 
-        while(!valid) {
+        int slotId = askNumber("Choose the slot where you want to insert the development card", 1, game.getThisPlayer().getSlots().size());
 
-            //TODO use ask method
-            System.out.println(Graphics.ANSI_RESET+"Choose developmentCard to buy (number 1-" + game.getDevCardDecks().size() + "):");
-            System.out.print(Graphics.ANSI_CYAN+">"+Graphics.ANSI_RESET);
-             position = input.nextInt();
-
-            if(position > game.getDevCardDecks().size() || position < 1){
-                showErrorMessage("Insert a number between 1-" + game.getDevCardDecks().size());
-            }
-            else valid = true;
-        }
-        valid = false;
-
-        int slotId = 0;
-        while(!valid){
-
-            System.out.println(Graphics.ANSI_RESET+"Choose slot in which to insert the developmentCard( number 1-" + game.getThisPlayer().getSlots().size() + "):");
-            System.out.print(Graphics.ANSI_CYAN+">"+Graphics.ANSI_RESET);
-            slotId = input.nextInt();
-
-            if(slotId > game.getThisPlayer().getSlots().size() || slotId < 1){
-                showErrorMessage("Insert a number between 1-" + game.getThisPlayer().getSlots().size());
-            }
-            else valid = true;
-        }
         CardColor cardColor = game.getDevCardDecks().get(position-1).getColor();
         int level =  game.getDevCardDecks().get(position-1).getLevel();
 
-        return new BuyandAddCardInSlotMsg(cardColor, level, slotId);
+        return new BuyAndAddCardInSlotMsg(cardColor, level, slotId-1);
     }
 
     @Deprecated
@@ -811,7 +787,6 @@ public class CLIView implements View {
         showResources(card.getRequirements());
         showProductionPower(card.getColor(), card.getInput(), card.getOutput());
         System.out.println();
-
         //victory points
         System.out.println("     "+Graphics.ANSI_YELLOW+card.getVictoryPoints()+Graphics.ANSI_RESET);
         System.out.println("└──────────┘");

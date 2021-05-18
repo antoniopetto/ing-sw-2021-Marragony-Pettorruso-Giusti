@@ -175,7 +175,7 @@ public class PlayerBoard {
             }
 
             incrementMap(totalInput, power.getInput());
-            incrementMap(totalInput, power.getOutput());
+            incrementMap(totalOutput, power.getOutput());
         }
 
         for(Integer i : selectedExtraPowers.keySet()){
