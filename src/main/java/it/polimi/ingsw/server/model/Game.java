@@ -274,7 +274,10 @@ public class Game {
             !playing.getPlayerBoard().getWareHouse().isInsertable(depot, resource)) {
 
             virtualView.sendError("Illegal putResource request");
-            virtualView.requestPutResource();
+            if (state == State.INITIALIZING)
+                virtualView.requestPutResource();
+            else
+                virtualView.manageResource();
             return;
         }
 
@@ -282,8 +285,10 @@ public class Game {
         marbleBuffer.remove(listId);
         virtualView.bufferUpdate(marble);
 
-        if (marbleBuffer.size() > 0)
+        if (marbleBuffer.size() > 0 && state == State.INSERTING)
             virtualView.manageResource();
+        else if (marbleBuffer.size() > 0 && state == State.INITIALIZING)
+            virtualView.requestPutResource();
         else if (state == State.INSERTING) {
             state = State.POSTTURN;
             virtualView.nextAction(true);
@@ -294,20 +299,13 @@ public class Game {
         }
 
     }
-    public void goBack(GoBackMsg.State state)
-    {
-
-        switch (state)
-        {
-            case BEGIN_TURN -> virtualView.nextAction(false);
-            case MANAGE_RESOURCES ->
-                    {
-                        if(this.state==State.INITIALIZING)
-                            virtualView.requestPutResource();
-                        else
-                            virtualView.manageResource();
-                    }
-        }
+    public void goBack() {
+        if (state == State.PRETURN)
+            virtualView.nextAction(false);
+        else if (state == State.POSTTURN)
+            virtualView.nextAction(true);
+        else if (state == State.INSERTING)
+            virtualView.manageResource();
     }
 
     /**
@@ -423,7 +421,7 @@ public class Game {
         } catch (Exception e) {
             virtualView.sendError(e.getMessage());
         }
-        virtualView.depotAction();
+        virtualView.manageResource();
     }
 
     /**
@@ -447,7 +445,7 @@ public class Game {
             virtualView.sendError(e.getMessage());
         }
 
-        virtualView.depotAction();
+        virtualView.manageResource();
     }
 
 

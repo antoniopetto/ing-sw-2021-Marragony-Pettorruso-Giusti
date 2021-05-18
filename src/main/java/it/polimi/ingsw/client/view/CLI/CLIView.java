@@ -267,10 +267,17 @@ public class CLIView implements View {
 
         System.out.println(text);
         for (int i = 0; i < options.length; i++)
-            System.out.println(i+1 + ")" + options[i]);
+            System.out.println(i + 1 + ")" + options[i]);
         System.out.print(">");
 
-        int choice = input.nextInt();
+        int choice;
+        try {
+            choice = input.nextInt();
+        } catch (InputMismatchException e) {
+            showErrorMessage("Illegal input");
+            input.nextLine();
+            return askChoice(text, options);
+        }
         if (choice < 1 || choice > options.length){
             showErrorMessage("Illegal input");
             return askChoice(text, options);
@@ -318,7 +325,7 @@ public class CLIView implements View {
             msg = new DiscardMarbleMsg(selectedMarble);
         }
         else if (choice == 3)
-            msg = changeDepots();
+            return changeDepots();
         else{
             show();
             return manageResource();
@@ -418,8 +425,8 @@ public class CLIView implements View {
         if (depotName1 == DepotName.FIRST_EXTRA || depotName1 == DepotName.SECOND_EXTRA
             || depotName2 == DepotName.FIRST_EXTRA || depotName2 == DepotName.SECOND_EXTRA){
             return new MoveDepotsMsg(depotName1, depotName2);
-        }else return new SwitchDepotsMsg(depotName1,depotName2);
-
+        }else
+            return new SwitchDepotsMsg(depotName1,depotName2);
     }
 
     private int printDepotSelection(int position, int depotNr, int depotChoose){
@@ -638,52 +645,22 @@ public class CLIView implements View {
             }
             cardId = player.chooseLeaderCard(position);
         }
-
         return new PlayLeaderCardMsg(cardId);
     }
 
     private CommandMsg buyResources(){
 
         showMarketBoard();
-        boolean valid = false;
-        int choice = 0;
-        while(!valid) {
-            try {
-                System.out.println("Want to buy a column/row?");
-                System.out.println("1) column");
-                System.out.println("2) row");
-                System.out.println("3) back...");
-                System.out.print(">");
-                choice=input.nextInt();
-                if(choice<1||choice>3) throw new InputMismatchException();
-                valid=true;
-            } catch (Exception e) {
-                showErrorMessage("Invalid input");
-            }
-        }
-        if(choice==3)
-        {
-            return new GoBackMsg(GoBackMsg.State.BEGIN_TURN);
-        }
+        int choice = askChoice("Do you want to buy a:", "Column", "Row", "Back...");
+
+        if(choice == 3)
+            return selectMove(false);
+
         boolean isRow;
-        isRow= choice != 1;
-        System.out.println("Insert the number of the " + (isRow? "row:":"column:"));
-        System.out.print(">");
-        valid=false;
-        while (!valid)
-        {
-            try
-            {
-                choice=input.nextInt();
-                int bound = (isRow? 3:4);
-                if(choice<1||choice>bound) throw new InputMismatchException();
-                valid=true;
-            }catch (Exception e)
-            {
-                showErrorMessage("Invalid input");
-            }
-        }
-        return new BuyResourcesMsg(choice-1, isRow);
+        isRow = choice != 1;
+
+        choice = askNumber("Insert the number of " + (isRow ? "row:":"column:"), 1, (isRow ? 3 : 4));
+        return new BuyResourcesMsg(choice - 1, isRow);
     }
 
     private CommandMsg activateProduction(Set<Integer> selectedCardIds, Map<Integer, ProductionPower> selectedExtraPowers){

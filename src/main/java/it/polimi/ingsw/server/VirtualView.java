@@ -97,15 +97,6 @@ public class VirtualView implements Runnable{
         }
     }
 
-    public void depotAction(){
-        try{
-            getPlayingHandler().writeObject(new ManageResourceMsg());
-        }catch (IOException e){
-            System.out.println("Connection dropped");
-            exitGame();
-        }
-    }
-
     public void manageResource(){
         try{
             getPlayingHandler().writeObject(new ManageResourceMsg());

@@ -21,7 +21,7 @@ public class PutResourceRequestMsg implements ViewMsg {
         Marble selectedMarble = view.selectMarble();
         DepotName selectedDepot = view.selectDepot();
         if (selectedDepot == null) {
-            msg = new GoBackMsg(GoBackMsg.State.MANAGE_RESOURCES);
+            msg = new GoBackMsg();
             server.writeObject(msg);
             return;
         }
