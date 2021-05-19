@@ -1,6 +1,7 @@
 package it.polimi.ingsw.client.simplemodel;
 
 import it.polimi.ingsw.client.view.View;
+import it.polimi.ingsw.server.model.cards.LeaderCard;
 import it.polimi.ingsw.server.model.cards.ProductionPower;
 import it.polimi.ingsw.server.model.playerboard.Resource;
 
@@ -56,21 +57,16 @@ public class SimplePlayer implements Serializable {
     }
 
     public void activeLeaderCard(int cardId){
-        for(int i = 0; i < leaderCards.size(); i++) {
-            if ( leaderCards.get(i).getId() == cardId ) leaderCards.get(i).setActive(true);
-        }
+        for (SimpleLeaderCard card : leaderCards)
+            if (card.getId() == cardId) card.setActive(true);
     }
 
-    public void insertCardInSlot(int cardId, int slotId){
-        for(SimpleSlot slot : slots){
-            if(slot.getId() == slotId) slot.addCard(cardId);
-        }
+    public void insertCardInSlot(int cardId, int slotIdx){
+        slots.get(slotIdx).addCard(cardId);
     }
 
     public void discardLeaderCard(int cardId){
-        for(int i = 0; i < leaderCards.size(); i++) {
-            if ( leaderCards.get(i).getId() == cardId ) leaderCards.remove(i);
-        }
+        leaderCards.removeIf(card -> card.getId() == cardId);
     }
 
     public List<SimpleLeaderCard> getLeaderCards() {

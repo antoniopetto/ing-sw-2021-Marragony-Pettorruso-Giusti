@@ -32,7 +32,7 @@ public class DepotTest {
     }
 
     @Test
-    public void testGetterESetter(){
+    public void testGetterAndSetter(){
         assertEquals(3, depot.getCapacity());
         assertEquals(0, depot.getQuantity());
         depot.setQuantity(2);
@@ -62,13 +62,8 @@ public class DepotTest {
 
     @Test
     public void testGetResource(){
-        try{
-            depot.getResource();
-            fail();
-        }catch (IllegalArgumentException e){
-            assertTrue(true);
-        }
 
+        assertTrue(depot.getResource() == null);
         depot.addResource(Resource.SHIELD);
         assertEquals(depot.getResource(),Resource.SHIELD);
     }

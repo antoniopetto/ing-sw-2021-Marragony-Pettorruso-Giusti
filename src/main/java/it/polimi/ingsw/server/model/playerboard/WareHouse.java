@@ -27,7 +27,6 @@ public class WareHouse {
     public WareHouse() {
 
         this.depotList = new ArrayList<>();
-        //spostare in un metodo a sè
         this.depotList.add(new Depot(DepotName.HIGH,1));
         this.depotList.add(new Depot(DepotName.MEDIUM,2));
         this.depotList.add(new Depot(DepotName.LOW,3));
@@ -89,8 +88,7 @@ public class WareHouse {
      * @param r the Resource to add
      */
     public void insert(DepotName depotName, Resource r){
-        if(isInsertable(depotName,r))
-        {
+        if(isInsertable(depotName,r)) {
             depotByName(depotName).addResource(r);
             observer.warehouseUpdate();
         }

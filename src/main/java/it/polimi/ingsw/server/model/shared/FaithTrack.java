@@ -12,7 +12,7 @@ public class FaithTrack {
     private final List<Position> track = new ArrayList<>();
     private final List<AbstractPlayer> players = new ArrayList<>();
     private final Game game;
-    private int vaticanReportCounter = 0;
+    private int nextVaticanReport = 0;
     private final VirtualView virtualView;
 
     /**
@@ -39,7 +39,7 @@ public class FaithTrack {
 
         SortedSet<Integer> sectionRanges = new TreeSet<>(List.of(5, 8, 12, 16, 19, 24));
 
-        track.add(new Position(0, 0, false, 0));
+        track.add(new Position(0, 0, false, -1));
 
         for(int i = 1; i <= LAST_POSITION; i++){
 
@@ -52,8 +52,8 @@ public class FaithTrack {
             if (sectionRanges.contains(i) && headSetSize % 2 == 1)
                 isPopeSpace = true;
             if (sectionRanges.contains(i) || headSetSize % 2 == 1)
-                currentSection = (headSetSize / 2) + 1;
-            else currentSection = 0;
+                currentSection = (headSetSize / 2);
+            else currentSection = - 1;
 
             track.add(new Position(i, currentVP, isPopeSpace, currentSection));
         }
@@ -69,11 +69,11 @@ public class FaithTrack {
      * inside the correct vatican report section.
      */
     public void vaticanReport(){
-        vaticanReportCounter++;
         for (AbstractPlayer p : players){
-            if (p.getPosition().sectionNumber() == vaticanReportCounter)
-                p.vaticanReportEffect(vaticanReportCounter + 1);
+            if (p.getPosition().sectionNumber() == nextVaticanReport)
+                p.vaticanReportEffect(nextVaticanReport);
         }
+        nextVaticanReport ++;
         virtualView.vaticanReportUpdate();
     }
 
@@ -139,5 +139,9 @@ public class FaithTrack {
             vaticanReport();
 
         virtualView.faithTrackUpdate(excludedPlayer, true);
+    }
+
+    public List<Position> getTrack(){
+        return new ArrayList<>(track);
     }
 }

@@ -19,12 +19,10 @@ public class ResourceRequirementTest {
     @Test
     public void constructorTest(){
         //tries to create a requirement with an invalid quantity
-        try
-        {
+        try {
             requirement=new ResourceRequirement(Resource.COIN, -1);
             fail();
-        }catch(IllegalArgumentException e)
-        {
+        }catch(IllegalArgumentException e) {
             assertTrue(true);
         }
         //tries to create a requirement with a faith resource
