@@ -31,7 +31,12 @@ public class CLIView implements View {
 
     public static int askNumber(String text, int min, int max){
 
-        System.out.println(text + " (" + min + "-" + max + ")");
+        if (min > max)
+            throw new IllegalStateException();
+        if (min == max)
+            System.out.println(text + " (" + min + ")");
+        else
+            System.out.println(text + " (" + min + "-" + max + ")");
         System.out.print(Graphics.ANSI_CYAN+">"+Graphics.ANSI_RESET);
         Scanner input = new Scanner(System.in);
         int result;
@@ -124,7 +129,7 @@ public class CLIView implements View {
      * symbols used as resources
      */
     @Override
-    public void startGame() {
+    public void showTitle() {
         System.out.println(Graphics.ANSI_GREEN+Graphics.TITLE+Graphics.ANSI_RESET);
         System.out.println(Graphics.ANSI_BLUE+"Game started"+Graphics.ANSI_RESET);
         System.out.println(Graphics.ANSI_YELLOW+"Rules: "+ "https://tinyurl.com/mor-rules"+Graphics.ANSI_RESET);
@@ -727,8 +732,8 @@ public class CLIView implements View {
         }
         int choice = askNumber("Select power",1, availablePowers.size());
         ProductionPower chosenPower = availablePowers.get(choice - 1);
-        Map<Resource, Integer> realInput = chosenPower.getInput();
-        Map<Resource, Integer> realOutput = chosenPower.getOutput();
+        Map<Resource, Integer> realInput = new HashMap<>(chosenPower.getInput());
+        Map<Resource, Integer> realOutput = new HashMap<>(chosenPower.getOutput());
         for (int i = 0; i < chosenPower.getAgnosticInput(); i++){
             Resource inputChoice = Resource.valueOf(askChoiceValue("Choose an input resource:", "COIN", "SERVANT", "SHIELD", "STONE"));
             if (!realInput.containsKey(inputChoice))

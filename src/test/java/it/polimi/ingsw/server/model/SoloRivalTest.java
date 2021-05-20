@@ -5,9 +5,11 @@ import it.polimi.ingsw.server.VirtualView;
 import it.polimi.ingsw.server.model.singleplayer.SoloRival;
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.Mockito;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 import static org.junit.Assert.*;
 
@@ -16,14 +18,7 @@ public class SoloRivalTest {
     private Game game;
 
     @Before
-    public void setUp()
-    {
-        Map<String, ClientHandler> players = new HashMap<>();
-        players.put("username", null);
-        VirtualView virtualView = new VirtualView(players);
-        soloRival = new SoloRival();
-        game = Game.newSinglePlayerGame("username", virtualView);
+    public void setUp() {
+        game = new Game(Set.of("username"), Mockito.mock(VirtualView.class));
     }
-
-
 }

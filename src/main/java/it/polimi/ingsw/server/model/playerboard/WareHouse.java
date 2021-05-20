@@ -18,14 +18,15 @@ import java.util.stream.Collectors;
  */
 public class WareHouse {
     private final List<Depot> depotList;
-    private VirtualView observer;
+    private final VirtualView virtualView;
 
     /**
      * Constructs the WareHouse
      * Instances 3 Depots
      */
-    public WareHouse() {
+    public WareHouse(VirtualView virtualView) {
 
+        this.virtualView = virtualView;
         this.depotList = new ArrayList<>();
         this.depotList.add(new Depot(DepotName.HIGH,1));
         this.depotList.add(new Depot(DepotName.MEDIUM,2));
@@ -34,10 +35,6 @@ public class WareHouse {
 
     public List<Depot> getDepots() {
         return this.depotList;
-    }
-
-    public void setObserver(VirtualView virtualView){
-        observer = virtualView;
     }
 
     /**
@@ -53,8 +50,8 @@ public class WareHouse {
         else if(depotList.size() == 4)
             depotList.add(new Depot(DepotName.SECOND_EXTRA, capacity, constraint));
         else throw new IllegalArgumentException("Trying to add too many extraDepots");
-        if(observer!=null)
-            observer.warehouseUpdate();
+        if(virtualView !=null)
+            virtualView.warehouseUpdate();
     }
 
     /**
@@ -90,7 +87,7 @@ public class WareHouse {
     public void insert(DepotName depotName, Resource r){
         if(isInsertable(depotName,r)) {
             depotByName(depotName).addResource(r);
-            observer.warehouseUpdate();
+            virtualView.warehouseUpdate();
         }
           else throw new IllegalArgumentException("There isn't an empty space of the select Depot in which to insert the Resource r" +
                                                     "or The Resource that the player wants to insert does not match " +
@@ -123,7 +120,7 @@ public class WareHouse {
      * @param depotName2 the Depot with which to exchange resources
      */
     public void switchDepots(DepotName depotName1, DepotName depotName2) throws Exception {
-            if(isExtraDepot(depotName1) || isExtraDepot(depotName2))  observer.sendError("It isn't possible to exchange resources from a Depot to an extraDepot or in reverse");
+            if(isExtraDepot(depotName1) || isExtraDepot(depotName2))  virtualView.sendError("It isn't possible to exchange resources from a Depot to an extraDepot or in reverse");
                     else {
                 if(!(depotByName(depotName1).isEmpty() && depotByName(depotName2).isEmpty())){
                     if( compareTwoDepots(depotName1, depotName2) && compareTwoDepots(depotName2,depotName1))
@@ -156,11 +153,11 @@ public class WareHouse {
                         depotByName(depotName1).setResource(resourceTmp2);
                         depotByName(depotName1).setQuantity(quantityTmp2);
 
-                        observer.warehouseUpdate();
+                        virtualView.warehouseUpdate();
                     }
                     else throw new Exception("It isn't possible switch the Resources between Depots");
                 }
-                else observer.sendError("Both depots are empty!");
+                else virtualView.sendError("Both depots are empty!");
 
             }
 
@@ -184,7 +181,7 @@ public class WareHouse {
 
         if ( !depotByName(depotToFill).isEmpty()  || controlResource.apply(depotToEmpty)){
             fillTheOtherDepot(depotToEmpty, depotToFill);
-            observer.warehouseUpdate();
+            virtualView.warehouseUpdate();
         }
         else throw new IllegalArgumentException("It isn't possible switch the Resources between Depots, " +
                                                 "the type of resource that the player tries to insert in the extraDepot is different from the constraint ");
@@ -230,12 +227,11 @@ public class WareHouse {
      * @return a List of Depots which includes the <code>Depots</code> containing the <code>Resource</code> r
      */
     private List<Depot> depotFilter(Resource r){
-        //Se non dovesse esserci la risorsa r in nessun depot cosa succede? Ha senso utilizzare un optional?
-        return  this.depotList.stream()
-                                .filter(d -> !d.isEmpty())
-                                    .filter(d -> d.getResource().equals(r))
-                                        .collect(Collectors.toList());
 
+        return  depotList.stream()
+                    .filter(d -> !d.isEmpty())
+                        .filter(d -> d.getResource().equals(r))
+                            .collect(Collectors.toList());
     }
 
     /**
@@ -249,32 +245,14 @@ public class WareHouse {
      * Removes the <code>Resource</code> r  from a Depot that contains it
      * @param r the Resource to remove
      */
-    public void removeResource( Resource r){
-        Optional<Depot> optional = this.depotFilter(r)
-                                                .stream()
-                                                    .findFirst();
+    public void removeResource(Resource r){
+        Depot depot = depotFilter(r).stream().findFirst().orElse(null);
 
-        /*
-        optional.ifPresentOrElse( d -> {
-            DepotName dName = optional
-                    .map(Depot::getName)
-                    .get();//gestire warning
-                },
-                () -> {
-                throw new IllegalArgumentException("Problema");
-                }
-                );
-        */
+        if (depot == null)
+            throw new IllegalArgumentException("There is no Resource r in WareHouse ");
 
-        if (optional.isEmpty())
-            throw new IllegalArgumentException(" There is no Resource r in WareHouse ");
-
-        DepotName dName = optional
-                            .map(Depot::getName)
-                                .get();//gestire warning
-
-        this.depotList.get(dName.getPosition()).removeResource();
-        observer.warehouseUpdate();
+        depot.removeResource();
+        virtualView.warehouseUpdate();
     }
 
     /**
@@ -289,8 +267,6 @@ public class WareHouse {
      * @return the sum of the resources within the various Depots of the depotList
      */
     private int sumOfResInDepotList(List<Depot> depotList){
-        return depotList.stream()
-                            .map(Depot::getQuantity)
-                                .reduce(0, Integer::sum);
+        return depotList.stream().map(Depot::getQuantity).reduce(0, Integer::sum);
     }
 }

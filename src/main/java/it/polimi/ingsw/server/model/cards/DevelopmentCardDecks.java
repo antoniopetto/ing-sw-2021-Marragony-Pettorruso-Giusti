@@ -11,8 +11,8 @@ import java.util.*;
  * ArrayList decks.
  */
 public class DevelopmentCardDecks {
-    private final List<CardDeck> decks=new ArrayList<>();
-    private VirtualView observer;
+    private final List<CardDeck> decks = new ArrayList<>();
+    private final VirtualView virtualView;
 
     /**
      * The constructor creates 12 decks with all the possible combinations of colors and levels and add each card
@@ -20,7 +20,7 @@ public class DevelopmentCardDecks {
      * @param cards is a list of development cards which have to be divided in different decks.
      * @throws IllegalStateException if more than 4 cards in <code>cards</code> belong to a deck
      */
-    public DevelopmentCardDecks(List<DevelopmentCard> cards, VirtualView observer)  throws IllegalStateException{
+    public DevelopmentCardDecks(List<DevelopmentCard> cards, VirtualView virtualView)  throws IllegalStateException{
         decks.add(new CardDeck(1, CardColor.GREEN));
         decks.add(new CardDeck(2, CardColor.GREEN));
         decks.add(new CardDeck(3, CardColor.GREEN));
@@ -36,7 +36,7 @@ public class DevelopmentCardDecks {
         for (CardDeck deck: decks) {
                 cards.stream().filter(deck::belongs).forEach(deck::add);
         }
-        this.observer=observer;
+        this.virtualView = virtualView;
     }
 
     /**
@@ -46,21 +46,20 @@ public class DevelopmentCardDecks {
      * @return the first card of the deck with those color and level.
      * @throws EmptyStackException if the deck with color=<code>color</code> and level = <code>level</code> is empty
      */
-    public DevelopmentCard drawCard(CardColor color, int level)  throws EmptyStackException{
-        if(level<1||level>3) throw new IllegalArgumentException("Level value not valid");
+    public DevelopmentCard drawCard(CardColor color, int level) throws EmptyStackException{
+        if(level < 1 || level > 3) throw new IllegalArgumentException("Level value not valid");
         for (CardDeck deck : decks) {
             if (deck.properties(color, level)) {
-                    if(deck.size()>0&&observer!=null){
-                        observer.devCardDecksUpdate((level-1), color ,deck.size()-1 );
-                    }
-                    return deck.pop();
+                if (deck.size() > 0) {
+                    virtualView.devCardDecksUpdate(level-1, color);
+                }
+                return deck.pop();
             }
         }
         return null;
     }
 
     /**
-     *
      * @param color is the color of the deck from which the card is read
      * @param level is the level of the deck from which the card is read
      * @return the card on top of the deck without removing it

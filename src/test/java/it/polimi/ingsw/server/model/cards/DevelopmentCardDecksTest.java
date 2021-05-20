@@ -1,9 +1,11 @@
 package it.polimi.ingsw.server.model.cards;
 
+import it.polimi.ingsw.server.VirtualView;
 import it.polimi.ingsw.server.model.playerboard.Resource;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.Mockito;
 
 import java.util.ArrayList;
 import java.util.EmptyStackException;
@@ -12,7 +14,7 @@ import java.util.List;
 import static org.junit.Assert.*;
 
 public class DevelopmentCardDecksTest {
-    private List<DevelopmentCard> cards = new ArrayList<>();
+    private final List<DevelopmentCard> cards = new ArrayList<>();
     private DevelopmentCardDecks decks;
     ProductionPower power;
     List<ResourceRequirement> requirements = new ArrayList<>();
@@ -39,7 +41,7 @@ public class DevelopmentCardDecksTest {
         cards.add(new DevelopmentCard(13,0, 1, CardColor.BLUE, requirements,power));
         cards.add(new DevelopmentCard(14,0, 1, CardColor.BLUE, requirements,power));
         cards.add(new DevelopmentCard(15,0, 1, CardColor.BLUE, requirements,power));
-        decks = new DevelopmentCardDecks(cards, null);
+        decks = new DevelopmentCardDecks(cards, Mockito.mock(VirtualView.class));
     }
     @After
     public void tearDown()

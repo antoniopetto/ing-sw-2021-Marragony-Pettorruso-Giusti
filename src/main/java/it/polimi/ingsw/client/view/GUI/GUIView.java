@@ -82,7 +82,7 @@ public class GUIView implements View {
     }
 
     @Override
-    public void startGame() {
+    public void showTitle() {
         Message = "Game Started!";
     }
 

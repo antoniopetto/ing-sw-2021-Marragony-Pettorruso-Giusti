@@ -4,6 +4,7 @@ import it.polimi.ingsw.server.model.playerboard.Resource;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.Mockito;
 
 import java.util.ArrayList;
 import java.util.EmptyStackException;
@@ -66,8 +67,7 @@ public class CardDeckTest {
     }
 
     @Test
-    public void addTest()
-    {
+    public void addTest() {
         DevelopmentCard card1 = new DevelopmentCard(5, 0, 2, CardColor.BLUE, requirements, power);
         DevelopmentCard card2 = new DevelopmentCard(6, 0, 2, CardColor.BLUE, requirements, power);
         DevelopmentCard card3 = new DevelopmentCard( 7, 0,2, CardColor.BLUE, requirements, power);
@@ -92,15 +92,7 @@ public class CardDeckTest {
             deck1.add(card2);
             deck1.add(card3);
             deck1.add(card4);
-            for (int i =0; i<4; i++)
-            {
-                if(!deck1.pop().equals(deck.pop()))
-                    shuffled = true;
-            }
-            assertTrue(shuffled);
-            //TODO test to change because it doesn't have a clear result
-        }catch (Exception e)
-        {
+        } catch (Exception e) {
             fail();
         }
         //tries to add 5 cards in a deck

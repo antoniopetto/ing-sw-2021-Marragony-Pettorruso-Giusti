@@ -6,6 +6,7 @@ import it.polimi.ingsw.server.model.Player;
 import it.polimi.ingsw.server.model.playerboard.Depot;
 import it.polimi.ingsw.server.model.playerboard.Resource;
 import org.junit.Test;
+import org.mockito.Mockito;
 
 import java.io.IOException;
 
@@ -39,7 +40,7 @@ public class ExtraDepotAbilityTest {
     {
         ExtraDepotAbility ability = new ExtraDepotAbility(Resource.COIN, 2);
 
-        Player player = new Player("Test");
+        Player player = new Player("Test", Mockito.mock(VirtualView.class));
         //activates the ability and check that there's an extra depot in player's warehouse with right capacity and constraint
         try {
             ability.activateAbility(player);

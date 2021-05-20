@@ -1,5 +1,4 @@
 package it.polimi.ingsw.server.model.playerboard;
-import java.util.Optional;
 
 /**
  *This class represents the Depot.
@@ -105,8 +104,11 @@ public class Depot {
      */
     public void removeResource(){
 
-        if (!this.isEmpty())
-            this.quantity--;
+        if (!isEmpty()) {
+            quantity--;
+            if (isEmpty())
+                resource = null;
+        }
         else
             throw new IllegalArgumentException("There is no Resource in this Depot");
     }

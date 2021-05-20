@@ -41,10 +41,8 @@ public class CardDeck {
         if(deck.size()==num_of_cards)
             throw new IllegalStateException("The deck il full");
         deck.push(card);
-        if(deck.size()==num_of_cards)
-        {
+        if(deck.size()==num_of_cards) {
             Collections.shuffle(deck);
-
         }
 
 

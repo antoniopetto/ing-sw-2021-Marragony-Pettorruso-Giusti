@@ -77,4 +77,14 @@ public class ProductionPower implements Serializable {
     public int hashCode() {
         return Objects.hash(input, output, agnosticInput, agnosticOutput);
     }
+
+    @Override
+    public String toString() {
+        return "ProductionPower{" +
+                "input=" + input +
+                ", output=" + output +
+                ", agnosticInput=" + agnosticInput +
+                ", agnosticOutput=" + agnosticOutput +
+                '}';
+    }
 }

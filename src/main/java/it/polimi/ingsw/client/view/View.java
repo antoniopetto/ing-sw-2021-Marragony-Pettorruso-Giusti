@@ -18,7 +18,7 @@ public interface View {
     void showMarbleBuffer(List<Marble> marbleList);
     String getUsername();
     int getNumberOfPlayers();
-    void startGame();
+    void showTitle();
     void startSetting();
     CommandMsg selectMove(boolean postTurn);
     CommandMsg manageResource();

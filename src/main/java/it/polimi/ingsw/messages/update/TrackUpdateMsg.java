@@ -1,42 +1,29 @@
 package it.polimi.ingsw.messages.update;
 
-
-import it.polimi.ingsw.client.ServerHandler;
 import it.polimi.ingsw.client.simplemodel.SimpleGame;
 import it.polimi.ingsw.client.simplemodel.SimplePlayer;
-import it.polimi.ingsw.server.model.AbstractPlayer;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class TrackUpdateMsg implements UpdateMsg {
-    private String player;
-    private boolean allBut;
+    private final Map<String, Integer> positions;
 
-    public TrackUpdateMsg(AbstractPlayer player, boolean allBut)
-    {
-        this.player=player.getUsername();
-        this.allBut=allBut;
+    public TrackUpdateMsg(Map<String, Integer> positions) {
+        this.positions = new HashMap<>(positions);
     }
-
 
     @Override
     public void execute(SimpleGame model) {
-        for (SimplePlayer simplePlayer:model.getPlayers()) {
-            if(!allBut)
-            {
-                if(simplePlayer.getUsername().equals(player))
-                    simplePlayer.advance();
-            }
-            else {
-                if (!simplePlayer.getUsername().equals(player))
-                    simplePlayer.advance();
-            }
+        for (SimplePlayer simplePlayer : model.getPlayers()) {
+            simplePlayer.setPosition(positions.get(simplePlayer.getUsername()));
         }
     }
 
     @Override
     public String toString() {
         return "TrackUpdateMsg{" +
-                "player='" + player + '\'' +
-                ", allBut=" + allBut +
+                "positions=" + positions +
                 '}';
     }
 }

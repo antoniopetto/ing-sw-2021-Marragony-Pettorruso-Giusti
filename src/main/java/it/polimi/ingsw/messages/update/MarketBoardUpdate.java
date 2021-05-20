@@ -13,7 +13,7 @@ public class MarketBoardUpdate implements UpdateMsg{
 
     public MarketBoardUpdate(Marble[][] marketBoard, Marble spareMarble) {
         this.marketBoard = marketBoard;
-        this.spareMarble=spareMarble;
+        this.spareMarble = spareMarble;
     }
 
     @Override
