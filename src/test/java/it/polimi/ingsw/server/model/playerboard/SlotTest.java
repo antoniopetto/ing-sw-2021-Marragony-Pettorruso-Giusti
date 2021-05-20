@@ -21,7 +21,7 @@ public class SlotTest {
 
     @Before
     public void inizializeSlot(){
-        slot = new Slot(1);
+        slot = new Slot();
         requirements = new ArrayList<>();
         productionPower = new ProductionPower(0,0);
     }
@@ -32,12 +32,6 @@ public class SlotTest {
         productionPower = null;
         requirements.clear();
     }
-
-    @Test
-    public void testGetId(){
-        assertEquals(1, slot.getId());
-    }
-
 
     @Test
     public void testGetLastCard(){

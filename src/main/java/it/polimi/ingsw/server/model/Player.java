@@ -131,15 +131,15 @@ public class Player extends AbstractPlayer{
      * Adds a <code>DevelopmentCard</code> in a player's slot
      *
      * @param card      The card to add
-     * @param slotId    The destination slot
+     * @param slotIdx    The destination slot
      */
-    public void addCard(DevelopmentCard card, int slotId){
-        if (canBuyCard(card) && playerBoard.canAddCardInSlot(card, slotId)){
+    public void addCard(DevelopmentCard card, int slotIdx){
+        if (canBuyCard(card) && playerBoard.canAddCardInSlot(card, slotIdx)){
             for (ResourceRequirement req : card.getDiscountedRequirements(activeDiscounts)){
                 playerBoard.pay(req);
             }
-            playerBoard.addCardInSlot(card, slotId);
-            observer.addCardInSlotUpdate(card.getId(), slotId);
+            playerBoard.addCardInSlot(card, slotIdx);
+            observer.addCardInSlotUpdate(card.getId(), slotIdx);
         }
         else throw new IllegalArgumentException("Invalid move: can't pay or can't place the selected Development Card");
     }
@@ -180,12 +180,12 @@ public class Player extends AbstractPlayer{
     /**
      * The effect of a vatican report. For a <code>Player</code> consists in gaining a <code>VaticanReportTile</code>
      *
-     * @param tileNumber        The tile to activate
+     * @param tileIdx        The tile to activate
      */
     @Override
-    public void vaticanReportEffect(int tileNumber) {
+    public void vaticanReportEffect(int tileIdx) {
 
-        tiles.get(tileNumber).gain();
+        tiles.get(tileIdx).gain();
     }
 
     public List<LeaderCard> getLeaderCardList(){
@@ -210,4 +210,6 @@ public class Player extends AbstractPlayer{
     public Map<Resource, Integer> getActiveDiscount() {
         return activeDiscounts;
     }
+
+    public List<PopeFavourTile> getTiles(){ return new ArrayList<>(tiles); }
 }

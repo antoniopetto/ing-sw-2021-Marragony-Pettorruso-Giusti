@@ -16,7 +16,9 @@ public class CLIView implements View {
     private final CLISettingView settingView;
     private final SimpleGame game;
 
+    //TODO must be removed from methods and removed
     private final Scanner input = new Scanner(System.in);
+
     private final String column1Format = "%-2s";
     private final String column2Format = "%-2s";
     private final String column3Format = "%2s";
@@ -27,6 +29,75 @@ public class CLIView implements View {
         game = new SimpleGame(this);
     }
 
+    public static int askNumber(String text, int min, int max){
+
+        System.out.println(text + " (" + min + "-" + max + ")");
+        System.out.print(Graphics.ANSI_CYAN+">"+Graphics.ANSI_RESET);
+        Scanner input = new Scanner(System.in);
+        int result;
+        try {
+            result = input.nextInt();
+            if (result < min || result > max) throw new InputMismatchException();
+        }catch (Exception e) {
+            System.out.println(Graphics.ANSI_RED + "Invalid input" + Graphics.ANSI_RESET);
+            input.nextLine();
+            return askNumber(text, min, max);
+        }
+        return result;
+    }
+
+    public static int askChoice (String text, String... options){
+
+        if (options == null)
+            throw new IllegalArgumentException();
+
+        System.out.println(text);
+        for (int i = 0; i < options.length; i++)
+            System.out.println(i + 1 + ")" + options[i]);
+        System.out.print(">");
+
+        int choice;
+        Scanner input = new Scanner(System.in);
+        try {
+            choice = input.nextInt();
+        } catch (InputMismatchException e) {
+            System.out.println(Graphics.ANSI_RED + "Invalid input" + Graphics.ANSI_RESET);
+            input.nextLine();
+            return askChoice(text, options);
+        }
+        if (choice < 1 || choice > options.length){
+            System.out.println(Graphics.ANSI_RED + "Invalid input" + Graphics.ANSI_RESET);
+            return askChoice(text, options);
+        } else
+            return choice;
+    }
+
+    public static String askChoiceValue(String text, String... options){
+        return options[askChoice(text, options) - 1];
+    }
+
+    public static boolean askYesNo(String text, boolean defaultYes) {
+        System.out.println(text + (defaultYes ? " (Y/n)" : " (y/N)"));
+        System.out.print(">");
+        Scanner input = new Scanner(System.in);
+        String choice = input.nextLine();
+        if (choice.equalsIgnoreCase("y") || (choice.equals("") && defaultYes))
+            return true;
+        else if(choice.equalsIgnoreCase("n") || choice.equals(""))
+            return false;
+        else {
+            System.out.println(Graphics.ANSI_RED + "Invalid input" + Graphics.ANSI_RESET);
+            return askYesNo(text, defaultYes);
+        }
+    }
+
+    public static String askString(String text){
+        Scanner input = new Scanner(System.in);
+        System.out.println(text);
+        System.out.print(">");
+        return input.nextLine();
+    }
+
     @Override
     public SimpleGame getGame() { return game; }
 
@@ -35,26 +106,7 @@ public class CLIView implements View {
 
     @Override
     public String getUsername() {
-        System.out.println(Graphics.ANSI_RESET+"Insert your username:");
-        System.out.print(Graphics.ANSI_CYAN+">");
-        return input.nextLine();
-    }
-
-    private int askNumber(String text, int min, int max){
-
-        System.out.println(text + " (" + min + "-" + max + ")");
-        System.out.print(Graphics.ANSI_CYAN+">"+Graphics.ANSI_RESET);
-        int result;
-        try {
-            result = input.nextInt();
-            if (result < min || result > max) throw new InputMismatchException();
-        }catch (Exception e)
-        {
-            showErrorMessage("Invalid input");
-            input.nextLine();
-            return askNumber(text, min, max);
-        }
-        return result;
+        return askString("Insert your username:");
     }
 
     /**
@@ -75,7 +127,7 @@ public class CLIView implements View {
     public void startGame() {
         System.out.println(Graphics.ANSI_GREEN+Graphics.TITLE+Graphics.ANSI_RESET);
         System.out.println(Graphics.ANSI_BLUE+"Game started"+Graphics.ANSI_RESET);
-        System.out.println(Graphics.ANSI_YELLOW+"Rules: "+ "https://www.google.com/url?sa=t&rct=j&q=&esrc=s&source=web&cd=&cad=rja&uact=8&ved=2ahUKEwjrp562xsLwAhVQ4YUKHZWMBhcQFjAAegQIAhAD&url=http%3A%2F%2Fboardgame.bg%2Fmasters%2520of%2520renaissance%2520rules.pdf&usg=AOvVaw3zG_mi_quuZtRXse1AERmk"+Graphics.ANSI_RESET);
+        System.out.println(Graphics.ANSI_YELLOW+"Rules: "+ "https://tinyurl.com/mor-rules"+Graphics.ANSI_RESET);
         showLegend();
         System.out.println(Graphics.ANSI_CYAN+"Waiting for your turn to choose the leader cards..."+Graphics.ANSI_RESET);
     }
@@ -260,42 +312,6 @@ public class CLIView implements View {
         return null;
     }
 
-    public int askChoice (String text, String... options){
-        if (options == null)
-            throw new IllegalArgumentException();
-
-        System.out.println(text);
-        for (int i = 0; i < options.length; i++)
-            System.out.println(i+1 + ")" + options[i]);
-        System.out.print(">");
-
-        int choice = input.nextInt();
-        if (choice < 1 || choice > options.length){
-            showErrorMessage("Illegal input");
-            return askChoice(text, options);
-        }
-        else
-            return choice;
-    }
-
-    public String askString (String text, String... options){
-        return options[askChoice(text, options) - 1];
-    }
-
-    private boolean askYesNo(String text, boolean defaultYes) {
-        System.out.println(text + (defaultYes ? " (Y/n)" : " (y/N)"));
-        System.out.print(">");
-        String choice = input.nextLine();
-        if (choice.equalsIgnoreCase("y") || (choice.equals("") && defaultYes))
-            return true;
-        else if(choice.equalsIgnoreCase("n") || choice.equals(""))
-            return false;
-        else {
-            System.out.println("Invalid input");
-            return askYesNo(text, defaultYes);
-        }
-    }
-
     public CommandMsg manageResource(){
 
         CommandMsg msg;
@@ -317,7 +333,7 @@ public class CLIView implements View {
             msg = new DiscardMarbleMsg(selectedMarble);
         }
         else if (choice == 3)
-            msg = changeDepots();
+            return changeDepots();
         else{
             show();
             return manageResource();
@@ -359,9 +375,10 @@ public class CLIView implements View {
         System.out.println(Graphics.ANSI_BLUE+"Leader cards:"+Graphics.ANSI_RESET);
         printLeaderCards(player);
         System.out.println(Graphics.ANSI_BLUE+"Slots:"+Graphics.ANSI_RESET);
-        for (SimpleSlot slot:player.getSlots()) {
-            System.out.println("Slot "+slot.getId()+":");
-            for (SimpleDevCard card:slot.getCards()) {
+        List<SimpleSlot> slots = player.getSlots();
+        for (int i = 0; i < slots.size(); i++) {
+            System.out.println("Slot "+ i + 1 +":");
+            for (SimpleDevCard card : slots.get(i).getCards()) {
                 showCard(card);
             }
             System.out.println("-------------------");
@@ -437,7 +454,8 @@ public class CLIView implements View {
         if (depotName1 == DepotName.FIRST_EXTRA || depotName1 == DepotName.SECOND_EXTRA
             || depotName2 == DepotName.FIRST_EXTRA || depotName2 == DepotName.SECOND_EXTRA){
             return new MoveDepotsMsg(depotName1, depotName2);
-        }else return new SwitchDepotsMsg(depotName1,depotName2);
+        }else
+            return new SwitchDepotsMsg(depotName1,depotName2);
     }
 
 
@@ -468,52 +486,22 @@ public class CLIView implements View {
             }
             cardId = player.chooseLeaderCard(position);
         }
-
         return new PlayLeaderCardMsg(cardId);
     }
 
     private CommandMsg buyResources(){
 
         showMarketBoard();
-        boolean valid = false;
-        int choice = 0;
-        while(!valid) {
-            try {
-                System.out.println("Want to buy a column/row?");
-                System.out.println("1) column");
-                System.out.println("2) row");
-                System.out.println("3) back...");
-                System.out.print(">");
-                choice=input.nextInt();
-                if(choice<1||choice>3) throw new InputMismatchException();
-                valid=true;
-            } catch (Exception e) {
-                showErrorMessage("Invalid input");
-            }
-        }
-        if(choice==3)
-        {
-            return new GoBackMsg(GoBackMsg.State.BEGIN_TURN);
-        }
+        int choice = askChoice("Do you want to buy a:", "Column", "Row", "Back...");
+
+        if(choice == 3)
+            return selectMove(false);
+
         boolean isRow;
-        isRow= choice != 1;
-        System.out.println("Insert the number of the " + (isRow? "row:":"column:"));
-        System.out.print(">");
-        valid=false;
-        while (!valid)
-        {
-            try
-            {
-                choice=input.nextInt();
-                int bound = (isRow? 3:4);
-                if(choice<1||choice>bound) throw new InputMismatchException();
-                valid=true;
-            }catch (Exception e)
-            {
-                showErrorMessage("Invalid input");
-            }
-        }
-        return new BuyResourcesMsg(choice-1, isRow);
+        isRow = choice != 1;
+
+        choice = askNumber("Insert the number of " + (isRow ? "row:":"column:"), 1, (isRow ? 3 : 4));
+        return new BuyResourcesMsg(choice - 1, isRow);
     }
 
     private CommandMsg activateProduction(Set<Integer> selectedCardIds, Map<Integer, ProductionPower> selectedExtraPowers){
@@ -574,14 +562,14 @@ public class CLIView implements View {
         Map<Resource, Integer> realInput = chosenPower.getInput();
         Map<Resource, Integer> realOutput = chosenPower.getOutput();
         for (int i = 0; i < chosenPower.getAgnosticInput(); i++){
-            Resource inputChoice = Resource.valueOf(askString("Choose an input resource:", "COIN", "SERVANT", "SHIELD", "STONE"));
+            Resource inputChoice = Resource.valueOf(askChoiceValue("Choose an input resource:", "COIN", "SERVANT", "SHIELD", "STONE"));
             if (!realInput.containsKey(inputChoice))
                 realInput.put(inputChoice, 1);
             else
                 realInput.put(inputChoice, realInput.get(inputChoice) + 1);
         }
         for (int i = 0; i < chosenPower.getAgnosticOutput(); i++){
-            Resource outputChoice = Resource.valueOf(askString("Choose an output resource", "COIN", "SERVANT", "SHIELD", "STONE"));
+            Resource outputChoice = Resource.valueOf(askChoiceValue("Choose an output resource", "COIN", "SERVANT", "SHIELD", "STONE"));
             if (!realOutput.containsKey(outputChoice))
                 realOutput.put(outputChoice, 1);
             else
@@ -607,40 +595,16 @@ public class CLIView implements View {
     }
 
     private CommandMsg buyCard(){
-        boolean valid = false;
+
         showDevCardDecks();
-        int position = 0;
+        int position = askNumber("Choose developement card to buy", 1, game.getDevCardDecks().size());
 
-        while(!valid) {
+        int slotIdx = -1 + askNumber("Choose the slot where you want to insert the development card", 1, game.getThisPlayer().getSlots().size());
 
-            //TODO use ask method
-            System.out.println(Graphics.ANSI_RESET+"Choose developmentCard to buy (number 1-" + game.getDevCardDecks().size() + "):");
-            System.out.print(Graphics.ANSI_CYAN+">"+Graphics.ANSI_RESET);
-             position = input.nextInt();
-
-            if(position > game.getDevCardDecks().size() || position < 1){
-                showErrorMessage("Insert a number between 1-" + game.getDevCardDecks().size());
-            }
-            else valid = true;
-        }
-        valid = false;
-
-        int slotId = 0;
-        while(!valid){
-
-            System.out.println(Graphics.ANSI_RESET+"Choose slot in which to insert the developmentCard( number 1-" + game.getThisPlayer().getSlots().size() + "):");
-            System.out.print(Graphics.ANSI_CYAN+">"+Graphics.ANSI_RESET);
-            slotId = input.nextInt();
-
-            if(slotId > game.getThisPlayer().getSlots().size() || slotId < 1){
-                showErrorMessage("Insert a number between 1-" + game.getThisPlayer().getSlots().size());
-            }
-            else valid = true;
-        }
         CardColor cardColor = game.getDevCardDecks().get(position-1).getColor();
         int level =  game.getDevCardDecks().get(position-1).getLevel();
 
-        return new BuyandAddCardInSlotMsg(cardColor, level, slotId);
+        return new BuyAndAddCardInSlotMsg(cardColor, level, slotIdx);
     }
 
     @Deprecated
@@ -664,7 +628,6 @@ public class CLIView implements View {
         showResources(card.getRequirements());
         showProductionPower(card.getColor(), card.getInput(), card.getOutput());
         System.out.println();
-
         //victory points
         System.out.println("     "+Graphics.ANSI_YELLOW+card.getVictoryPoints()+Graphics.ANSI_RESET);
         System.out.println("└──────────┘");

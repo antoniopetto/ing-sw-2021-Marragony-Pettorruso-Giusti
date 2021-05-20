@@ -1,7 +1,9 @@
 package it.polimi.ingsw.server.model.playerboard;
 
+import it.polimi.ingsw.server.VirtualView;
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.Mockito;
 
 import static org.junit.Assert.*;
 
@@ -12,6 +14,8 @@ public class WareHouseTest {
     @Before
     public void initWareHouse(){
         wareHouse = new WareHouse();
+        VirtualView observer = Mockito.mock(VirtualView.class);
+        wareHouse.setObserver(observer);
     }
 
     @Test

@@ -1,27 +1,26 @@
 package it.polimi.ingsw.messages.update;
 
-import it.polimi.ingsw.client.ServerHandler;
 import it.polimi.ingsw.client.simplemodel.SimpleGame;
 import it.polimi.ingsw.client.simplemodel.SimplePlayer;
 
 public class AddCardInSlotUpdateMsg implements UpdateMsg {
 
-    private String username;
-    private int cardId;
-    private int slotId;
+    private final String username;
+    private final int cardId;
+    private final int slotIdx;
 
 
-    public AddCardInSlotUpdateMsg(String username, int cardId, int slotId) {
+    public AddCardInSlotUpdateMsg(String username, int cardId, int slotIdx) {
         this.username = username;
         this.cardId = cardId;
-        this.slotId = slotId;
+        this.slotIdx = slotIdx;
     }
 
     @Override
     public void execute(SimpleGame model) {
         for (SimplePlayer player: model.getPlayers()) {
             if(player.getUsername().equals(this.username))
-                player.insertCardInSlot(cardId, slotId);
+                player.insertCardInSlot(cardId, slotIdx);
         }
     }
 
@@ -30,7 +29,7 @@ public class AddCardInSlotUpdateMsg implements UpdateMsg {
         return "AddCardInSlotUpdateMsg{" +
                 "username='" + username + '\'' +
                 ", cardId=" + cardId +
-                ", slotId=" + slotId +
+                ", slotId=" + slotIdx +
                 '}';
     }
 }

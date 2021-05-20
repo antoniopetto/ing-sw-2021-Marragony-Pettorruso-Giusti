@@ -3,23 +3,21 @@ package it.polimi.ingsw.messages.command;
 import it.polimi.ingsw.server.model.Game;
 import it.polimi.ingsw.server.model.cards.CardColor;
 
-import java.io.IOException;
+public class BuyAndAddCardInSlotMsg implements CommandMsg {
 
-public class BuyandAddCardInSlotMsg implements CommandMsg {
+    private final CardColor cardColor;
+    private final int level;
+    private final int slotIdx;
 
-    private CardColor cardColor;
-    private int level;
-    private int slotId;
-
-    public BuyandAddCardInSlotMsg(CardColor cardColor, int level, int slotId) {
+    public BuyAndAddCardInSlotMsg(CardColor cardColor, int level, int slotIdx) {
         this.cardColor = cardColor;
         this.level = level;
-        this.slotId = slotId;
+        this.slotIdx = slotIdx;
     }
 
     @Override
     public void execute(Game game) {
-        game.buyAndAddCardInSlot(cardColor,level, slotId);
+        game.buyAndAddCardInSlot(cardColor, level, slotIdx);
     }
 
     @Override
@@ -27,7 +25,7 @@ public class BuyandAddCardInSlotMsg implements CommandMsg {
         return "BuyandAddCardInSlotMsg{" +
                 "cardColor=" + cardColor +
                 ", level=" + level +
-                ", slotId=" + slotId +
+                ", slotId=" + slotIdx +
                 '}';
     }
 }

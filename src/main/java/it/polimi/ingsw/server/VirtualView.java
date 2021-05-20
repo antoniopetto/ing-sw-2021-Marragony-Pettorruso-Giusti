@@ -97,15 +97,6 @@ public class VirtualView implements Runnable{
         }
     }
 
-    public void depotAction(){
-        try{
-            getPlayingHandler().writeObject(new ManageResourceMsg());
-        }catch (IOException e){
-            System.out.println("Connection dropped");
-            exitGame();
-        }
-    }
-
     public void manageResource(){
         try{
             getPlayingHandler().writeObject(new ManageResourceMsg());
@@ -169,7 +160,7 @@ public class VirtualView implements Runnable{
         Map<DepotName, Map<Resource, Integer>> warehouse = new LinkedHashMap<>();
         for (Depot depot: game.getPlaying().getPlayerBoard().getWareHouse().getDepots()) {
             Map<Resource, Integer> resources = new HashMap<>();
-            if(depot.getResource()!=null&&depot.getQuantity()!=0)
+            if(depot.getResource() != null && depot.getQuantity() != 0)
                 resources.put(depot.getResource(), depot.getQuantity());
             warehouse.put(depot.getName(), resources);
         }
@@ -189,8 +180,8 @@ public class VirtualView implements Runnable{
         sendAll(msg);
     }
 
-    public void addCardInSlotUpdate(int cardId, int slotId){
-        AddCardInSlotUpdateMsg msg = new AddCardInSlotUpdateMsg(getPlayingUsername(), cardId, slotId);
+    public void addCardInSlotUpdate(int cardId, int slotIdx){
+        AddCardInSlotUpdateMsg msg = new AddCardInSlotUpdateMsg(getPlayingUsername(), cardId, slotIdx);
         messageFilter(msg, "The player '"+ getPlayingUsername()+ "' has bought a development card");
     }
 

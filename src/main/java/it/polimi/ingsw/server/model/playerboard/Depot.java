@@ -69,8 +69,7 @@ public class Depot {
      * @return the type of <code>Resource</code> inserted in the Depot
      */
     public Resource getResource(){
-        //if(this.isEmpty()) throw new IllegalArgumentException("It is no resource");
-                return this.resource;
+        return this.resource;
     }
 
     public int getQuantity(){ return quantity; }

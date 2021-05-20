@@ -15,19 +15,11 @@ import java.util.Stack;
 public class Slot {
 
     private final Stack<DevelopmentCard> developmentCardList;
-    private final int id;
     private VirtualView observer;
 
-    /**
-     *Construct a slot
-     * @param id  It identifies this slot
-     */
-    public Slot(int id){
+    public Slot(){
         this.developmentCardList = new Stack<>();
-        this.id = id;
     }
-
-    public int getId() { return id; }
 
     /**
      *

@@ -29,9 +29,9 @@ public class PlayerBoard {
         this.wareHouse = new WareHouse();
         this.slotList = new ArrayList<>();
 
-        this.slotList.add( new Slot(1));
-        this.slotList.add( new Slot(2));
-        this.slotList.add( new Slot(3));
+        this.slotList.add( new Slot());
+        this.slotList.add( new Slot());
+        this.slotList.add( new Slot());
     }
 
     public WareHouse getWareHouse() { return wareHouse; }
@@ -175,7 +175,7 @@ public class PlayerBoard {
             }
 
             incrementMap(totalInput, power.getInput());
-            incrementMap(totalInput, power.getOutput());
+            incrementMap(totalOutput, power.getOutput());
         }
 
         for(Integer i : selectedExtraPowers.keySet()){

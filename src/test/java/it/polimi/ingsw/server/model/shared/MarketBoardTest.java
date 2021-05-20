@@ -2,6 +2,7 @@ package it.polimi.ingsw.server.model.shared;
 
 import it.polimi.ingsw.server.VirtualView;
 import org.junit.Test;
+import org.mockito.Mockito;
 
 import static it.polimi.ingsw.server.model.shared.MarketBoard.COLUMNS;
 import static it.polimi.ingsw.server.model.shared.MarketBoard.ROWS;
@@ -9,7 +10,7 @@ import static org.junit.Assert.assertEquals;
 
 public class MarketBoardTest {
 
-    private final MarketBoard marketBoard = new MarketBoard(null);
+    private final MarketBoard marketBoard = new MarketBoard(Mockito.mock(VirtualView.class));
 
     @Test
     public void buyColumnTest() {
