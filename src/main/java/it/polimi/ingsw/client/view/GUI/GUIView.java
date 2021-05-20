@@ -34,7 +34,7 @@ public class GUIView implements View {
     public static String getMessage(){
 
         if(Message == null) return null;
-        String message = Message;
+        String message = new String(Message);
         Message = null;
         return message;
     }

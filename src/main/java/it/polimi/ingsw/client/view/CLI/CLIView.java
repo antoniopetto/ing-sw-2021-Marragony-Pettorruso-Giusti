@@ -261,7 +261,6 @@ public class CLIView implements View {
     }
 
     public int askChoice (String text, String... options){
-
         if (options == null)
             throw new IllegalArgumentException();
 
@@ -399,222 +398,53 @@ public class CLIView implements View {
         }
     }
 
-    //TODO refactor
     public CommandMsg changeDepots(){
 
         showWarehouse(game.getThisPlayer());
-        int depot1 = 0;
-        int depot2 = 0;
 
-        for (int i = 0; i < 2; i++) {
-            if(i == 0)
-                depot1 = printDepotSelection(1, 1, 0);
-            else
-                depot2 = printDepotSelection(0, 2, depot1);
+        int depot1;
+        int depot2;
+        List<String> depotList = new ArrayList<>();
+        depotList.add("HIGH");
+        depotList.add("MEDIUM");
+        depotList.add("LOW");
+
+        int pos = 3;// da cambiare a 4 se si ha intenzione di aggiungere "BACK" nella depotList
+        for(SimpleLeaderCard leaderCard : game.getThisPlayer().getLeaderCards()) {
+            if (leaderCard.isActive()) {
+                if (leaderCard.getAbility() == SimpleLeaderCard.Ability.EXTRADEPOT) pos++;
+            }
         }
-        DepotName depotName1 = chooseDepotName(depot1, true);
-        DepotName depotName2 = chooseDepotName(depot2, depot1);
+            if(pos > 3) depotList.add("FIRST_EXTRA");// da cambiare a 4 se si ha intenzione di aggiungere "BACK" nella depotList
+            if(pos > 4) depotList.add("SECOND_EXTRA");// da cambiare a 5 se si ha intenzione di aggiungere "BACK" nella depotList
+
+       // depotList.add("BACK");
+
+        depot1 = askChoice("Choose first Depot", depotList.toArray(new String[pos]));
+
+       // if(depotList.get(depot1-1).equals("BACK")) return new GoBackMsg(State);
+
+        DepotName depotName1 = DepotName.valueOf(depotList.get(depot1-1));
+            depotList.remove(depot1-1);
+            pos--;
+
+        depot2 = askChoice(" Choose second Depot", depotList.toArray(new String[pos]));
+       // if(depotList.get(depot1-1).equals("BACK")) return new GoBackMsg(State);
+
+        DepotName depotName2 = DepotName.valueOf(depotList.get(depot2-1));
+        depotList.clear();
 
         if (depotName1 == DepotName.FIRST_EXTRA || depotName1 == DepotName.SECOND_EXTRA
             || depotName2 == DepotName.FIRST_EXTRA || depotName2 == DepotName.SECOND_EXTRA){
             return new MoveDepotsMsg(depotName1, depotName2);
         }else return new SwitchDepotsMsg(depotName1,depotName2);
-
     }
 
-    private int printDepotSelection(int position, int depotNr, int depotChoose){
 
-        boolean nonValid = true;
-        int choose = 0;
-        int pos = position +2;
-        for(SimpleLeaderCard leaderCard : game.getThisPlayer().getLeaderCards()){
-            if(leaderCard.isActive()) {
-                if(leaderCard.getAbility() == SimpleLeaderCard.Ability.EXTRADEPOT)  pos++;
-            }
-        }
 
-        showWarehouse(game.getThisPlayer());
 
-        while (nonValid) {
-            System.out.println("Choose " + depotNr + " depot");
-            switch (depotChoose){
-                case 0 ->{
-                    System.out.println("1) HIGH");
-                    System.out.println("2) MEDIUM");
-                    System.out.println("3) LOW");
-                    if(pos > 3){
-                        System.out.println("4) FIRST EXTRA-DEPOT");
-                    }
-                    if(pos > 4){
-                        System.out.println("5) SECOND EXTRA-DEPOT");
-                    }
-                }
-                case 1 ->{
-                    System.out.println("1) MEDIUM");
-                    System.out.println("2) LOW");
-                    if(pos > 2){
-                        System.out.println("3) FIRST EXTRA-DEPOT");
-                    }
-                    if(pos > 3){
-                        System.out.println("4) SECOND EXTRA-DEPOT");
-                    }
-                }
-                case 2 ->{
-                    System.out.println("1) HIGH");
-                    System.out.println("2) LOW");
-                    if(pos > 2){
-                        System.out.println("3) FIRST EXTRA-DEPOT");
-                    }
-                    if(pos > 3){
-                        System.out.println("4) SECOND EXTRA-DEPOT");
-                    }
-                }
-                case 3 ->{
-                    System.out.println("1) HIGH");
-                    System.out.println("2) MEDIUM");
-                    if(pos > 2){
-                        System.out.println("3) FIRST EXTRA-DEPOT");
-                    }
-                    if(pos > 3){
-                        System.out.println("4) SECOND EXTRA-DEPOT");
-                    }
-                }
-                case 4 ->{
-                    System.out.println("1) HIGH");
-                    System.out.println("2) MEDIUM");
-                    System.out.println("3) LOW");
-                    if(pos > 3){
-                        System.out.println("4) SECOND EXTRA-DEPOT");
-                    }
-                }
-                case 5 ->{
-                    System.out.println("1) HIGH");
-                    System.out.println("2) MEDIUM");
-                    System.out.println("3) LOW");
-                    if(pos > 3){
-                        System.out.println("4) FIRST EXTRA-DEPOT");
-                    }
-                }
-            }
-            System.out.print(">");
 
-            choose = input.nextInt();
 
-            if (choose > pos || choose < 1) {
-                showErrorMessage("Insert a number between 1-" + pos);
-            } else nonValid = false;
-
-        }
-        return choose;
-    }
-
-    private DepotName chooseDepotName(int depotNumber, int previousDepot){
-           if(previousDepot == 1){
-               switch (depotNumber){
-                   case 1 ->{
-                       return DepotName.MEDIUM;
-                   }
-                   case 2 ->{
-                       return DepotName.LOW;
-                   }
-                   case 3 ->{
-                       return DepotName.FIRST_EXTRA;
-                   }
-                   case 4 ->{
-                       return DepotName.SECOND_EXTRA;
-                   }
-                   default -> { return  null;}
-               }
-           }else if ( previousDepot == 2){
-               switch (depotNumber){
-                   case 1 ->{
-                       return DepotName.HIGH;
-                   }
-                   case 2 ->{
-                       return DepotName.LOW;
-                   }
-                   case 3 ->{
-                       return DepotName.FIRST_EXTRA;
-                   }
-                   case 4 ->{
-                       return DepotName.SECOND_EXTRA;
-                   }
-                   default -> { return  null;}
-               }
-           } else if( previousDepot == 3){
-               switch (depotNumber){
-                   case 1 ->{
-                       return DepotName.HIGH;
-                   }
-                   case 2 ->{
-                       return DepotName.MEDIUM;
-                   }
-                   case 3 ->{
-                       return DepotName.FIRST_EXTRA;
-                   }
-                   case 4 ->{
-                       return DepotName.SECOND_EXTRA;
-                   }
-                   default -> { return  null;}
-               }
-
-           } else if ( previousDepot == 4){
-               switch (depotNumber){
-                   case 1 ->{
-                       return DepotName.HIGH;
-                   }
-                   case 2 ->{
-                       return DepotName.MEDIUM;
-                   }
-                   case 3 ->{
-                       return DepotName.LOW;
-                   }
-                   case 4 ->{
-                       return DepotName.SECOND_EXTRA;
-                   }
-                   default -> { return  null;}
-               }
-           } else if ( previousDepot == 5){
-               switch (depotNumber){
-                   case 1 ->{
-                       return DepotName.HIGH;
-                   }
-                   case 2 ->{
-                       return DepotName.MEDIUM;
-                   }
-                   case 3 ->{
-                       return DepotName.LOW;
-                   }
-                   case 4 ->{
-                       return DepotName.FIRST_EXTRA;
-                   }
-                   default -> { return  null;}
-               }
-           }
-        return null;
-    }
-
-    private DepotName chooseDepotName(int depotNumber, boolean isFirst){
-
-        switch (depotNumber){
-            case 1 ->{
-                return DepotName.HIGH;
-            }
-            case 2 ->{
-                return DepotName.MEDIUM;
-            }
-            case 3 ->{
-                return DepotName.LOW;
-            }
-            case 4 ->{
-                return DepotName.FIRST_EXTRA;
-            }
-            case 5 ->{
-                return DepotName.SECOND_EXTRA;
-            }
-            default -> { return  null;}
-        }
-    }
 
     private CommandMsg playLeaderCard(){
         SimplePlayer player = game.getThisPlayer();
