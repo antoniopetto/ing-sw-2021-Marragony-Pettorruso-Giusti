@@ -2,3 +2,10 @@
     -fx-background-image:url('\maestri-del-rinascimento.jpg');
     -fx-background-size: cover;
 }
+
+.playerBoardPane {
+    -fx-background-image:url('\PlayerBoard.jpg');
+    -fx-background-repeat: stretch;
+    -fx-background-size: 1600 400;
+    -fx-background-position: center center;
+}
