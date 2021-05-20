@@ -108,6 +108,7 @@ public class Player extends AbstractPlayer{
             throw new IllegalStateException("Card already played");
         if(card.isPlayable(this)) {
             card.play(this);
+            observer.playLeaderCardUpdate(cardId);
             return true;
         }
         else return false;

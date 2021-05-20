@@ -1,5 +1,6 @@
 package it.polimi.ingsw.client.view.GUI;
 
+import it.polimi.ingsw.client.ServerHandler;
 import it.polimi.ingsw.client.simplemodel.SimpleGame;
 import it.polimi.ingsw.client.simplemodel.SimpleLeaderCard;
 import it.polimi.ingsw.client.simplemodel.SimplePlayer;
@@ -9,16 +10,33 @@ import it.polimi.ingsw.server.model.playerboard.Resource;
 import it.polimi.ingsw.server.model.shared.Marble;
 import it.polimi.ingsw.messages.command.CommandMsg;
 import javafx.application.Application;
+import javafx.application.Platform;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.text.Font;
+import javafx.stage.Stage;
 
+import java.io.IOException;
+import java.net.Socket;
 import java.util.List;
 
-public class GUIView implements View {
+public class GUIView extends Application implements View  {
 
-    private InitializeGame initializeGame;
-    private SimpleGame game;
+
+    private final SimpleGame game;
+    private Stage loginWindows;
+    private String username;
+    private boolean loop = true;
+    private int nPlayers;
+    private StartGameController startGameController;
+    private FXMLLoader loader;
+
 
     public GUIView() {
-        this.initializeGame = new InitializeGame();
         game = new SimpleGame(this);
     }
 
@@ -27,35 +45,154 @@ public class GUIView implements View {
         return game;
     }
 
-    private  static volatile String username = null;
-    private  static volatile int nPlayers = 0;
-    private static String Message = null;
+    @Override
+    public void start(Stage stage) throws Exception {
+        Parent root = null;
+        setLoader("/initializegame.fxml");
+        root = loader.load();
+        Font.loadFont(getClass().getResourceAsStream("/resources/fonts/master_of_break.ttf"), 14);
+        stage.setTitle("Schermata Iniziale");
+        Scene scene = new Scene(root);
+        stage.setScene(scene);
+        stage.setResizable(false);
+        stage.show();
+        SettingGameController settingGameController = loader.getController();
+        loginWindows = stage;
+       Button button = (Button) loader.getNamespace().get("confirmButton");
+            button.setOnAction(event -> {
+                settingGameController.setPort();
+                settingGameController.setServerIP();
+                setting(settingGameController);
+    });
 
-    public static String getMessage(){
-
-        if(Message == null) return null;
-        String message = new String(Message);
-        Message = null;
-        return message;
     }
 
-    public static void setUser(String user){
-        username = user;
+    @Override
+    public void startGame() {
+        //Message = "Game Started!";
     }
 
-    public static void setPlayers(int players){
-        nPlayers = players;
+    public void setting(SettingGameController settingGameController){
+        try{
+            Socket server = new Socket(settingGameController.getServerIP(), Integer.parseInt(settingGameController.getPort()));
+            ServerHandler serverHandler = new ServerHandler(server, this, this.getGame());
+            new Thread(serverHandler).start();
+
+            settingGameController.setTextError("You are connected to the server!");
+
+            boolean reachable = true;
+        }catch(IOException e)
+        {
+            settingGameController.setTextError("Server unreachable, try again.");
+        }
     }
 
     @Override
     public void showErrorMessage(String text) {
-        Message = text;
+        Parent root = null;
+        setLoader("/alertDialog.fxml");
+        try {
+            root = loader.load();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        AlertController settingGameController = loader.getController();
+        settingGameController.setErrorLabel(text);
+        Scene scene = new Scene(root);
+        Platform.runLater(() -> {
+            Stage stage = new Stage();
+            stage.setAlwaysOnTop(true);
+            stage.setTitle("Error Message");
+            stage.setScene(scene);
+            stage.setResizable(false);
+            stage.show();
+            Button button = (Button) loader.getNamespace().get("errorConfirm");
+            button.setOnAction(event ->{
+                stage.close();
+            });
+        });
+
+
+    }
+
+
+
+
+
+
+
+    private void setUsername(String username) {
+        this.username = username;
+    }
+
+    private void setLoop(boolean loop) {
+        this.loop = loop;
     }
 
     @Override
-    public void showConfirmMessage(String text) {
+    public String getUsername() {
+
+        setLoader("/setGame.fxml");
+        Parent root = null;
+
+        try {
+            root = loader.load();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        Scene loginScene = new Scene(root);
+
+        Platform.runLater(() -> {
+            loginWindows.setScene(loginScene);
+            loginWindows.setResizable(false);
+            loginWindows.show();
+        });
+
+        startGameController = loader.getController();
+        Button button = (Button) loader.getNamespace().get("confirm");
+        loop = true;
+    while(loop) {
+            button.setOnAction(event -> {
+            setUsername(startGameController.getUsernameField());
+            setLoop(false);
+            });
+        }
+        return username;
 
     }
+
+    private void setPlayers(int nPlayers){
+        this.nPlayers = nPlayers;
+    }
+
+    @Override
+    public int getNumberOfPlayers() {
+        startGameController.setUsernameField(false);
+        startGameController.setPlayersLabel(true);
+        startGameController.setUsernameLabel(false);
+        startGameController.setChoicePlayers(true);
+        Button button = (Button) loader.getNamespace().get("confirm");
+        loop = true;
+        while(loop) {
+            button.setOnAction(event -> {
+                setPlayers(startGameController.getChoicePlayers());
+                setLoop(false);
+            });
+        }
+        return nPlayers;
+
+    }
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -65,30 +202,10 @@ public class GUIView implements View {
 
     }
 
-    @Override
-    public String getUsername() {
-        while (username == null) {
-            Thread.onSpinWait();
-        }
-        return username;
-    }
-
-    @Override
-    public int getNumberOfPlayers() {
-        while (nPlayers == 0) {
-            Thread.onSpinWait();
-        }
-        return nPlayers;
-    }
-
-    @Override
-    public void startGame() {
-        Message = "Game Started!";
-    }
 
     @Override
     public void startSetting() {
-        Application.launch(InitializeGame.class);
+        Application.launch(GUIView.class);
     }
 
 
@@ -134,5 +251,9 @@ public class GUIView implements View {
 
     }
 
+
+    private void setLoader(String path){
+        loader = new FXMLLoader(getClass().getResource(path));
+    }
 
 }

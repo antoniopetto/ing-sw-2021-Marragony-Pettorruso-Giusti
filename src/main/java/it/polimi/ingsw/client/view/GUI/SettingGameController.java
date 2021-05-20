@@ -3,14 +3,19 @@ package it.polimi.ingsw.client.view.GUI;
 import it.polimi.ingsw.client.ServerHandler;
 import it.polimi.ingsw.client.simplemodel.SimpleGame;
 import javafx.event.ActionEvent;
+import javafx.event.Event;
+import javafx.event.EventDispatchChain;
+import javafx.event.EventDispatcher;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
@@ -21,48 +26,35 @@ import java.util.ResourceBundle;
 
 public class SettingGameController implements Initializable {
 
-    private GUIView guiView;
-    private Socket server;
-    private ServerHandler serverHandler;
-    private boolean reachable = false;
+
+    private String port;
+    private String serverIP;
     @FXML
     private TextField textIP;
     @FXML
     private TextField textPORT;
     @FXML
     private Label textError;
-    private Object Node;
-
-    @FXML
-    void passToServer(ActionEvent event) {
-
-        event.consume();
-        String serverIP = textIP.getText();
-        String port = textPORT.getText();
-        try{
-            guiView = new GUIView();
-            server = new Socket(serverIP, Integer.parseInt(port));
-            serverHandler = new ServerHandler(server, guiView, guiView.getGame());
-            new Thread(serverHandler).start();
-
-            textError.setText("You are connected to the server!");
-
-            Parent root = FXMLLoader.load(getClass().getResource("/setGame.fxml"));
-            Scene loginScene = new Scene(root);
-
-            Stage loginWindows = (Stage) ((Node) event.getSource()).getScene().getWindow();
-
-            loginWindows.setScene(loginScene);
-            loginWindows.setResizable(false);
-            loginWindows.show();
 
 
-            reachable=true;
-        }catch(IOException e)
-        {
-            textError.setText("Server unreachable, try again.");
-        }
+    public void setPort() {
+        this.port = textPORT.getText();;
+    }
 
+    public void setServerIP() {
+        this.serverIP = textIP.getText();
+    }
+
+    public void setTextError(String string) {
+        this.textError.setText(string);
+    }
+
+    public String getPort(){
+        return this.port;
+    }
+
+    public String getServerIP() {
+        return serverIP;
     }
 
     @Override

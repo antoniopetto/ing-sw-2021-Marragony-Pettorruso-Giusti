@@ -1,5 +1,6 @@
 package it.polimi.ingsw.client.view.GUI;
 
+import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -7,6 +8,8 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
@@ -18,54 +21,41 @@ import java.util.ResourceBundle;
 public class StartGameController implements Initializable {
 
     @FXML
-    private TextField textUsername;
+    private TextField usernameField;
     @FXML
-    private TextField textNPlayers;
+    private ChoiceBox<Integer> choicePlayers;
     @FXML
-    private Label usernameLabel;
+    private Label userLabel;
     @FXML
-    private Label nplayersLabel;
-
-    @FXML
-    public void setUsername(ActionEvent actionEvent){
-        actionEvent.consume();
-        GUIView.setUser(textUsername.getText());
-        /*
-        while(GUIView.getMessage() == null){
-            usernameLabel.setText("");
-        }
-
-        usernameLabel.setText(GUIView.getMessage());*/
+    private Label playersLabel;
 
 
+    public String getUsernameField() {
+        return usernameField.getText();
     }
 
-    @FXML
-    public void setNPlayers(ActionEvent actionEvent) throws IOException {
-        actionEvent.consume();
-        GUIView.setPlayers(Integer.parseInt(textNPlayers.getText()));
-        /*
-        while (GUIView.getMessage() == null){
-            nplayersLabel.setText("");
-        }
-        nplayersLabel.setText(GUIView.getMessage());*/
+    public void setUsernameField(boolean visible){
+        usernameField.setVisible(visible);
+    }
+    public void setUsernameLabel(boolean visible){
+        userLabel.setVisible(visible);
+    }
+    public void setChoicePlayers(boolean visible){
+        choicePlayers.setVisible(visible);
+    }
+    public void setPlayersLabel(boolean visible){
+        playersLabel.setVisible(visible);
+    }
 
-        Stage newStage = new Stage();
-        Stage loginWindows = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
-        Parent root = FXMLLoader.load(getClass().getResource("/initializegame.fxml"));
-        Scene loginScene = new Scene(root);
-        newStage.setScene(loginScene);
-        newStage.setResizable(false);
-        newStage.show();
-        loginWindows.close();
-
+    public int getChoicePlayers() {
+        return choicePlayers.getValue();
     }
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        textUsername.setText("");
-        textNPlayers.setText("");
-        usernameLabel.setText("");
-        nplayersLabel.setText("");
+        usernameField.setText("");
+        choicePlayers.setItems(FXCollections.observableArrayList(1,2,3,4));
+        choicePlayers.setVisible(false);
+        playersLabel.setVisible(false);
     }
 }

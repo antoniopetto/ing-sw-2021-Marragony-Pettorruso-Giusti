@@ -280,8 +280,11 @@ public class Game {
                 virtualView.manageResource();
             return;
         }
-
-        playing.getPlayerBoard().getWareHouse().insert(depot, resource);
+        try {
+            playing.getPlayerBoard().getWareHouse().insert(depot, resource);
+        }catch (IllegalArgumentException | IllegalStateException e){
+            virtualView.sendError(e.getMessage()); //necessario?
+        }
         marbleBuffer.remove(listId);
         virtualView.bufferUpdate(marble);
 

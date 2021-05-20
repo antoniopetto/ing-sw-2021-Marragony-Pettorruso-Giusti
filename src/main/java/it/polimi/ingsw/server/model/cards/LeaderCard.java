@@ -33,7 +33,6 @@ public class LeaderCard extends Card{
     public void play(Player player){
         ability.activateAbility(player);
         this.played=true;
-        observer.playLeaderCardUpdate(getId());
     }
 
     public boolean isPlayed() {

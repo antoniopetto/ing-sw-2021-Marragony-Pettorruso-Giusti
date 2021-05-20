@@ -1,14 +1,8 @@
 package it.polimi.ingsw.client;
 
 import it.polimi.ingsw.client.view.CLI.CLIView;
-import it.polimi.ingsw.client.view.CLI.Graphics;
 import it.polimi.ingsw.client.view.GUI.GUIView;
-import it.polimi.ingsw.client.view.GUI.InitializeGame;
 import it.polimi.ingsw.client.view.View;
-import javafx.application.Application;
-
-import java.util.InputMismatchException;
-import java.util.Scanner;
 
 public class Client {
 

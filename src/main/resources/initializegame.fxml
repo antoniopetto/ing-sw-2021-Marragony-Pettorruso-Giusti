@@ -1,15 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.paint.*?>
-<?import javafx.scene.*?>
 <?import javafx.geometry.*?>
-<?import java.lang.*?>
+<?import javafx.scene.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.scene.paint.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane prefHeight="565.0" prefWidth="886.0" styleClass="anchor" stylesheets="@backgroundStart.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.client.view.GUI.SettingGameController">
+<AnchorPane fx:id="pane" prefHeight="565.0" prefWidth="886.0" styleClass="anchor" stylesheets="@backgroundStart.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.client.view.GUI.SettingGameController">
    <children>
        <GridPane layoutX="-2.0" layoutY="-1.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="360.0" prefWidth="609.0" AnchorPane.bottomAnchor="-7.0" AnchorPane.leftAnchor="-2.0" AnchorPane.rightAnchor="-7.0" AnchorPane.topAnchor="-1.0">
            <columnConstraints>
@@ -49,14 +48,22 @@
                <textFill>
                   <LinearGradient endX="1.0" endY="0.26213592233009714" startX="0.7766990291262135" startY="0.703883495145631">
                      <stops>
-                        <Stop color="#16388a" />
-                        <Stop color="WHITE" offset="1.0" />
+                        <Stop>
+                           <color>
+                              <Color red="0.08627451211214066" green="0.21960784494876862" blue="0.5411764979362488" />
+                           </color>
+                        </Stop>
+                        <Stop offset="1.0">
+                           <color>
+                              <Color red="1.0" green="1.0" blue="1.0" />
+                           </color>
+                        </Stop>
                      </stops>
                   </LinearGradient>
                </textFill>
               </Label>
               <TextField fx:id="textIP" alignment="CENTER" prefHeight="26.0" prefWidth="185.0" style="-fx-background-color: transparent;" styleClass="text-field" translateY="10.0" GridPane.columnIndex="2" GridPane.columnSpan="3" GridPane.rowIndex="1" GridPane.valignment="CENTER" />
-              <Button alignment="CENTER" contentDisplay="TOP" mnemonicParsing="false" onAction="#passToServer" prefHeight="126.0" prefWidth="256.0" style="-fx-background-color: transparent;" text="Confirm" textAlignment="CENTER" GridPane.columnIndex="3" GridPane.columnSpan="2" GridPane.halignment="LEFT" GridPane.rowIndex="3" GridPane.valignment="TOP">
+              <Button fx:id="confirmButton" alignment="CENTER" contentDisplay="TOP" mnemonicParsing="false" prefHeight="126.0" prefWidth="256.0" style="-fx-background-color: transparent;" text="Confirm" textAlignment="CENTER" GridPane.columnIndex="3" GridPane.columnSpan="2" GridPane.halignment="LEFT" GridPane.rowIndex="3" GridPane.valignment="TOP">
                <graphic>
                   <ImageView fitHeight="70.0" fitWidth="215.0" pickOnBounds="true" preserveRatio="true" x="10.0">
                      <image>
@@ -66,10 +73,13 @@
                </graphic>
                <font>
                   <Font size="21.0" />
-               </font></Button>
+               </font>
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor></Button>
             <Label fx:id="textError" prefHeight="34.0" prefWidth="125.0" GridPane.columnIndex="2" GridPane.rowIndex="3" />
             <TextField fx:id="textPORT" alignment="CENTER" prefHeight="26.0" prefWidth="185.0" style="-fx-background-color: transparent;" GridPane.columnIndex="2" GridPane.columnSpan="3" GridPane.rowIndex="2" />
-            <Label alignment="TOP_LEFT" prefHeight="31.0" prefWidth="142.0" text="Insert Port" GridPane.columnIndex="2" GridPane.rowIndex="2" GridPane.valignment="TOP">
+            <Label alignment="TOP_LEFT" text="Insert Port (default: 7777)" GridPane.columnIndex="2" GridPane.columnSpan="2147483647" GridPane.rowIndex="2" GridPane.valignment="TOP">
                <font>
                   <Font name="System Bold Italic" size="21.0" />
                </font>

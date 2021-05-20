@@ -705,10 +705,4 @@ public class CLIView implements View {
         System.out.println(text+Graphics.ANSI_RESET);
     }
 
-
-    @Override
-    public void showConfirmMessage(String text) {
-        System.out.println(Graphics.ANSI_GREEN+"OK!");
-        System.out.println(text+Graphics.ANSI_RESET);
-    }
 }

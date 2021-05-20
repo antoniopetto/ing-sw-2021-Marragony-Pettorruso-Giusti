@@ -27,6 +27,11 @@ public class PlayerBoard {
     public PlayerBoard() {
         this.strongBox = new StrongBox();
         this.wareHouse = new WareHouse();
+        //momentaneo
+        strongBox.addResource(Resource.COIN,10);
+        strongBox.addResource(Resource.SERVANT,10);
+        strongBox.addResource(Resource.STONE,10);
+        strongBox.addResource(Resource.SHIELD,10);
         this.slotList = new ArrayList<>();
 
         this.slotList.add( new Slot());

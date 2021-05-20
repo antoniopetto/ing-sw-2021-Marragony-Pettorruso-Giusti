@@ -68,7 +68,7 @@ public class WareHouse {
 
         Depot depotToInsert = depotByName(depotName);
 
-        if(depotByName(depotName).getConstraint() == null) {
+        if(depotToInsert.getConstraint() == null) {
 
             List<Depot> depotList1 = this.depotList.stream()
                     .filter(d -> !d.getName().equals(depotName))
@@ -77,8 +77,10 @@ public class WareHouse {
                     .collect(Collectors.toList());
 
             for (Depot depot : depotList1) if (depot.getResource().equals(r)) return false;
-        }
-        return depotToInsert.isEmpty() || (depotToInsert.getResource().equals(r) && !depotToInsert.isFull());
+
+            return depotToInsert.isEmpty() || (depotToInsert.getResource().equals(r) && !depotToInsert.isFull());
+
+        } else return depotToInsert.getConstraint().equals(r) && !depotToInsert.isFull();
 
     }
 
