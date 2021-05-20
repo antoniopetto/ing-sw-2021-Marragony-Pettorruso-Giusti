@@ -377,7 +377,7 @@ public class CLIView implements View {
         System.out.println(Graphics.ANSI_BLUE+"Slots:"+Graphics.ANSI_RESET);
         List<SimpleSlot> slots = player.getSlots();
         for (int i = 0; i < slots.size(); i++) {
-            System.out.println("Slot "+ i + 1 +":");
+            System.out.println("Slot "+ (i+1) +":");
             for (SimpleDevCard card : slots.get(i).getCards()) {
                 showCard(card);
             }
