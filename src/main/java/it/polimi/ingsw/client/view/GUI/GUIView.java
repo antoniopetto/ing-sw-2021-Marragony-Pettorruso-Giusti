@@ -67,10 +67,7 @@ public class GUIView extends Application implements View  {
 
     }
 
-    @Override
-    public void startGame() {
-        //Message = "Game Started!";
-    }
+
 
     public void setting(SettingGameController settingGameController){
         try{
@@ -183,18 +180,10 @@ public class GUIView extends Application implements View  {
 
     }
 
+    @Override
+    public void showTitle() {
 
-
-
-
-
-
-
-
-
-
-
-
+    }
 
 
     @Override
