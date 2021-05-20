@@ -1,14 +1,11 @@
 package it.polimi.ingsw.server.model;
 
-import it.polimi.ingsw.client.simplemodel.SimplePlayer;
-import it.polimi.ingsw.messages.command.GoBackMsg;
 import it.polimi.ingsw.server.VirtualView;
 import it.polimi.ingsw.server.model.cards.*;
 import it.polimi.ingsw.server.model.exceptions.ElementNotFoundException;
 import it.polimi.ingsw.server.model.exceptions.IllegalConfigXMLException;
 import it.polimi.ingsw.server.model.playerboard.DepotName;
 import it.polimi.ingsw.server.model.playerboard.Resource;
-import it.polimi.ingsw.server.model.playerboard.Slot;
 import it.polimi.ingsw.server.model.shared.FaithTrack;
 import it.polimi.ingsw.server.model.shared.Marble;
 import it.polimi.ingsw.server.model.shared.MarketBoard;
@@ -39,111 +36,80 @@ public class Game {
     private final MarketBoard marketBoard;
     private final FaithTrack faithTrack;
     private final List<Marble> marbleBuffer = new ArrayList<>();
-    private DevelopmentCardDecks developmentCardDecks;
+    private final DevelopmentCardDecks developmentCardDecks;
 
-    /**
-     * Singleplayer static game constructor.
-     *
-     * @param username      The username of the only player
-     * @param virtualView   The <code>VirtualView</code> used to communicate with the client
-     * @return              The newly created game
-     */
-    public static Game newSinglePlayerGame(String username, VirtualView virtualView) {
-        return new Game(username, virtualView);
-    }
+    public Game(Set<String> usernames, VirtualView virtualView) {
 
-    /**
-     * Static regular game constructor.
-     *
-     * @param usernames     List of the players' usernames
-     * @param virtualView   The <code>VirtualView</code> used to communicate with the clients
-     * @return              The newly created game
-     */
-    public static Game newRegularGame(List<String> usernames, VirtualView virtualView) {
-        return new Game(usernames, virtualView);
-    }
+        if (usernames.size() == 0 || usernames.size() > 4 || virtualView == null)
+            throw new IllegalArgumentException();
 
-    private Game(String username, VirtualView virtualView) {
-        this.marketBoard = new MarketBoard(virtualView);
         this.virtualView = virtualView;
-        singlePlayer = true;
-        soloRival = new SoloRival();
-        Player player = new Player(username);
-        player.setObserver(virtualView);
-        players.add(player);
-        playing = players.get(0);
-        faithTrack = new FaithTrack(this, virtualView, List.of(players.get(0), soloRival));
-        initCards();
 
-    }
+        marketBoard = new MarketBoard(virtualView);
+        developmentCardDecks = new DevelopmentCardDecks(parseDevCards(), virtualView);
+        faithTrack = new FaithTrack(this, virtualView);
 
-    private Game(List<String> usernames, VirtualView virtualView) {
-        this.marketBoard = new MarketBoard(virtualView);
-        this.virtualView = virtualView;
-        singlePlayer = false;
-        soloRival = null;
-
-        if (usernames.size() > 4 || usernames.size() < 2)
-            throw new IllegalArgumentException("Number of players out of bounds");
-
-        for (String s : usernames){
-            Player player = new Player(s);
-            player.setObserver(virtualView);
+        for (String username : usernames){
+            Player player = new Player(username, virtualView);
             players.add(player);
         }
-
         //TODO return to random when ready to release
-        // Collections.shuffle(players);
+        //Collections.shuffle(players);
         playing = players.get(0);
-        faithTrack = new FaithTrack(this, virtualView, players);
-        /*
+        initLeaderCards();
+
+        if (usernames.size() == 1) {
+            singlePlayer = true;
+            soloRival = new SoloRival();
+            faithTrack.addPlayers(List.of(soloRival, players.get(0)));
+        }
+        else {
+            singlePlayer = false;
+            soloRival = null;
+            faithTrack.addPlayers(players);
+        }
+    }
+
+    public void firstUpdates(){
+        virtualView.initPlayersUpdate();
+        virtualView.faithTrackUpdate();
         if (players.size()>2)
             faithTrack.advance(players.get(2));
         if (players.size()>3)
             faithTrack.advance(players.get(3));
-        */
-        initCards();
+        virtualView.marketBoardUpdate();
+        virtualView.initCardsUpdate();
+
+        virtualView.showTitle();
+        virtualView.requestDiscardLeaderCard();
     }
 
-    private void initCards(){
+    private List<DevelopmentCard> parseDevCards(){
         try {
-            CardParser cardParser = new CardParser();
+            return (new CardParser()).parseDevelopmentCards();
+        }
+        catch (ParserConfigurationException | IOException | SAXException | IllegalConfigXMLException e){
+            e.printStackTrace();
+            virtualView.exitGame();
+            return null;
+        }
+    }
 
-            List<DevelopmentCard> developmentCards = cardParser.parseDevelopmentCards();
-            Collections.shuffle(developmentCards);
-            developmentCardDecks = new DevelopmentCardDecks(cardParser.parseDevelopmentCards(), virtualView);
-
-            List<LeaderCard> leaderCards = cardParser.parseLeaderCards();
+    private void initLeaderCards(){
+        try {
+            CardParser parser = new CardParser();
+            List<LeaderCard> leaderCards = parser.parseLeaderCards();
             Collections.shuffle(leaderCards);
             for(Player p : players){
                 List<LeaderCard> firstFour = leaderCards.subList(0, 4);
                 p.setLeaderCards(firstFour);
                 firstFour.clear();
             }
-
-            ProductionPower basePower = cardParser.parseBaseProductionPower();
-            for(Player p : players)
-                p.getPlayerBoard().addExtraProductionPower(basePower);
         }
         catch (ParserConfigurationException | IOException | SAXException | IllegalConfigXMLException e){
             e.printStackTrace();
-            System.out.println("Parsing error");
             virtualView.exitGame();
         }
-    }
-
-    public List<SimplePlayer> getSimplePlayers() {
-        List<SimplePlayer> simplePlayers = new ArrayList<>();
-        for (Player player : players) {
-            List<Integer> leaderCardIds = new ArrayList<>();
-            for (LeaderCard card : player.getLeaderCardList())
-                leaderCardIds.add(card.getId());
-            SimplePlayer simplePlayer = new SimplePlayer(player.getUsername(), leaderCardIds);
-            //adding the base production power
-            simplePlayer.addExtraProductionPower(player.getPlayerBoard().getExtraProductionPowers().get(0));
-            simplePlayers.add(simplePlayer);
-        }
-        return simplePlayers;
     }
 
     /**
@@ -182,7 +148,6 @@ public class Game {
                         marbleBuffer.add(Marble.WHITE);
                     virtualView.createBuffer(marbleBuffer);
                     virtualView.requestPutResource();
-                    if(position>=2) faithTrack.advance(playing);
                 }
             }
         } catch (ElementNotFoundException e){
@@ -395,16 +360,16 @@ public class Game {
             virtualView.sendError("Illegal state command");
             return;
         }
-
-        if (!playing.getPlayerBoard().canActivateProduction(selectedCardIds, selectedExtraPowers)) {
-            virtualView.sendError("Cannot afford this production");
+        try {
+            int steps = playing.activateProduction(selectedCardIds, selectedExtraPowers);
+            for (int i = 0; i < steps; i++)
+                faithTrack.advance(playing);
+            state = State.POSTTURN;
+            virtualView.nextAction(true);
+        } catch (IllegalArgumentException e){
+            virtualView.sendError(e.getMessage());
             virtualView.nextAction(false);
-            return;
         }
-
-        playing.getPlayerBoard().activateProduction(selectedCardIds, selectedExtraPowers);
-        state = State.POSTTURN;
-        virtualView.nextAction(true);
     }
 
     /**
@@ -519,6 +484,10 @@ public class Game {
         return playing;
     }
 
+    public List<Player> getPlayers(){
+        return new ArrayList<>(players);
+    }
+
     /**
      * Activates the last round of the game
      */
@@ -530,7 +499,7 @@ public class Game {
         return Optional.of(soloRival);
     }
 
-    public FaithTrack getTrack() {
+    public FaithTrack getFaithTrack() {
         return faithTrack;
     }
 

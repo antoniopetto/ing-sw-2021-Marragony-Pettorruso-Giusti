@@ -5,6 +5,7 @@ import it.polimi.ingsw.server.model.AbstractPlayer;
 import it.polimi.ingsw.server.model.Game;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class FaithTrack {
 
@@ -22,11 +23,10 @@ public class FaithTrack {
      * @param virtualView   Virtual view reference, used to send updates
      * @param players       List of player to place in the track
      */
-    public FaithTrack(Game game, VirtualView virtualView, List<? extends AbstractPlayer> players){
+    public FaithTrack(Game game, VirtualView virtualView){
 
         this.game = game;
         this.virtualView = virtualView;
-        this.players.addAll(players);
 
         Map<Integer, Integer> vPMap = Map.of(3, 1,
                                              6, 2,
@@ -57,10 +57,11 @@ public class FaithTrack {
 
             track.add(new Position(i, currentVP, isPopeSpace, currentSection));
         }
+    }
 
-        for (AbstractPlayer p : players){
-            p.setPosition(track.get(0));
-        }
+    public void addPlayers(List<? extends AbstractPlayer> players){
+        this.players.addAll(players);
+        this.players.forEach(player -> player.setPosition(track.get(0)));
     }
 
     /**
@@ -109,7 +110,8 @@ public class FaithTrack {
             if (player.getPosition().getNumber() == LAST_POSITION)
                 game.setLastRound();
         }
-        virtualView.faithTrackUpdate(player, false);
+
+        virtualView.faithTrackUpdate();
     }
 
     /**
@@ -138,7 +140,11 @@ public class FaithTrack {
         if(isVaticanReportDue)
             vaticanReport();
 
-        virtualView.faithTrackUpdate(excludedPlayer, true);
+        virtualView.faithTrackUpdate();
+    }
+
+    public List<AbstractPlayer> getPlayers() {
+        return new ArrayList<>(players);
     }
 
     public List<Position> getTrack(){

@@ -14,12 +14,15 @@ import java.util.Map;
 public class StrongBox {
 
     private final Map<Resource, Integer> content;
-    private VirtualView observer;
+    private final VirtualView virtualView;
 
     /**
      * Constructs the StrongBox
      */
-    public StrongBox() { this.content = new EnumMap<Resource, Integer>(Resource.class); }
+    public StrongBox(VirtualView virtualView) {
+        this.content = new EnumMap<Resource, Integer>(Resource.class);
+        this.virtualView = virtualView;
+    }
 
     /**
      * @param r    The <code>Resource</code>
@@ -33,15 +36,17 @@ public class StrongBox {
      * @param r The <code>Resource</code> to add
      * @param quantity number of Resource r to add in StrongBox
      */
-    public void addResource( Resource r, int quantity){
+    public void addResource(Resource r, int quantity){
 
-        if(quantity<=0) throw new IllegalArgumentException("No sense to enter a negative / equal to 0 quantity");
+        if (quantity <= 0)
+            throw new IllegalArgumentException("Cannot add non positive quantity");
 
-        if(content.containsKey(r))
-            content.replace(r, content.get(r)+quantity);
-            else content.put(r, quantity);
-        if(observer!=null)
-            observer.strongBoxUpdate();
+        if (content.containsKey(r))
+            content.put(r, content.get(r) + quantity);
+        else
+            content.put(r, quantity);
+
+        virtualView.strongBoxUpdate();
     }
 
     /**
@@ -49,14 +54,15 @@ public class StrongBox {
      *
      * @param r The <code>Resource</code> to remove
      */
-    public void removeResource( Resource r){
-            if(getQuantity(r)>1)
+    public void removeResource(Resource r){
+            if(getQuantity(r) > 1)
                 content.replace(r, content.get(r)-1);
-                else if(getQuantity(r)==1) content.remove(r);
-                    else if(getQuantity(r) == 0)
-                        throw new IllegalArgumentException("In StrongBox there is no Resource r");
-            if(observer!=null)
-                    observer.strongBoxUpdate();
+            else if(getQuantity(r) == 1)
+                content.remove(r);
+            else if(getQuantity(r) == 0)
+                throw new IllegalArgumentException("In StrongBox there are no " + r + " left");
+
+            virtualView.strongBoxUpdate();
     }
 
     /**
@@ -67,11 +73,6 @@ public class StrongBox {
         return content.values()
                         .stream()
                             .reduce(0, Integer::sum);
-    }
-
-    public void setObserver(VirtualView observer)
-    {
-        this.observer=observer;
     }
 
     public Map<Resource, Integer> getContent() {

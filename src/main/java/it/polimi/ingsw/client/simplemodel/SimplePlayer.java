@@ -1,7 +1,5 @@
 package it.polimi.ingsw.client.simplemodel;
 
-import it.polimi.ingsw.client.view.View;
-import it.polimi.ingsw.server.model.cards.LeaderCard;
 import it.polimi.ingsw.server.model.cards.ProductionPower;
 import it.polimi.ingsw.server.model.playerboard.Resource;
 
@@ -11,48 +9,41 @@ import java.util.*;
 public class SimplePlayer implements Serializable {
     private final String username;
     private int position;
-    private View view;
     private SimpleWarehouse warehouse;
     private final ArrayList<SimpleSlot> slots;
     private Map<Resource, Integer> strongbox = new HashMap<>();
     private final List<SimpleLeaderCard> leaderCards = new ArrayList<>();
-    private final List<ProductionPower> extraProductionPowers = new ArrayList<>();
+    private final List<ProductionPower> extraProductionPowers = List.of(new ProductionPower(2, 1));
     private final Set<Resource> whiteMarbleAliases = new HashSet<>();
 
-    public SimplePlayer(String username, List<Integer> cardIds) {
+    public SimplePlayer(String username) {
         this.username = username;
         this.slots = new ArrayList<>();
         this.position = 0;
         this.warehouse = new SimpleWarehouse();
-
-        cardIds.forEach(cardId -> leaderCards.add(SimpleLeaderCard.parse(cardId)));
 
         slots.add(new SimpleSlot(1));
         slots.add(new SimpleSlot(2));
         slots.add(new SimpleSlot(3));
     }
 
+    public void addLeaderCards(Collection<Integer> cardIds){
+        cardIds.forEach(cardId -> leaderCards.add(SimpleLeaderCard.parse(cardId)));
+    }
+
     public Map<Resource, Integer> getStrongbox() {
         return strongbox;
     }
 
-    public void advance()
-    {
-        position++;
+    public void setPosition(int position) {
+        this.position = position;
     }
 
     public String getUsername() {
         return username;
     }
 
-    public View getView(){return view;}
-
-    public void setView(View view){
-        this.view = view;
-    }
-
-    public void changeWarehouse(SimpleWarehouse warehouse)
-    {
+    public void changeWarehouse(SimpleWarehouse warehouse) {
         this.warehouse = warehouse;
     }
 
@@ -85,8 +76,7 @@ public class SimplePlayer implements Serializable {
         return position;
     }
 
-    public void changeStrongbox(Map<Resource, Integer> strongbox)
-    {
+    public void changeStrongbox(Map<Resource, Integer> strongbox) {
         this.strongbox=strongbox;
     }
 

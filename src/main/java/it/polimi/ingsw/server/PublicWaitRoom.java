@@ -16,9 +16,7 @@ public class PublicWaitRoom {
     public synchronized void add(String username, ClientHandler handler) throws IOException{
 
         if (players.size() < nPlayers){
-            //handler.writeObject(new ErrorMsg("Wait other Players"));
             players.put(username, handler);
-
         }
 
         if (players.size() == nPlayers) {
@@ -27,7 +25,5 @@ public class PublicWaitRoom {
             new Thread(new VirtualView(players)).start();
             players.clear();
         }
-
     }
-
 }

@@ -1,29 +1,29 @@
 package it.polimi.ingsw.server.model;
 
-import it.polimi.ingsw.client.simplemodel.SimplePlayer;
-import it.polimi.ingsw.messages.update.WhiteMarbleAliasUpdateMsg;
 import it.polimi.ingsw.server.VirtualView;
 import it.polimi.ingsw.server.model.cards.*;
 import it.polimi.ingsw.server.model.cards.LeaderCard;
 import it.polimi.ingsw.server.model.exceptions.ElementNotFoundException;
 import it.polimi.ingsw.server.model.playerboard.*;
+import it.polimi.ingsw.server.model.shared.FaithTrack;
 import it.polimi.ingsw.server.model.shared.Marble;
 import it.polimi.ingsw.server.model.shared.MarketBoard;
 import it.polimi.ingsw.server.model.shared.PopeFavourTile;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class Player extends AbstractPlayer{
 
     private final String username;
 
-    private final List<PopeFavourTile> tiles = new ArrayList<>();
-    private final PlayerBoard playerBoard = new PlayerBoard();
+    private final List<PopeFavourTile> tiles = List.of(new PopeFavourTile(2),
+                                                       new PopeFavourTile(3),
+                                                       new PopeFavourTile(4));
     private final Map<Resource, Integer> activeDiscounts = new EnumMap<>(Resource.class);
     private final Set<Resource> whiteMarbleAliases = new HashSet<>();
     private final List<LeaderCard> leaderCardList = new ArrayList<>();
-    private VirtualView observer;
+    private final PlayerBoard playerBoard;
+    private final VirtualView virtualView;
 
     /**
      * <code>Player</code> constructor.
@@ -31,11 +31,10 @@ public class Player extends AbstractPlayer{
      *
      * @param username      The player username
      */
-    public Player(String username){
+    public Player(String username, VirtualView virtualView){
         this.username = username;
-        tiles.add(new PopeFavourTile(2));
-        tiles.add(new PopeFavourTile(3));
-        tiles.add(new PopeFavourTile(4));
+        this.virtualView = virtualView;
+        this.playerBoard = new PlayerBoard(virtualView);
     }
 
     /**
@@ -78,12 +77,12 @@ public class Player extends AbstractPlayer{
      */
     public void addWhiteMarbleAlias(Resource resource) {
         whiteMarbleAliases.add(resource);
-        observer.whiteMarbleAliasUpdate(username, whiteMarbleAliases);
+        virtualView.whiteMarbleAliasUpdate(username, whiteMarbleAliases);
     }
 
     public void clearWhiteMarbleAlias(){
         whiteMarbleAliases.clear();
-        observer.whiteMarbleAliasUpdate(username, whiteMarbleAliases);
+        virtualView.whiteMarbleAliasUpdate(username, whiteMarbleAliases);
     }
 
     public void addAllWhiteMarbleAlias(){
@@ -91,7 +90,7 @@ public class Player extends AbstractPlayer{
         whiteMarbleAliases.add(Resource.SERVANT);
         whiteMarbleAliases.add(Resource.SHIELD);
         whiteMarbleAliases.add(Resource.COIN);
-        observer.whiteMarbleAliasUpdate(username, whiteMarbleAliases);
+        virtualView.whiteMarbleAliasUpdate(username, whiteMarbleAliases);
     }
 
     /**
@@ -124,7 +123,7 @@ public class Player extends AbstractPlayer{
         if(id == 0) throw new IllegalArgumentException("All leaderCards have already been discarded");
             else {
             leaderCardList.remove(Card.getById(id, leaderCardList));
-            observer.discardLeaderCardUpdate(id);
+            virtualView.discardLeaderCardUpdate(id);
         }
     }
 
@@ -140,7 +139,7 @@ public class Player extends AbstractPlayer{
                 playerBoard.pay(req);
             }
             playerBoard.addCardInSlot(card, slotIdx);
-            observer.addCardInSlotUpdate(card.getId(), slotIdx);
+            virtualView.addCardInSlotUpdate(card.getId(), slotIdx);
         }
         else throw new IllegalArgumentException("Invalid move: can't pay or can't place the selected Development Card");
     }
@@ -193,11 +192,6 @@ public class Player extends AbstractPlayer{
         return new ArrayList<>(leaderCardList);
     }
 
-    public void setObserver(VirtualView view){
-        observer = view;
-        playerBoard.setObserver(observer);
-    }
-
     public void setLeaderCards(List<LeaderCard> cards){
         leaderCardList.addAll(cards);
     }
@@ -213,4 +207,122 @@ public class Player extends AbstractPlayer{
     }
 
     public List<PopeFavourTile> getTiles(){ return new ArrayList<>(tiles); }
+
+    /**
+     * This method implements the logic behind the action of activating the production in a player's turn.
+     * It receives from the user all the elements to identify what <code>ProductionPower</code>, regular or special,
+     * he wants to activate. Moreover, in association with the <code>id</code> of every special <code>ProductionPower</code>,
+     * it requires a <code>ProductionPower</code> that represents all of its agnostic <code>Resources</code> after being determined.
+     * The method first checks if the player can afford to activate these effects all at once, and if so proceeds.
+     *
+     * @param selectedCardIds                   The <code>Set</code> of <code>DevelopmentCard id</code>s that the user has selected.
+     *
+     * @param selectedExtraPowers               A <code>Map</code> linking <code>id</code> and desired composition of a special <code>ProductionPower</code>.
+     *                                          The <code>Map</code> stores an <code>Integer</code> representing the <code>id</code>,
+     *                                          and a <code>ProductionPower</code> that contains the same fixed <code>Resources</code>
+     *                                          of the corresponding power, plus the agnostic <code>Resource</code>s converted in concrete ones.
+     *
+     * @return                                  The number of positions to advance
+     * @see ProductionPower
+     */
+
+    public int activateProduction(Set<Integer> selectedCardIds, Map<Integer, ProductionPower> selectedExtraPowers){
+
+        ProductionPower totalProductionPower;
+        if(canActivateProduction(selectedCardIds, selectedExtraPowers)) {
+            totalProductionPower = getTotalProductionPower(selectedCardIds, selectedExtraPowers);
+            for (Resource r : totalProductionPower.getInput().keySet())
+                playerBoard.pay(new ResourceRequirement(r, totalProductionPower.getInput().get(r)));
+        }
+        else{
+            throw new IllegalArgumentException("Cannot activate production");
+        }
+        int faithCounter = 0;
+        for(Resource r: totalProductionPower.getOutput().keySet()) {
+            if (r == Resource.FAITH)
+                faithCounter ++;
+            else
+                playerBoard.getStrongBox().addResource(r, totalProductionPower.getOutput().get(r));
+        }
+        return faithCounter;
+    }
+
+    private boolean canActivateProduction(Set<Integer> selectedCardIds, Map<Integer, ProductionPower> selectedExtraPowers){
+        ProductionPower totalProductionPower;
+        try{
+            totalProductionPower = getTotalProductionPower(selectedCardIds, selectedExtraPowers);
+        } catch (IllegalArgumentException e){
+            System.out.println(e.getMessage());
+            return false;
+        }
+        for(Map.Entry<Resource, Integer> entry : totalProductionPower.getInput().entrySet())
+            if (!playerBoard.isAffordable(new ResourceRequirement(entry.getKey(), entry.getValue())))
+                return false;
+        return true;
+    }
+
+    private ProductionPower getTotalProductionPower(Set<Integer> selectedCardIds, Map<Integer, ProductionPower> selectedExtraPowers){
+        Map<Resource, Integer> totalInput = new EnumMap<>(Resource.class);
+        Map<Resource, Integer> totalOutput = new EnumMap<>(Resource.class);
+        ProductionPower power;
+
+        for(int i : selectedCardIds){
+
+            try{
+                power = Card.getById(i, playerBoard.getLastDevCards()).getPower();
+            } catch (ElementNotFoundException e){
+                throw new IllegalArgumentException("The user requested a production he didn't have");
+            }
+            incrementMap(totalInput, power.getInput());
+            incrementMap(totalOutput, power.getOutput());
+        }
+
+        for(Integer i : selectedExtraPowers.keySet()){
+
+            power = playerBoard.getExtraProductionPowers().get(i);
+
+            incrementMap(totalInput, power.getInput());
+            incrementMap(totalOutput, power.getOutput());
+
+            ProductionPower chosenResources = selectedExtraPowers.get(i);
+
+            if (!specialProductionConsistent(power, chosenResources))
+                throw new IllegalArgumentException("The client choice of special production is illegal");
+
+            incrementMap(totalInput, chosenResources.getInput());
+            incrementMap(totalOutput, chosenResources.getOutput());
+        }
+
+        return new ProductionPower(totalInput, totalOutput);
+    }
+
+    /**
+     * Support method that increments partial sum of input/output resources with the <code>values</code> of new <code>Map</code>s.
+     *
+     * @param totalMap        The <code>Resource</code> map to be incremented.
+     * @param map             The input <code>Resource</code> map to be added.
+     */
+    private void incrementMap(Map<Resource, Integer> totalMap, Map<Resource, Integer> map) {
+
+        for(Resource resource : map.keySet())
+            totalMap.compute(resource, (k, v) -> (v == null) ? map.get(resource) : v + map.get(resource));
+    }
+
+    /**
+     * Checks that the agnostic <code>Resources</code> for a certain <code>ProductionPower</code> sent by the client are legal.
+     * @param power             The original <code>ProductionPower</code>.
+     * @param chosenResources       The <code>Resources</code> chosen to replace the agnostic ones.
+     * @return                  true iff the conversion is legal.
+     */
+    private boolean specialProductionConsistent(ProductionPower power, ProductionPower chosenResources) {
+
+        if (chosenResources.getAgnosticInput() != 0 || chosenResources.getAgnosticOutput() != 0)
+            return false;
+        var chosenInput = chosenResources.getInput();
+        var chosenOutput = chosenResources.getOutput();
+
+        return !chosenInput.containsKey(Resource.FAITH) && !chosenOutput.containsKey(Resource.FAITH) &&
+                power.getAgnosticInput() == chosenInput.values().stream().mapToInt(Integer::intValue).sum() &&
+                power.getAgnosticOutput() == chosenOutput.values().stream().mapToInt(Integer::intValue).sum();
+    }
 }

@@ -22,14 +22,12 @@ public class FaithTrackTest {
 
     @Before
     public void setUp() {
-        p1 = new Player("First");
-        p2 = new Player("Second");
+        p1 = new Player("First", Mockito.mock(VirtualView.class));
+        p2 = new Player("Second", Mockito.mock(VirtualView.class));
         Game game = Mockito.mock(Game.class);
         virtualView = Mockito.mock(VirtualView.class);
-        faithTrack = new FaithTrack(game, virtualView, List.of(p1, p2));
-        for (Position p : faithTrack.getTrack()){
-            System.out.println(p.getNumber() + " " + p.sectionNumber() + " " + p.getVictoryPoints() + " " + (p.isPopeSpace()?"yes":"no"));
-        }
+        faithTrack = new FaithTrack(game, virtualView);
+        faithTrack.addPlayers(List.of(p1, p2));
     }
 
     @Test

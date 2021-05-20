@@ -1,8 +1,10 @@
 package it.polimi.ingsw.server.model.cards;
 
+import it.polimi.ingsw.server.VirtualView;
 import it.polimi.ingsw.server.model.Player;
 import it.polimi.ingsw.server.model.playerboard.Resource;
 import org.junit.Test;
+import org.mockito.Mockito;
 import org.mockito.internal.matchers.Null;
 
 import static org.junit.Assert.*;
@@ -14,14 +16,12 @@ public class WhiteMarbleAbilityTest {
     public void activateAbilityTest()
     {
         ability = new WhiteMarbleAbility(Resource.COIN);
-        Player player = new Player("Test");
+        Player player = new Player("Test", Mockito.mock(VirtualView.class));
         try {
             ability.activateAbility(player);
-        }catch (NullPointerException e)
-        {
+        }catch (NullPointerException e) {
             assertTrue(true);
-        }catch (Exception e)
-        {
+        }catch (Exception e) {
             fail();
         }
 

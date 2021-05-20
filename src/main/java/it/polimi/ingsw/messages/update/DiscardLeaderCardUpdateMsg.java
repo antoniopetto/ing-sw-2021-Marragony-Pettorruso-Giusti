@@ -16,7 +16,7 @@ public class DiscardLeaderCardUpdateMsg implements UpdateMsg{
 
     @Override
     public void execute(SimpleGame game) {
-        for (SimplePlayer player: game.getPlayers()) {
+        for (SimplePlayer player : game.getPlayers()) {
             if(player.getUsername().equals(this.username))
                 player.discardLeaderCard(cardId);
         }

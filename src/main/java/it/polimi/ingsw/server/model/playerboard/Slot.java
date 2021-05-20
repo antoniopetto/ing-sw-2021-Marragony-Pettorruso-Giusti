@@ -14,12 +14,7 @@ import java.util.Stack;
  */
 public class Slot {
 
-    private final Stack<DevelopmentCard> developmentCardList;
-    private VirtualView observer;
-
-    public Slot(){
-        this.developmentCardList = new Stack<>();
-    }
+    private final Stack<DevelopmentCard> developmentCardList = new Stack<>();
 
     /**
      *
@@ -62,9 +57,4 @@ public class Slot {
      * @return true if the slot contains no <code>DevelopmentCards</code>
      */
     public boolean isEmpty(){ return this.developmentCardList.size() == 0; }
-
-    public void setObserver(VirtualView virtualView){
-        observer = virtualView;
-    }
-
 }

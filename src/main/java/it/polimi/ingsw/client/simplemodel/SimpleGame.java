@@ -6,6 +6,7 @@ import it.polimi.ingsw.server.model.shared.Marble;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 public class SimpleGame {
     private List<SimplePlayer> players;
@@ -18,7 +19,6 @@ public class SimpleGame {
 
     public SimpleGame(View view) {
         this.view = view;
-
     }
 
     public View getView() {
@@ -29,36 +29,36 @@ public class SimpleGame {
         return marbleBuffer;
     }
 
-    public void startGame(List<SimplePlayer> players, int[][][] cardIds, SimplePlayer thisPlayer) {
-        view.startGame();
+    public void createPlayers(List<SimplePlayer> players, SimplePlayer thisPlayer){
+        if (!players.contains(thisPlayer))
+            throw new IllegalArgumentException();
         this.players = players;
         this.thisPlayer = thisPlayer;
+    }
 
-        //TODO What is the view used for in the simplePlayers?
-        for(SimplePlayer player : players){
-            player.setView(view);
-        }
+    public void initCards(int[][][] devCardIds, Set<Integer> leaderCardIds){
         for(int i=0; i<4; i++) {
             for(int j=0; j<3; j++) {
                 for(int k=0; k<4; k++) {
-                    devCardDecks[i][j][k]= SimpleDevCard.parse(cardIds[i][j][k]);
+                    devCardDecks[i][j][k]= SimpleDevCard.parse(devCardIds[i][j][k]);
                 }
             }
         }
-        try {
+        thisPlayer.addLeaderCards(leaderCardIds);
+        //TODO maybe needed? Was uncommented before
+        /*try {
             Thread.sleep(2000);
         }catch (InterruptedException e){
             e.printStackTrace();
-        }
-
+        }*/
     }
 
-    public void updateDevCardDecks(int level, CardColor cardColor, int deleteCard){
+    public void updateDevCardDecks(int level, CardColor cardColor){
 
-        for(int i = 0; i < 4; i++)
-        {
-            if(devCardDecks[i][level][deleteCard]!=null&&devCardDecks[i][level][deleteCard].getColor().equals(cardColor)){
-                devCardDecks[i][level][deleteCard] = null;
+        for(int i = 0; i < 4; i++) {
+            if(devCardDecks[i][level][0] != null && devCardDecks[i][level][0].getColor().equals(cardColor)){
+                int size = devCardDecks[i][level].length;
+                devCardDecks[i][level][size-1] = null;
             }
         }
     }

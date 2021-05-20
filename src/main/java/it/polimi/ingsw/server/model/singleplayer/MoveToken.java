@@ -23,11 +23,11 @@ public class MoveToken implements SoloActionToken {
             throw new IllegalArgumentException("A token was activated in a game with no soloRival");
 
         if(steps == 1) {
-            game.getTrack().advance(game.getSoloRival().get());
-            game.getTrack().advance(game.getSoloRival().get());
+            game.getFaithTrack().advance(game.getSoloRival().get());
+            game.getFaithTrack().advance(game.getSoloRival().get());
         }
         else {
-            game.getTrack().advance(game.getSoloRival().get());
+            game.getFaithTrack().advance(game.getSoloRival().get());
             game.getSoloRival().get().resetStack();
         }
     }

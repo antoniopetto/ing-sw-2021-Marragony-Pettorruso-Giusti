@@ -1,8 +1,10 @@
 package it.polimi.ingsw.server.model.playerboard;
 
 import it.polimi.ingsw.server.VirtualView;
+import it.polimi.ingsw.server.model.Player;
 import it.polimi.ingsw.server.model.cards.*;
 import it.polimi.ingsw.server.model.exceptions.ElementNotFoundException;
+import it.polimi.ingsw.server.model.shared.FaithTrack;
 
 import java.util.*;
 /**
@@ -16,27 +18,18 @@ public class PlayerBoard {
 
     private final StrongBox strongBox;
     private final WareHouse wareHouse;
-    private final List<Slot> slotList;
-    private final List<ProductionPower> extraProductionPowers = new ArrayList<>();
-    private VirtualView observer;
+    private final List<Slot> slotList = List.of(new Slot(), new Slot(), new Slot());
+    private final List<ProductionPower> extraProductionPowers = new ArrayList<>(List.of(new ProductionPower(2, 1)));
+    private final VirtualView virtualView;
 
     /**
      * Constructs the PlayerBoard
      * It will contain a StrongBox, a WareHouse, three Slots
      */
-    public PlayerBoard() {
-        this.strongBox = new StrongBox();
-        this.wareHouse = new WareHouse();
-        //momentaneo
-        strongBox.addResource(Resource.COIN,10);
-        strongBox.addResource(Resource.SERVANT,10);
-        strongBox.addResource(Resource.STONE,10);
-        strongBox.addResource(Resource.SHIELD,10);
-        this.slotList = new ArrayList<>();
-
-        this.slotList.add( new Slot());
-        this.slotList.add( new Slot());
-        this.slotList.add( new Slot());
+    public PlayerBoard(VirtualView virtualView) {
+        this.virtualView = virtualView;
+        wareHouse = new WareHouse(virtualView);
+        strongBox = new StrongBox(virtualView);
     }
 
     public WareHouse getWareHouse() { return wareHouse; }
@@ -59,8 +52,8 @@ public class PlayerBoard {
         return slotList.get(idSlot).canAddCard(developmentCard);
     }
 
-    public void addCardInSlot(DevelopmentCard developmentCard, int idSlot){
-        slotList.get(idSlot).addCard(developmentCard);
+    public void addCardInSlot(DevelopmentCard developmentCard, int slotIdx){
+        slotList.get(slotIdx).addCard(developmentCard);
     }
 
     /**
@@ -81,25 +74,15 @@ public class PlayerBoard {
      * to buy a <code>DevelopmentCard</code> or activate production power
      */
     public void pay(ResourceRequirement resourceRequirement){
-        if(!isAffordable(resourceRequirement)) throw new IllegalArgumentException("The player cannot proceed with the payment cause he doesn't have enough Resources");
 
-        boolean resourceInWareHouse = true;
-        int i = 0;
+        if(!isAffordable(resourceRequirement))
+            throw new IllegalArgumentException("The player doesn't have enough resources");
 
-        while( i < resourceRequirement.getQuantity() ) {
-
-            if(resourceInWareHouse) {
-                try {
-                    wareHouse.removeResource(resourceRequirement.getResource());
-                    i++;
-                }
-                catch (IllegalArgumentException e) {
-                    resourceInWareHouse = false;
-                }
-            }
-            else {
+        for (int i = 0; i < resourceRequirement.getQuantity(); i++) {
+            try {
+                wareHouse.removeResource(resourceRequirement.getResource());
+            } catch (IllegalArgumentException e) {
                 strongBox.removeResource(resourceRequirement.getResource());
-                i++;
             }
         }
     }
@@ -119,95 +102,11 @@ public class PlayerBoard {
     }
 
     /**
-     * This method implements the logic behind the action of activating the production in a player's turn.
-     * It receives from the user all the elements to identify what <code>ProductionPower</code>, regular or special,
-     * he wants to activate. Moreover, in association with the <code>id</code> of every special <code>ProductionPower</code>,
-     * it requires a <code>ProductionPower</code> that represents all of its agnostic <code>Resources</code> after being determined.
-     * The method first checks if the player can afford to activate these effects all at once, and if so proceeds.
-     *
-     * @param selectedCardIds                   The <code>Set</code> of <code>DevelopmentCard id</code>s that the user has selected.
-     *
-     * @param selectedExtraPowers               A <code>Map</code> linking <code>id</code> and desired composition of a special <code>ProductionPower</code>.
-     *                                          The <code>Map</code> stores an <code>Integer</code> representing the <code>id</code>,
-     *                                          and a <code>ProductionPower</code> that contains the same fixed <code>Resources</code>
-     *                                          of the corresponding power, plus the agnostic <code>Resource</code>s converted in concrete ones.
-     *
-     * @see ProductionPower
-     */
-
-    public void activateProduction(Set<Integer> selectedCardIds, Map<Integer, ProductionPower> selectedExtraPowers){
-
-        ProductionPower totalProductionPower;
-        if(canActivateProduction(selectedCardIds, selectedExtraPowers)) {
-            totalProductionPower = getTotalProductionPower(selectedCardIds, selectedExtraPowers);
-            for (Resource r : totalProductionPower.getInput().keySet())
-                pay(new ResourceRequirement(r, totalProductionPower.getInput().get(r)));
-        }
-        else{
-            throw new IllegalArgumentException("Cannot activate production");
-        }
-        for(Resource r: totalProductionPower.getOutput().keySet())
-            strongBox.addResource(r, totalProductionPower.getOutput().get(r));
-    }
-
-    public boolean canActivateProduction(Set<Integer> selectedCardIds, Map<Integer, ProductionPower> selectedExtraPowers){
-        ProductionPower totalProductionPower;
-        try{
-            totalProductionPower = getTotalProductionPower(selectedCardIds, selectedExtraPowers);
-        }
-        catch (IllegalArgumentException e){
-            System.out.println(e.getMessage());
-            return false;
-        }
-        for(Map.Entry<Resource, Integer> entry : totalProductionPower.getInput().entrySet())
-            if (!isAffordable(new ResourceRequirement(entry.getKey(), entry.getValue())))
-                return false;
-        return true;
-    }
-
-    private ProductionPower getTotalProductionPower(Set<Integer> selectedCardIds, Map<Integer, ProductionPower> selectedExtraPowers){
-        Map<Resource, Integer> totalInput = new EnumMap<>(Resource.class);
-        Map<Resource, Integer> totalOutput = new EnumMap<>(Resource.class);
-        ProductionPower power;
-
-        for(int i : selectedCardIds){
-
-            try{
-                power = Card.getById(i, getLastDevCards()).getPower();
-            }
-            catch (ElementNotFoundException e){
-                throw new IllegalArgumentException("The user requested a production he didn't have");
-            }
-
-            incrementMap(totalInput, power.getInput());
-            incrementMap(totalOutput, power.getOutput());
-        }
-
-        for(Integer i : selectedExtraPowers.keySet()){
-
-            power = extraProductionPowers.get(i);
-
-            incrementMap(totalInput, power.getInput());
-            incrementMap(totalOutput, power.getOutput());
-
-            ProductionPower chosenResources = selectedExtraPowers.get(i);
-
-            if (!specialProductionConsistent(power, chosenResources))
-                throw new IllegalArgumentException("The client choice of special production is illegal");
-
-            incrementMap(totalInput, chosenResources.getInput());
-            incrementMap(totalOutput, chosenResources.getOutput());
-        }
-
-        return new ProductionPower(totalInput, totalOutput);
-    }
-
-    /**
      * A support method to quickly retrieve a list containing the first element of the 3 development card slots.
      *
      * @return                         A <code>List</code> with the first element of each of the <code>Slot</code>s
      */
-    private List<DevelopmentCard> getLastDevCards(){
+    public List<DevelopmentCard> getLastDevCards(){
 
         List<DevelopmentCard> lastDevCards = new ArrayList<>();
         for (Slot s : slotList){
@@ -218,36 +117,6 @@ public class PlayerBoard {
     }
 
     /**
-     * Support method that increments partial sum of input/output resources with the <code>values</code> of new <code>Map</code>s.
-     *
-     * @param totalMap        The <code>Resource</code> map to be incremented.
-     * @param map             The input <code>Resource</code> map to be added.
-     */
-    private void incrementMap(Map<Resource, Integer> totalMap, Map<Resource, Integer> map) {
-
-        for(Resource resource : map.keySet())
-            totalMap.compute(resource, (k, v) -> (v == null) ? map.get(resource) : v + map.get(resource));
-    }
-
-    /**
-     * Checks that the agnostic <code>Resources</code> for a certain <code>ProductionPower</code> sent by the client are legal.
-     * @param power             The original <code>ProductionPower</code>.
-     * @param chosenResources       The <code>Resources</code> chosen to replace the agnostic ones.
-     * @return                  true iff the conversion is legal.
-     */
-    private boolean specialProductionConsistent(ProductionPower power, ProductionPower chosenResources) {
-
-        if (chosenResources.getAgnosticInput() != 0 || chosenResources.getAgnosticOutput() != 0)
-            return false;
-        var chosenInput = chosenResources.getInput();
-        var chosenOutput = chosenResources.getOutput();
-
-        return !chosenInput.containsKey(Resource.FAITH) && !chosenOutput.containsKey(Resource.FAITH) &&
-                power.getAgnosticInput() == chosenInput.values().stream().mapToInt(Integer::intValue).sum() &&
-                power.getAgnosticOutput() == chosenInput.values().stream().mapToInt(Integer::intValue).sum();
-    }
-
-    /**
      * Adds a new possibly agnostic <code>ProductionPower</code> to the <code>extraProductionPower</code>
      *
      * @param productionPower           The power to add
@@ -255,18 +124,7 @@ public class PlayerBoard {
     public void addExtraProductionPower(ProductionPower productionPower) {
 
         extraProductionPowers.add(productionPower);
-        // if it's the base production power, the client game is not yet initialized so we can't update
-        if (extraProductionPowers.size() != 1)
-            observer.extraPowerUpdate(productionPower);
-    }
-
-    public void setObserver(VirtualView view){
-        observer = view;
-        wareHouse.setObserver(observer);
-        strongBox.setObserver(observer);
-        for(Slot slot : slotList){
-            slot.setObserver(view);
-        }
+        virtualView.extraPowerUpdate(productionPower);
     }
 }
 

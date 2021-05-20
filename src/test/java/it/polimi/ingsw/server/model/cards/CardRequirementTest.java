@@ -1,21 +1,14 @@
 package it.polimi.ingsw.server.model.cards;
 
-import it.polimi.ingsw.server.ClientHandler;
-import it.polimi.ingsw.server.VirtualView;
 import it.polimi.ingsw.server.model.Player;
 import it.polimi.ingsw.server.model.playerboard.Resource;
 import it.polimi.ingsw.server.model.playerboard.Slot;
-import it.polimi.ingsw.server.model.stubs.PlayerBoardStub;
-import it.polimi.ingsw.server.model.stubs.PlayerStub;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
 
-import java.io.IOException;
-import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import static org.junit.Assert.*;
 

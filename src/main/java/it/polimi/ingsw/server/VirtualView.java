@@ -1,9 +1,9 @@
 package it.polimi.ingsw.server;
 
-import it.polimi.ingsw.client.simplemodel.SimplePlayer;
 import it.polimi.ingsw.messages.view.*;
 import it.polimi.ingsw.server.model.AbstractPlayer;
 import it.polimi.ingsw.server.model.Game;
+import it.polimi.ingsw.server.model.Player;
 import it.polimi.ingsw.server.model.cards.CardColor;
 import it.polimi.ingsw.server.model.cards.ProductionPower;
 import it.polimi.ingsw.server.model.playerboard.Depot;
@@ -22,14 +22,10 @@ public class VirtualView implements Runnable{
     private final Game game;
     private final Map<String, ClientHandler> players = new HashMap<>();
 
-    public VirtualView(Map<String, ClientHandler> players) {
+    public VirtualView(Map<String, ClientHandler> players){
         this.players.putAll(players);
-        if (players.size() == 1)
-            game = Game.newSinglePlayerGame(players.keySet().iterator().next(), this);
-        else
-            game = Game.newRegularGame(new ArrayList<>(players.keySet()), this);
-
-        initGame();
+        game = new Game(players.keySet(), this);
+        game.firstUpdates();
     }
 
     @Override
@@ -47,20 +43,47 @@ public class VirtualView implements Runnable{
         }
     }
 
-    private void initGame() {
-        List<SimplePlayer> simplePlayerList = game.getSimplePlayers();
-        int[][][] cardIDs = game.getDevelopmentCardDecks().getDecksStatus();
-        for (SimplePlayer player : simplePlayerList){
-            try{
-                UpdateMsg msg = new GameInitMsg(simplePlayerList, cardIDs, player);
-                players.get(player.getUsername()).writeObject(msg);
-            }
-            catch (IOException e){
+    public void showTitle(){
+        ViewMsg msg = new TitleMsg();
+        for (ClientHandler handler : players.values()){
+            try {
+                handler.writeObject(msg);
+            } catch (IOException e) {
                 e.printStackTrace();
+                exitGame();
             }
         }
-        requestDiscardLeaderCard();
-        marketBoardUpdate();
+    }
+
+    public void initPlayersUpdate() {
+
+        for (Map.Entry<String, ClientHandler> entry : players.entrySet()){
+            try {
+                UpdateMsg msg = new InitPlayersUpdateMsg(players.keySet(), entry.getKey());
+                entry.getValue().writeObject(msg);
+            } catch (IOException e) {
+                e.printStackTrace();
+                exitGame();
+            }
+        }
+    }
+
+    public void initCardsUpdate() {
+
+        int[][][] devCardIDs = game.getDevelopmentCardDecks().getDecksStatus();
+        List<Player> players = game.getPlayers();
+
+        for (Player p : players){
+            try {
+                Set<Integer> leaderCardIds = new HashSet<>();
+                p.getLeaderCardList().forEach(i -> leaderCardIds.add(i.getId()));
+                UpdateMsg msg = new InitCardsUpdateMsg(devCardIDs, leaderCardIds);
+                this.players.get(p.getUsername()).writeObject(msg);
+            } catch (IOException e) {
+                e.printStackTrace();
+                exitGame();
+            }
+        }
     }
 
     public void requestDiscardLeaderCard(){
@@ -108,7 +131,7 @@ public class VirtualView implements Runnable{
 
     public void discardLeaderCardUpdate(int cardId){
         DiscardLeaderCardUpdateMsg msg = new DiscardLeaderCardUpdateMsg(getPlayingUsername(), cardId);
-        messageFilter(msg, "The player '"+ getPlayingUsername()+ "' has discarded a leader card");
+        messageFilter(msg, getPlayingUsername()+ " has discarded a leader card");
     }
 
     public void createBuffer(List<Marble> marbleBuffer){
@@ -145,12 +168,17 @@ public class VirtualView implements Runnable{
     }
 
     public void extraPowerUpdate(ProductionPower power){
-        UpdateMsg msg = new ExtraPowerUpdateMsg(getPlayingUsername(), power);
-        sendAll(msg);
+        for (Map.Entry<String, ClientHandler> entry : players.entrySet()) {
+            UpdateMsg msg = new ExtraPowerUpdateMsg(entry.getKey(), power);
+            sendAll(msg);
+        }
     }
 
-    public void faithTrackUpdate(AbstractPlayer player, boolean allBut){
-        UpdateMsg msg = new TrackUpdateMsg(player, allBut);
+    public void faithTrackUpdate(){
+        Map<String, Integer> positions = new HashMap<>();
+        for (AbstractPlayer p : game.getFaithTrack().getPlayers())
+            positions.put(p.getUsername(), p.getPosition().getNumber());
+        UpdateMsg msg = new TrackUpdateMsg(positions);
         sendAll(msg);
     }
 
@@ -182,17 +210,17 @@ public class VirtualView implements Runnable{
 
     public void addCardInSlotUpdate(int cardId, int slotIdx){
         AddCardInSlotUpdateMsg msg = new AddCardInSlotUpdateMsg(getPlayingUsername(), cardId, slotIdx);
-        messageFilter(msg, "The player '"+ getPlayingUsername()+ "' has bought a development card");
+        messageFilter(msg, getPlayingUsername() + "has bought a development card");
     }
 
-    public void devCardDecksUpdate(int level, CardColor cardcolor, int cardTop){
-        UpdateMsg msg = new CardDecksUpdateMsg(level,cardcolor,cardTop);
+    public void devCardDecksUpdate(int level, CardColor cardcolor){
+        UpdateMsg msg = new CardDecksUpdateMsg(level, cardcolor);
         sendAll(msg);
     }
 
     public void playLeaderCardUpdate(int cardId) {
         LeaderCardUpdateMsg msg = new LeaderCardUpdateMsg(getPlayingUsername(), cardId);
-        messageFilter(msg, "The player '"+ getPlayingUsername()+ "' plays a LeaderCard");
+        messageFilter(msg, getPlayingUsername() + "has played a LeaderCard");
     }
 
     public void whiteMarbleAliasUpdate(String username, Set<Resource> aliases){
@@ -225,14 +253,14 @@ public class VirtualView implements Runnable{
     /**Auxiliary methods */
 
     public void messageFilter(UpdateMsg msg, String text) {
-        for (Map.Entry<String, ClientHandler> map: players.entrySet()) {
+        for (Map.Entry<String, ClientHandler> entry: players.entrySet()) {
             try {
-                if(!map.getKey().equals(game.getPlaying().getUsername())){
+                if(!entry.getKey().equals(game.getPlaying().getUsername())){
                     TextMsg textMsg = new TextMsg(text);
-                    map.getValue().writeObject(textMsg);
+                    entry.getValue().writeObject(textMsg);
                 }
-                if(msg!=null)
-                    map.getValue().writeObject(msg);
+                if(msg != null)
+                    entry.getValue().writeObject(msg);
             } catch (IOException e) {
                 e.printStackTrace();
             }

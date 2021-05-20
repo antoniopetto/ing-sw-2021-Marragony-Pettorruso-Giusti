@@ -33,4 +33,9 @@ public class PutResourceRequestMsg implements ViewMsg {
         server.writeObject(msg);
 
     }
+
+    @Override
+    public String toString() {
+        return "PutResourceRequestMsg{}";
+    }
 }

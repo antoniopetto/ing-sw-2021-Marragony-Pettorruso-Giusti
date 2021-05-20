@@ -20,13 +20,13 @@ public class MarketBoard {
     public static final int COLUMNS = 4;
     private final Marble[][] marbleGrid = new Marble[ROWS][COLUMNS];
     private Marble spareMarble;
-    private VirtualView observer;
+    private final VirtualView virtualView;
 
     /**
      * Constructs the MarketBoard filling it with the 13 default game marbles.
      */
     public MarketBoard(VirtualView view) {
-        this.observer=view;
+        this.virtualView = view;
         List<Marble> marbles = new ArrayList<>();
         marbles.addAll(Collections.nCopies(1, Marble.RED));
         marbles.addAll(Collections.nCopies(2, Marble.BLUE));
@@ -84,14 +84,14 @@ public class MarketBoard {
         }
 
         insertSpareInColumn(columnId);
-        observer.marketBoardUpdate();
+        virtualView.marketBoardUpdate();
         return column;
     }
 
     public List<Marble> buyRow(int rowId) {
         List<Marble> row = Arrays.asList(marbleGrid[rowId].clone());
         insertSpareInRow(rowId);
-        observer.marketBoardUpdate();
+        virtualView.marketBoardUpdate();
         return row;
     }
 

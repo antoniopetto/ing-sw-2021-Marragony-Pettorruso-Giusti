@@ -1,8 +1,11 @@
 package it.polimi.ingsw.server.model.playerboard;
 
+import it.polimi.ingsw.server.VirtualView;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.Mockito;
+
 import static org.junit.Assert.*;
 
 public class StrongBoxTest {
@@ -10,7 +13,7 @@ public class StrongBoxTest {
 
     @Before
     public void initStrongBox(){
-        strongBox = new StrongBox();
+        strongBox = new StrongBox(Mockito.mock(VirtualView.class));
     }
 
     @After
