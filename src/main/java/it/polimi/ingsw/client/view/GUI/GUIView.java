@@ -5,6 +5,7 @@ import it.polimi.ingsw.client.simplemodel.SimpleGame;
 import it.polimi.ingsw.client.simplemodel.SimpleLeaderCard;
 import it.polimi.ingsw.client.simplemodel.SimplePlayer;
 import it.polimi.ingsw.client.view.View;
+import it.polimi.ingsw.messages.command.DiscardLeaderCardMsg;
 import it.polimi.ingsw.server.model.playerboard.DepotName;
 import it.polimi.ingsw.server.model.playerboard.Resource;
 import it.polimi.ingsw.server.model.shared.Marble;
@@ -20,9 +21,18 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.text.Font;
+import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.net.Socket;
+
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
 
 public class GUIView extends Application implements View  {
@@ -35,10 +45,12 @@ public class GUIView extends Application implements View  {
     private int nPlayers;
     private StartGameController startGameController;
     private FXMLLoader loader;
-
+    public static Font font;
+    private Stage stage;
 
     public GUIView() {
         game = new SimpleGame(this);
+        font=Font.loadFont("@fonts/master_of_break.ttf", 14);
     }
 
     @Override
@@ -178,6 +190,7 @@ public class GUIView extends Application implements View  {
                 setLoop(false);
             });
         }
+
         return nPlayers;
 
     }
@@ -219,7 +232,33 @@ public class GUIView extends Application implements View  {
 
     @Override
     public CommandMsg discardLeaderCard() {
-        return null;
+
+
+        FXMLLoader thisloader = new FXMLLoader(getClass().getResource("/setUp.fxml"));
+
+        Parent root = null;
+        try {
+            root = thisloader.load();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        setUpController controller = thisloader.getController();
+        controller.setGame(game);
+        Scene scene = new Scene(root);
+        Platform.runLater(()->{
+            Stage newStage = new Stage();
+            newStage.setScene(scene);
+            newStage.setResizable(false);
+            newStage.show();
+        });
+
+        int id = controller.selectedCard(null);
+        while(id==0)
+        {
+            id = controller.selectedCard(null);
+        }
+        DiscardLeaderCardMsg msg = new DiscardLeaderCardMsg(id);
+        return msg;
     }
 
     @Override

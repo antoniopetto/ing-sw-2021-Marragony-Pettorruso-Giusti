@@ -61,5 +61,6 @@ public class SettingGameController implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {
         textIP.setText("");
         textPORT.setText("");
+        textIP.setFont(GUIView.font);
     }
 }
