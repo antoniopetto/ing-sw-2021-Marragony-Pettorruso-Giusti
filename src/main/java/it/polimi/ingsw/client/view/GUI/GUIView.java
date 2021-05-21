@@ -11,6 +11,7 @@ import it.polimi.ingsw.server.model.shared.Marble;
 import it.polimi.ingsw.messages.command.CommandMsg;
 import javafx.application.Application;
 import javafx.application.Platform;
+import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
@@ -48,7 +49,8 @@ public class GUIView extends Application implements View  {
     @Override
     public void start(Stage stage) throws Exception {
         Parent root = null;
-        setLoader("/initializegame.fxml");
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/initializegame.fxml"));
+
         root = loader.load();
         Font.loadFont(getClass().getResourceAsStream("/resources/fonts/master_of_break.ttf"), 14);
         stage.setTitle("Schermata Iniziale");
@@ -87,7 +89,7 @@ public class GUIView extends Application implements View  {
     @Override
     public void showErrorMessage(String text) {
         Parent root = null;
-        setLoader("/alertDialog.fxml");
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/alertDialog.fxml"));
         try {
             root = loader.load();
         } catch (IOException e) {
@@ -128,8 +130,8 @@ public class GUIView extends Application implements View  {
 
     @Override
     public String getUsername() {
-
-        setLoader("/setGame.fxml");
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/setGame.fxml"));
+        setLoader(loader);
         Parent root = null;
 
         try {
@@ -182,7 +184,9 @@ public class GUIView extends Application implements View  {
 
     @Override
     public void showTitle() {
-
+        Platform.runLater(() -> {
+            loginWindows.close();
+        });
     }
 
 
@@ -241,8 +245,8 @@ public class GUIView extends Application implements View  {
     }
 
 
-    private void setLoader(String path){
-        loader = new FXMLLoader(getClass().getResource(path));
+    private void setLoader(FXMLLoader loader){
+        this.loader = loader;
     }
 
 }
