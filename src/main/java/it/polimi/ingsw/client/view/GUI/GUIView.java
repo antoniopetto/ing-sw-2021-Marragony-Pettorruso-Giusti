@@ -12,43 +12,33 @@ import it.polimi.ingsw.server.model.shared.Marble;
 import it.polimi.ingsw.messages.command.CommandMsg;
 import javafx.application.Application;
 import javafx.application.Platform;
-import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.text.Font;
-import javafx.stage.Stage;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.net.Socket;
 
-import java.io.File;
-import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class GUIView extends Application implements View  {
 
 
     private final SimpleGame game;
-    private Stage loginWindows;
     private String username;
     private boolean loop = true;
     private int nPlayers;
-    private StartGameController startGameController;
-    private FXMLLoader loader;
+    private FXMLLoader currentLoader;
     public static Font font;
-    private Stage stage;
+    private Stage currentStage;
+    private Stage oldStage;
 
     public GUIView() {
+
         game = new SimpleGame(this);
         font=Font.loadFont("@fonts/master_of_break.ttf", 14);
     }
@@ -59,20 +49,14 @@ public class GUIView extends Application implements View  {
     }
 
     @Override
-    public void start(Stage stage) throws Exception {
-        Parent root = null;
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/initializegame.fxml"));
+    public void start(Stage stage) {
 
-        root = loader.load();
+        setLoader("/initializegame.fxml");
         Font.loadFont(getClass().getResourceAsStream("/resources/fonts/master_of_break.ttf"), 14);
-        stage.setTitle("Schermata Iniziale");
-        Scene scene = new Scene(root);
-        stage.setScene(scene);
-        stage.setResizable(false);
-        stage.show();
-        SettingGameController settingGameController = loader.getController();
-        loginWindows = stage;
-       Button button = (Button) loader.getNamespace().get("confirmButton");
+        manageStage(false, "Inserting", true, loadScene(currentLoader), false);
+
+        SettingGameController settingGameController = currentLoader.getController();
+       Button button = (Button) currentLoader.getNamespace().get("confirmButton");
             button.setOnAction(event -> {
                 settingGameController.setPort();
                 settingGameController.setServerIP();
@@ -91,7 +75,6 @@ public class GUIView extends Application implements View  {
 
             settingGameController.setTextError("You are connected to the server!");
 
-            boolean reachable = true;
         }catch(IOException e)
         {
             settingGameController.setTextError("Server unreachable, try again.");
@@ -100,36 +83,20 @@ public class GUIView extends Application implements View  {
 
     @Override
     public void showErrorMessage(String text) {
-        Parent root = null;
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/alertDialog.fxml"));
-        try {
-            root = loader.load();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        AlertController settingGameController = loader.getController();
-        settingGameController.setErrorLabel(text);
-        Scene scene = new Scene(root);
-        Platform.runLater(() -> {
-            Stage stage = new Stage();
-            stage.setAlwaysOnTop(true);
-            stage.setTitle("Error Message");
-            stage.setScene(scene);
-            stage.setResizable(false);
-            stage.show();
-            Button button = (Button) loader.getNamespace().get("errorConfirm");
-            button.setOnAction(event ->{
-                stage.close();
-            });
-        });
 
+        setLoader("/alertDialog.fxml");
+
+        AlertController settingGameController = currentLoader.getController();
+        settingGameController.setErrorLabel(text);
+
+
+            manageStage(false, "Error Message", true, loadScene(currentLoader), false);
+            Button button = (Button) currentLoader.getNamespace().get("errorConfirm");
+            button.setOnAction(event ->{
+                currentStage.close();
+            });
 
     }
-
-
-
-
-
 
 
     private void setUsername(String username) {
@@ -142,25 +109,13 @@ public class GUIView extends Application implements View  {
 
     @Override
     public String getUsername() {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/setGame.fxml"));
-        setLoader(loader);
-        Parent root = null;
 
-        try {
-            root = loader.load();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        Scene loginScene = new Scene(root);
+       setLoader("/setGame.fxml");
+        manageStage(false, "Start Config", false, loadScene(currentLoader), false);
 
-        Platform.runLater(() -> {
-            loginWindows.setScene(loginScene);
-            loginWindows.setResizable(false);
-            loginWindows.show();
-        });
 
-        startGameController = loader.getController();
-        Button button = (Button) loader.getNamespace().get("confirm");
+        StartGameController startGameController = currentLoader.getController();
+        Button button = (Button) currentLoader.getNamespace().get("confirm");
         loop = true;
     while(loop) {
             button.setOnAction(event -> {
@@ -178,15 +133,15 @@ public class GUIView extends Application implements View  {
 
     @Override
     public int getNumberOfPlayers() {
-        startGameController.setUsernameField(false);
-        startGameController.setPlayersLabel(true);
-        startGameController.setUsernameLabel(false);
-        startGameController.setChoicePlayers(true);
-        Button button = (Button) loader.getNamespace().get("confirm");
+        ((StartGameController )currentLoader.getController()).setUsernameField(false);
+        ((StartGameController )currentLoader.getController()).setPlayersLabel(true);
+        ((StartGameController )currentLoader.getController()).setUsernameLabel(false);
+        ((StartGameController )currentLoader.getController()).setChoicePlayers(true);
+        Button button = (Button) currentLoader.getNamespace().get("confirm");
         loop = true;
         while(loop) {
             button.setOnAction(event -> {
-                setPlayers(startGameController.getChoicePlayers());
+                setPlayers( ((StartGameController )currentLoader.getController()).getChoicePlayers());
                 setLoop(false);
             });
         }
@@ -197,9 +152,7 @@ public class GUIView extends Application implements View  {
 
     @Override
     public void showTitle() {
-        Platform.runLater(() -> {
-            loginWindows.close();
-        });
+
     }
 
 
@@ -208,10 +161,15 @@ public class GUIView extends Application implements View  {
 
     }
 
+    public static void main(String[] args)
+    {
+        launch(args);
+    }
+
 
     @Override
     public void startSetting() {
-        Application.launch(GUIView.class);
+
     }
 
 
@@ -232,25 +190,11 @@ public class GUIView extends Application implements View  {
 
     @Override
     public CommandMsg discardLeaderCard() {
-
-
-        FXMLLoader thisloader = new FXMLLoader(getClass().getResource("/setUp.fxml"));
-
-        Parent root = null;
-        try {
-            root = thisloader.load();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        setUpController controller = thisloader.getController();
+        setLoader("/setUp.fxml");
+        Scene scene = loadScene(currentLoader);
+        setUpController controller = currentLoader.getController();
         controller.setGame(game);
-        Scene scene = new Scene(root);
-        Platform.runLater(()->{
-            Stage newStage = new Stage();
-            newStage.setScene(scene);
-            newStage.setResizable(false);
-            newStage.show();
-        });
+        manageStage(false, "Select Cards", true, scene, true);
 
         int id = controller.selectedCard(null);
         while(id==0)
@@ -284,8 +228,37 @@ public class GUIView extends Application implements View  {
     }
 
 
-    private void setLoader(FXMLLoader loader){
-        this.loader = loader;
+    private void setLoader(String path){
+        currentLoader = new FXMLLoader(getClass().getResource(path));
+    }
+
+    private void manageStage(boolean resizable, String title, boolean createStage, Scene scene, boolean close){
+        oldStage = currentStage;
+        Platform.runLater(() -> {
+
+            if(createStage){
+                currentStage = new Stage();
+                currentStage.setTitle(title);
+            }
+            currentStage.setScene(scene);
+            currentStage.setResizable(resizable);
+            if(close) oldStage.close();
+            currentStage.show();
+        });
+
+    }
+
+
+    private Scene loadScene(FXMLLoader loader){
+        Parent root = null;
+        try {
+            root = loader.load();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return new Scene(root);
     }
 
 }

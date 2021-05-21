@@ -41,6 +41,9 @@ public class SettingGameController implements Initializable {
         this.port = textPORT.getText();;
     }
 
+
+
+
     public void setServerIP() {
         this.serverIP = textIP.getText();
     }

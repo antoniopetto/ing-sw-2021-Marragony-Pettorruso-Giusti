@@ -38,7 +38,22 @@ public class setUpController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+
+    }
+    @FXML
+    public int selectedCard(MouseEvent mouseEvent) {
+        return 0;
+    }
+
+    @FXML
+    public void confirm(MouseEvent mouseEvent) {
+
+    }
+
+    public void setGame(SimpleGame game) {
+        this.game = game;
         List<Image> cards = new ArrayList<>();
+
         for(SimpleLeaderCard card : game.getThisPlayer().getLeaderCards()){
             int cardId= card.getId();
             String imUrl = "/cards/leader/Leader-"+cardId+".jpg";
@@ -47,12 +62,12 @@ public class setUpController implements Initializable {
         switch (cards.size())
         {
             case 4 ->
-                {
-                    imCard1.setImage(cards.get(0));
-                    imCard2.setImage(cards.get(1));
-                    imCard3.setImage(cards.get(2));
-                    imCard4.setImage(cards.get(3));
-                }
+                    {
+                        imCard1.setImage(cards.get(0));
+                        imCard2.setImage(cards.get(1));
+                        imCard3.setImage(cards.get(2));
+                        imCard4.setImage(cards.get(3));
+                    }
             case 3->{
                 imCard1.setImage(cards.get(0));
                 imCard2.setImage(cards.get(1));
@@ -63,16 +78,5 @@ public class setUpController implements Initializable {
 
         }
 
-    }
-
-    public int selectedCard(MouseEvent mouseEvent) {
-        return 0;
-    }
-
-    public void confirm(MouseEvent mouseEvent) {
-    }
-
-    public void setGame(SimpleGame game) {
-        this.game = game;
     }
 }
