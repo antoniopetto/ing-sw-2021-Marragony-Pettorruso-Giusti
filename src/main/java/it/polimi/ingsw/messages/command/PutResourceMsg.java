@@ -1,12 +1,9 @@
 package it.polimi.ingsw.messages.command;
 
-import it.polimi.ingsw.server.model.Game;
+import it.polimi.ingsw.server.GameController;
 import it.polimi.ingsw.server.model.playerboard.DepotName;
 import it.polimi.ingsw.server.model.playerboard.Resource;
 import it.polimi.ingsw.server.model.shared.Marble;
-
-
-import java.io.IOException;
 
 public class PutResourceMsg implements CommandMsg {
     private final Marble marble;
@@ -26,12 +23,12 @@ public class PutResourceMsg implements CommandMsg {
     }
 
     @Override
-    public void execute(Game game){
+    public void execute(GameController gameController){
 
         if (marble == Marble.WHITE)
-            game.putResource(marble, depot, resource);
+            gameController.putResource(marble, depot, resource);
         else
-            game.putResource(marble, depot);
+            gameController.putResource(marble, depot);
     }
 
     @Override

@@ -1,5 +1,6 @@
 package it.polimi.ingsw.server.model;
 
+import it.polimi.ingsw.server.GameController;
 import it.polimi.ingsw.server.VirtualView;
 import it.polimi.ingsw.server.model.cards.CardColor;
 import it.polimi.ingsw.server.model.cards.DevelopmentCard;
@@ -27,7 +28,7 @@ public class PlayerTest {
     @Before
     public void setUp(){
         player = new Player("AAA", Mockito.mock(VirtualView.class));
-        FaithTrack faithTrack = new FaithTrack(Mockito.mock(Game.class), Mockito.mock(VirtualView.class));
+        FaithTrack faithTrack = new FaithTrack(Mockito.mock(GameController.class), Mockito.mock(VirtualView.class));
         faithTrack.addPlayers(List.of(player));
         playerBoard = player.getPlayerBoard();
     }

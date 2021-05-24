@@ -1,4 +1,4 @@
-package it.polimi.ingsw.messages.view;
+package it.polimi.ingsw.messages.toview;
 
 
 import it.polimi.ingsw.client.ServerHandler;
@@ -14,7 +14,7 @@ public class TextMsg implements ViewMsg {
     }
 
     @Override
-    public void changeView(View view, ServerHandler server) throws IOException {
+    public void changeView(View view, ServerHandler server){
         view.showStatusMessage(text);
     }
 

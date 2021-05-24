@@ -1,6 +1,6 @@
 package it.polimi.ingsw.server.model.singleplayer;
 
-import it.polimi.ingsw.server.model.Game;
+import it.polimi.ingsw.server.GameController;
 
 /**
  * This class represents a move token. If <code>steps</code> == 2 the SoloRival position increases by two;
@@ -17,18 +17,18 @@ public class MoveToken implements SoloActionToken {
     }
 
     @Override
-    public void activateToken(Game game) {
+    public void activateToken(GameController gameController) {
 
-        if (game.getSoloRival().isEmpty())
-            throw new IllegalArgumentException("A token was activated in a game with no soloRival");
+        if (gameController.getSoloRival().isEmpty())
+            throw new IllegalArgumentException("A token was activated in a gameController with no soloRival");
 
         if(steps == 1) {
-            game.getFaithTrack().advance(game.getSoloRival().get());
-            game.getFaithTrack().advance(game.getSoloRival().get());
+            gameController.getFaithTrack().advance(gameController.getSoloRival().get());
+            gameController.getFaithTrack().advance(gameController.getSoloRival().get());
         }
         else {
-            game.getFaithTrack().advance(game.getSoloRival().get());
-            game.getSoloRival().get().resetStack();
+            gameController.getFaithTrack().advance(gameController.getSoloRival().get());
+            gameController.getSoloRival().get().resetStack();
         }
     }
 

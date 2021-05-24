@@ -1,26 +1,10 @@
 package it.polimi.ingsw.client.view.GUI;
 
-import it.polimi.ingsw.client.ServerHandler;
-import it.polimi.ingsw.client.simplemodel.SimpleGame;
-import javafx.event.ActionEvent;
-import javafx.event.Event;
-import javafx.event.EventDispatchChain;
-import javafx.event.EventDispatcher;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Node;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.text.Text;
-import javafx.stage.Stage;
 
-import java.io.IOException;
-import java.net.Socket;
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -38,7 +22,7 @@ public class SettingGameController implements Initializable {
 
 
     public void setPort() {
-        this.port = textPORT.getText();;
+        this.port = textPORT.getText();
     }
 
 

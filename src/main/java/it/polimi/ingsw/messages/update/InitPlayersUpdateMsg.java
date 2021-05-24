@@ -1,6 +1,6 @@
 package it.polimi.ingsw.messages.update;
 
-import it.polimi.ingsw.client.simplemodel.SimpleGame;
+import it.polimi.ingsw.client.simplemodel.SimpleModel;
 import it.polimi.ingsw.client.simplemodel.SimplePlayer;
 
 import java.util.ArrayList;
@@ -25,7 +25,7 @@ public class InitPlayersUpdateMsg implements UpdateMsg{
     }
 
     @Override
-    public void execute(SimpleGame game) {
+    public void execute(SimpleModel game) {
         game.createPlayers(players, thisPlayer);
     }
 }

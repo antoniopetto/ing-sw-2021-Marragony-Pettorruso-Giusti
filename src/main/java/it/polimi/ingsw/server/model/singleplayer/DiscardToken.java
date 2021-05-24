@@ -1,6 +1,6 @@
 package it.polimi.ingsw.server.model.singleplayer;
 
-import it.polimi.ingsw.server.model.Game;
+import it.polimi.ingsw.server.GameController;
 import it.polimi.ingsw.server.model.cards.CardColor;
 
 /**
@@ -16,8 +16,8 @@ public class DiscardToken implements SoloActionToken {
     }
 
     @Override
-    public void activateToken(Game game) {
-        game.getDevelopmentCardDecks().discard(color);
+    public void activateToken(GameController gameController) {
+        gameController.getDevelopmentCardDecks().discard(color);
     }
 
     @Override

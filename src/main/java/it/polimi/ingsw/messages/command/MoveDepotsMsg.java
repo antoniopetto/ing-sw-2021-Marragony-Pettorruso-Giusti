@@ -1,9 +1,7 @@
 package it.polimi.ingsw.messages.command;
 
-import it.polimi.ingsw.server.model.Game;
+import it.polimi.ingsw.server.GameController;
 import it.polimi.ingsw.server.model.playerboard.DepotName;
-
-import java.io.IOException;
 
 public class MoveDepotsMsg implements CommandMsg {
 
@@ -16,8 +14,8 @@ public class MoveDepotsMsg implements CommandMsg {
     }
 
     @Override
-    public void execute(Game game){
-        game.moveDepots(depotFrom,depotTo);
+    public void execute(GameController gameController){
+        gameController.moveDepots(depotFrom,depotTo);
     }
 
     @Override

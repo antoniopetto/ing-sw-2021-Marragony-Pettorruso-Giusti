@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-public class SimpleGame {
+public class SimpleModel {
     private List<SimplePlayer> players;
     private List<Marble> marbleBuffer;
     private Marble[][] marketBoard = new Marble[3][4];
@@ -17,7 +17,7 @@ public class SimpleGame {
     private final View view;
     private SimplePlayer thisPlayer;
 
-    public SimpleGame(View view) {
+    public SimpleModel(View view) {
         this.view = view;
     }
 

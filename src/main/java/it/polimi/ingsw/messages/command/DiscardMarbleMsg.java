@@ -1,9 +1,7 @@
 package it.polimi.ingsw.messages.command;
 
-import it.polimi.ingsw.server.model.Game;
+import it.polimi.ingsw.server.GameController;
 import it.polimi.ingsw.server.model.shared.Marble;
-
-import java.io.IOException;
 
 public class DiscardMarbleMsg implements CommandMsg {
     private Marble marble;
@@ -13,8 +11,8 @@ public class DiscardMarbleMsg implements CommandMsg {
     }
 
     @Override
-    public void execute(Game game){
-        game.discardMarble(marble);
+    public void execute(GameController gameController){
+        gameController.discardMarble(marble);
     }
 
     @Override

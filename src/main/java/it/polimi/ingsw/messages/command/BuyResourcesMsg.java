@@ -1,8 +1,6 @@
 package it.polimi.ingsw.messages.command;
 
-import it.polimi.ingsw.server.model.Game;
-
-import java.io.IOException;
+import it.polimi.ingsw.server.GameController;
 
 public class BuyResourcesMsg implements CommandMsg {
     private int idLine;
@@ -14,8 +12,8 @@ public class BuyResourcesMsg implements CommandMsg {
     }
 
     @Override
-    public void execute(Game game){
-        game.buyResources(idLine, isRow);
+    public void execute(GameController gameController){
+        gameController.buyResources(idLine, isRow);
     }
 
     @Override

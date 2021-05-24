@@ -1,7 +1,6 @@
 package it.polimi.ingsw.messages.update;
 
-import it.polimi.ingsw.client.ServerHandler;
-import it.polimi.ingsw.client.simplemodel.SimpleGame;
+import it.polimi.ingsw.client.simplemodel.SimpleModel;
 import it.polimi.ingsw.client.simplemodel.SimplePlayer;
 
 public class DiscardLeaderCardUpdateMsg implements UpdateMsg{
@@ -15,7 +14,7 @@ public class DiscardLeaderCardUpdateMsg implements UpdateMsg{
     }
 
     @Override
-    public void execute(SimpleGame game) {
+    public void execute(SimpleModel game) {
         for (SimplePlayer player : game.getPlayers()) {
             if(player.getUsername().equals(this.username))
                 player.discardLeaderCard(cardId);

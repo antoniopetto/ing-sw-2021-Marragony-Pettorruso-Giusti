@@ -1,6 +1,6 @@
 package it.polimi.ingsw.messages.update;
 
-import it.polimi.ingsw.client.simplemodel.SimpleGame;
+import it.polimi.ingsw.client.simplemodel.SimpleModel;
 
 import java.util.Arrays;
 import java.util.Set;
@@ -16,7 +16,7 @@ public class InitCardsUpdateMsg implements UpdateMsg{
     }
 
     @Override
-    public void execute(SimpleGame game) {
+    public void execute(SimpleModel game) {
         game.initCards(devCardIds, leaderCardIds);
     }
 

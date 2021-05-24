@@ -1,12 +1,10 @@
 package it.polimi.ingsw.messages.command;
 
-import it.polimi.ingsw.server.model.Game;
-
-import java.io.IOException;
+import it.polimi.ingsw.server.GameController;
 
 public class EndTurnMsg implements CommandMsg{
-    public void execute(Game game) {
-        game.endTurn();
+    public void execute(GameController gameController) {
+        gameController.endTurn();
     }
 
     @Override

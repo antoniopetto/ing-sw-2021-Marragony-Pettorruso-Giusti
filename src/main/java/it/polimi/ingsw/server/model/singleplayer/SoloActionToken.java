@@ -1,6 +1,6 @@
 package it.polimi.ingsw.server.model.singleplayer;
 
-import it.polimi.ingsw.server.model.Game;
+import it.polimi.ingsw.server.GameController;
 
 /**
  * This interface is used to represent the action tokens in a single player game. There are two types of action tokens,
@@ -10,7 +10,7 @@ public interface SoloActionToken {
     /**
      * This method is used when a token is drawn and activates its ability.
      */
-    void activateToken(Game game);
+    void activateToken(GameController gameController);
 
     int getId();
 }

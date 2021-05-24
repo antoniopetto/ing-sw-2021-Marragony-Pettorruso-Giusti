@@ -1,9 +1,8 @@
-package it.polimi.ingsw.messages.view;
+package it.polimi.ingsw.messages.toview;
 
 import it.polimi.ingsw.client.ServerHandler;
 import it.polimi.ingsw.client.view.View;
 import it.polimi.ingsw.messages.command.CommandMsg;
-import it.polimi.ingsw.messages.command.DiscardLeaderCardMsg;
 import it.polimi.ingsw.messages.command.GoBackMsg;
 import it.polimi.ingsw.messages.command.PutResourceMsg;
 import it.polimi.ingsw.server.model.playerboard.DepotName;

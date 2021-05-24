@@ -1,14 +1,12 @@
 package it.polimi.ingsw.server.model.shared;
 
 import it.polimi.ingsw.server.VirtualView;
-import it.polimi.ingsw.server.model.Game;
+import it.polimi.ingsw.server.GameController;
 import it.polimi.ingsw.server.model.Player;
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.Mock;
 import org.mockito.Mockito;
 
-import java.util.Collections;
 import java.util.List;
 
 import static org.junit.Assert.*;
@@ -24,9 +22,9 @@ public class FaithTrackTest {
     public void setUp() {
         p1 = new Player("First", Mockito.mock(VirtualView.class));
         p2 = new Player("Second", Mockito.mock(VirtualView.class));
-        Game game = Mockito.mock(Game.class);
+        GameController gameController = Mockito.mock(GameController.class);
         virtualView = Mockito.mock(VirtualView.class);
-        faithTrack = new FaithTrack(game, virtualView);
+        faithTrack = new FaithTrack(gameController, virtualView);
         faithTrack.addPlayers(List.of(p1, p2));
     }
 

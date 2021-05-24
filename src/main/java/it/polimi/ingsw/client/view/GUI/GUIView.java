@@ -1,7 +1,7 @@
 package it.polimi.ingsw.client.view.GUI;
 
 import it.polimi.ingsw.client.ServerHandler;
-import it.polimi.ingsw.client.simplemodel.SimpleGame;
+import it.polimi.ingsw.client.simplemodel.SimpleModel;
 import it.polimi.ingsw.client.simplemodel.SimpleLeaderCard;
 import it.polimi.ingsw.client.simplemodel.SimplePlayer;
 import it.polimi.ingsw.client.view.View;
@@ -22,13 +22,12 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.net.Socket;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class GUIView extends Application implements View  {
 
 
-    private final SimpleGame game;
+    private final SimpleModel game;
     private String username;
     private boolean loop = true;
     private int nPlayers;
@@ -39,12 +38,12 @@ public class GUIView extends Application implements View  {
 
     public GUIView() {
 
-        game = new SimpleGame(this);
+        game = new SimpleModel(this);
         font=Font.loadFont("@fonts/master_of_break.ttf", 14);
     }
 
     @Override
-    public SimpleGame getGame() {
+    public SimpleModel getGame() {
         return game;
     }
 
@@ -92,9 +91,7 @@ public class GUIView extends Application implements View  {
 
             manageStage(false, "Error Message", true, loadScene(currentLoader), false);
             Button button = (Button) currentLoader.getNamespace().get("errorConfirm");
-            button.setOnAction(event ->{
-                currentStage.close();
-            });
+            button.setOnAction(event -> currentStage.close());
 
     }
 
@@ -176,6 +173,7 @@ public class GUIView extends Application implements View  {
 
     @Override
     public CommandMsg selectMove(boolean postTurn){
+        System.out.println("message sent");
         return null;
     }
 
@@ -195,14 +193,18 @@ public class GUIView extends Application implements View  {
         setUpController controller = currentLoader.getController();
         controller.setGame(game);
         manageStage(false, "Select Cards", true, scene, true);
-
-        int id = controller.selectedCard(null);
-        while(id==0)
-        {
-            id = controller.selectedCard(null);
+        int id =controller.getResult();
+        while(id==0){
+            id=controller.getResult();
         }
-        DiscardLeaderCardMsg msg = new DiscardLeaderCardMsg(id);
-        return msg;
+
+        /*
+        setLoader("/mainScene.fxml");
+        Scene scene = loadScene(currentLoader);
+        manageStage(false, "main", true, scene, true);
+        */
+        return new DiscardLeaderCardMsg(id);
+
     }
 
     @Override

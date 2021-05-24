@@ -1,8 +1,7 @@
 package it.polimi.ingsw.server;
 
-import it.polimi.ingsw.messages.view.*;
+import it.polimi.ingsw.messages.toview.*;
 import it.polimi.ingsw.server.model.AbstractPlayer;
-import it.polimi.ingsw.server.model.Game;
 import it.polimi.ingsw.server.model.Player;
 import it.polimi.ingsw.server.model.cards.CardColor;
 import it.polimi.ingsw.server.model.cards.ProductionPower;
@@ -19,13 +18,13 @@ import java.util.*;
 public class VirtualView implements Runnable{
 
     private boolean exiting = false;
-    private final Game game;
+    private final GameController gameController;
     private final Map<String, ClientHandler> players = new HashMap<>();
 
     public VirtualView(Map<String, ClientHandler> players){
         this.players.putAll(players);
-        game = new Game(players.keySet(), this);
-        game.firstUpdates();
+        gameController = new GameController(players.keySet(), this);
+        gameController.firstUpdates();
     }
 
     @Override
@@ -35,7 +34,7 @@ public class VirtualView implements Runnable{
                 Object nextMsg = getPlayingHandler().readObject();
                 CommandMsg command = (CommandMsg)nextMsg;
                 System.out.println(command);
-                command.execute(game);
+                command.execute(gameController);
             } catch (IOException | ClassNotFoundException e) {
                 e.printStackTrace();
                 exitGame();
@@ -70,8 +69,8 @@ public class VirtualView implements Runnable{
 
     public void initCardsUpdate() {
 
-        int[][][] devCardIDs = game.getDevelopmentCardDecks().getDecksStatus();
-        List<Player> players = game.getPlayers();
+        int[][][] devCardIDs = gameController.getDevelopmentCardDecks().getDecksStatus();
+        List<Player> players = gameController.getPlayers();
 
         for (Player p : players){
             try {
@@ -176,7 +175,7 @@ public class VirtualView implements Runnable{
 
     public void faithTrackUpdate(){
         Map<String, Integer> positions = new HashMap<>();
-        for (AbstractPlayer p : game.getFaithTrack().getPlayers())
+        for (AbstractPlayer p : gameController.getFaithTrack().getPlayers())
             positions.put(p.getUsername(), p.getPosition().getNumber());
         UpdateMsg msg = new TrackUpdateMsg(positions);
         sendAll(msg);
@@ -186,7 +185,7 @@ public class VirtualView implements Runnable{
 
     public void warehouseUpdate() {
         Map<DepotName, Map<Resource, Integer>> warehouse = new LinkedHashMap<>();
-        for (Depot depot: game.getPlaying().getPlayerBoard().getWareHouse().getDepots()) {
+        for (Depot depot: gameController.getPlaying().getPlayerBoard().getWareHouse().getDepots()) {
             Map<Resource, Integer> resources = new HashMap<>();
             if(depot.getResource() != null && depot.getQuantity() != 0)
                 resources.put(depot.getResource(), depot.getQuantity());
@@ -198,13 +197,13 @@ public class VirtualView implements Runnable{
     }
 
     public void strongBoxUpdate() {
-        Map<Resource, Integer> strongbox = game.getPlaying().getPlayerBoard().getStrongBox().getContent();
+        Map<Resource, Integer> strongbox = gameController.getPlaying().getPlayerBoard().getStrongBox().getContent();
         UpdateMsg msg = new StrongBoxUpdateMsg(strongbox, getPlayingUsername());
         sendAll(msg);
     }
 
     public void marketBoardUpdate(){
-        UpdateMsg msg = new MarketBoardUpdate(game.getMarketBoard().getMarbleGrid(), game.getMarketBoard().getSpareMarble());
+        UpdateMsg msg = new MarketBoardUpdate(gameController.getMarketBoard().getMarbleGrid(), gameController.getMarketBoard().getSpareMarble());
         sendAll(msg);
     }
 
@@ -242,7 +241,7 @@ public class VirtualView implements Runnable{
     }
 
     public void exitGame(){
-        System.out.println("Exiting game");
+        System.out.println("Exiting gameController");
         exiting = true;
         for (Map.Entry<String, ClientHandler> entry : players.entrySet()){
             Server.logOut(entry.getKey());
@@ -255,7 +254,7 @@ public class VirtualView implements Runnable{
     public void messageFilter(UpdateMsg msg, String text) {
         for (Map.Entry<String, ClientHandler> entry: players.entrySet()) {
             try {
-                if(!entry.getKey().equals(game.getPlaying().getUsername())){
+                if(!entry.getKey().equals(gameController.getPlaying().getUsername())){
                     TextMsg textMsg = new TextMsg(text);
                     entry.getValue().writeObject(textMsg);
                 }
@@ -289,11 +288,11 @@ public class VirtualView implements Runnable{
     }
 
     private ClientHandler getPlayingHandler(){
-        return players.get(game.getPlaying().getUsername());
+        return players.get(gameController.getPlaying().getUsername());
     }
 
     private String getPlayingUsername(){
-        return game.getPlaying().getUsername();
+        return gameController.getPlaying().getUsername();
     }
 
 }

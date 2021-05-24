@@ -14,7 +14,7 @@ import java.util.stream.Stream;
 
 public class CLIView implements View {
     private final CLISettingView settingView;
-    private final SimpleGame game;
+    private final SimpleModel game;
 
     //TODO must be removed from methods and removed
     private final Scanner input = new Scanner(System.in);
@@ -26,7 +26,7 @@ public class CLIView implements View {
 
     public CLIView() {
         this.settingView = new CLISettingView(this);
-        game = new SimpleGame(this);
+        game = new SimpleModel(this);
     }
 
     public static int askNumber(String text, int min, int max){
@@ -104,7 +104,7 @@ public class CLIView implements View {
     }
 
     @Override
-    public SimpleGame getGame() { return game; }
+    public SimpleModel getGame() { return game; }
 
     @Override
     public void startSetting() { settingView.execute(); }
@@ -131,7 +131,7 @@ public class CLIView implements View {
     @Override
     public void showTitle() {
         System.out.println(Graphics.ANSI_GREEN+Graphics.TITLE+Graphics.ANSI_RESET);
-        System.out.println(Graphics.ANSI_BLUE+"Game started"+Graphics.ANSI_RESET);
+        System.out.println(Graphics.ANSI_BLUE+"GameController started"+Graphics.ANSI_RESET);
         System.out.println(Graphics.ANSI_YELLOW+"Rules: "+ "https://tinyurl.com/mor-rules"+Graphics.ANSI_RESET);
         showLegend();
         System.out.println(Graphics.ANSI_CYAN+"Waiting for your turn to choose the leader cards..."+Graphics.ANSI_RESET);

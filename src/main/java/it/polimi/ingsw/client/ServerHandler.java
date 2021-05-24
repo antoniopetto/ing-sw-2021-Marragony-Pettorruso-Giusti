@@ -1,10 +1,10 @@
 package it.polimi.ingsw.client;
 
 
-import it.polimi.ingsw.client.simplemodel.SimpleGame;
+import it.polimi.ingsw.client.simplemodel.SimpleModel;
 import it.polimi.ingsw.client.view.View;
 import it.polimi.ingsw.messages.update.UpdateMsg;
-import it.polimi.ingsw.messages.view.ViewMsg;
+import it.polimi.ingsw.messages.toview.ViewMsg;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -15,10 +15,10 @@ public class ServerHandler implements Runnable{
     private final Socket serverSocket;
     private ObjectInputStream input;
     private ObjectOutputStream output;
-    private final SimpleGame model;
+    private final SimpleModel model;
     private final View view;
 
-    public ServerHandler(Socket socket, View view, SimpleGame game) {
+    public ServerHandler(Socket socket, View view, SimpleModel game) {
         serverSocket=socket;
         this.view=view;
         model = game;

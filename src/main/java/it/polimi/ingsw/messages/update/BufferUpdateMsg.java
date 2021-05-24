@@ -1,7 +1,6 @@
 package it.polimi.ingsw.messages.update;
 
-import it.polimi.ingsw.client.ServerHandler;
-import it.polimi.ingsw.client.simplemodel.SimpleGame;
+import it.polimi.ingsw.client.simplemodel.SimpleModel;
 import it.polimi.ingsw.server.model.shared.Marble;
 
 public class BufferUpdateMsg implements UpdateMsg {
@@ -12,7 +11,7 @@ public class BufferUpdateMsg implements UpdateMsg {
     }
 
     @Override
-    public void execute(SimpleGame model) {
+    public void execute(SimpleModel model) {
         model.reduceBuffer(marble);
     }
 

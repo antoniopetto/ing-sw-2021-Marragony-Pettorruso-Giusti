@@ -1,6 +1,6 @@
 package it.polimi.ingsw.messages.update;
 
-import it.polimi.ingsw.client.simplemodel.SimpleGame;
+import it.polimi.ingsw.client.simplemodel.SimpleModel;
 import it.polimi.ingsw.client.simplemodel.SimplePlayer;
 
 import java.util.HashMap;
@@ -14,7 +14,7 @@ public class TrackUpdateMsg implements UpdateMsg {
     }
 
     @Override
-    public void execute(SimpleGame model) {
+    public void execute(SimpleModel model) {
         for (SimplePlayer simplePlayer : model.getPlayers()) {
             simplePlayer.setPosition(positions.get(simplePlayer.getUsername()));
         }

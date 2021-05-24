@@ -1,6 +1,6 @@
 package it.polimi.ingsw.client.view;
 
-import it.polimi.ingsw.client.simplemodel.SimpleGame;
+import it.polimi.ingsw.client.simplemodel.SimpleModel;
 import it.polimi.ingsw.client.simplemodel.SimpleLeaderCard;
 import it.polimi.ingsw.client.simplemodel.SimplePlayer;
 import it.polimi.ingsw.server.model.playerboard.DepotName;
@@ -13,7 +13,7 @@ import java.util.List;
 public interface View {
 
     void showErrorMessage(String text);
-    SimpleGame getGame();
+    SimpleModel getGame();
     void showMarbleBuffer(List<Marble> marbleList);
     String getUsername();
     int getNumberOfPlayers();

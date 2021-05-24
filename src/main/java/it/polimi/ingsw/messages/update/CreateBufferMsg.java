@@ -1,14 +1,8 @@
 package it.polimi.ingsw.messages.update;
 
-import it.polimi.ingsw.client.ServerHandler;
-import it.polimi.ingsw.client.simplemodel.SimpleGame;
-import it.polimi.ingsw.client.view.View;
-import it.polimi.ingsw.messages.command.PutResourceMsg;
-import it.polimi.ingsw.messages.view.ViewMsg;
-import it.polimi.ingsw.server.model.playerboard.DepotName;
+import it.polimi.ingsw.client.simplemodel.SimpleModel;
 import it.polimi.ingsw.server.model.shared.Marble;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,7 +14,7 @@ public class CreateBufferMsg implements UpdateMsg {
     }
 
     @Override
-    public void execute(SimpleGame model) {
+    public void execute(SimpleModel model) {
         model.setMarbleBuffer(marbleBuffer);
     }
 

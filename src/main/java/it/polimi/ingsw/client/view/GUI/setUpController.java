@@ -1,9 +1,9 @@
 package it.polimi.ingsw.client.view.GUI;
 
-import it.polimi.ingsw.client.simplemodel.SimpleGame;
+import it.polimi.ingsw.client.simplemodel.SimpleModel;
 import it.polimi.ingsw.client.simplemodel.SimpleLeaderCard;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
@@ -34,49 +34,70 @@ public class setUpController implements Initializable {
     @FXML
     private ImageView imCard4;
 
-    private SimpleGame game;
+    private int result=0;
+
+    private boolean isFirst = true;
+
+    private List<Integer> cardIds = new ArrayList<>();
+    private SimpleModel game;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
     }
+
     @FXML
-    public int selectedCard(MouseEvent mouseEvent) {
-        return 0;
+    public void selectedCard(MouseEvent mouseEvent) {
+            mouseEvent.consume();
+            Platform.runLater(()->{
+                Button card = (Button)mouseEvent.getSource();
+                switch (card.getId()) {
+                    case "card1" -> result = cardIds.get(0);
+                    case "card2" -> result = cardIds.get(1);
+                    case "card3" -> result = cardIds.get(2);
+                    case "card4" -> result = cardIds.get(3);
+                }
+                System.out.println();
+            });
+
+
     }
 
     @FXML
     public void confirm(MouseEvent mouseEvent) {
-
     }
 
-    public void setGame(SimpleGame game) {
+
+
+    public void setGame(SimpleModel game) {
         this.game = game;
         List<Image> cards = new ArrayList<>();
 
-        for(SimpleLeaderCard card : game.getThisPlayer().getLeaderCards()){
-            int cardId= card.getId();
-            String imUrl = "/cards/leader/Leader-"+cardId+".jpg";
+        for (SimpleLeaderCard card : game.getThisPlayer().getLeaderCards()) {
+            int cardId = card.getId();
+            cardIds.add(cardId);
+            String imUrl = "/cards/leader/Leader-" + cardId + ".jpg";
             cards.add(new Image(imUrl));
         }
-        switch (cards.size())
-        {
-            case 4 ->
-                    {
-                        imCard1.setImage(cards.get(0));
-                        imCard2.setImage(cards.get(1));
-                        imCard3.setImage(cards.get(2));
-                        imCard4.setImage(cards.get(3));
-                    }
-            case 3->{
+        switch (cards.size()) {
+            case 4 -> {
                 imCard1.setImage(cards.get(0));
                 imCard2.setImage(cards.get(1));
                 imCard3.setImage(cards.get(2));
-                imCard3.setVisible(false);
-                card3.setVisible(false);
+                imCard4.setImage(cards.get(3));
             }
-
+            case 3 -> {
+                imCard1.setImage(cards.get(0));
+                imCard2.setImage(cards.get(1));
+                imCard3.setImage(cards.get(2));
+                imCard4.setVisible(false);
+                card4.setVisible(false);
+            }
         }
+        isFirst=true;
+    }
 
+    public synchronized int getResult() {
+        return result;
     }
 }

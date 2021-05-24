@@ -1,6 +1,6 @@
 package it.polimi.ingsw.messages.update;
 
-import it.polimi.ingsw.client.simplemodel.SimpleGame;
+import it.polimi.ingsw.client.simplemodel.SimpleModel;
 import it.polimi.ingsw.server.model.cards.CardColor;
 
 public class CardDecksUpdateMsg implements UpdateMsg {
@@ -14,7 +14,7 @@ public class CardDecksUpdateMsg implements UpdateMsg {
     }
 
     @Override
-    public void execute(SimpleGame model) {
+    public void execute(SimpleModel model) {
         model.updateDevCardDecks(level,cardColor);
     }
 

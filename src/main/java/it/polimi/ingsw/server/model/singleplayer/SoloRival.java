@@ -1,11 +1,8 @@
 package it.polimi.ingsw.server.model.singleplayer;
 
 import it.polimi.ingsw.server.model.AbstractPlayer;
-import it.polimi.ingsw.server.model.Game;
+import it.polimi.ingsw.server.GameController;
 import it.polimi.ingsw.server.model.cards.CardColor;
-import it.polimi.ingsw.server.model.singleplayer.DiscardToken;
-import it.polimi.ingsw.server.model.singleplayer.MoveToken;
-import it.polimi.ingsw.server.model.singleplayer.SoloActionToken;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -36,11 +33,11 @@ public class SoloRival extends AbstractPlayer {
     /**
      * This method represents the turn of the virtual player. It takes the first token from <code>activeTokens</code>
      * and activates it
-     * @param game is the single player game in which the token is used
+     * @param gameController is the single player gameController in which the token is used
      */
-    public void soloTurn(Game game){
+    public void soloTurn(GameController gameController){
         lastPlayedToken=this.takeFirst();
-        lastPlayedToken.activateToken(game);
+        lastPlayedToken.activateToken(gameController);
     }
 
     /**

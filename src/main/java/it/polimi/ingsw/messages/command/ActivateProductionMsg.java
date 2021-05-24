@@ -1,6 +1,6 @@
 package it.polimi.ingsw.messages.command;
 
-import it.polimi.ingsw.server.model.Game;
+import it.polimi.ingsw.server.GameController;
 import it.polimi.ingsw.server.model.cards.ProductionPower;
 
 import java.util.HashMap;
@@ -18,8 +18,8 @@ public class ActivateProductionMsg implements CommandMsg{
         this.selectedExtraPowers = new HashMap<>(selectedExtraPowers);
     }
 
-    public void execute(Game game){
-        game.activateProduction(selectedCardIds, selectedExtraPowers);
+    public void execute(GameController gameController){
+        gameController.activateProduction(selectedCardIds, selectedExtraPowers);
     }
 
     @Override

@@ -1,6 +1,7 @@
-package it.polimi.ingsw.server.model;
+package it.polimi.ingsw.server;
 
 import it.polimi.ingsw.server.VirtualView;
+import it.polimi.ingsw.server.model.Player;
 import it.polimi.ingsw.server.model.cards.*;
 import it.polimi.ingsw.server.model.exceptions.ElementNotFoundException;
 import it.polimi.ingsw.server.model.exceptions.IllegalConfigXMLException;
@@ -16,7 +17,7 @@ import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;
 import java.util.*;
 
-public class Game {
+public class GameController {
 
     private enum State {
         INITIALIZING,
@@ -38,7 +39,7 @@ public class Game {
     private final List<Marble> marbleBuffer = new ArrayList<>();
     private final DevelopmentCardDecks developmentCardDecks;
 
-    public Game(Set<String> usernames, VirtualView virtualView) {
+    public GameController(Set<String> usernames, VirtualView virtualView) {
 
         if (usernames.size() == 0 || usernames.size() > 4 || virtualView == null)
             throw new IllegalArgumentException();

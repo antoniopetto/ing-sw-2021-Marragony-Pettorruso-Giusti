@@ -1,6 +1,6 @@
 package it.polimi.ingsw.messages.update;
 
-import it.polimi.ingsw.client.simplemodel.SimpleGame;
+import it.polimi.ingsw.client.simplemodel.SimpleModel;
 import it.polimi.ingsw.client.simplemodel.SimplePlayer;
 
 public class AddCardInSlotUpdateMsg implements UpdateMsg {
@@ -17,7 +17,7 @@ public class AddCardInSlotUpdateMsg implements UpdateMsg {
     }
 
     @Override
-    public void execute(SimpleGame model) {
+    public void execute(SimpleModel model) {
         for (SimplePlayer player: model.getPlayers()) {
             if(player.getUsername().equals(this.username))
                 player.insertCardInSlot(cardId, slotIdx);

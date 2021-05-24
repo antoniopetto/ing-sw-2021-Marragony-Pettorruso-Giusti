@@ -1,7 +1,6 @@
 package it.polimi.ingsw.messages.update;
 
-import it.polimi.ingsw.client.ServerHandler;
-import it.polimi.ingsw.client.simplemodel.SimpleGame;
+import it.polimi.ingsw.client.simplemodel.SimpleModel;
 
 public class LeaderCardUpdateMsg implements UpdateMsg {
     private final String username;
@@ -13,7 +12,7 @@ public class LeaderCardUpdateMsg implements UpdateMsg {
     }
 
     @Override
-    public void execute(SimpleGame game) {
+    public void execute(SimpleModel game) {
         game.getPlayers().stream()
                 .filter(p -> p.getUsername().equals(username)).findAny()
                 .ifPresent(p -> p.activeLeaderCard(cardId));

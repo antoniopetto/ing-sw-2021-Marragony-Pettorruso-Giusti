@@ -1,6 +1,6 @@
 package it.polimi.ingsw.messages.update;
 
-import it.polimi.ingsw.client.simplemodel.SimpleGame;
+import it.polimi.ingsw.client.simplemodel.SimpleModel;
 import it.polimi.ingsw.server.model.cards.ProductionPower;
 
 public class ExtraPowerUpdateMsg implements UpdateMsg{
@@ -14,7 +14,7 @@ public class ExtraPowerUpdateMsg implements UpdateMsg{
     }
 
     @Override
-    public void execute(SimpleGame game) {
+    public void execute(SimpleModel game) {
         game.getPlayers().stream()
                 .filter(p -> p.getUsername().equals(username)).findAny()
                 .ifPresent(p -> p.addExtraProductionPower(power));

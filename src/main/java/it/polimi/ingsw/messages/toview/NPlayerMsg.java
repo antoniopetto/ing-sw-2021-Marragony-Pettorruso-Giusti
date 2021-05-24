@@ -1,4 +1,4 @@
-package it.polimi.ingsw.messages.view;
+package it.polimi.ingsw.messages.toview;
 
 import java.io.Serializable;
 

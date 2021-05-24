@@ -1,22 +1,16 @@
 package it.polimi.ingsw.server.model.playerboard;
 
 import it.polimi.ingsw.server.VirtualView;
-import it.polimi.ingsw.server.model.Game;
-import it.polimi.ingsw.server.model.Player;
 import it.polimi.ingsw.server.model.cards.CardColor;
 import it.polimi.ingsw.server.model.cards.DevelopmentCard;
 import it.polimi.ingsw.server.model.cards.ProductionPower;
 import it.polimi.ingsw.server.model.cards.ResourceRequirement;
-import it.polimi.ingsw.server.model.shared.FaithTrack;
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.Mock;
 import org.mockito.Mockito;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
 import static org.junit.Assert.*;
 
