@@ -1,0 +1,8 @@
+.maingrid {
+    -fx-background-image:url('\background.jpg');
+    -fx-background-size: cover;
+}
+
+.transparent {
+	-fx-background-color:transparent;
+}

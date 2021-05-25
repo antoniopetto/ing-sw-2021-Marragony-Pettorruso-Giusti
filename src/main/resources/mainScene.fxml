@@ -1,0 +1,473 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.Group?>
+<?import javafx.scene.canvas.Canvas?>
+<?import javafx.scene.control.Accordion?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TitledPane?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<GridPane alignment="CENTER_RIGHT" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1280.0" styleClass="maingrid" stylesheets="@background.css" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.client.view.GUI.MainSceneController">
+  <columnConstraints>
+    <ColumnConstraints />
+    <ColumnConstraints hgrow="SOMETIMES" maxWidth="1276.7999267578125" minWidth="10.0" prefWidth="778.2000244140625" />
+      <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" maxWidth="931.199951171875" minWidth="10.0" prefWidth="501.39997558593745" />
+  </columnConstraints>
+  <rowConstraints>
+    <RowConstraints maxHeight="521.1999267578125" minHeight="10.0" prefHeight="230.1999969482422" vgrow="SOMETIMES" />
+    <RowConstraints maxHeight="620.4" minHeight="10.0" prefHeight="569.4000030517577" vgrow="SOMETIMES" />
+  </rowConstraints>
+   <children>
+      <GridPane GridPane.columnIndex="2" GridPane.rowIndex="1">
+        <columnConstraints>
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+        </columnConstraints>
+        <rowConstraints>
+          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+        </rowConstraints>
+         <children>
+            <ImageView fitHeight="185.0" fitWidth="123.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1" GridPane.rowIndex="1">
+               <image>
+                  <Image url="@cards/development/Development-1.jpg" />
+               </image>
+            </ImageView>
+            <ImageView fitHeight="195.0" fitWidth="123.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@cards/development/Development-1.jpg" />
+               </image>
+            </ImageView>
+            <ImageView fitHeight="198.0" fitWidth="123.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1">
+               <image>
+                  <Image url="@cards/development/Development-1.jpg" />
+               </image>
+            </ImageView>
+            <ImageView fitHeight="195.0" fitWidth="123.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2" GridPane.rowIndex="1">
+               <image>
+                  <Image url="@cards/development/Development-1.jpg" />
+               </image>
+            </ImageView>
+            <ImageView fitHeight="195.0" fitWidth="123.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2">
+               <image>
+                  <Image url="@cards/development/Development-1.jpg" />
+               </image>
+            </ImageView>
+            <ImageView fitHeight="195.0" fitWidth="123.0" layoutX="332.0" layoutY="225.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="3">
+               <image>
+                  <Image url="@cards/development/Development-1.jpg" />
+               </image>
+            </ImageView>
+            <ImageView fitHeight="195.0" fitWidth="123.0" layoutX="493.0" layoutY="20.0" pickOnBounds="true" preserveRatio="true" GridPane.rowIndex="1">
+               <image>
+                  <Image url="@cards/development/Development-1.jpg" />
+               </image>
+            </ImageView>
+            <ImageView fitHeight="195.0" fitWidth="123.0" layoutX="10.0" layoutY="225.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="3" GridPane.rowIndex="1">
+               <image>
+                  <Image url="@cards/development/Development-1.jpg" />
+               </image>
+            </ImageView>
+            <ImageView fitHeight="195.0" fitWidth="123.0" layoutX="493.0" layoutY="225.0" pickOnBounds="true" preserveRatio="true" GridPane.rowIndex="2">
+               <image>
+                  <Image url="@cards/development/Development-1.jpg" />
+               </image>
+            </ImageView>
+            <ImageView fitHeight="198.0" fitWidth="123.0" layoutX="171.0" layoutY="20.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1" GridPane.rowIndex="2">
+               <image>
+                  <Image url="@cards/development/Development-1.jpg" />
+               </image>
+            </ImageView>
+            <ImageView fitHeight="195.0" fitWidth="123.0" layoutX="493.0" layoutY="225.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2" GridPane.rowIndex="2">
+               <image>
+                  <Image url="@cards/development/Development-1.jpg" />
+               </image>
+            </ImageView>
+            <ImageView fitHeight="198.0" fitWidth="123.0" layoutX="171.0" layoutY="20.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="3" GridPane.rowIndex="2">
+               <image>
+                  <Image url="@cards/development/Development-1.jpg" />
+               </image>
+            </ImageView>
+         </children>
+      </GridPane>
+      <GridPane styleClass="transparent" stylesheets="@background.css" GridPane.columnIndex="1">
+        <columnConstraints>
+          <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="248.79991149902344" minWidth="10.0" prefWidth="160.79991149902344" />
+          <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="359.20008850097656" minWidth="10.0" prefWidth="171.20007324218744" />
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="419.0" minWidth="10.0" prefWidth="367.7999267578125" />
+        </columnConstraints>
+        <rowConstraints>
+          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+        </rowConstraints>
+         <children>
+            <ImageView fitHeight="214.0" fitWidth="269.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@cards/leader/Leader-101.jpg" />
+               </image>
+            </ImageView>
+            <ImageView fitHeight="214.0" fitWidth="248.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1">
+               <image>
+                  <Image url="@cards/leader/Leader-102.jpg" />
+               </image>
+            </ImageView>
+            <GridPane styleClass="transparent" stylesheets="@background.css" GridPane.columnIndex="2">
+              <rowConstraints>
+                <RowConstraints maxHeight="148.4666732788086" minHeight="10.0" prefHeight="148.4666732788086" vgrow="SOMETIMES" />
+                <RowConstraints maxHeight="108.9999984741211" minHeight="10.0" prefHeight="82.33332672119141" vgrow="SOMETIMES" />
+              </rowConstraints>
+               <children>
+                  <Accordion maxHeight="-Infinity" minHeight="-Infinity" prefHeight="149.0" prefWidth="394.0" style="-fx-background-color: transparent;" GridPane.columnIndex="1" GridPane.valignment="TOP">
+                    <panes>
+                      <TitledPane animated="false" text="show others...">
+                        <content>
+                          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" style="-fx-background-color: transparent;" />
+                        </content>
+                      </TitledPane>
+                      <TitledPane animated="false" prefHeight="101.0" prefWidth="394.0" text="normal action">
+                        <content>
+                          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" style="-fx-background-color: transparent;">
+                                 <children>
+                                    <Button layoutX="10.0" layoutY="2.0" mnemonicParsing="false" prefHeight="65.0" prefWidth="120.0" text="Buy Resources" />
+                                    <Button layoutX="137.0" layoutY="2.0" mnemonicParsing="false" prefHeight="65.0" prefWidth="120.0" text="Buy card" />
+                                    <Button layoutX="264.0" layoutY="2.0" mnemonicParsing="false" prefHeight="65.0" prefWidth="120.0" text="Activate Production" />
+                                 </children>
+                              </AnchorPane>
+                        </content>
+                      </TitledPane>
+                      <TitledPane animated="false" prefHeight="119.0" prefWidth="394.0" text="leader card action">
+                        <content>
+                          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                        </content>
+                      </TitledPane>
+                    </panes>
+                  </Accordion>
+                  <ScrollPane prefHeight="200.0" prefWidth="200.0" styleClass="transparent" stylesheets="@background.css" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                    <content>
+                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="198.0" prefWidth="374.0" styleClass="transparent" stylesheets="@background.css">
+                           <children>
+                              <Text layoutX="17.0" layoutY="28.0" strokeType="OUTSIDE" strokeWidth="0.0" text="This is the log of the application" wrappingWidth="346.9500732421875" />
+                           </children>
+                        </AnchorPane>
+                    </content>
+                  </ScrollPane>
+               </children>
+               <columnConstraints>
+                  <ColumnConstraints />
+                  <ColumnConstraints />
+               </columnConstraints>
+            </GridPane>
+         </children>
+      </GridPane>
+      <Group GridPane.columnIndex="1" GridPane.rowIndex="1">
+         <children>
+            <Canvas height="549.0" width="766.0" />
+            <ImageView fitHeight="548.0" fitWidth="756.0" layoutX="7.0" layoutY="7.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@PlayerBoard.jpg" />
+               </image>
+            </ImageView>
+            <ImageView fitHeight="210.0" fitWidth="166.0" layoutX="295.0" layoutY="317.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@cards/development/Development-2.jpg" />
+               </image>
+            </ImageView>
+            <ImageView fitHeight="210.0" fitWidth="166.0" layoutX="436.0" layoutY="248.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@cards/development/Development-2.jpg" />
+               </image>
+            </ImageView>
+            <ImageView fitHeight="210.0" fitWidth="166.0" layoutX="593.0" layoutY="249.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@cards/development/Development-2.jpg" />
+               </image>
+            </ImageView>
+            <ImageView fitHeight="35.0" fitWidth="39.0" layoutX="87.0" layoutY="239.0" pickOnBounds="true" preserveRatio="true" />
+            <ImageView fitHeight="210.0" fitWidth="166.0" layoutX="295.0" layoutY="264.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@cards/development/Development-2.jpg" />
+               </image>
+            </ImageView>
+            <ImageView fitHeight="32.0" fitWidth="29.0" layoutX="92.0" layoutY="243.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@res-marbles/servant.png" />
+               </image>
+            </ImageView>
+            <ImageView fitHeight="32.0" fitWidth="29.0" layoutX="73.0" layoutY="289.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@res-marbles/shield.png" />
+               </image>
+            </ImageView>
+            <ImageView fitHeight="32.0" fitWidth="29.0" layoutX="107.0" layoutY="289.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@res-marbles/shield.png" />
+               </image>
+            </ImageView>
+            <ImageView fitHeight="32.0" fitWidth="29.0" layoutX="63.0" layoutY="339.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@res-marbles/coin.png" />
+               </image>
+            </ImageView>
+            <ImageView fitHeight="32.0" fitWidth="29.0" layoutX="93.0" layoutY="339.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@res-marbles/coin.png" />
+               </image>
+            </ImageView>
+            <ImageView fitHeight="32.0" fitWidth="29.0" layoutX="122.0" layoutY="339.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@res-marbles/coin.png" />
+               </image>
+            </ImageView>
+            <GridPane layoutX="26.0" layoutY="405.0" prefHeight="107.0" prefWidth="140.0">
+              <columnConstraints>
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+              </columnConstraints>
+              <rowConstraints>
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+              </rowConstraints>
+               <children>
+                  <ImageView fitHeight="42.0" fitWidth="36.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
+                     <image>
+                        <Image url="@res-marbles/shield.png" />
+                     </image>
+                  </ImageView>
+                  <ImageView fitHeight="42.0" fitWidth="36.0" layoutX="45.0" layoutY="16.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                     <image>
+                        <Image url="@res-marbles/servant.png" />
+                     </image>
+                  </ImageView>
+                  <ImageView fitHeight="42.0" fitWidth="36.0" layoutX="45.0" layoutY="69.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="3">
+                     <image>
+                        <Image url="@res-marbles/stone.png" />
+                     </image>
+                  </ImageView>
+                  <ImageView fitHeight="42.0" fitWidth="36.0" layoutX="115.0" layoutY="16.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="3" GridPane.rowIndex="1">
+                     <image>
+                        <Image url="@res-marbles/coin.png" />
+                     </image>
+                  </ImageView>
+                  <Text fill="#71cbff" strokeType="OUTSIDE" strokeWidth="0.0" text="1" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
+                     <font>
+                        <Font name="Script MT Bold" size="44.0" />
+                     </font>
+                  </Text>
+                  <Text fill="#5f0fbc" strokeType="OUTSIDE" strokeWidth="0.0" text="1" GridPane.halignment="CENTER" GridPane.rowIndex="1">
+                     <font>
+                        <Font name="Script MT Bold" size="51.0" />
+                     </font>
+                  </Text>
+                  <Text fill="#afadb1" layoutX="16.0" layoutY="109.0" strokeType="OUTSIDE" strokeWidth="0.0" text="2" GridPane.columnIndex="2" GridPane.halignment="CENTER">
+                     <font>
+                        <Font name="Script MT Bold" size="41.0" />
+                     </font>
+                  </Text>
+                  <Text fill="#fff01b" strokeType="OUTSIDE" strokeWidth="0.0" text="3" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="1">
+                     <font>
+                        <Font name="Script MT Bold" size="41.0" />
+                     </font>
+                  </Text>
+               </children>
+            </GridPane>
+            <ImageView fitHeight="56.0" fitWidth="67.0" layoutX="97.0" layoutY="99.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@res-marbles/faith.png" />
+               </image>
+            </ImageView>
+         </children>
+      </Group>
+      <Group GridPane.columnIndex="2">
+         <children>
+            <Canvas height="230.0" width="501.0" />
+            <ImageView fitHeight="220.0" fitWidth="314.0" layoutX="14.0" layoutY="5.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@planciaportabiglie.png" />
+               </image>
+            </ImageView>
+            <ImageView fitHeight="35.0" fitWidth="42.0" layoutX="306.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@res-marbles/black-marble.png" />
+               </image>
+            </ImageView>
+            <ImageView fitHeight="35.0" fitWidth="42.0" layoutX="306.0" layoutY="55.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@res-marbles/blue-marble.png" />
+               </image>
+            </ImageView>
+            <ImageView fitHeight="35.0" fitWidth="42.0" layoutX="306.0" layoutY="96.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@res-marbles/yellow-marble.png" />
+               </image>
+            </ImageView>
+            <ImageView fitHeight="35.0" fitWidth="42.0" layoutX="306.0" layoutY="137.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@res-marbles/purple-marble.png" />
+               </image>
+            </ImageView>
+            <ImageView fitHeight="35.0" fitWidth="42.0" layoutX="387.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@res-marbles/stone.png" />
+               </image>
+            </ImageView>
+            <ImageView fitHeight="35.0" fitWidth="42.0" layoutX="387.0" layoutY="55.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@res-marbles/shield.png" />
+               </image>
+            </ImageView>
+            <ImageView fitHeight="35.0" fitWidth="42.0" layoutX="387.0" layoutY="93.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@res-marbles/coin.png" />
+               </image>
+            </ImageView>
+            <ImageView fitHeight="35.0" fitWidth="42.0" layoutX="387.0" layoutY="134.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@res-marbles/servant.png" />
+               </image>
+            </ImageView>
+            <ImageView fitHeight="35.0" fitWidth="42.0" layoutX="251.0" layoutY="180.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@res-marbles/red-marble.png" />
+               </image>
+            </ImageView>
+            <ImageView fitHeight="35.0" fitWidth="42.0" layoutX="323.0" layoutY="180.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@res-marbles/faith.png" />
+               </image>
+            </ImageView>
+            <ImageView fitHeight="35.0" fitWidth="42.0" layoutX="369.0" layoutY="180.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@res-marbles/white-marble.png" />
+               </image>
+            </ImageView>
+            <ImageView fitHeight="35.0" fitWidth="42.0" layoutX="350.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@res-marbles/arrow.png" />
+               </image>
+            </ImageView>
+            <ImageView fitHeight="35.0" fitWidth="42.0" layoutX="350.0" layoutY="55.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@res-marbles/arrow.png" />
+               </image>
+            </ImageView>
+            <ImageView fitHeight="35.0" fitWidth="42.0" layoutX="350.0" layoutY="93.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@res-marbles/arrow.png" />
+               </image>
+            </ImageView>
+            <ImageView fitHeight="35.0" fitWidth="42.0" layoutX="350.0" layoutY="134.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@res-marbles/arrow.png" />
+               </image>
+            </ImageView>
+            <ImageView fitHeight="35.0" fitWidth="45.0" layoutX="289.0" layoutY="180.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@res-marbles/arrow.png" />
+               </image>
+            </ImageView>
+            <ImageView fitHeight="35.0" fitWidth="45.0" layoutX="408.0" layoutY="180.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@res-marbles/arrow.png" />
+               </image>
+            </ImageView>
+            <Text layoutX="451.0" layoutY="210.0" strokeType="OUTSIDE" strokeWidth="0.0" text="0">
+               <font>
+                  <Font name="Consolas Bold" size="39.0" />
+               </font>
+            </Text>
+            <GridPane layoutX="68.0" layoutY="60.0" prefHeight="101.0" prefWidth="126.0">
+              <columnConstraints>
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+              </columnConstraints>
+              <rowConstraints>
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+              </rowConstraints>
+               <children>
+                  <ImageView fitHeight="37.0" fitWidth="29.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@res-marbles/black-marble.png" />
+                     </image>
+                  </ImageView>
+                  <ImageView fitHeight="37.0" fitWidth="29.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1">
+                     <image>
+                        <Image url="@res-marbles/black-marble.png" />
+                     </image>
+                  </ImageView>
+                  <ImageView fitHeight="37.0" fitWidth="29.0" layoutX="10.0" layoutY="12.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2">
+                     <image>
+                        <Image url="@res-marbles/blue-marble.png" />
+                     </image>
+                  </ImageView>
+                  <ImageView fitHeight="37.0" fitWidth="29.0" layoutX="41.0" layoutY="12.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="3">
+                     <image>
+                        <Image url="@res-marbles/black-marble.png" />
+                     </image>
+                  </ImageView>
+                  <ImageView fitHeight="37.0" fitWidth="29.0" layoutX="10.0" layoutY="12.0" pickOnBounds="true" preserveRatio="true" GridPane.rowIndex="1">
+                     <image>
+                        <Image url="@res-marbles/black-marble.png" />
+                     </image>
+                  </ImageView>
+                  <ImageView fitHeight="37.0" fitWidth="29.0" layoutX="41.0" layoutY="12.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="3" GridPane.rowIndex="1">
+                     <image>
+                        <Image url="@res-marbles/white-marble.png" />
+                     </image>
+                  </ImageView>
+                  <ImageView fitHeight="37.0" fitWidth="29.0" layoutX="72.0" layoutY="12.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2" GridPane.rowIndex="1">
+                     <image>
+                        <Image url="@res-marbles/black-marble.png" />
+                     </image>
+                  </ImageView>
+                  <ImageView fitHeight="37.0" fitWidth="29.0" layoutX="104.0" layoutY="12.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                     <image>
+                        <Image url="@res-marbles/white-marble.png" />
+                     </image>
+                  </ImageView>
+                  <ImageView fitHeight="37.0" fitWidth="29.0" layoutX="10.0" layoutY="46.0" pickOnBounds="true" preserveRatio="true" GridPane.rowIndex="2">
+                     <image>
+                        <Image url="@res-marbles/yellow-marble.png" />
+                     </image>
+                  </ImageView>
+                  <ImageView fitHeight="37.0" fitWidth="29.0" layoutX="104.0" layoutY="46.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="3" GridPane.rowIndex="2">
+                     <image>
+                        <Image url="@res-marbles/black-marble.png" />
+                     </image>
+                  </ImageView>
+                  <ImageView fitHeight="37.0" fitWidth="29.0" layoutX="72.0" layoutY="46.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2" GridPane.rowIndex="2">
+                     <image>
+                        <Image url="@res-marbles/purple-marble.png" />
+                     </image>
+                  </ImageView>
+                  <ImageView fitHeight="37.0" fitWidth="29.0" layoutX="41.0" layoutY="46.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                     <image>
+                        <Image url="@res-marbles/black-marble.png" />
+                     </image>
+                  </ImageView>
+               </children>
+            </GridPane>
+            <ImageView fitHeight="37.0" fitWidth="29.0" layoutX="208.0" layoutY="186.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@res-marbles/red-marble.png" />
+               </image>
+            </ImageView>
+         </children>
+      </Group>
+   </children>
+</GridPane>
