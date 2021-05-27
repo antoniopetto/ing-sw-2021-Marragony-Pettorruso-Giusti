@@ -15,7 +15,7 @@ public class Client {
             view.startSetting();
         }
         else{
-           //   GUIView view =new GUIView();
+              GUIView view =new GUIView();
                 GUIView.main(args);
         }
     }

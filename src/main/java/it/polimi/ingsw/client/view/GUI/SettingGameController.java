@@ -2,6 +2,7 @@ package it.polimi.ingsw.client.view.GUI;
 
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 
@@ -20,13 +21,9 @@ public class SettingGameController implements Initializable {
     @FXML
     private Label textError;
 
-
     public void setPort() {
         this.port = textPORT.getText();
     }
-
-
-
 
     public void setServerIP() {
         this.serverIP = textIP.getText();

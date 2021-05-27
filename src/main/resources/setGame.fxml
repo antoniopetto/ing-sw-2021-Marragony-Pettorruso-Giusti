@@ -1,16 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.paint.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" styleClass="anchor" stylesheets="@backgroundStart.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.client.view.GUI.StartGameController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" styleClass="anchor" stylesheets="@backgroundStart.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.client.view.GUI.StartGameController">
    <children>
       <Pane prefHeight="400.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <Button fx:id="confirm" layoutX="441.0" layoutY="185.0" mnemonicParsing="false" text="Confirm" />
+            <Button fx:id="userButton" layoutX="441.0" layoutY="185.0" mnemonicParsing="false" onAction="#userConfirm" text="Confirm" />
             <ImageView fitHeight="110.0" fitWidth="97.0" layoutX="240.0" layoutY="154.0" pickOnBounds="true" preserveRatio="true" style="-fx-scale-x: 3; -fx-scale-y: 0.7;">
                <image>
                   <Image url="@Pergamena2.png" />
@@ -44,6 +45,7 @@
                </textFill>
             </Label>
             <ChoiceBox fx:id="choicePlayers" layoutX="200.0" layoutY="185.0" prefHeight="31.0" prefWidth="218.0" style="-fx-background-color: transparent;" visible="false" />
+            <Button fx:id="playersButton" layoutX="441.0" layoutY="185.0" mnemonicParsing="false" onAction="#playersConfirm" text="Confirm" />
          </children>
       </Pane>
    </children>
