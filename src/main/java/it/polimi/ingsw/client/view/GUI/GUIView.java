@@ -16,9 +16,12 @@ import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.image.Image;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 
 import java.io.IOException;
 import java.net.Socket;
@@ -34,6 +37,7 @@ public class GUIView extends Application implements View  {
     public static Font font;
     private Stage initStage;
     private Stage oldStage;
+    private Alert alert;
     private Stage errorStage;
     private Stage mainStage;
     private Stage tmpStage;
@@ -95,27 +99,41 @@ public class GUIView extends Application implements View  {
 
         setLoader("/alertDialog.fxml");
         Scene scene = loadScene(currentLoader);
-        AlertController alertController = currentLoader.getController();
-        alertController.setErrorLabel(text);
-        Platform.runLater(() ->{
-            errorStage = new Stage();
-            manageStage(errorStage,scene, "Error window", false);
-            errorStage.setAlwaysOnTop(true);
-
-        });
-
-        Button button = (Button) currentLoader.getNamespace().get("errorConfirm");
+        AlertController settingGameController = currentLoader.getController();
+        settingGameController.setErrorLabel(text);
+            openErrorStage(false, "Dialog window", scene);
+            Button button = (Button) currentLoader.getNamespace().get("errorConfirm");
             button.setOnAction(event -> errorStage.close());
 
     }
+
+    private void openErrorStage(boolean resizable,String title, Scene scene) {
+        Platform.runLater(() -> {
+            errorStage = new Stage();
+            errorStage.setTitle(title);
+            setScene(scene, errorStage, resizable);
+            errorStage.setAlwaysOnTop(true);
+
+        });
+        Button button = (Button) currentLoader.getNamespace().get("errorConfirm");
+        button.setOnAction(event -> errorStage.close());
+    }
+
+    private void setScene(Scene scene, Stage stage, boolean resizable)
+    {
+        Platform.runLater(()->{
+            stage.setScene(scene);
+            stage.setResizable(resizable);
+            stage.show();
+        });
+    }
+
 
     @Override
     public String getUsername() {
         setLoader("/setGame.fxml");
         Scene scene = loadScene(currentLoader);
-        Platform.runLater(() ->{
-            manageStage(initStage,scene, "Inserting", false );
-        });
+        Platform.runLater(() -> manageStage(initStage,scene, "Inserting", false ));
        StartGameController startGameController = currentLoader.getController();
        String username = startGameController.getUsername();
 
@@ -129,13 +147,23 @@ public class GUIView extends Application implements View  {
         ((StartGameController) currentLoader.getController()).setPlayersComponents(true);
 
         int nPlayers = ((StartGameController) currentLoader.getController()).getnPlayers();
-
+        showErrorMessage("Waiting for other players...");
         return nPlayers;
 
     }
 
     @Override
     public void showTitle() {
+        setLoader("/title.fxml");
+        Scene scene = loadScene(currentLoader);
+        Platform.runLater(()->{
+            if(errorStage.isShowing()) errorStage.close();
+            oldStage = initStage;
+            initStage = new Stage();
+            initStage.initStyle(StageStyle.UNDECORATED);
+            initStage.setAlwaysOnTop(true);
+            manageStage(initStage, scene, "", true);
+        });
 
     }
 
@@ -189,25 +217,21 @@ public class GUIView extends Application implements View  {
         setUpController controller = currentLoader.getController();
         controller.setGame(game);
 
-        if(discardCounter == 0){
-            Platform.runLater(
-                    () -> {
-                        oldStage = initStage;
-                        initStage = new Stage();
-                        manageStage(initStage, scene, "Discard Card Window", true);
-                    }
-            );
-        }
-        else if(discardCounter == 1){
-                Platform.runLater(() ->{
-                    manageStage(initStage, scene, "Discard Card Window", false);
-                });
-        } else {
-                Platform.runLater(() -> {
-                    tmpStage = new Stage();
-                    manageStage(tmpStage, scene, "Discard Card Window", false);
-                });
-        }
+        Platform.runLater(()->{
+            if(discardCounter == 0){
+                oldStage = initStage;
+                initStage = new Stage();
+                manageStage(initStage, scene, "Discard Card Window", true);
+            }
+            else if(discardCounter == 1){
+                manageStage(initStage, scene, "Discard Card Window", false);
+
+            } else {
+                tmpStage = new Stage();
+                manageStage(tmpStage, scene, "Discard Card Window", false);
+            }
+        });
+
 
         int id = controller.getResult();
 
@@ -297,6 +321,7 @@ public class GUIView extends Application implements View  {
             if(close){
                 oldStage.close();
             }
+            stage.getIcons().add(new Image(getClass().getResourceAsStream("/Ritagliare.png")));
             stage.setScene(scene);
             stage.setTitle(title);
             stage.setResizable(false);

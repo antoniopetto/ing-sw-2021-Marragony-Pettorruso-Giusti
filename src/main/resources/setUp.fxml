@@ -1,11 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.*?>
-<?import javafx.scene.image.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.text.*?>
+<?import javafx.scene.Cursor?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="549.0" prefWidth="932.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.client.view.GUI.setUpController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="549.0" prefWidth="932.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.client.view.GUI.setUpController">
    <children>
       <ImageView fitHeight="552.0" fitWidth="931.0" layoutX="1.0" layoutY="2.0" opacity="0.5" pickOnBounds="true" preserveRatio="true">
          <image>
@@ -26,21 +28,33 @@
          <image>
             <Image url="@cards/leader/Leader-101.jpg" />
          </image>
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor>
       </ImageView>
       <ImageView fx:id="imCard2" fitHeight="328.0" fitWidth="195.0" layoutX="250.0" layoutY="117.0" onMouseClicked="#selectedCard" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@cards/leader/Leader-101.jpg" />
          </image>
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor>
       </ImageView>
       <ImageView fx:id="imCard3" fitHeight="328.0" fitWidth="195.0" layoutX="475.0" layoutY="117.0" onMouseClicked="#selectedCard" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@cards/leader/Leader-101.jpg" />
          </image>
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor>
       </ImageView>
       <ImageView fx:id="imCard4" fitHeight="328.0" fitWidth="195.0" layoutX="703.0" layoutY="117.0" onMouseClicked="#selectedCard" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@cards/leader/Leader-101.jpg" />
          </image>
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor>
       </ImageView>
    </children>
    <cursor>
