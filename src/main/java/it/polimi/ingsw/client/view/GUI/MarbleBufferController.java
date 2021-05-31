@@ -26,6 +26,7 @@ public class MarbleBufferController implements Initializable {
     private DepotName depotName = null;
     private SimpleModel simpleModel = null;
     private Resource resource = null;
+    private String resourceString = null;
     @FXML
     private ImageView res1;
     @FXML
@@ -77,9 +78,9 @@ public class MarbleBufferController implements Initializable {
     public void insertResource(ActionEvent actionEvent) {
         actionEvent.consume();
 
-        Platform.runLater(() ->{
+        Platform.runLater(() -> {
             Button button = (Button) actionEvent.getSource();
-            switch (button.getId()){
+            switch (button.getId()) {
                 case "highDepot" -> setDepotName(DepotName.HIGH);
                 case "mediumDepot" -> setDepotName(DepotName.MEDIUM);
                 case "lowDepot" -> setDepotName(DepotName.LOW);
@@ -89,92 +90,92 @@ public class MarbleBufferController implements Initializable {
     }
 
 
-
     @FXML
     public void selectMarble(MouseEvent mouseEvent) {
         mouseEvent.consume();
-        Platform.runLater(()->{
+        Platform.runLater(() -> {
             ImageView marble = (ImageView) mouseEvent.getSource();
             String path = marble.getImage().getUrl();
 
-            if( path.contains("black-marble.png") ) setMarble(Marble.GREY);
-            if( path.contains("blue-marble.png") ) setMarble(Marble.BLUE);
-            if( path.contains("purple-marble.png")) setMarble(Marble.PURPLE);
-            if( path.contains("yellow-marble.png") ) setMarble(Marble.YELLOW);
-            if( path.contains("white-marble.png") ) setMarble(Marble.WHITE);
+            if (path.contains("black-marble.png")) setMarble(Marble.GREY);
+            if (path.contains("blue-marble.png")) setMarble(Marble.BLUE);
+            if (path.contains("purple-marble.png")) setMarble(Marble.PURPLE);
+            if (path.contains("yellow-marble.png")) setMarble(Marble.YELLOW);
+            if (path.contains("white-marble.png")) setMarble(Marble.WHITE);
 
         });
     }
 
-    public void manageButton( boolean disable){
+    public void manageButton(boolean disable) {
         lowDepot.setDisable(disable);
         mediumDepot.setDisable(disable);
         highDepot.setDisable(disable);
-        
+
     }
 
-    public void show(boolean resources, boolean depot, boolean marble){
-        setImageView(resources, res1,res2,res3,res4);
-        setImageView(marble, marble1,marble2, marble3, marble4);
-        if(depot) setDepotResources();
+    public void show(boolean resources, boolean depot, boolean marble) {
+        setImageView(resources, res1, res2, res3, res4);
+        setImageView(marble, marble1, marble2, marble3, marble4);
+        if (depot) setDepotResources();
         setImageView(depot, wareHouse);
-        if(depot) activeExtraDepot();
+        if (depot) activeExtraDepot();
     }
 
-    private void setDepotResources(){
+    private void setDepotResources() {
         String path = "/res-marbles/";
-        String resource = null;
-        Map<Resource, Integer> map;
         int quantity = 0;
-        map =  simpleModel.getThisPlayer().getWarehouse().getDepots().get(DepotName.HIGH);
-        if(map!=null) {
-            for (Resource resource1 : map.keySet()) {
-                resource = returnPath(resource1.toString());
-            }
-            resourceHigh.setImage(new Image(path + resource));
-            resourceHigh.setVisible(true);
-            resourceHigh.setDisable(false);
+
+        quantity = printResources(DepotName.HIGH);
+        if (quantity > 0) {
+            resourceHigh.setImage(new Image(path + resourceString));
+            setImageView(true, resourceHigh);
         }
-        map =  simpleModel.getThisPlayer().getWarehouse().getDepots().get(DepotName.MEDIUM);
-        if(map!=null) {
-            for (Resource resource2 : map.keySet()) {
-                quantity = map.get(resource2);
-                resource = returnPath(resource2.toString());
-            }
-            if (quantity > 0) {
-                resourceSXMed.setImage(new Image(path + resource));
-                resourceSXMed.setVisible(true);
-                resourceSXMed.setDisable(false);
-            }
-            if (quantity > 1) {
-                resourceDXMed.setImage(new Image(path + resource));
-                resourceDXMed.setVisible(true);
-                resourceDXMed.setDisable(false);
-            }
+
+        quantity = printResources(DepotName.MEDIUM);
+        if (quantity > 0) {
+            resourceSXMed.setImage(new Image(path + resourceString));
+            setImageView(true, resourceSXMed);
         }
-        map =  simpleModel.getThisPlayer().getWarehouse().getDepots().get(DepotName.LOW);
-        if(map!=null){
-            for(Resource resource3 : map.keySet()){
-                quantity = map.get(resource3);
-                resource = returnPath(resource3.toString());
-            }
-            if(quantity > 0){
-                resourceSXLow.setImage(new Image(path+resource));
-                resourceSXLow.setVisible(true);
-                resourceSXLow.setDisable(false);
-            }
-            if(quantity > 1){
-                resourceCLow.setImage(new Image(path+resource));
-                resourceCLow.setVisible(true);
-                resourceCLow.setDisable(false);
-            }
-            if(quantity > 2){
-                resourceDXLow.setImage(new Image(path+resource));
-                resourceDXLow.setVisible(true);
-                resourceDXLow.setDisable(false);
-            }
+        if (quantity > 1) {
+            resourceDXMed.setImage(new Image(path + resourceString));
+            setImageView(true, resourceDXMed);
         }
+
+
+        quantity =printResources(DepotName.LOW);
+            if(quantity >0)
+            {
+        resourceSXLow.setImage(new Image(path + resourceString));
+        setImageView(true, resourceSXLow);
+            }
+            if(quantity >1)
+            {
+          resourceCLow.setImage(new Image(path + resourceString));
+        resourceCLow.setVisible(true);
+        resourceCLow.setDisable(false);
+        }
+            if(quantity >2)
+            {
+        resourceDXLow.setImage(new Image(path + resourceString));
+        resourceDXLow.setVisible(true);
+        resourceDXLow.setDisable(false);
+    }
+
 //TODO: print resources in ExtraDepot
+    }
+
+    private int printResources(DepotName depotName){
+
+        Map<Resource, Integer> map =  simpleModel.getThisPlayer().getWarehouse().getDepots().get(depotName);
+        if(map!=null) {
+            int quantity = 1;
+            for (Resource resource1 : map.keySet()) {
+                quantity = map.get(resource1);
+                resourceString = returnPath(resource1.toString());
+            }
+            return quantity;
+        }else return 0;
+
     }
 
     private String returnPath(String resource){
@@ -226,7 +227,7 @@ public class MarbleBufferController implements Initializable {
     @FXML
     public void selectResource(MouseEvent mouseEvent) {
         mouseEvent.consume();
-        Platform.runLater(() ->{
+        Platform.runLater(() -> {
             ImageView imageView = (ImageView) mouseEvent.getSource();
             switch (imageView.getId()){
                 case "res1" -> setResource(Resource.SHIELD);
@@ -297,12 +298,8 @@ public class MarbleBufferController implements Initializable {
         Platform.runLater(() ->{
             ImageView card = (ImageView) mouseEvent.getSource();
             switch (card.getId()) {
-                case "extraCard1" ->{
-                    setDepotName(DepotName.FIRST_EXTRA);
-                }
-                case "extraCard2" -> {
-                    setDepotName(DepotName.SECOND_EXTRA);
-                }
+                case "extraCard1" -> setDepotName(DepotName.FIRST_EXTRA);
+                case "extraCard2" -> setDepotName(DepotName.SECOND_EXTRA);
             }
         });
 

@@ -1,21 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.Group?>
-<?import javafx.scene.canvas.Canvas?>
-<?import javafx.scene.control.Accordion?>
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.ScrollPane?>
-<?import javafx.scene.control.TitledPane?>
-<?import javafx.scene.image.Image?>
-<?import javafx.scene.image.ImageView?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.ColumnConstraints?>
-<?import javafx.scene.layout.GridPane?>
-<?import javafx.scene.layout.RowConstraints?>
-<?import javafx.scene.text.Font?>
-<?import javafx.scene.text.Text?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.canvas.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 
-<GridPane alignment="CENTER_RIGHT" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1280.0" styleClass="maingrid" stylesheets="@background.css" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.client.view.GUI.MainSceneController">
+<GridPane alignment="CENTER_RIGHT" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1280.0" styleClass="maingrid" stylesheets="@background.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.client.view.GUI.MainSceneController">
   <columnConstraints>
     <ColumnConstraints />
     <ColumnConstraints hgrow="SOMETIMES" maxWidth="1276.7999267578125" minWidth="10.0" prefWidth="778.2000244140625" />
@@ -109,14 +102,15 @@
         </columnConstraints>
         <rowConstraints>
           <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
-            <ImageView fitHeight="214.0" fitWidth="269.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView fx:id="leaderCard2" fitHeight="214.0" fitWidth="269.0" pickOnBounds="true" preserveRatio="true" GridPane.valignment="TOP">
                <image>
                   <Image url="@cards/leader/Leader-101.jpg" />
                </image>
             </ImageView>
-            <ImageView fitHeight="214.0" fitWidth="248.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1">
+            <ImageView fx:id="leaderCard1" fitHeight="214.0" fitWidth="248.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1" GridPane.valignment="TOP">
                <image>
                   <Image url="@cards/leader/Leader-102.jpg" />
                </image>
@@ -138,8 +132,9 @@
                         <content>
                           <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" style="-fx-background-color: transparent;">
                                  <children>
-                                    <Button layoutX="10.0" layoutY="2.0" mnemonicParsing="false" prefHeight="65.0" prefWidth="120.0" text="Buy Resources" />
-                                    <Button layoutX="137.0" layoutY="2.0" mnemonicParsing="false" prefHeight="65.0" prefWidth="120.0" text="Buy card" />
+                                    <Button layoutX="141.0" layoutY="19.0" mnemonicParsing="false" prefHeight="31.0" prefWidth="116.0" text="End Turn" />
+                                    <Button layoutX="10.0" layoutY="2.0" mnemonicParsing="false" onAction="#clickActionButton" prefHeight="65.0" prefWidth="120.0" text="Buy Resources" />
+                                    <Button layoutX="137.0" layoutY="2.0" mnemonicParsing="false" onAction="#clickActionButton" prefHeight="65.0" prefWidth="120.0" text="Buy card" />
                                     <Button layoutX="264.0" layoutY="2.0" mnemonicParsing="false" prefHeight="65.0" prefWidth="120.0" text="Activate Production" />
                                  </children>
                               </AnchorPane>
@@ -147,16 +142,20 @@
                       </TitledPane>
                       <TitledPane animated="false" prefHeight="119.0" prefWidth="394.0" text="leader card action">
                         <content>
-                          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                                 <children>
+                                    <Button fx:id="pLCardButton" layoutX="14.0" layoutY="12.0" mnemonicParsing="false" onAction="#clickActionButton" prefHeight="31.0" prefWidth="174.0" text="Play Leader Card" />
+                                    <Button fx:id="dLCardButton" layoutX="207.0" layoutY="12.0" mnemonicParsing="false" onAction="#clickActionButton" prefHeight="31.0" prefWidth="171.0" text="Discard Leader Card" />
+                                 </children></AnchorPane>
                         </content>
                       </TitledPane>
                     </panes>
                   </Accordion>
-                  <ScrollPane prefHeight="200.0" prefWidth="200.0" styleClass="transparent" stylesheets="@background.css" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                  <ScrollPane prefHeight="200.0" prefWidth="200.0" styleClass="transparent" stylesheets="@background.css" GridPane.columnIndex="1" GridPane.rowIndex="1" GridPane.valignment="BOTTOM">
                     <content>
                       <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="198.0" prefWidth="374.0" styleClass="transparent" stylesheets="@background.css">
                            <children>
-                              <Text layoutX="17.0" layoutY="28.0" strokeType="OUTSIDE" strokeWidth="0.0" text="This is the log of the application" wrappingWidth="346.9500732421875" />
+                              <Text layoutX="17.0" layoutY="16.0" strokeType="OUTSIDE" strokeWidth="0.0" text="This is the log of the application" wrappingWidth="346.9500732421875" />
                            </children>
                         </AnchorPane>
                     </content>
@@ -167,6 +166,32 @@
                   <ColumnConstraints />
                </columnConstraints>
             </GridPane>
+            <Label fx:id="activeCard2" alignment="TOP_LEFT" disable="true" prefHeight="210.0" prefWidth="24.0" text="A" textFill="#00ff04" visible="false" GridPane.halignment="LEFT">
+               <font>
+                  <Font name="System Bold" size="33.0" />
+               </font></Label>
+            <Label fx:id="activeCard1" alignment="TOP_LEFT" prefHeight="210.0" prefWidth="24.0" text="A" textFill="#00ff04" visible="false" GridPane.columnIndex="1" GridPane.halignment="RIGHT">
+               <font>
+                  <Font name="System Bold" size="33.0" />
+               </font>
+            </Label>
+            <RadioButton fx:id="activeCard2Radio" disable="true" mnemonicParsing="false" prefHeight="21.0" prefWidth="13.0" visible="false" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="BOTTOM">
+               <GridPane.margin>
+                  <Insets bottom="-10.0" left="20.0" />
+               </GridPane.margin>
+               <toggleGroup>
+                  <ToggleGroup fx:id="leaderCardGroup"/>
+               </toggleGroup>
+            </RadioButton>
+            <RadioButton fx:id="activeCard1Radio" disable="true" mnemonicParsing="false" prefHeight="21.0" prefWidth="13.0" toggleGroup="$leaderCardGroup" visible="false" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="BOTTOM">
+               <GridPane.margin>
+                  <Insets bottom="-10.0" left="20.0" />
+               </GridPane.margin></RadioButton>
+            <Button fx:id="lCardButton" disable="true" mnemonicParsing="false" onAction="#selectLCard" text="Select" visible="false" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="1" GridPane.valignment="BOTTOM">
+               <GridPane.margin>
+                  <Insets bottom="-15.0" />
+               </GridPane.margin>
+            </Button>
          </children>
       </GridPane>
       <Group GridPane.columnIndex="1" GridPane.rowIndex="1">
@@ -467,6 +492,8 @@
                   <Image url="@res-marbles/red-marble.png" />
                </image>
             </ImageView>
+            <Button fx:id="firstCol" layoutX="82.0" layoutY="182.0" mnemonicParsing="false" onAction="#selectCol" prefHeight="42.0" prefWidth="25.0" style="-fx-background-color: transparent;" />
+            <Button fx:id="secondCol" layoutX="112.0" layoutY="182.0" mnemonicParsing="false" onAction="#selectCol" prefHeight="42.0" prefWidth="20.0" style="-fx-background-color: transparent;" />
          </children>
       </Group>
    </children>

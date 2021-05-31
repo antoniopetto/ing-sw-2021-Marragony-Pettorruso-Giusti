@@ -6,6 +6,7 @@ import it.polimi.ingsw.client.simplemodel.SimpleLeaderCard;
 import it.polimi.ingsw.client.simplemodel.SimplePlayer;
 import it.polimi.ingsw.client.view.View;
 import it.polimi.ingsw.messages.command.DiscardLeaderCardMsg;
+import it.polimi.ingsw.messages.command.PlayLeaderCardMsg;
 import it.polimi.ingsw.server.model.playerboard.Depot;
 import it.polimi.ingsw.server.model.playerboard.DepotName;
 import it.polimi.ingsw.server.model.playerboard.Resource;
@@ -44,7 +45,24 @@ public class GUIView extends Application implements View  {
     private int discardCounter = 0;
     private int marbleCounter = 0;
     private Marble marble;
-    private boolean firstMain = false;
+    private boolean firstMain = true;
+    private Action action = Action.INIT;
+    private MainSceneController mainSceneController = null;
+
+
+    private enum Action{
+        PLAY_LEADER,
+        DISCARD_LEADER,
+        BUY_RESOURCES,
+        END_TURN,
+        BUY_CARD,
+        ACTIVE_PRODUCTION,
+        MOVE_DEPOT,
+        INIT,
+        SWITCH_DEPOT;
+
+
+    }
 
     public GUIView() {
 
@@ -188,14 +206,45 @@ public class GUIView extends Application implements View  {
 
     @Override
     public CommandMsg selectMove(boolean postTurn){
-        firstMain = false;
-        setLoader("/mainScene.fxml");
-        Scene scene = loadScene(currentLoader);
-        Platform.runLater(()->{
-            if(initStage.isShowing()) initStage.close();
+        if(firstMain){
+            setLoader("/mainScene.fxml");
+            Scene scene = loadScene(currentLoader);
+            //TODO setStageComponents
+            mainSceneController = currentLoader.getController();
+            mainSceneController.setSimpleModel(game);
+            mainSceneController.setLeaderCard();
+
+            Platform.runLater(()->{
+                if(initStage.isShowing()) initStage.close();
                 mainStage = new Stage();
                 manageStage(mainStage, scene, "Main", false);
-        });
+            });
+            firstMain = false;
+        }
+
+
+
+        if(action.equals(Action.DISCARD_LEADER) || action.equals(Action.PLAY_LEADER)) mainSceneController.setLeaderCard();
+
+
+
+        int choice = mainSceneController.getChoice();
+
+        switch (choice){
+            case 1 ->{
+                int cardId = mainSceneController.getCardId();
+                action = Action.PLAY_LEADER;
+                return new PlayLeaderCardMsg(cardId);
+            }
+            case 2 ->{
+                int cardId = mainSceneController.getCardId();
+                action = Action.DISCARD_LEADER;
+                return new DiscardLeaderCardMsg(cardId);
+            }
+        }
+
+        
+
 
 
         return null;
