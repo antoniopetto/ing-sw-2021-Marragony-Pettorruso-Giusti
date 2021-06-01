@@ -211,9 +211,7 @@ public class GUIView extends Application implements View  {
             Scene scene = loadScene(currentLoader);
             //TODO setStageComponents
             mainSceneController = currentLoader.getController();
-            mainSceneController.setSimpleModel(game);
-            mainSceneController.setLeaderCard();
-
+            mainSceneController.setScene(game);
             Platform.runLater(()->{
                 if(initStage.isShowing()) initStage.close();
                 mainStage = new Stage();
@@ -221,13 +219,7 @@ public class GUIView extends Application implements View  {
             });
             firstMain = false;
         }
-
-
-
         if(action.equals(Action.DISCARD_LEADER) || action.equals(Action.PLAY_LEADER)) mainSceneController.setLeaderCard();
-
-
-
         int choice = mainSceneController.getChoice();
 
         switch (choice){
@@ -241,12 +233,19 @@ public class GUIView extends Application implements View  {
                 action = Action.DISCARD_LEADER;
                 return new DiscardLeaderCardMsg(cardId);
             }
+            case 3 ->{
+                action = Action.BUY_RESOURCES;
+                return null;
+            }
+            case 4->{
+                action=Action.BUY_CARD;
+                return buyCard();
+            }
         }
-
-        
-
-
-
+        return null;
+    }
+    private CommandMsg buyCard()
+    {
         return null;
     }
 

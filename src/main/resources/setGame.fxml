@@ -31,7 +31,7 @@
                   <Font name="Lucida Calligraphy Italic" size="22.0" />
                </font>
             </Label>
-            <Label fx:id="playersLabel" layoutX="154.0" layoutY="140.0" prefHeight="31.0" prefWidth="247.0" text="Insert number of players" textFill="#3b2873" visible="false">
+            <Label fx:id="playersLabel" layoutX="154.0" layoutY="140.0" prefHeight="33.0" prefWidth="322.0" text="Insert number of players" textFill="#3b2873" visible="false">
                <font>
                   <Font name="Lucida Calligraphy Italic" size="22.0" />
                </font>

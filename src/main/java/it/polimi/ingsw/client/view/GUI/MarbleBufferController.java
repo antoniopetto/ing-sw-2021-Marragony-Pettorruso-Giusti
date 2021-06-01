@@ -20,6 +20,8 @@ import java.net.URL;
 import java.util.Map;
 import java.util.ResourceBundle;
 
+import static it.polimi.ingsw.client.view.GUI.GUISupport.returnPath;
+
 public class MarbleBufferController implements Initializable {
 
     private Marble marble = null;
@@ -178,23 +180,7 @@ public class MarbleBufferController implements Initializable {
 
     }
 
-    private String returnPath(String resource){
-        switch (resource) {
-            case "COIN" -> {
-                return "coin.png";
-            }
-            case "STONE" -> {
-                return "stone.png";
-            }
-            case "SHIELD" -> {
-                return "shield.png";
-            }
-            case "SERVANT" -> {
-                return "servant";
-            }
-            default ->{return null;}
-        }
-    }
+
 
     private void activeExtraDepot(){
         int counter = 0;

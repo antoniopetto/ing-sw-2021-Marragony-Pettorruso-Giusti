@@ -1,13 +1,17 @@
 package it.polimi.ingsw.client.view.GUI;
 
+import it.polimi.ingsw.client.simplemodel.SimpleDevCard;
 import it.polimi.ingsw.client.simplemodel.SimpleLeaderCard;
 import it.polimi.ingsw.client.simplemodel.SimpleModel;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.GridPane;
 
 import java.net.URL;
 import java.util.ArrayList;
@@ -42,8 +46,14 @@ public class MainSceneController implements Initializable {
     private ImageView leaderCard2;
     @FXML
     private ToggleGroup leaderCardGroup;
-
     //End
+
+    @FXML
+    private GridPane decks;
+
+
+    @FXML
+    private GridPane marketGrid;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -221,10 +231,32 @@ public class MainSceneController implements Initializable {
     public void selectCol(ActionEvent actionEvent) {
     }
 
-
-
-
-    public void setSimpleModel(SimpleModel simpleModel) {
-        this.simpleModel = simpleModel;
+    public void setScene(SimpleModel simpleModel){
+        this.simpleModel=simpleModel;
+        setLeaderCard();
+        setDecks();
     }
+    
+    public void setDecks()
+    {
+        List<Integer> ids = new ArrayList<>();
+        for (SimpleDevCard card: simpleModel.getDevCardDecks()) {
+            ids.add(card.getId());
+        }
+
+        int i =0;
+
+        for (Node node: decks.getChildren()) {
+            ImageView imageview = (ImageView) node;
+            if(ids.get(i)!=null)
+            {
+                String url = "/cards/development/Development-" + ids.get(i) + ".jpg";
+                imageview.setImage(new Image(url));
+            }
+            else imageview.setVisible(false);
+            i++;
+        }
+    }
+
+    
 }
