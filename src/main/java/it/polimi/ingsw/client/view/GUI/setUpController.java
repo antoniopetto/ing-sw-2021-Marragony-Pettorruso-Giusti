@@ -64,8 +64,6 @@ public class setUpController implements Initializable {
     public void setGame(SimpleModel game) {
         this.game = game;
         List<Image> cards = new ArrayList<>();
-        
-
         for (SimpleLeaderCard card : game.getThisPlayer().getLeaderCards()) {
             int cardId = card.getId();
             cardIds.add(cardId);

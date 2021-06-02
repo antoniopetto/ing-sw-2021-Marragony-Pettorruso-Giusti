@@ -3,15 +3,19 @@ package it.polimi.ingsw.client.view.GUI;
 import it.polimi.ingsw.client.simplemodel.SimpleDevCard;
 import it.polimi.ingsw.client.simplemodel.SimpleLeaderCard;
 import it.polimi.ingsw.client.simplemodel.SimpleModel;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
+import javafx.scene.shape.Rectangle;
 
 import java.net.URL;
 import java.util.ArrayList;
@@ -51,6 +55,9 @@ public class MainSceneController implements Initializable {
     @FXML
     private GridPane decks;
 
+    @FXML
+    private Group slots;
+
 
     @FXML
     private GridPane marketGrid;
@@ -82,6 +89,9 @@ public class MainSceneController implements Initializable {
                     activeLeaderCardComponents(true, simpleModel.getThisPlayer().getLeaderCards().size());
                     setActionButton(false);
                 }
+            }
+            case "buyCardButton" -> {
+                setChoice(4);
             }
         }
     }
@@ -235,7 +245,14 @@ public class MainSceneController implements Initializable {
         this.simpleModel=simpleModel;
         setLeaderCard();
         setDecks();
+        disableCards(true);
+        disableSlots(true);
     }
+
+    public void disableCards(boolean disable) {GUISupport.setDisable(disable, decks);}
+    public void disableSlots(boolean disable) {GUISupport.setVisible(!disable, slots);}
+
+
     
     public void setDecks()
     {
@@ -252,11 +269,33 @@ public class MainSceneController implements Initializable {
             {
                 String url = "/cards/development/Development-" + ids.get(i) + ".jpg";
                 imageview.setImage(new Image(url));
+                imageview.setId(String.valueOf(ids.get(i)));
             }
             else imageview.setVisible(false);
             i++;
         }
     }
 
-    
+
+    public void devCardSelected(MouseEvent mouseEvent) {
+        mouseEvent.consume();
+        Platform.runLater(()->{
+            ImageView image = (ImageView)mouseEvent.getSource();
+            setCardId(Integer.parseInt(image.getId()));
+        });
+    }
+
+
+    public void slotSelected(MouseEvent mouseEvent) {
+        mouseEvent.consume();
+        Platform.runLater(()->{
+            Rectangle slot = (Rectangle)mouseEvent.getSource();
+            String slotId = slot.getId();
+            switch (slotId){
+                case "slot1" -> setChoice(1);
+                case "slot2" -> setChoice(2);
+                case "slot3" -> setChoice(3);
+            }
+        });
+    }
 }

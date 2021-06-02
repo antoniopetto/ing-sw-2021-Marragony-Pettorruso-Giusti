@@ -1,12 +1,12 @@
 package it.polimi.ingsw.client.view.GUI;
 
 import it.polimi.ingsw.client.ServerHandler;
-import it.polimi.ingsw.client.simplemodel.SimpleModel;
-import it.polimi.ingsw.client.simplemodel.SimpleLeaderCard;
-import it.polimi.ingsw.client.simplemodel.SimplePlayer;
+import it.polimi.ingsw.client.simplemodel.*;
 import it.polimi.ingsw.client.view.View;
+import it.polimi.ingsw.messages.command.BuyAndAddCardInSlotMsg;
 import it.polimi.ingsw.messages.command.DiscardLeaderCardMsg;
 import it.polimi.ingsw.messages.command.PlayLeaderCardMsg;
+import it.polimi.ingsw.server.model.cards.CardParser;
 import it.polimi.ingsw.server.model.playerboard.Depot;
 import it.polimi.ingsw.server.model.playerboard.DepotName;
 import it.polimi.ingsw.server.model.playerboard.Resource;
@@ -246,7 +246,16 @@ public class GUIView extends Application implements View  {
     }
     private CommandMsg buyCard()
     {
-        return null;
+        mainSceneController.disableCards(false);
+        int cardId = mainSceneController.getCardId();
+        mainSceneController.disableCards(true);
+        mainSceneController.disableSlots(false);
+        int slotId = mainSceneController.getChoice()-1;
+        System.out.println(slotId);
+        mainSceneController.disableSlots(true);
+        SimpleCardParser parser = SimpleCardParser.getInstance();
+        SimpleDevCard card = parser.getSimpleDevelopmentCard(cardId);
+        return new BuyAndAddCardInSlotMsg(card.getColor(), card.getLevel(), slotId);
     }
 
     @Override

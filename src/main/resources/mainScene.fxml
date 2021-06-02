@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.Cursor?>
 <?import javafx.scene.Group?>
 <?import javafx.scene.canvas.Canvas?>
 <?import javafx.scene.control.Accordion?>
@@ -16,6 +17,7 @@
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
@@ -43,67 +45,70 @@
           <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
-            <ImageView fitHeight="195.0" fitWidth="123.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView fitHeight="195.0" fitWidth="123.0" onMouseClicked="#devCardSelected" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@cards/development/Development-1.jpg" />
                </image>
             </ImageView>
-            <ImageView fitHeight="195.0" fitWidth="123.0" layoutX="493.0" layoutY="20.0" pickOnBounds="true" preserveRatio="true" GridPane.rowIndex="1">
+            <ImageView fitHeight="195.0" fitWidth="123.0" layoutX="493.0" layoutY="20.0" onMouseClicked="#devCardSelected" pickOnBounds="true" preserveRatio="true" GridPane.rowIndex="1">
                <image>
                   <Image url="@cards/development/Development-1.jpg" />
                </image>
             </ImageView>
-            <ImageView fitHeight="195.0" fitWidth="123.0" layoutX="493.0" layoutY="225.0" pickOnBounds="true" preserveRatio="true" GridPane.rowIndex="2">
+            <ImageView fitHeight="195.0" fitWidth="123.0" layoutX="493.0" layoutY="225.0" onMouseClicked="#devCardSelected" pickOnBounds="true" preserveRatio="true" GridPane.rowIndex="2">
                <image>
                   <Image url="@cards/development/Development-1.jpg" />
                </image>
             </ImageView>
-            <ImageView fitHeight="198.0" fitWidth="123.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1">
+            <ImageView fitHeight="198.0" fitWidth="123.0" onMouseClicked="#devCardSelected" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1">
                <image>
                   <Image url="@cards/development/Development-1.jpg" />
                </image>
             </ImageView>
-            <ImageView fitHeight="185.0" fitWidth="123.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1" GridPane.rowIndex="1">
+            <ImageView fitHeight="185.0" fitWidth="123.0" onMouseClicked="#devCardSelected" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1" GridPane.rowIndex="1">
                <image>
                   <Image url="@cards/development/Development-1.jpg" />
                </image>
             </ImageView>
-            <ImageView fitHeight="198.0" fitWidth="123.0" layoutX="171.0" layoutY="20.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1" GridPane.rowIndex="2">
+            <ImageView fitHeight="198.0" fitWidth="123.0" layoutX="171.0" layoutY="20.0" onMouseClicked="#devCardSelected" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1" GridPane.rowIndex="2">
                <image>
                   <Image url="@cards/development/Development-1.jpg" />
                </image>
             </ImageView>
-            <ImageView fitHeight="195.0" fitWidth="123.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2">
+            <ImageView fitHeight="195.0" fitWidth="123.0" onMouseClicked="#devCardSelected" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2">
                <image>
                   <Image url="@cards/development/Development-1.jpg" />
                </image>
             </ImageView>
-            <ImageView fitHeight="195.0" fitWidth="123.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2" GridPane.rowIndex="1">
+            <ImageView fitHeight="195.0" fitWidth="123.0" onMouseClicked="#devCardSelected" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2" GridPane.rowIndex="1">
                <image>
                   <Image url="@cards/development/Development-1.jpg" />
                </image>
             </ImageView>
-            <ImageView fitHeight="195.0" fitWidth="123.0" layoutX="493.0" layoutY="225.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2" GridPane.rowIndex="2">
+            <ImageView fitHeight="195.0" fitWidth="123.0" layoutX="493.0" layoutY="225.0" onMouseClicked="#devCardSelected" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2" GridPane.rowIndex="2">
                <image>
                   <Image url="@cards/development/Development-1.jpg" />
                </image>
             </ImageView>
-            <ImageView fitHeight="195.0" fitWidth="123.0" layoutX="332.0" layoutY="225.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="3">
+            <ImageView fitHeight="195.0" fitWidth="123.0" layoutX="332.0" layoutY="225.0" onMouseClicked="#devCardSelected" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="3">
                <image>
                   <Image url="@cards/development/Development-1.jpg" />
                </image>
             </ImageView>
-            <ImageView fitHeight="195.0" fitWidth="123.0" layoutX="10.0" layoutY="225.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="3" GridPane.rowIndex="1">
+            <ImageView fitHeight="195.0" fitWidth="123.0" layoutX="10.0" layoutY="225.0" onMouseClicked="#devCardSelected" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="3" GridPane.rowIndex="1">
                <image>
                   <Image url="@cards/development/Development-1.jpg" />
                </image>
             </ImageView>
-            <ImageView fitHeight="198.0" fitWidth="123.0" layoutX="171.0" layoutY="20.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="3" GridPane.rowIndex="2">
+            <ImageView fitHeight="198.0" fitWidth="123.0" layoutX="171.0" layoutY="20.0" onMouseClicked="#devCardSelected" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="3" GridPane.rowIndex="2">
                <image>
                   <Image url="@cards/development/Development-1.jpg" />
                </image>
             </ImageView>
          </children>
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor>
       </GridPane>
       <GridPane styleClass="transparent" stylesheets="@background.css" GridPane.columnIndex="1">
         <columnConstraints>
@@ -145,7 +150,7 @@
                                  <children>
                                     <Button layoutX="9.0" layoutY="5.0" mnemonicParsing="false" prefHeight="60.0" prefWidth="376.0" text="End Turn" visible="false" />
                                     <Button layoutX="10.0" layoutY="2.0" mnemonicParsing="false" onAction="#clickActionButton" prefHeight="65.0" prefWidth="120.0" text="Buy Resources" />
-                                    <Button layoutX="137.0" layoutY="2.0" mnemonicParsing="false" onAction="#clickActionButton" prefHeight="65.0" prefWidth="120.0" text="Buy card" />
+                                    <Button fx:id="buyCardButton" layoutX="137.0" layoutY="2.0" mnemonicParsing="false" onAction="#clickActionButton" prefHeight="65.0" prefWidth="120.0" text="Buy card" />
                                     <Button layoutX="264.0" layoutY="2.0" mnemonicParsing="false" prefHeight="65.0" prefWidth="120.0" text="Activate Production" />
                                  </children>
                               </AnchorPane>
@@ -208,63 +213,63 @@
       <Group GridPane.columnIndex="1" GridPane.rowIndex="1">
          <children>
             <Canvas height="549.0" width="766.0" />
-            <ImageView fitHeight="548.0" fitWidth="756.0" layoutX="7.0" layoutY="7.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView fitHeight="548.0" fitWidth="756.0" layoutX="-80.0" layoutY="6.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@PlayerBoard.jpg" />
                </image>
             </ImageView>
-            <ImageView fitHeight="210.0" fitWidth="166.0" layoutX="295.0" layoutY="317.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView fitHeight="210.0" fitWidth="166.0" layoutX="295.0" layoutY="317.0" pickOnBounds="true" preserveRatio="true" visible="false">
                <image>
                   <Image url="@cards/development/Development-2.jpg" />
                </image>
             </ImageView>
-            <ImageView fitHeight="210.0" fitWidth="166.0" layoutX="436.0" layoutY="248.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView fitHeight="210.0" fitWidth="166.0" layoutX="436.0" layoutY="248.0" pickOnBounds="true" preserveRatio="true" visible="false">
                <image>
                   <Image url="@cards/development/Development-2.jpg" />
                </image>
             </ImageView>
-            <ImageView fitHeight="210.0" fitWidth="166.0" layoutX="593.0" layoutY="249.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView fitHeight="210.0" fitWidth="166.0" layoutX="593.0" layoutY="249.0" pickOnBounds="true" preserveRatio="true" visible="false">
                <image>
                   <Image url="@cards/development/Development-2.jpg" />
                </image>
             </ImageView>
             <ImageView fitHeight="35.0" fitWidth="39.0" layoutX="87.0" layoutY="239.0" pickOnBounds="true" preserveRatio="true" />
-            <ImageView fitHeight="210.0" fitWidth="166.0" layoutX="295.0" layoutY="264.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView fitHeight="210.0" fitWidth="166.0" layoutX="295.0" layoutY="264.0" pickOnBounds="true" preserveRatio="true" visible="false">
                <image>
                   <Image url="@cards/development/Development-2.jpg" />
                </image>
             </ImageView>
-            <ImageView fitHeight="32.0" fitWidth="29.0" layoutX="92.0" layoutY="243.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView fitHeight="32.0" fitWidth="29.0" layoutX="9.0" layoutY="239.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@res-marbles/servant.png" />
                </image>
             </ImageView>
-            <ImageView fitHeight="32.0" fitWidth="29.0" layoutX="73.0" layoutY="289.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView fitHeight="32.0" fitWidth="29.0" layoutX="-10.0" layoutY="285.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@res-marbles/shield.png" />
                </image>
             </ImageView>
-            <ImageView fitHeight="32.0" fitWidth="29.0" layoutX="107.0" layoutY="289.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView fitHeight="32.0" fitWidth="29.0" layoutX="24.0" layoutY="285.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@res-marbles/shield.png" />
                </image>
             </ImageView>
-            <ImageView fitHeight="32.0" fitWidth="29.0" layoutX="63.0" layoutY="339.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView fitHeight="32.0" fitWidth="29.0" layoutX="-20.0" layoutY="335.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@res-marbles/coin.png" />
                </image>
             </ImageView>
-            <ImageView fitHeight="32.0" fitWidth="29.0" layoutX="93.0" layoutY="339.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView fitHeight="32.0" fitWidth="29.0" layoutX="10.0" layoutY="335.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@res-marbles/coin.png" />
                </image>
             </ImageView>
-            <ImageView fitHeight="32.0" fitWidth="29.0" layoutX="122.0" layoutY="339.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView fitHeight="32.0" fitWidth="29.0" layoutX="39.0" layoutY="335.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@res-marbles/coin.png" />
                </image>
             </ImageView>
-            <GridPane layoutX="26.0" layoutY="405.0" prefHeight="107.0" prefWidth="140.0">
+            <GridPane layoutX="-66.0" layoutY="405.0" prefHeight="107.0" prefWidth="140.0">
               <columnConstraints>
                 <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                 <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -323,6 +328,25 @@
                   <Image url="@res-marbles/faith.png" />
                </image>
             </ImageView>
+            <Group fx:id="slots" layoutX="219.0" layoutY="226.0">
+               <children>
+                  <Rectangle fx:id="slot1" arcHeight="5.0" arcWidth="5.0" fill="#1f93ff00" height="243.0" onMouseClicked="#slotSelected" stroke="#516cf2" strokeType="INSIDE" strokeWidth="5.0" width="119.0">
+                     <cursor>
+                        <Cursor fx:constant="HAND" />
+                     </cursor>
+                  </Rectangle>
+                  <Rectangle fx:id="slot2" arcHeight="5.0" arcWidth="5.0" fill="#1f93ff00" height="243.0" layoutX="145.0" onMouseClicked="#slotSelected" stroke="#516cf2" strokeType="INSIDE" strokeWidth="5.0" width="119.0">
+                     <cursor>
+                        <Cursor fx:constant="HAND" />
+                     </cursor>
+                  </Rectangle>
+                  <Rectangle fx:id="slot3" arcHeight="5.0" arcWidth="5.0" fill="#1f93ff00" height="243.0" layoutX="291.0" onMouseClicked="#slotSelected" stroke="#516cf2" strokeType="INSIDE" strokeWidth="5.0" width="128.0">
+                     <cursor>
+                        <Cursor fx:constant="HAND" />
+                     </cursor>
+                  </Rectangle>
+               </children>
+            </Group>
          </children>
       </Group>
       <Group GridPane.columnIndex="2">
