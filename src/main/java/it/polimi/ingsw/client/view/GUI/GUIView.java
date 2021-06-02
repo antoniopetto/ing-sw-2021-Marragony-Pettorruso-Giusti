@@ -400,7 +400,7 @@ public class GUIView extends Application implements View  {
     @Override
     public Resource selectResource(){
         Resource resource = null;
-        if(marbleCounter == 1 && !game.getThisPlayer().getUsername().equals(game.getPlayers().get(0).getUsername())
+        if(marbleCounter == 1 && (!game.getThisPlayer().getUsername().equals(game.getPlayers().get(0).getUsername()))
                 || (marbleCounter == 2 && game.getPlayers().size() == 4 && game.getThisPlayer().getUsername().equals(game.getPlayers().get(3).getUsername()))){
             return marble.getResource();
         }else if(marbleCounter >= 1 ){
