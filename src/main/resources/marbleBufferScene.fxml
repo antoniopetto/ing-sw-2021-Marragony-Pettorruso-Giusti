@@ -1,12 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.paint.*?>
+<?import javafx.scene.effect.*?>
+<?import java.lang.*?>
 <?import javafx.scene.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.client.view.GUI.MarbleBufferController">
+<AnchorPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.client.view.GUI.MarbleBufferController">
    <children>
 
       <Group>
@@ -20,7 +23,7 @@
                <children>
                   <Pane prefHeight="200.0" prefWidth="200.0">
                      <children>
-                        <ImageView fx:id="extraCard1" disable="true" fitHeight="230.0" fitWidth="240.0" layoutX="285.0" layoutY="20.0" onMouseClicked="#insertAResource" pickOnBounds="true" preserveRatio="true" visible="false">
+                        <ImageView fx:id="extraCard1" fitHeight="230.0" fitWidth="240.0" layoutX="285.0" layoutY="20.0" onMouseClicked="#insertAResource" pickOnBounds="true" preserveRatio="true" visible="false">
                            <image>
                               <Image url="@cards/leader/Leader-105.jpg" />
                            </image>
@@ -28,13 +31,23 @@
                               <Cursor fx:constant="HAND" />
                            </cursor>
                         </ImageView>
-                        <ImageView fx:id="extraCard2" disable="true" fitHeight="230.0" fitWidth="240.0" layoutX="110.0" layoutY="20.0" onMouseClicked="#insertAResource" pickOnBounds="true" preserveRatio="true" visible="false">
+                        <ImageView fx:id="extraCard2" fitHeight="230.0" fitWidth="240.0" layoutX="110.0" layoutY="20.0" onMouseClicked="#insertAResource" pickOnBounds="true" preserveRatio="true" visible="false">
                            <image>
                               <Image url="@cards/leader/Leader-105.jpg" />
                            </image>
                            <cursor>
                               <Cursor fx:constant="HAND" />
                            </cursor>
+                        </ImageView>
+                        <ImageView fx:id="switchExtra1" fitHeight="45.0" fitWidth="35.0" layoutX="344.0" layoutY="255.0" onMouseClicked="#switchDepot" pickOnBounds="true" preserveRatio="true" rotate="-90.0" visible="false">
+                           <image>
+                              <Image url="@switchButton.jpg" />
+                           </image>
+                        </ImageView>
+                        <ImageView fx:id="switchExtra2" fitHeight="35.0" fitWidth="58.0" layoutX="151.0" layoutY="254.0" onMouseClicked="#switchDepot" pickOnBounds="true" preserveRatio="true" rotate="90.0" visible="false" x="20.0">
+                           <image>
+                              <Image url="@switchButton.jpg" />
+                           </image>
                         </ImageView>
                      </children>
                   </Pane>
@@ -126,7 +139,7 @@
                   <Image url="@Pergamena2.png" />
                </image>
             </ImageView>
-            <Text fill="#0b67d9" layoutX="143.0" layoutY="64.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Please select a marble to put in a depot" wrappingWidth="462.28131103515625">
+            <Text fx:id="titleLabel" fill="#0b67d9" layoutX="143.0" layoutY="64.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Please select a marble to put in a depot" wrappingWidth="462.28131103515625">
                <font>
                   <Font name="Viner Hand ITC" size="26.0" />
                </font>
@@ -188,6 +201,30 @@
                      <cursor>
                         <Cursor fx:constant="HAND" />
                      </cursor>
+                  </ImageView>
+                  <ImageView fx:id="switchHigh" fitHeight="44.0" fitWidth="35.0" layoutX="3.0" layoutY="26.0" onMouseClicked="#switchDepot" pickOnBounds="true" preserveRatio="true" visible="false">
+                     <image>
+                        <Image url="@switchButton.jpg" />
+                     </image>
+                     <effect>
+                        <Bloom threshold="0.21" />
+                     </effect>
+                  </ImageView>
+                  <ImageView fx:id="switchMed" fitHeight="44.0" fitWidth="35.0" layoutX="3.0" layoutY="84.0" onMouseClicked="#switchDepot" pickOnBounds="true" preserveRatio="true" visible="false">
+                     <effect>
+                        <Bloom threshold="0.21" />
+                     </effect>
+                     <image>
+                        <Image url="@switchButton.jpg" />
+                     </image>
+                  </ImageView>
+                  <ImageView fx:id="switchLow" fitHeight="44.0" fitWidth="35.0" layoutX="3.0" layoutY="152.0" onMouseClicked="#switchDepot" pickOnBounds="true" preserveRatio="true" visible="false">
+                     <effect>
+                        <Bloom threshold="0.21" />
+                     </effect>
+                     <image>
+                        <Image url="@switchButton.jpg" />
+                     </image>
                   </ImageView>
 
                </children>

@@ -2,8 +2,6 @@ package it.polimi.ingsw.client.view.GUI;
 
 import it.polimi.ingsw.client.simplemodel.SimpleLeaderCard;
 import it.polimi.ingsw.client.simplemodel.SimpleModel;
-import it.polimi.ingsw.client.simplemodel.SimpleWarehouse;
-import it.polimi.ingsw.server.model.playerboard.Depot;
 import it.polimi.ingsw.server.model.playerboard.DepotName;
 import it.polimi.ingsw.server.model.playerboard.Resource;
 import it.polimi.ingsw.server.model.shared.Marble;
@@ -11,12 +9,15 @@ import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
 
@@ -116,70 +117,28 @@ public class MarbleBufferController implements Initializable {
     }
 
     public void show(boolean resources, boolean depot, boolean marble) {
-        setImageView(resources, res1, res2, res3, res4);
-        setImageView(marble, marble1, marble2, marble3, marble4);
+        GUISupport.setVisible(resources, res1, res2, res3, res4);
+        GUISupport.setVisible(marble, marble1, marble2, marble3, marble4);
         if (depot) setDepotResources();
-        setImageView(depot, wareHouse);
+        wareHouse.setVisible(depot);
         if (depot) activeExtraDepot();
     }
 
     private void setDepotResources() {
-        String path = "/res-marbles/";
-        int quantity = 0;
+        int quantity;
 
-        quantity = printResources(DepotName.HIGH);
-        if (quantity > 0) {
-            resourceHigh.setImage(new Image(path + resourceString));
-            setImageView(true, resourceHigh);
-        }
+        quantity = GUISupport.quantityOfResources(simpleModel.getThisPlayer().getWarehouse().getDepots().get(DepotName.HIGH));
+        GUISupport.settingImageView(quantity, resourceHigh);
 
-        quantity = printResources(DepotName.MEDIUM);
-        if (quantity > 0) {
-            resourceSXMed.setImage(new Image(path + resourceString));
-            setImageView(true, resourceSXMed);
-        }
-        if (quantity > 1) {
-            resourceDXMed.setImage(new Image(path + resourceString));
-            setImageView(true, resourceDXMed);
-        }
+        quantity = GUISupport.quantityOfResources(simpleModel.getThisPlayer().getWarehouse().getDepots().get(DepotName.MEDIUM));
+        GUISupport.settingImageView(quantity, resourceSXMed, resourceDXMed);
 
 
-        quantity =printResources(DepotName.LOW);
-            if(quantity >0)
-            {
-        resourceSXLow.setImage(new Image(path + resourceString));
-        setImageView(true, resourceSXLow);
-            }
-            if(quantity >1)
-            {
-          resourceCLow.setImage(new Image(path + resourceString));
-        resourceCLow.setVisible(true);
-        resourceCLow.setDisable(false);
-        }
-            if(quantity >2)
-            {
-        resourceDXLow.setImage(new Image(path + resourceString));
-        resourceDXLow.setVisible(true);
-        resourceDXLow.setDisable(false);
-    }
+        quantity = GUISupport.quantityOfResources(simpleModel.getThisPlayer().getWarehouse().getDepots().get(DepotName.LOW));
+        GUISupport.settingImageView(quantity, resourceSXLow, resourceCLow, resourceDXLow);
 
 //TODO: print resources in ExtraDepot
     }
-
-    private int printResources(DepotName depotName){
-
-        Map<Resource, Integer> map =  simpleModel.getThisPlayer().getWarehouse().getDepots().get(depotName);
-        if(map!=null) {
-            int quantity = 1;
-            for (Resource resource1 : map.keySet()) {
-                quantity = map.get(resource1);
-                resourceString = returnPath(resource1.toString());
-            }
-            return quantity;
-        }else return 0;
-
-    }
-
 
 
     private void activeExtraDepot(){
@@ -190,10 +149,8 @@ public class MarbleBufferController implements Initializable {
                     if (counter == 0) {
                         extraCard1.setImage(new Image("/cards/leader/Leader-" + simpleLeaderCard.getId() + ".jpg"));
                         extraCard1.setVisible(true);
-                        extraCard1.setDisable(false);
                     } else {
                         extraCard2.setImage(new Image("/cards/leader/Leader-" + simpleLeaderCard.getId() + ".jpg"));
-                        extraCard2.setDisable(false);
                         extraCard2.setVisible(true);
                     }
                     counter++;
@@ -202,13 +159,6 @@ public class MarbleBufferController implements Initializable {
         }
     }
 
-
-    private void setImageView(boolean available, ImageView... object){
-        for(ImageView imageView : object){
-            imageView.setVisible(available);
-            imageView.setDisable(!available);
-        }
-    }
 
     @FXML
     public void selectResource(MouseEvent mouseEvent) {
@@ -222,7 +172,24 @@ public class MarbleBufferController implements Initializable {
                 case "res4" -> setResource(Resource.STONE);
             }
         });
+    }
 
+    public void setMarble(){
+        int bufferSize = simpleModel.getMarbleBuffer().size();
+        marbleCast(bufferSize, marble1, marble2, marble3, marble4);
+    }
+
+    private void marbleCast(int quantity, ImageView... marbleBuffer){
+        for(int i = 0; i < quantity; i++){
+            marbleBuffer[i].setImage(new Image("/res-marbles/" + GUISupport.getMarblePath(simpleModel.getMarbleBuffer().get(i).toString())));
+            marbleBuffer[i].setVisible(true);
+            marbleBuffer[i].setDisable(false);
+        }
+        if(quantity < marbleBuffer.length){
+            for(int i = quantity; i < marbleBuffer.length; i++){
+                marbleBuffer[i].setVisible(false);
+            }
+        }
 
     }
 
@@ -289,5 +256,9 @@ public class MarbleBufferController implements Initializable {
             }
         });
 
+    }
+
+    @FXML
+    public void switchDepot(MouseEvent mouseEvent) {
     }
 }

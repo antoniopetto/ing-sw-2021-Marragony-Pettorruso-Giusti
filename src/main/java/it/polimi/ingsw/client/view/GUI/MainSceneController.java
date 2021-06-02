@@ -3,14 +3,16 @@ package it.polimi.ingsw.client.view.GUI;
 import it.polimi.ingsw.client.simplemodel.SimpleDevCard;
 import it.polimi.ingsw.client.simplemodel.SimpleLeaderCard;
 import it.polimi.ingsw.client.simplemodel.SimpleModel;
+import it.polimi.ingsw.server.model.playerboard.DepotName;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 
 import java.net.URL;
@@ -23,6 +25,7 @@ public class MainSceneController implements Initializable {
     private int choice = 0;
     private SimpleModel simpleModel = null;
     private int cardId = 0;
+    private int bufferId = 0;
 
 
     //LeaderCard Action
@@ -49,11 +52,33 @@ public class MainSceneController implements Initializable {
     //End
 
     @FXML
+    private ImageView resourceHigh;
+    @FXML
+    private ImageView resourceSXMed;
+    @FXML
+    private ImageView resourceDXMed;
+    @FXML
+    private ImageView resourceCLow;
+    @FXML
+    private ImageView resourceSXLow;
+    @FXML
+    private ImageView resourceDXLow;
+    @FXML
+    private Button buyCardButton;
+    @FXML
+    private Button activateProductionButton;
+    @FXML
+    private Button endTurnButton;
+    @FXML
+    private Button buyResourcesButton;
+    @FXML
     private GridPane decks;
-
-
     @FXML
     private GridPane marketGrid;
+    @FXML
+    private ImageView spareMarble;
+    @FXML
+    private Group resourceArrow;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -64,6 +89,7 @@ public class MainSceneController implements Initializable {
     public void clickActionButton(ActionEvent actionEvent) {
         actionEvent.consume();
         Button button = (Button) actionEvent.getSource();
+
         switch (button.getId()){
             case "pLCardButton" -> {
                 setChoice(1);
@@ -83,22 +109,25 @@ public class MainSceneController implements Initializable {
                     setActionButton(false);
                 }
             }
+            case "buyResourcesButton" ->{
+                setChoice(3);
+                resourceArrow.setVisible(true);
+                setActionButton(false);
+            }
+            case "endTurnButton" -> setChoice(6);
+
         }
     }
 
     private void activeLeaderCardComponents(boolean active, int counter){
-
         if(counter > 0){
-            activeCard1Radio.setVisible(active);
-            activeCard1Radio.setDisable(!active);
-            lCardButton.setDisable(!active);
-            lCardButton.setVisible(active);
+        GUISupport.setVisible(active, activeCard1Radio, lCardButton);
         }
         if(counter > 1){
-            activeCard2Radio.setVisible(active);
-            activeCard2Radio.setDisable(!active);
+            GUISupport.setVisible(active, activeCard2Radio);
         }
     }
+
 
     @FXML
     public void selectLCard(ActionEvent actionEvent) {
@@ -108,7 +137,6 @@ public class MainSceneController implements Initializable {
         else if(leaderCardGroup.getSelectedToggle() == activeCard2Radio) setCardId(simpleModel.getThisPlayer().getLeaderCards().get(1).getId());
 
         activeLeaderCardComponents(false, simpleModel.getThisPlayer().getLeaderCards().size());
-        setActionButton(true);
 
     }
 
@@ -129,25 +157,22 @@ public class MainSceneController implements Initializable {
                 case 2 -> {
                     leaderCard1.setImage(cards.get(0));
                     leaderCard2.setImage(cards.get(1));
-                    leaderCard1.setVisible(true);
-                    leaderCard1.setDisable(false);
-                    leaderCard2.setDisable(false);
-                    leaderCard2.setVisible(true);
+                    GUISupport.setVisible(true, leaderCard1, leaderCard2);
 
                     if(active.get(0)){
-                        activeCard1.setVisible(true);
-                        activeCard1.setDisable(false);
+                        GUISupport.setVisible(true, activeCard1);
+
                     }else{
-                        activeCard1.setVisible(false);
-                        activeCard1.setDisable(true);
+                        GUISupport.setVisible(false, activeCard1);
+
                     }
 
                     if(active.get(1)){
-                        activeCard2.setVisible(true);
-                        activeCard2.setDisable(false);
+                        GUISupport.setVisible(true, activeCard2);
+
                     }else{
-                        activeCard2.setVisible(false);
-                        activeCard2.setDisable(true);
+                        GUISupport.setVisible(false, activeCard2);
+
                     }
 
 
@@ -155,29 +180,19 @@ public class MainSceneController implements Initializable {
                 case 1 -> {
                     leaderCard1.setImage(cards.get(0));
                     leaderCard1.setVisible(true);
-                    leaderCard1.setDisable(false);
-                    leaderCard2.setDisable(true);
                     leaderCard2.setVisible(false);
 
                     if(active.get(0)){
                         activeCard1.setVisible(true);
-                        activeCard1.setDisable(false);
                     }else{
                         activeCard1.setVisible(false);
-                        activeCard1.setDisable(true);
                     }
                 }
 
             }
         } else {
-            leaderCard1.setVisible(false);
-            leaderCard1.setDisable(true);
-            leaderCard2.setDisable(true);
-            leaderCard2.setVisible(false);
-            activeCard1.setVisible(false);
-            activeCard1.setDisable(true);
-            activeCard2.setVisible(false);
-            activeCard2.setDisable(true);
+            GUISupport.setVisible(false, leaderCard1, leaderCard2, activeCard1, activeCard2);
+
         }
 
     }
@@ -220,21 +235,25 @@ public class MainSceneController implements Initializable {
     }
 
 
-    private void setActionButton( boolean active){
-        pLCardButton.setVisible(active);
-        pLCardButton.setDisable(!active);
-        dLCardButton.setVisible(active);
-        dLCardButton.setDisable(!active);
+    public void setActionButton( boolean postTurn){
+        if(!postTurn){
+            GUISupport.setVisible(true, pLCardButton, dLCardButton, buyResourcesButton, buyCardButton, activateProductionButton);
+            endTurnButton.setVisible(postTurn);
+        }else{
+            GUISupport.setVisible(false, buyResourcesButton, buyCardButton, activateProductionButton);
+            endTurnButton.setVisible(true);
+            GUISupport.setDisable(false, pLCardButton, dLCardButton);
+        }
     }
 
-
-    public void selectCol(ActionEvent actionEvent) {
-    }
 
     public void setScene(SimpleModel simpleModel){
         this.simpleModel=simpleModel;
+        setActionButton(false);
+        setResourcesInDepot();
         setLeaderCard();
         setDecks();
+        setMarketBoard();
     }
     
     public void setDecks()
@@ -258,5 +277,79 @@ public class MainSceneController implements Initializable {
         }
     }
 
-    
+    public void setMarketBoard(){
+
+        List<String> marbleColor = new ArrayList<>();
+
+        for(int i = 0; i < simpleModel.getMarketBoard().length; i++){
+            for(int j = 0; j < simpleModel.getMarketBoard()[i].length; j++){
+                marbleColor.add(simpleModel.getMarketBoard()[i][j].toString());
+            }
+        }
+
+
+        int i = 0;
+        for (Node node: marketGrid.getChildren()) {
+            ImageView imageview = (ImageView) node;
+            if(marbleColor.get(i)!=null)
+            {
+                String url = "/res-marbles/" + GUISupport.getMarblePath(marbleColor.get(i));
+                imageview.setImage(new Image(url));
+            }
+            else imageview.setVisible(false);
+            i++;
+        }
+
+        spareMarble.setImage(new Image("/res-marbles/" + GUISupport.getMarblePath(simpleModel.getSpareMarble().toString())));
+    }
+
+    @FXML
+    public void selectMarbleBuffer(MouseEvent mouseEvent) {
+        mouseEvent.consume();
+        ImageView arrow = (ImageView) mouseEvent.getSource();
+        switch (arrow.getId()){
+           case "firstCol" -> setBufferId(1);
+           case "secondCol" -> setBufferId(2);
+           case "thirdCol" -> setBufferId(3);
+           case "fourthCol" -> setBufferId(4);
+           case "firstRow" -> setBufferId(5);
+           case "secondRow" -> setBufferId(6);
+           case "thirdRow" -> setBufferId(7);
+        }
+    }
+
+    private synchronized void setBufferId(int bufferId){
+        this.bufferId = bufferId;
+        resourceArrow.setVisible(false);
+        notifyAll();
+    }
+
+    public synchronized int getBufferId(){
+        while (bufferId == 0){
+            try {
+                wait();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+
+        int tmpId = bufferId;
+        bufferId = 0;
+        return tmpId;
+    }
+
+    public void setResourcesInDepot(){
+        int quantity;
+
+        quantity = GUISupport.quantityOfResources(simpleModel.getThisPlayer().getWarehouse().getDepots().get(DepotName.HIGH));
+        GUISupport.settingImageView(quantity, resourceHigh);
+
+        quantity = GUISupport.quantityOfResources(simpleModel.getThisPlayer().getWarehouse().getDepots().get(DepotName.MEDIUM));
+        GUISupport.settingImageView(quantity, resourceSXMed, resourceDXMed);
+
+
+        quantity = GUISupport.quantityOfResources(simpleModel.getThisPlayer().getWarehouse().getDepots().get(DepotName.LOW));
+        GUISupport.settingImageView(quantity, resourceSXLow, resourceCLow, resourceDXLow);
+    }
+
 }
