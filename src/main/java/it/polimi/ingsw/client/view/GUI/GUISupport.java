@@ -70,6 +70,7 @@ public class GUISupport {
 
     public static void settingImageView(int quantity, ImageView... resources){
         String path = "/res-marbles/";
+
         for(int i = 0; i < quantity; i++){
             resources[i].setImage(new Image(path + resourceString));
             resources[i].setVisible(true);

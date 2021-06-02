@@ -21,6 +21,7 @@ public interface View {
     void startSetting();
     CommandMsg selectMove(boolean postTurn);
     CommandMsg manageResource();
+    CommandMsg changeDepots();
     void showLeaderCard(SimpleLeaderCard card);
     CommandMsg discardLeaderCard();
     Marble selectMarble();

@@ -420,6 +420,7 @@ public class CLIView implements View {
         }
     }
 
+    @Override
     public CommandMsg changeDepots(){
 
         showWarehouse(game.getThisPlayer());

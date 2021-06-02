@@ -228,6 +228,10 @@ public class GUIView extends Application implements View  {
             mainSceneController.setResourcesInDepot();
             mainSceneController.setMarketBoard();
         }
+        if(action.equals(Action.BUY_CARD)){
+            mainSceneController.setDecks();
+            mainSceneController.setResourcesInDepot();
+        }
 
         int choice = mainSceneController.getChoice();
 
@@ -308,9 +312,36 @@ public class GUIView extends Application implements View  {
                 Marble selectedMarble = selectMarble();
                 msg = new DiscardMarbleMsg(selectedMarble);
             }
+            case 3 ->{
+                msg = changeDepots();
+            }
         }
 
         return msg;
+    }
+
+    @Override
+    public CommandMsg changeDepots() {
+        setLoader("/marbleBufferScene.fxml");
+        Scene scene = loadScene(currentLoader);
+        MarbleBufferController marbleBufferController = currentLoader.getController();
+        marbleBufferController.setSimpleModel(game);
+        marbleBufferController.show(false,true,false);
+        marbleBufferController.setSwitchButton(true);
+
+        Platform.runLater(() ->{
+            manageStage(tmpStage, scene, "Select Marble1", false);
+        });
+
+        DepotName depot1 = marbleBufferController.getDepot();
+        DepotName depot2 = marbleBufferController.getDepot();
+
+        if (depot1 == DepotName.FIRST_EXTRA || depot1 == DepotName.SECOND_EXTRA
+                || depot2 == DepotName.FIRST_EXTRA || depot2 == DepotName.SECOND_EXTRA){
+            return new MoveDepotsMsg(depot1, depot2);
+        }else
+            return new SwitchDepotsMsg(depot1,depot2);
+
     }
 
     @Override
@@ -354,8 +385,8 @@ public class GUIView extends Application implements View  {
         MarbleBufferController marbleBufferController = currentLoader.getController();
         marbleBufferController.setSimpleModel(game);
 
-        if(marbleCounter ==0 && !(game.getThisPlayer().getUsername().equals(game.getPlayers().get(0).getUsername()))
-                || marbleCounter == 1 && (game.getPlayers().size() == 4 && game.getThisPlayer().getUsername().equals(game.getPlayers().get(3).getUsername()))){
+        if((marbleCounter ==0 && !game.getThisPlayer().getUsername().equals(game.getPlayers().get(0).getUsername()))
+                || (marbleCounter == 1 && game.getPlayers().size() == 4 && game.getThisPlayer().getUsername().equals(game.getPlayers().get(3).getUsername()))){
             Platform.runLater(() -> {
                 oldStage = initStage;
                 initStage = new Stage();
@@ -364,6 +395,7 @@ public class GUIView extends Application implements View  {
         }
         else if(marbleCounter >= 0 ){
             //TODO change label when player wants to discard Marble
+
             marbleBufferController.setMarble();
             Platform.runLater(() ->{
                 manageStage(tmpStage, scene, "Select Marble1", false);
@@ -374,8 +406,8 @@ public class GUIView extends Application implements View  {
         marble = marbleBufferController.getMarble();
         marbleCounter++;
 
-        if(marbleCounter ==1 && !game.getThisPlayer().getUsername().equals(game.getPlayers().get(0).getUsername())
-        || marbleCounter == 2 && (game.getPlayers().size() == 4 && game.getThisPlayer().getUsername().equals(game.getPlayers().get(3).getUsername()))){
+        if((marbleCounter ==1 && !game.getThisPlayer().getUsername().equals(game.getPlayers().get(0).getUsername()))
+        || (marbleCounter == 2 && game.getPlayers().size() == 4 && game.getThisPlayer().getUsername().equals(game.getPlayers().get(3).getUsername()))){
             return Marble.WHITE;
         }
         else if(marbleCounter >= 1 ) return marble;
@@ -393,14 +425,14 @@ public class GUIView extends Application implements View  {
         MarbleBufferController marbleBufferController = currentLoader.getController();
         marbleBufferController.show(false, true, false);
         marbleBufferController.manageButton(false);
-        DepotName depot = marbleBufferController.getDepotName();
+        DepotName depot = marbleBufferController.getDepot();
         return depot;
     }
 
     @Override
     public Resource selectResource(){
         Resource resource = null;
-        if(marbleCounter == 1 && (!game.getThisPlayer().getUsername().equals(game.getPlayers().get(0).getUsername()))
+        if((marbleCounter == 1 && !game.getThisPlayer().getUsername().equals(game.getPlayers().get(0).getUsername()))
                 || (marbleCounter == 2 && game.getPlayers().size() == 4 && game.getThisPlayer().getUsername().equals(game.getPlayers().get(3).getUsername()))){
             return marble.getResource();
         }else if(marbleCounter >= 1 ){

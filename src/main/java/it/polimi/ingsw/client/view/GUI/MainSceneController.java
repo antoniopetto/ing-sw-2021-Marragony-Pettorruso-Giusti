@@ -358,6 +358,7 @@ public class MainSceneController implements Initializable {
 
     public void setResourcesInDepot(){
         int quantity;
+        GUISupport.setVisible(false, resourceHigh, resourceSXMed, resourceDXMed, resourceSXLow, resourceCLow, resourceDXLow);
 
         quantity = GUISupport.quantityOfResources(simpleModel.getThisPlayer().getWarehouse().getDepots().get(DepotName.HIGH));
         GUISupport.settingImageView(quantity, resourceHigh);

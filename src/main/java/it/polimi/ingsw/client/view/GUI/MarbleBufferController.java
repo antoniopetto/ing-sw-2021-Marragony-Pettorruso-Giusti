@@ -26,10 +26,11 @@ import static it.polimi.ingsw.client.view.GUI.GUISupport.returnPath;
 public class MarbleBufferController implements Initializable {
 
     private Marble marble = null;
-    private DepotName depotName = null;
     private SimpleModel simpleModel = null;
     private Resource resource = null;
     private String resourceString = null;
+    private DepotName depot = null;
+
     @FXML
     private ImageView res1;
     @FXML
@@ -70,6 +71,16 @@ public class MarbleBufferController implements Initializable {
     private Button mediumDepot;
     @FXML
     private Button lowDepot;
+    @FXML
+    private ImageView switchHigh;
+    @FXML
+    private ImageView switchMed;
+    @FXML
+    private ImageView switchLow;
+    @FXML
+    private ImageView switchExtra1;
+    @FXML
+    private ImageView switchExtra2;
 
 
     @Override
@@ -84,9 +95,9 @@ public class MarbleBufferController implements Initializable {
         Platform.runLater(() -> {
             Button button = (Button) actionEvent.getSource();
             switch (button.getId()) {
-                case "highDepot" -> setDepotName(DepotName.HIGH);
-                case "mediumDepot" -> setDepotName(DepotName.MEDIUM);
-                case "lowDepot" -> setDepotName(DepotName.LOW);
+                case "highDepot" -> setDepot(DepotName.HIGH);
+                case "mediumDepot" -> setDepot(DepotName.MEDIUM);
+                case "lowDepot" -> setDepot(DepotName.LOW);
             }
         });
 
@@ -126,6 +137,7 @@ public class MarbleBufferController implements Initializable {
 
     private void setDepotResources() {
         int quantity;
+        GUISupport.setVisible(false, resourceHigh, resourceSXMed, resourceDXMed, resourceSXLow, resourceCLow, resourceDXLow);
 
         quantity = GUISupport.quantityOfResources(simpleModel.getThisPlayer().getWarehouse().getDepots().get(DepotName.HIGH));
         GUISupport.settingImageView(quantity, resourceHigh);
@@ -225,22 +237,6 @@ public class MarbleBufferController implements Initializable {
         return marble;
     }
 
-    private synchronized void setDepotName(DepotName depotName) {
-        this.depotName = depotName;
-        notifyAll();
-    }
-
-    public synchronized DepotName getDepotName() {
-        while (depotName == null) {
-            try {
-                wait();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
-        return depotName;
-    }
-
     public void setSimpleModel(SimpleModel simpleModel) {
         this.simpleModel = simpleModel;
     }
@@ -251,14 +247,66 @@ public class MarbleBufferController implements Initializable {
         Platform.runLater(() ->{
             ImageView card = (ImageView) mouseEvent.getSource();
             switch (card.getId()) {
-                case "extraCard1" -> setDepotName(DepotName.FIRST_EXTRA);
-                case "extraCard2" -> setDepotName(DepotName.SECOND_EXTRA);
+                case "extraCard1" -> setDepot(DepotName.FIRST_EXTRA);
+                case "extraCard2" -> setDepot(DepotName.SECOND_EXTRA);
             }
         });
 
     }
 
+    public void setSwitchButton(boolean visible){
+        GUISupport.setVisible(visible, switchLow, switchMed, switchHigh);
+        if(extraCard1.isVisible()) switchExtra1.setVisible(visible);
+        if(extraCard2.isVisible()) switchExtra2.setVisible(visible);
+    }
+
     @FXML
     public void switchDepot(MouseEvent mouseEvent) {
+        mouseEvent.consume();
+
+        ImageView button = (ImageView) mouseEvent.getSource();
+        switch (button.getId()){
+            case "switchLow" ->{
+                setDepot(DepotName.LOW);
+                switchLow.setVisible(false);
+            }
+            case "switchMed" ->{
+                setDepot(DepotName.MEDIUM);
+                switchMed.setVisible(false);
+            }
+            case "switchHigh" ->{
+                setDepot(DepotName.HIGH);
+                switchHigh.setVisible(false);
+            }
+            case "switchExtra1" ->{
+                setDepot(DepotName.FIRST_EXTRA);
+                switchExtra1.setVisible(false);
+            }
+            case "switchExtra2" ->{
+                setDepot(DepotName.SECOND_EXTRA);
+                switchExtra2.setVisible(false);
+            }
+
+        }
     }
+
+    private synchronized void setDepot(DepotName depot) {
+        this.depot = depot;
+        notifyAll();
+    }
+
+
+    public synchronized DepotName getDepot() {
+        while (depot == null){
+            try {
+                wait();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+        DepotName tmpDepot = depot;
+        depot = null;
+        return tmpDepot;
+    }
+
 }
