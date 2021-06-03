@@ -1,5 +1,6 @@
 package it.polimi.ingsw.client.view.CLI;
 
+import it.polimi.ingsw.client.simplemodel.SimpleAbility;
 import it.polimi.ingsw.client.simplemodel.SimpleLeaderCard;
 import it.polimi.ingsw.server.model.cards.CardColor;
 import it.polimi.ingsw.server.model.playerboard.Resource;
@@ -102,9 +103,8 @@ public class Graphics {
         return result;
     }
 
-    public static String getAbility(SimpleLeaderCard.Ability ability, Resource res)
-    {
-        switch (ability){
+    public static String getAbility(SimpleAbility.Type type, Resource res) {
+        switch (type){
             case CARDDISCOUNT -> {
                 return "-1 "+ getResource(res);
             }

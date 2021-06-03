@@ -33,10 +33,10 @@ public class SoloRival extends AbstractPlayer {
     /**
      * This method represents the turn of the virtual player. It takes the first token from <code>activeTokens</code>
      * and activates it
-     * @param gameController is the single player gameController in which the token is used
+     * @param gameController is the single player game in which the token is used
      */
     public void soloTurn(GameController gameController){
-        lastPlayedToken=this.takeFirst();
+        lastPlayedToken = this.takeFirst();
         lastPlayedToken.activateToken(gameController);
     }
 

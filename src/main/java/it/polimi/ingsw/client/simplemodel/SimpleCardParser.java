@@ -125,61 +125,44 @@ public class SimpleCardParser {
         int points = getAttributeInteger("points", leaderCardNode)
                 .orElseThrow(() -> new IllegalConfigXMLException("Leader card" + id + ": missing points"));
 
-        SimpleLeaderCard.Ability ability = null;
-        Resource abilityResource = null;
+        SimpleAbility ability = null;
         Optional<Resource> res;
 
         res = getChildEnum(Resource.class, "cardDiscountAbility", leaderCardNode);
-        if(res.isPresent()) {
-            abilityResource = res.get();
-            ability = SimpleLeaderCard.Ability.CARDDISCOUNT;
-        }
+        if(res.isPresent()) ability = new SimpleAbility(SimpleAbility.Type.CARDDISCOUNT, res.get());
+
         res = getChildEnum(Resource.class, "extraDepotAbility", leaderCardNode);
-        if(res.isPresent()) {
-            abilityResource = res.get();
-            ability = SimpleLeaderCard.Ability.EXTRADEPOT;
-        }
+        if(res.isPresent()) ability = new SimpleAbility(SimpleAbility.Type.EXTRADEPOT, res.get());
+
         res = getChildEnum(Resource.class, "whiteMarbleAbility", leaderCardNode);
-        if(res.isPresent()) {
-            abilityResource = res.get();
-            ability = SimpleLeaderCard.Ability.WHITEMARBLE;
-        }
+        if(res.isPresent()) ability = new SimpleAbility(SimpleAbility.Type.WHITEMARBLE, res.get());
 
         Optional<Node> powerNode = getChildNode("extraProductionAbility", leaderCardNode);
         if(powerNode.isPresent()) {
-            abilityResource = getChildNode("input", powerNode.get())
+            res = getChildNode("input", powerNode.get())
                 .flatMap(i -> getChildNode("resQty", i))
-                .map(this::parseResQty).map(ResQty::getResource)
-                .orElseThrow(() -> new IllegalConfigXMLException("Illegal special production power"));
-            ability = SimpleLeaderCard.Ability.EXTRAPRODUCTION;
+                .map(this::parseResQty).map(ResQty::getResource);
+            if(res.isPresent()) ability = new SimpleAbility(SimpleAbility.Type.EXTRAPRODUCTION, res.get());
         }
 
         Map<Resource, Integer> resReqs = new HashMap<>();
         getChildNode("resourceRequirements", leaderCardNode)
                 .ifPresent(i -> resReqs.putAll(parseResQtyMap(i)));
 
-        Map<CardColor, Map<Integer, Integer>> cardReqs = new HashMap<>();
+        List<SimpleCardRequirement> cardReqs = new ArrayList<>();
         getChildNode("cardRequirements", leaderCardNode)
-                .ifPresent(i -> cardReqs.putAll(parseCardRequirements(i)));
+                .ifPresent(i -> cardReqs.addAll(parseCardRequirements(i)));
 
-        return new SimpleLeaderCard(id, points, cardReqs, resReqs, ability, abilityResource);
+        return new SimpleLeaderCard(id, points, cardReqs, resReqs, ability);
     }
 
-    private Map<CardColor, Map<Integer, Integer>> parseCardRequirements(Node cardReqsNode){
+    private List<SimpleCardRequirement> parseCardRequirements(Node cardReqsNode){
 
         NodeList cardReqQtyNodes = getChildrenByName("cardReq", cardReqsNode);
-        Map<CardColor, Map<Integer, Integer>> resultMap = new HashMap<>();
+        List<SimpleCardRequirement> cardReqList = new ArrayList<>();
         IntStream.range(0, cardReqQtyNodes.getLength()).mapToObj(i -> parseCardReq(cardReqQtyNodes.item(i)))
-            .forEach(i -> {
-                if(resultMap.containsKey(i.getColor()))
-                    resultMap.get(i.getColor()).put(i.getLevel(), i.getQuantity());
-                else {
-                    Map<Integer, Integer> newValue = new HashMap<>();
-                    newValue.put(i.getLevel(), i.getQuantity());
-                    resultMap.put(i.getColor(), newValue);
-                }
-            });
-        return resultMap;
+                .forEach(cardReqList::add);
+        return cardReqList;
     }
 
     private Map<Resource, Integer> parseResQtyMap(Node resQtyMapNode){
@@ -199,14 +182,14 @@ public class SimpleCardParser {
         return new ResQty(resource, quantity);
     }
 
-    private CardReq parseCardReq(Node cardReqNode){
+    private SimpleCardRequirement parseCardReq(Node cardReqNode){
 
         CardColor color = getAttributeEnum(CardColor.class, "color", cardReqNode)
                 .orElseThrow(() -> new IllegalConfigXMLException("Missing color in cardQty"));
         Integer level = getAttributeInteger("level", cardReqNode).orElse(null);
         int quantity = getInteger(cardReqNode)
                 .orElseThrow(() -> new IllegalConfigXMLException("Missing quantity in cardQty"));
-        return new CardReq(color, level, quantity);
+        return new SimpleCardRequirement(color, level, quantity);
     }
 
     private NodeList getChildrenByName(String childName, Node context){
@@ -290,32 +273,6 @@ public class SimpleCardParser {
 
         public Resource getResource() {
             return resource;
-        }
-
-        public int getQuantity() {
-            return quantity;
-        }
-    }
-
-    static class CardReq {
-        private final CardColor color;
-        private final Integer level;
-        private final int quantity;
-
-        public CardReq(CardColor color, Integer level, int quantity){
-            if (color == null || quantity < 0)
-                throw new IllegalArgumentException();
-            this.color = color;
-            this.level = level;
-            this.quantity = quantity;
-        }
-
-        public CardColor getColor() {
-            return color;
-        }
-
-        public Integer getLevel(){
-            return level;
         }
 
         public int getQuantity() {

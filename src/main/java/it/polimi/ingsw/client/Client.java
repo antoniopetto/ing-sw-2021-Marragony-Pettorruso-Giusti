@@ -9,14 +9,10 @@ public class Client {
     public static void main(String[] args) {
 
         int choice = CLIView.askChoice("Please select how to play:", "CLI", "GUI");
-
-        if(choice == 1){
-          View  view = new CLIView();
-            view.startSetting();
-        }
-        else{
-              GUIView view =new GUIView();
-                GUIView.main(args);
-        }
+        View view = ((choice == 1) ? new CLIView() : new GUIView());
+        if (choice == 1)
+            view.startConnection();
+        else
+            GUIView.main(args);
     }
 }

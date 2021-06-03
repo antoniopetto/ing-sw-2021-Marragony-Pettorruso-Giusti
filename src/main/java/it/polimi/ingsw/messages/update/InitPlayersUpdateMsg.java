@@ -9,23 +9,17 @@ import java.util.Set;
 
 public class InitPlayersUpdateMsg implements UpdateMsg{
 
-    private final List<SimplePlayer> players = new ArrayList<>();
-    private SimplePlayer thisPlayer;
+    private final List<SimplePlayer> players;
+    private final String requirerName;
 
-    public InitPlayersUpdateMsg(Set<String> usernames, String thisUsername){
-        if (!usernames.contains(thisUsername))
-            throw new IllegalArgumentException();
+    public InitPlayersUpdateMsg(List<SimplePlayer> players, String requirerName){
 
-        for (String username : usernames) {
-            SimplePlayer newPlayer = new SimplePlayer(username);
-            players.add(newPlayer);
-            if (username.equals(thisUsername))
-                thisPlayer = newPlayer;
-        }
+        this.players = players;
+        this.requirerName = requirerName;
     }
 
     @Override
     public void execute(SimpleModel game) {
-        game.createPlayers(players, thisPlayer);
+        game.setPlayers(players, requirerName);
     }
 }

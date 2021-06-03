@@ -4,7 +4,9 @@ import it.polimi.ingsw.server.model.cards.CardColor;
 import it.polimi.ingsw.server.model.playerboard.Resource;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -15,19 +17,12 @@ import java.util.Map;
  * number of cards required.
  */
 public class SimpleLeaderCard implements Serializable {
-    public enum Ability {
-        CARDDISCOUNT,
-        WHITEMARBLE,
-        EXTRADEPOT,
-        EXTRAPRODUCTION
-    }
 
-    private final Ability ability;
-    private final Resource abilityResource;
+    private final SimpleAbility ability;
     private final int id;
     private final int victoryPoints;
     private final Map<Resource, Integer> resourceRequirements;
-    private final Map<CardColor, Map<Integer, Integer>> cardRequirements;
+    private final List<SimpleCardRequirement> cardRequirements;
 
     private boolean active = false;
 
@@ -37,18 +32,17 @@ public class SimpleLeaderCard implements Serializable {
         return simpleCardParser.getSimpleLeaderCard(id);
     }
 
-    public SimpleLeaderCard(int id, int victoryPoints, Map<CardColor, Map<Integer, Integer>> cardRequirements,
-                            Map<Resource, Integer> resourceRequirements, Ability ability, Resource abilityResource){
+    public SimpleLeaderCard(int id, int victoryPoints, List<SimpleCardRequirement> cardRequirements,
+                            Map<Resource, Integer> resourceRequirements, SimpleAbility ability){
 
-        if(cardRequirements == null || resourceRequirements == null || ability == null || abilityResource == null)
+        if(cardRequirements == null || resourceRequirements == null || ability == null)
             throw new IllegalArgumentException();
 
         this.id = id;
         this.victoryPoints = victoryPoints;
-        this.cardRequirements = new HashMap<>(cardRequirements);
+        this.cardRequirements = new ArrayList<>(cardRequirements);
         this.resourceRequirements = new HashMap<>(resourceRequirements);
         this.ability = ability;
-        this.abilityResource = abilityResource;
     }
 
     public void setActive(boolean active) {
@@ -59,15 +53,11 @@ public class SimpleLeaderCard implements Serializable {
         return active;
     }
 
-    public Resource getAbilityResource() {
-        return abilityResource;
-    }
-
     public int getId() {
         return id;
     }
 
-    public Ability getAbility() {
+    public SimpleAbility getAbility() {
         return ability;
     }
 
@@ -75,7 +65,7 @@ public class SimpleLeaderCard implements Serializable {
         return victoryPoints;
     }
 
-    public Map<CardColor, Map<Integer, Integer>> getCardRequirements() {
+    public List<SimpleCardRequirement> getCardRequirements() {
         return cardRequirements;
     }
 

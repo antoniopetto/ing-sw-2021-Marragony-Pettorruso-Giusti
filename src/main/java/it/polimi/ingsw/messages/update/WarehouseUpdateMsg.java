@@ -13,8 +13,8 @@ public class WarehouseUpdateMsg implements UpdateMsg {
     private SimpleWarehouse warehouse;
     private String username;
 
-    public WarehouseUpdateMsg(Map<DepotName, Map<Resource, Integer>> warehouse, String username) {
-        this.warehouse = new SimpleWarehouse(warehouse);
+    public WarehouseUpdateMsg(SimpleWarehouse warehouse, String username) {
+        this.warehouse = warehouse;
         this.username = username;
     }
 
@@ -22,7 +22,7 @@ public class WarehouseUpdateMsg implements UpdateMsg {
     public void execute(SimpleModel game) {
         for (SimplePlayer player : game.getPlayers())
             if (player.getUsername().equals(username))
-                player.changeWarehouse(warehouse);
+                player.setWarehouse(warehouse);
     }
 
     @Override

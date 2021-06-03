@@ -1,6 +1,8 @@
 package it.polimi.ingsw.server;
 
-import it.polimi.ingsw.server.VirtualView;
+import it.polimi.ingsw.client.simplemodel.SimpleModel;
+import it.polimi.ingsw.client.simplemodel.SimplePlayer;
+import it.polimi.ingsw.server.model.AbstractPlayer;
 import it.polimi.ingsw.server.model.Player;
 import it.polimi.ingsw.server.model.cards.*;
 import it.polimi.ingsw.server.model.exceptions.ElementNotFoundException;
@@ -16,6 +18,7 @@ import org.xml.sax.SAXException;
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class GameController {
 
@@ -36,8 +39,8 @@ public class GameController {
     private final List<Player> players = new ArrayList<>();
     private final MarketBoard marketBoard;
     private final FaithTrack faithTrack;
-    private final List<Marble> marbleBuffer = new ArrayList<>();
     private final DevelopmentCardDecks developmentCardDecks;
+    private final List<Marble> marbleBuffer = new ArrayList<>();
 
     public GameController(Set<String> usernames, VirtualView virtualView) {
 
@@ -48,14 +51,14 @@ public class GameController {
 
         marketBoard = new MarketBoard(virtualView);
         developmentCardDecks = new DevelopmentCardDecks(parseDevCards(), virtualView);
-        faithTrack = new FaithTrack(this, virtualView);
+        faithTrack = new FaithTrack(virtualView);
 
         for (String username : usernames){
             Player player = new Player(username, virtualView);
             players.add(player);
         }
-        //TODO return to random when ready to release
-        //Collections.shuffle(players);
+
+        Collections.shuffle(players);
         playing = players.get(0);
         initLeaderCards();
 
@@ -69,20 +72,6 @@ public class GameController {
             soloRival = null;
             faithTrack.addPlayers(players);
         }
-    }
-
-    public void firstUpdates(){
-        virtualView.initPlayersUpdate();
-        virtualView.faithTrackUpdate();
-        if (players.size()>2)
-            faithTrack.advance(players.get(2));
-        if (players.size()>3)
-            faithTrack.advance(players.get(3));
-        virtualView.marketBoardUpdate();
-        virtualView.initCardsUpdate();
-
-        virtualView.showTitle();
-        virtualView.requestDiscardLeaderCard();
     }
 
     private List<DevelopmentCard> parseDevCards(){
@@ -132,7 +121,7 @@ public class GameController {
             playing.removeLeaderCard(cardId);
 
             if (state != State.INITIALIZING) {
-                faithTrack.advance(playing);
+                advance(playing);
                 virtualView.nextAction(isPostTurn);
             }
             else if (playing.getLeaderCardList().size() > 2) {
@@ -180,7 +169,7 @@ public class GameController {
         List<Marble> marbles = playing.buyResources(marketBoard, idLine, isRow);
         for (Marble marble : marbles) {
             if(marble.equals(Marble.RED)) {
-                faithTrack.advance(playing);
+                advance(playing);
             }
             else if(marble.equals(Marble.WHITE)) {
                 if(!playing.getWhiteMarbleAliases().isEmpty())
@@ -246,8 +235,8 @@ public class GameController {
                 virtualView.manageResource();
             return;
         }
-            playing.getPlayerBoard().getWareHouse().insert(depot, resource);
 
+        playing.getPlayerBoard().getWareHouse().insert(depot, resource);
         marbleBuffer.remove(listId);
         virtualView.bufferUpdate(marble);
 
@@ -263,7 +252,6 @@ public class GameController {
             playing.clearWhiteMarbleAlias();
             endTurn();
         }
-
     }
     public void goBack() {
         if (state == State.PRETURN)
@@ -321,27 +309,29 @@ public class GameController {
             return;
         }
 
-            DevelopmentCard developmentCard;
-            try {
-                developmentCard = developmentCardDecks.readTop(cardColor, level);
-            }catch (EmptyStackException e) {
-                virtualView.sendError("There are no more DevelopmentCard with that color and level");
-                virtualView.nextAction(false);
-                return;
-            }
+        DevelopmentCard developmentCard;
+        try {
+            developmentCard = developmentCardDecks.readTop(cardColor, level);
+        }catch (EmptyStackException e) {
+            virtualView.sendError("There are no more DevelopmentCard with that color and level");
+            virtualView.nextAction(false);
+            return;
+        }
 
-            try{
-                getPlaying().addCard(developmentCard,slotId);
-            }catch (IllegalArgumentException e){
-                virtualView.sendError(e.getMessage());
-                virtualView.nextAction(false);
-                return;
-            }
+        try{
+            getPlaying().addCard(developmentCard,slotId);
+        } catch (IllegalArgumentException e) {
+            virtualView.sendError(e.getMessage());
+            virtualView.nextAction(false);
+            return;
+        }
 
-            developmentCardDecks.drawCard(cardColor, level);
-            state = State.POSTTURN;
+        if (getPlaying().countDevCards() == 7)
+            lastRound = true;
+        developmentCardDecks.drawCard(cardColor, level);
+        state = State.POSTTURN;
 
-            virtualView.nextAction(true);
+        virtualView.nextAction(true);
     }
 
     /**
@@ -456,23 +446,31 @@ public class GameController {
         }
         int nextIndex = (players.indexOf(playing) + 1) % players.size();
 
-        if (nextIndex == 0 && lastRound)
-            virtualView.endGame();
+        if (nextIndex == 0 && lastRound) {
+            if (!singlePlayer)
+                virtualView.endGame();
+            else
+                virtualView.endSinglePlayerGame();
+        }
         else{
             playing = players.get(nextIndex);
-            if ( state == State.POSTTURN  || nextIndex == 0)
+            if (nextIndex == 0)
                 state = State.PRETURN;
-            if (singlePlayer)
-                soloRival.soloTurn(this);
-
-            if(state == State.INITIALIZING)
-               {
-                String text = playing.getUsername()+" is choosing the leader cards...";
-                virtualView.messageFilter(null, text);
+            if(state == State.INITIALIZING) {
+                virtualView.messageFilter(null, playing.getUsername()+" is choosing the leader cards...");
                 virtualView.requestDiscardLeaderCard();
             }
-            else
-                virtualView.startPlay();
+            else {
+                if (!singlePlayer) {
+                    virtualView.startPlay();
+                } else {
+                    soloRival.soloTurn(this);
+                    if (lastRound)
+                        virtualView.endSinglePlayerGame();
+                    else
+                        virtualView.startPlay();
+                }
+            }
         }
     }
 
@@ -484,13 +482,6 @@ public class GameController {
 
     public List<Player> getPlayers(){
         return new ArrayList<>(players);
-    }
-
-    /**
-     * Activates the last round of the game
-     */
-    public void setLastRound() {
-        this.lastRound = true;
     }
 
     public Optional<SoloRival> getSoloRival() {
@@ -518,5 +509,44 @@ public class GameController {
            if( players.get(i).getUsername().equals(playerUsername) ) return i;
         }
         return -1;
+    }
+
+    public Map<String, Integer> getLeaderboard(){
+        List<Map.Entry<String, Integer>> pointsList = new ArrayList<>();
+        Map<String, Integer> leaderboard = new LinkedHashMap<>();
+        for (Player player : players)
+            pointsList.add(new AbstractMap.SimpleEntry<>(player.getUsername(), player.countPoints()));
+        Collections.reverse(pointsList);
+        pointsList.sort(Map.Entry.comparingByValue());
+        for (Map.Entry<String, Integer> entry : pointsList)
+            leaderboard.put(entry.getKey(), entry.getValue());
+        return leaderboard;
+    }
+
+    public boolean isSinglePlayer(){
+        return singlePlayer;
+    }
+
+    public void advance(AbstractPlayer player){
+        faithTrack.advance(player);
+        if (faithTrack.someoneFinished())
+            lastRound = true;
+    }
+
+    public SimpleModel getSimple(String requirerName){
+
+        SimpleModel game = new SimpleModel();
+        game.setPlayers(players.stream().map(Player::getSimple).collect(Collectors.toList()), requirerName);
+
+        for (SimplePlayer player : game.getPlayers())
+            if (!player.getUsername().equals(requirerName))
+                player.clearLeaderCards();
+
+        game.setMarbleBuffer(marbleBuffer);
+        game.setMarketBoard(marketBoard.getMarbleGrid());
+        game.setSpareMarble(marketBoard.getSpareMarble());
+        game.setDevCardDecks(getDevelopmentCardDecks().getDevCardIds());
+
+        return game;
     }
 }

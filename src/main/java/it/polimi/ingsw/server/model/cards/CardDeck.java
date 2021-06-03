@@ -23,10 +23,8 @@ public class CardDeck {
      * this method checks if the level and the color of the card as parameter are the same of the deck
      * @return true if the card and the deck have the same color and level
      */
-    public boolean belongs(DevelopmentCard card)
-    {
-        if(card.getColor().equals(this.color))
-        {
+    public boolean belongs(DevelopmentCard card) {
+        if(card.getColor().equals(this.color)) {
             return card.getLevel() == this.level;
         }
         return false;
@@ -44,8 +42,6 @@ public class CardDeck {
         if(deck.size()==num_of_cards) {
             Collections.shuffle(deck);
         }
-
-
     }
 
     /**
@@ -62,7 +58,7 @@ public class CardDeck {
      * This method checks if the deck has those color and level
      * @return true if the color and the level of the deck are the same as the parameters
      */
-    public boolean properties(CardColor color, int level)
+    public boolean is(CardColor color, int level)
     {
         if(this.color.equals(color))
             return this.level==level;
@@ -88,19 +84,10 @@ public class CardDeck {
     /**
      * @return an array with the ids of the cards in the deck. In the empty positions of the array the id is set to 0;
      */
-    public int[] getDeckStatus()
-    {
+    public int[] getDeckIds() {
         int[] result = new int[4];
-        for (int i = 0; i< 4; i++)
-        {
-            try{
-                result[i] = deck.elementAt(i).getId();
-            }catch(ArrayIndexOutOfBoundsException e)
-            {
-                result[i]=0;
-            }
-
-        }
+        for (int i = 0; i < deck.size(); i++)
+            result[i] = deck.elementAt(i).getId();
         return result;
     }
 }

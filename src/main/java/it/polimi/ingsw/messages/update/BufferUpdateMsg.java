@@ -4,7 +4,7 @@ import it.polimi.ingsw.client.simplemodel.SimpleModel;
 import it.polimi.ingsw.server.model.shared.Marble;
 
 public class BufferUpdateMsg implements UpdateMsg {
-    private Marble marble;
+    private final Marble marble;
 
     public BufferUpdateMsg(Marble marble) {
         this.marble = marble;

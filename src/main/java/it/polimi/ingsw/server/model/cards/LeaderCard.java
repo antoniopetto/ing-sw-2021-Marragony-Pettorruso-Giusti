@@ -1,11 +1,14 @@
 package it.polimi.ingsw.server.model.cards;
 
+import it.polimi.ingsw.client.simplemodel.SimpleAbility;
+import it.polimi.ingsw.client.simplemodel.SimpleCardRequirement;
+import it.polimi.ingsw.client.simplemodel.SimpleDevCard;
+import it.polimi.ingsw.client.simplemodel.SimpleLeaderCard;
 import it.polimi.ingsw.server.VirtualView;
 import it.polimi.ingsw.server.model.Player;
+import it.polimi.ingsw.server.model.playerboard.Resource;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 /**
  * This class represents the leader card. It has three attributes: a list of generic requirements (they can be resource
@@ -13,10 +16,10 @@ import java.util.Objects;
  * ability attribute. The class extends the abstract class card.
  */
 public class LeaderCard extends Card{
+
     private final List<Requirement> requirements = new ArrayList<>();
     private boolean played = false;
     private final SpecialAbility ability;
-    private VirtualView observer;
 
     public LeaderCard(int id, int victoryPoints, List<? extends Requirement> requirements, SpecialAbility ability) {
         super(id, victoryPoints);
@@ -24,6 +27,20 @@ public class LeaderCard extends Card{
             throw new IllegalArgumentException();
         this.requirements.addAll(requirements);
         this.ability = ability;
+    }
+
+    public SimpleLeaderCard getSimple(){
+
+        SimpleAbility ability = this.ability.getSimple();
+        Map<Resource, Integer> resReqMap = new HashMap<>();
+        List<SimpleCardRequirement> cardReqList = new ArrayList<>();
+        for (Requirement req : requirements) {
+            if (req instanceof ResourceRequirement)
+                resReqMap.put(((ResourceRequirement) req).getResource(), ((ResourceRequirement) req).getQuantity());
+            else if (req instanceof CardRequirement)
+                cardReqList.add(((CardRequirement) req).getSimple());
+        }
+        return new SimpleLeaderCard(getId(), getVictoryPoints(), cardReqList, resReqMap, ability);
     }
 
     /**

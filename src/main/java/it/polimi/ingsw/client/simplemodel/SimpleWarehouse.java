@@ -9,6 +9,8 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 public class SimpleWarehouse implements Serializable {
+
+    //TODO wrong type for depot representation (a depot could contain different resources)
     private Map<DepotName, Map<Resource, Integer>> depots = new LinkedHashMap<>();
 
     public SimpleWarehouse() {
@@ -17,13 +19,11 @@ public class SimpleWarehouse implements Serializable {
         depots.put(DepotName.LOW, null);
     }
 
-    public SimpleWarehouse(Map<DepotName, Map<Resource, Integer>> depots) {
-        this.depots = depots;
-    }
-
-    public void setWarehouse(Map<DepotName, Map<Resource, Integer>> newState)
-    {
-        depots = newState;
+    public SimpleWarehouse(Map<DepotName, Map<Resource, Integer>> content) {
+        this();
+        for (DepotName depotName : content.keySet()){
+            depots.replace(depotName, content.get(depotName));
+        }
     }
 
     public Map<DepotName, Map<Resource, Integer>> getDepots() {

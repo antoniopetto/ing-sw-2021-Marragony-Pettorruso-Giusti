@@ -9,6 +9,7 @@ import it.polimi.ingsw.server.model.shared.Marble;
 import it.polimi.ingsw.messages.command.CommandMsg;
 
 import java.util.List;
+import java.util.Map;
 
 public interface View {
 
@@ -18,7 +19,7 @@ public interface View {
     String getUsername();
     int getNumberOfPlayers();
     void showTitle();
-    void startSetting();
+    void startConnection();
     CommandMsg selectMove(boolean postTurn);
     CommandMsg manageResource();
     CommandMsg changeDepots();
@@ -28,6 +29,8 @@ public interface View {
     void printLeaderCards(SimplePlayer player);
     DepotName selectDepot();
     Resource selectResource();
-    void showStatusMessage(String text);
-
+    void showTextMessage(String text);
+    void showLeaderboard(Map<String, Integer> leaderboard);
+    void setModel(SimpleModel game);
+    void endGame();
 }

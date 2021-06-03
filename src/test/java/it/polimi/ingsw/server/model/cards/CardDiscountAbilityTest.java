@@ -18,22 +18,15 @@ public class CardDiscountAbilityTest {
     @Test
     public void constructorTest()
     {
-        //checks that it is impossible to create a discount ability with a negative amount
-        try {
-            ability= new CardDiscountAbility(Resource.SHIELD, -2);
-            fail();
-        } catch (IllegalArgumentException e) {
-            assertTrue(true);
-        }
         //checks that it is impossible to create a discount ability with a FAITH resource
         try {
-            ability = new CardDiscountAbility(Resource.FAITH, 2);
+            ability = new CardDiscountAbility(Resource.FAITH);
             fail();
         }catch (IllegalArgumentException e) {
             assertTrue(true);
         }
         try {
-            ability= new CardDiscountAbility(Resource.COIN, 1);
+            ability= new CardDiscountAbility(Resource.COIN);
         }catch (Exception e) {
             fail();
         }
@@ -42,10 +35,8 @@ public class CardDiscountAbilityTest {
     @Test
     public void activateAbilityTest() {
         Player player = new Player("Test", Mockito.mock(VirtualView.class));
-        ability = new CardDiscountAbility(Resource.COIN, 2);
+        ability = new CardDiscountAbility(Resource.COIN);
         ability.activateAbility(player);
-        assertTrue(player.getActiveDiscount().containsKey(Resource.COIN));
-        Integer amount = 2;
-        assertEquals(amount, player.getActiveDiscount().get(Resource.COIN));
+        assertTrue(player.getActiveDiscount().contains(Resource.COIN));
     }
 }

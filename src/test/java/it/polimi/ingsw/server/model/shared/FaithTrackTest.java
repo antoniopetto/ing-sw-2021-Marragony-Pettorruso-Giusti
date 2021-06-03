@@ -24,7 +24,7 @@ public class FaithTrackTest {
         p2 = new Player("Second", Mockito.mock(VirtualView.class));
         GameController gameController = Mockito.mock(GameController.class);
         virtualView = Mockito.mock(VirtualView.class);
-        faithTrack = new FaithTrack(gameController, virtualView);
+        faithTrack = new FaithTrack(virtualView);
         faithTrack.addPlayers(List.of(p1, p2));
     }
 

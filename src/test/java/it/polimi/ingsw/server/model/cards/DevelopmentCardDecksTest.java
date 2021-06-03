@@ -149,7 +149,7 @@ public class DevelopmentCardDecksTest {
     @Test
     public void getDecksStatusTest()
     {
-        int[][][] result = decks.getDecksStatus();
+        int[][][] result = decks.getDevCardIds();
         assertEquals(11, result[0][1][0]);
         assertEquals(9, result[3][2][0]);
         assertEquals(0, result[3][2][3]);

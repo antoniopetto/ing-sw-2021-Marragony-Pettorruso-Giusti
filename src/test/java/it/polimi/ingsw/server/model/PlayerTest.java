@@ -28,7 +28,7 @@ public class PlayerTest {
     @Before
     public void setUp(){
         player = new Player("AAA", Mockito.mock(VirtualView.class));
-        FaithTrack faithTrack = new FaithTrack(Mockito.mock(GameController.class), Mockito.mock(VirtualView.class));
+        FaithTrack faithTrack = new FaithTrack(Mockito.mock(VirtualView.class));
         faithTrack.addPlayers(List.of(player));
         playerBoard = player.getPlayerBoard();
     }

@@ -7,7 +7,7 @@ import it.polimi.ingsw.client.view.View;
 import java.io.IOException;
 
 public class TextMsg implements ViewMsg {
-    private String text;
+    private final String text;
 
     public TextMsg(String text) {
         this.text = text;
@@ -15,7 +15,7 @@ public class TextMsg implements ViewMsg {
 
     @Override
     public void changeView(View view, ServerHandler server){
-        view.showStatusMessage(text);
+        view.showTextMessage(text);
     }
 
     @Override

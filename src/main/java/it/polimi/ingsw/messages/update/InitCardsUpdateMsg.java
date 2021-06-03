@@ -3,6 +3,7 @@ package it.polimi.ingsw.messages.update;
 import it.polimi.ingsw.client.simplemodel.SimpleModel;
 
 import java.util.Arrays;
+import java.util.Map;
 import java.util.Set;
 
 public class InitCardsUpdateMsg implements UpdateMsg{

@@ -2,28 +2,24 @@ package it.polimi.ingsw.server.model.shared;
 
 import it.polimi.ingsw.server.VirtualView;
 import it.polimi.ingsw.server.model.AbstractPlayer;
-import it.polimi.ingsw.server.GameController;
 
 import java.util.*;
 
 public class FaithTrack {
 
-    private static final int LAST_POSITION = 24;
+    public static final int LAST_POSITION = 24;
     private final List<Position> track = new ArrayList<>();
     private final List<AbstractPlayer> players = new ArrayList<>();
-    private final GameController gameController;
     private int nextVaticanReport = 0;
     private final VirtualView virtualView;
 
     /**
      * <code>FaithTrack</code> constructor.
      *
-     * @param gameController          GameController reference
      * @param virtualView   Virtual view reference, used to send updates
      */
-    public FaithTrack(GameController gameController, VirtualView virtualView){
+    public FaithTrack(VirtualView virtualView){
 
-        this.gameController = gameController;
         this.virtualView = virtualView;
 
         Map<Integer, Integer> vPMap = Map.of(3, 1,
@@ -59,7 +55,11 @@ public class FaithTrack {
 
     public void addPlayers(List<? extends AbstractPlayer> players){
         this.players.addAll(players);
-        this.players.forEach(player -> player.setPosition(track.get(0)));
+        for (int i = 0; i < players.size(); i++)
+            if (i < 2)
+                this.players.get(i).setPosition(track.get(0));
+            else
+                this.players.get(i).setPosition(track.get(1));
     }
 
     /**
@@ -92,7 +92,7 @@ public class FaithTrack {
 
     /**
      * Makes the requested player advance of one position in the <code>FaithTrack</code>.
-     * Triggers <code>GameController.setLastRoung()</code> if the player has reached the end of the track
+     * Triggers <code>Game.setLastRound()</code> if the player has reached the end of the track
      *
      * @param player        The player that is advancing
      */
@@ -105,8 +105,6 @@ public class FaithTrack {
             player.setPosition(track.get(currentIndex + 1));
             if (player.getPosition().isPopeSpace() && isAbsoluteFirst(player))
                 vaticanReport();
-            if (player.getPosition().getNumber() == LAST_POSITION)
-                gameController.setLastRound();
         }
 
         virtualView.faithTrackUpdate();
@@ -114,7 +112,7 @@ public class FaithTrack {
 
     /**
      * Makes all the player but one advance of one position in the <code>FaithTrack</code>.
-     * Triggers <code>GameController.setLastRoung()</code> if one player has reached the end of the track
+     * Triggers <code>Game.setLastRound()</code> if one player has reached the end of the track
      *
      * @param excludedPlayer        The player that is not advancing
      */
@@ -130,8 +128,6 @@ public class FaithTrack {
                 p.setPosition(track.get(currentIndex + 1));
                 if (p.getPosition().isPopeSpace() && isAbsoluteFirst(p))
                     isVaticanReportDue = true;
-                if (p.getPosition().getNumber() == LAST_POSITION)
-                    gameController.setLastRound();
             }
         }
 
@@ -141,11 +137,15 @@ public class FaithTrack {
         virtualView.faithTrackUpdate();
     }
 
+    public boolean someoneFinished(){
+        for (AbstractPlayer player : players)
+            if (player.getPosition().getNumber() == LAST_POSITION)
+                return true;
+        return false;
+    }
+
     public List<AbstractPlayer> getPlayers() {
         return new ArrayList<>(players);
     }
 
-    public List<Position> getTrack(){
-        return new ArrayList<>(track);
-    }
 }

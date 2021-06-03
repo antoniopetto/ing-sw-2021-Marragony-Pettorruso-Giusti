@@ -9,13 +9,14 @@ public class SimpleSlot implements Serializable {
 
     private final List<SimpleDevCard> cards;
 
-    public SimpleSlot(int id) {
+    public SimpleSlot() {
         cards = new ArrayList<>();
     }
 
     public void addCard(int cardId){
         cards.add(SimpleDevCard.parse(cardId));
     }
+    public void addCard(SimpleDevCard card){ cards.add(card); }
 
     public List<SimpleDevCard> getCards() {
         return cards;

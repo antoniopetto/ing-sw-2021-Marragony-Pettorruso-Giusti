@@ -1,5 +1,7 @@
 package it.polimi.ingsw.server.model.cards;
 
+import it.polimi.ingsw.client.simplemodel.SimpleAbility;
+import it.polimi.ingsw.client.simplemodel.SimpleWarehouse;
 import it.polimi.ingsw.server.model.Player;
 import it.polimi.ingsw.server.model.playerboard.Resource;
 
@@ -12,16 +14,10 @@ import java.util.Objects;
 public class ExtraDepotAbility implements SpecialAbility{
 
     private final Resource constraint;
-    private final int capacity;
+    private final int capacity = 2;
 
     public ExtraDepotAbility(Resource constraint){
-        this(constraint, 2);
-    }
-
-    public ExtraDepotAbility(Resource constraint, int capacity) {
-        if (capacity<1) throw new IllegalArgumentException("Illegal capacity");
         this.constraint = constraint;
-        this.capacity = capacity;
     }
 
     @Override
@@ -29,12 +25,16 @@ public class ExtraDepotAbility implements SpecialAbility{
         player.getPlayerBoard().getWareHouse().createExtraDepot(constraint, capacity);
     }
 
+    public SimpleAbility getSimple(){
+        return new SimpleAbility(SimpleAbility.Type.EXTRADEPOT, constraint);
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         ExtraDepotAbility that = (ExtraDepotAbility) o;
-        return capacity == that.capacity && constraint == that.constraint;
+        return constraint == that.constraint;
     }
 
     @Override

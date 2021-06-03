@@ -1,5 +1,6 @@
 package it.polimi.ingsw.server.model.cards;
 
+import it.polimi.ingsw.client.simplemodel.SimpleCardRequirement;
 import it.polimi.ingsw.server.model.Player;
 import it.polimi.ingsw.server.model.playerboard.Slot;
 
@@ -50,6 +51,22 @@ public class CardRequirement implements Requirement{
             }
         }
         return false;
+    }
+
+    public CardColor getColor(){
+        return color;
+    }
+
+    public Integer getLevel(){
+        return level;
+    }
+
+    public int getQuantity() {
+        return quantity;
+    }
+
+    public SimpleCardRequirement getSimple(){
+        return new SimpleCardRequirement(color, level, quantity);
     }
 
     @Override

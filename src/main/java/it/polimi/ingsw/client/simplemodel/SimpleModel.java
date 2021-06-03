@@ -1,79 +1,54 @@
 package it.polimi.ingsw.client.simplemodel;
 
-import it.polimi.ingsw.client.view.View;
 import it.polimi.ingsw.server.model.cards.CardColor;
 import it.polimi.ingsw.server.model.shared.Marble;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
+import java.io.Serializable;
+import java.util.*;
 
-public class SimpleModel {
+public class SimpleModel implements Serializable {
     private List<SimplePlayer> players;
+    private SimplePlayer thisPlayer;
     private List<Marble> marbleBuffer;
-    private Marble[][] marketBoard = new Marble[3][4];
+    private final Marble[][] marketBoard = new Marble[3][4];
     private Marble spareMarble;
     private final SimpleDevCard[][][] devCardDecks = new SimpleDevCard[4][3][4];
-    private final View view;
-    private SimplePlayer thisPlayer;
-
-    public SimpleModel(View view) {
-        this.view = view;
-    }
-
-    public View getView() {
-        return view;
-    }
 
     public List<Marble> getMarbleBuffer() {
         return marbleBuffer;
     }
 
-    public void createPlayers(List<SimplePlayer> players, SimplePlayer thisPlayer){
-        if (!players.contains(thisPlayer))
-            throw new IllegalArgumentException();
-        this.players = players;
-        this.thisPlayer = thisPlayer;
+    public void setPlayers(List<SimplePlayer> players, String requirerName){
+
+        this.players = new ArrayList<>(players);
+        this.thisPlayer = getPlayer(requirerName);
     }
 
     public void initCards(int[][][] devCardIds, Set<Integer> leaderCardIds){
-        for(int i=0; i<4; i++) {
-            for(int j=0; j<3; j++) {
-                for(int k=0; k<4; k++) {
-                    devCardDecks[i][j][k]= SimpleDevCard.parse(devCardIds[i][j][k]);
-                }
-            }
-        }
-        thisPlayer.addLeaderCards(leaderCardIds);
-        //TODO maybe needed? Was uncommented before
-        /*try {
-            Thread.sleep(2000);
-        }catch (InterruptedException e){
-            e.printStackTrace();
-        }*/
+
+        setDevCardDecks(devCardIds);
+        thisPlayer.setLeaderCards(leaderCardIds);
     }
 
     public void updateDevCardDecks(int level, CardColor cardColor){
-
         for(int i = 0; i < 4; i++) {
-            if(devCardDecks[i][level][0] != null && devCardDecks[i][level][0].getColor().equals(cardColor)){
-                int size = devCardDecks[i][level].length;
-                devCardDecks[i][level][size-1] = null;
+            if(devCardDecks[i][level - 1][0] != null && devCardDecks[i][level - 1][0].getColor().equals(cardColor)){
+                int size = devCardDecks[i][level - 1].length;
+                devCardDecks[i][level - 1][size-1] = null;
             }
         }
     }
 
-    public void setMarbleBuffer(List<Marble> marbles) {
-        marbleBuffer = marbles;
+    public void setMarbleBuffer(List<Marble> marbleBuffer) {
+        this.marbleBuffer = new ArrayList<>(marbleBuffer);
     }
 
-    public void reduceBuffer(Marble marble)
-    {
+    public void reduceBuffer(Marble marble) {
         marbleBuffer.remove(marble);
     }
 
     public List<SimplePlayer> getPlayers() {
-        return players;
+        return new ArrayList<>(players);
     }
 
     public Marble[][] getMarketBoard() {
@@ -81,7 +56,10 @@ public class SimpleModel {
     }
 
     public void setMarketBoard(Marble[][] marketBoard) {
-        this.marketBoard = marketBoard;
+
+        for (int i = 0; i < 3; i++){
+            this.marketBoard[i] = Arrays.copyOf(marketBoard[i], 4);
+        }
     }
 
     public void setSpareMarble(Marble spareMarble) {
@@ -92,8 +70,11 @@ public class SimpleModel {
         return spareMarble;
     }
 
-    public SimplePlayer getThisPlayer() {
-        return thisPlayer;
+    public void setDevCardDecks(int[][][] devCardIds){
+        for(int i=0; i<4; i++)
+            for(int j=0; j<3; j++)
+                for(int k=0; k<4; k++)
+                    devCardDecks[i][j][k] = SimpleDevCard.parse(devCardIds[i][j][k]);
     }
 
     public List<SimpleDevCard> getDevCardDecks() {
@@ -113,5 +94,13 @@ public class SimpleModel {
             }
         }
         return result;
+    }
+
+    public SimplePlayer getThisPlayer() {
+        return thisPlayer;
+    }
+
+    public SimplePlayer getPlayer(String name){
+        return players.stream().filter(i -> i.getUsername().equals(name)).findAny().orElseThrow(IllegalArgumentException::new);
     }
 }

@@ -1,16 +1,17 @@
 package it.polimi.ingsw.server.model;
 
+import it.polimi.ingsw.client.simplemodel.SimplePlayer;
 import it.polimi.ingsw.server.VirtualView;
 import it.polimi.ingsw.server.model.cards.*;
 import it.polimi.ingsw.server.model.cards.LeaderCard;
 import it.polimi.ingsw.server.model.exceptions.ElementNotFoundException;
 import it.polimi.ingsw.server.model.playerboard.*;
-import it.polimi.ingsw.server.model.shared.FaithTrack;
 import it.polimi.ingsw.server.model.shared.Marble;
 import it.polimi.ingsw.server.model.shared.MarketBoard;
 import it.polimi.ingsw.server.model.shared.PopeFavourTile;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class Player extends AbstractPlayer{
 
@@ -19,7 +20,7 @@ public class Player extends AbstractPlayer{
     private final List<PopeFavourTile> tiles = List.of(new PopeFavourTile(2),
                                                        new PopeFavourTile(3),
                                                        new PopeFavourTile(4));
-    private final Map<Resource, Integer> activeDiscounts = new EnumMap<>(Resource.class);
+    private final Set<Resource> activeDiscounts = new HashSet<>();
     private final Set<Resource> whiteMarbleAliases = new HashSet<>();
     private final List<LeaderCard> leaderCardList = new ArrayList<>();
     private final PlayerBoard playerBoard;
@@ -35,6 +36,19 @@ public class Player extends AbstractPlayer{
         this.username = username;
         this.virtualView = virtualView;
         this.playerBoard = new PlayerBoard(virtualView);
+    }
+
+    public SimplePlayer getSimple(){
+
+        SimplePlayer player = new SimplePlayer(username);
+        player.setPosition(getPosition().getNumber());
+        player.setWarehouse(playerBoard.getWareHouse().getSimple());
+        player.setSlots(playerBoard.getSlotList().stream().map(Slot::getSimple).collect(Collectors.toList()));
+        player.setStrongbox(playerBoard.getStrongBox().getContent());
+        player.setLeaderCards(leaderCardList.stream().map(LeaderCard::getSimple).collect(Collectors.toList()));
+        player.setExtraProductionPowers(playerBoard.getExtraProductionPowers());
+        player.setActiveDiscounts(activeDiscounts);
+        return player;
     }
 
     /**
@@ -60,10 +74,9 @@ public class Player extends AbstractPlayer{
      * Adds a <code>Resource</code> discount to the set of discounts of the player.
      *
      * @param resource      The discounted resource
-     * @param amount        The entity of the discount
      */
-    public void addActiveDiscount(Resource resource, int amount) {
-        activeDiscounts.put(resource, amount);
+    public void addActiveDiscount(Resource resource) {
+        activeDiscounts.add(resource);
     }
 
     public Set<Resource> getWhiteMarbleAliases() {
@@ -144,6 +157,14 @@ public class Player extends AbstractPlayer{
         else throw new IllegalArgumentException("Invalid move: can't pay or can't place the selected Development Card");
     }
 
+    public int countDevCards(){
+        int count = 0;
+        for (Slot slot : playerBoard.getSlotList()){
+            count += slot.getDevelopmentCardList().size();
+        }
+        return count;
+    }
+
     /**
      * Checks it the player can buy a certain <code>DevelopmentCard</code>.
      *
@@ -162,7 +183,7 @@ public class Player extends AbstractPlayer{
     /**
      * Buys a row/column from the <code>MarketBoard</code>.
      *
-     * @param marketBoard       Reference to the game's marketboard
+     * @param marketBoard       Reference to the game's marketBoard
      * @param idLine            Index of the selected row/column
      * @param isRow             <code>true</code> if we buy a row, <code>false</code> otherwise
      * @return                  The retrieved list of marbles
@@ -202,7 +223,7 @@ public class Player extends AbstractPlayer{
         return playerBoard;
     }
 
-    public Map<Resource, Integer> getActiveDiscount() {
+    public Set<Resource> getActiveDiscount() {
         return activeDiscounts;
     }
 
@@ -324,5 +345,11 @@ public class Player extends AbstractPlayer{
         return !chosenInput.containsKey(Resource.FAITH) && !chosenOutput.containsKey(Resource.FAITH) &&
                 power.getAgnosticInput() == chosenInput.values().stream().mapToInt(Integer::intValue).sum() &&
                 power.getAgnosticOutput() == chosenOutput.values().stream().mapToInt(Integer::intValue).sum();
+    }
+
+    public Set<Integer> getLeaderCardIds(){
+        Set<Integer> ids = new HashSet<>();
+        getLeaderCardList().forEach(i -> ids.add(i.getId()));
+        return ids;
     }
 }

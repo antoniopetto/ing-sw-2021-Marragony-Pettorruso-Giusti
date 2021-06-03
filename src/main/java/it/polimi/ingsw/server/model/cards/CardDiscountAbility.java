@@ -1,5 +1,6 @@
 package it.polimi.ingsw.server.model.cards;
 
+import it.polimi.ingsw.client.simplemodel.SimpleAbility;
 import it.polimi.ingsw.server.model.Player;
 import it.polimi.ingsw.server.model.playerboard.Resource;
 
@@ -11,34 +12,21 @@ import java.util.Objects;
 public class CardDiscountAbility implements SpecialAbility{
 
     private final Resource resource;
-    private final int amount;
-
-    /**
-     * Creates an ability with a discount of 1 for a selected <code>resource</code>
-     *
-     *  @param resource         The selected resource
-     */
-    public CardDiscountAbility(Resource resource){
-        this(resource, 1);
-    }
 
     /**
      * Creates an ability with a discount of <code>amount</code> for a selected <code>resource</code>
      *
      * @param resource      The selected resource
-     * @param amount        The entity of the discount
      */
-    public CardDiscountAbility(Resource resource, int amount) {
+    public CardDiscountAbility(Resource resource) {
 
-        if(amount<1) throw new IllegalArgumentException();
         if(resource.equals(Resource.FAITH)) throw new IllegalArgumentException();
         this.resource = resource;
-        this.amount = amount;
     }
 
     @Override
     public void activateAbility(Player player) {
-        player.addActiveDiscount(resource, amount);
+        player.addActiveDiscount(resource);
     }
 
     @Override
@@ -46,11 +34,16 @@ public class CardDiscountAbility implements SpecialAbility{
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         CardDiscountAbility that = (CardDiscountAbility) o;
-        return amount == that.amount && resource == that.resource;
+        return resource == that.resource;
+    }
+
+    @Override
+    public SimpleAbility getSimple(){
+        return new SimpleAbility(SimpleAbility.Type.CARDDISCOUNT, resource);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(resource, amount);
+        return Objects.hash(resource);
     }
 }
