@@ -6,8 +6,6 @@ import it.polimi.ingsw.client.view.View;
 import it.polimi.ingsw.messages.command.BuyAndAddCardInSlotMsg;
 import it.polimi.ingsw.messages.command.DiscardLeaderCardMsg;
 import it.polimi.ingsw.messages.command.PlayLeaderCardMsg;
-import it.polimi.ingsw.server.model.cards.CardParser;
-import it.polimi.ingsw.server.model.playerboard.Depot;
 import it.polimi.ingsw.messages.command.*;
 import it.polimi.ingsw.server.model.playerboard.DepotName;
 import it.polimi.ingsw.server.model.playerboard.Resource;
@@ -225,12 +223,13 @@ public class GUIView extends Application implements View  {
                 Platform.runLater(() ->{
                     tmpStage.close();
                 });
-            mainSceneController.setResourcesInDepot();
+            mainSceneController.setWarehouse();
             mainSceneController.setMarketBoard();
         }
         if(action.equals(Action.BUY_CARD)){
             mainSceneController.setDecks();
-            mainSceneController.setResourcesInDepot();
+            mainSceneController.setWarehouse();
+            mainSceneController.setSlots();
         }
 
         int choice = mainSceneController.getChoice();
@@ -269,6 +268,7 @@ public class GUIView extends Application implements View  {
     }
     private CommandMsg buyCard()
     {
+        mainSceneController.disableButtons(true);
         mainSceneController.disableCards(false);
         int cardId = mainSceneController.getCardId();
         mainSceneController.disableCards(true);
