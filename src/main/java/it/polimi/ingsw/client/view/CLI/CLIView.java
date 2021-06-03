@@ -447,6 +447,7 @@ public class CLIView implements View {
         }
     }
 
+    @Override
     public CommandMsg changeDepots(){
 
         showWarehouse(getThisPlayer());
@@ -680,7 +681,7 @@ public class CLIView implements View {
 
     public void showMarketBoard() {
         Marble[][] marketBoard = game.getMarketBoard();
-        System.out.println("  1 2 3 4");
+        System.out.println(" 1 2 3 4");
         for(int i=0; i<3; i++)
         {
             System.out.print((i+1) + " ");

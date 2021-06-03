@@ -1,23 +1,28 @@
 package it.polimi.ingsw.client.view.GUI;
 
 import it.polimi.ingsw.client.ServerHandler;
-import it.polimi.ingsw.client.simplemodel.SimpleModel;
-import it.polimi.ingsw.client.simplemodel.SimpleLeaderCard;
-import it.polimi.ingsw.client.simplemodel.SimplePlayer;
+import it.polimi.ingsw.client.simplemodel.*;
 import it.polimi.ingsw.client.view.View;
+import it.polimi.ingsw.messages.command.BuyAndAddCardInSlotMsg;
 import it.polimi.ingsw.messages.command.DiscardLeaderCardMsg;
+import it.polimi.ingsw.messages.command.PlayLeaderCardMsg;
+import it.polimi.ingsw.server.model.cards.CardParser;
+import it.polimi.ingsw.server.model.playerboard.Depot;
+import it.polimi.ingsw.messages.command.*;
 import it.polimi.ingsw.server.model.playerboard.DepotName;
 import it.polimi.ingsw.server.model.playerboard.Resource;
 import it.polimi.ingsw.server.model.shared.Marble;
-import it.polimi.ingsw.messages.command.CommandMsg;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.image.Image;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 
 import java.io.IOException;
 import java.net.Socket;
@@ -28,13 +33,35 @@ import java.util.Map;
 public class GUIView extends Application implements View  {
 
     private final SimpleModel game;
-    private String username;
-    private boolean loop = true;
-    private int nPlayers;
     private FXMLLoader currentLoader;
     public static Font font;
-    private Stage currentStage;
+    private Stage initStage;
     private Stage oldStage;
+    private Alert alert;
+    private Stage errorStage;
+    private Stage mainStage;
+    private Stage tmpStage;
+    private int discardCounter = 0;
+    private int marbleCounter = 0;
+    private Marble marble;
+    private boolean firstMain = true;
+    private Action action = Action.INIT;
+    private MainSceneController mainSceneController = null;
+
+
+    private enum Action{
+        PLAY_LEADER,
+        DISCARD_LEADER,
+        BUY_RESOURCES,
+        END_TURN,
+        BUY_CARD,
+        ACTIVE_PRODUCTION,
+        MOVE_DEPOT,
+        INIT,
+        SWITCH_DEPOT;
+
+
+    }
 
     public GUIView() {
 
@@ -50,17 +77,21 @@ public class GUIView extends Application implements View  {
     @Override
     public void start(Stage stage) {
 
-        setLoader("/initializegame.fxml");
+        setLoader("/startGame.fxml");
         Font.loadFont(getClass().getResourceAsStream("/resources/fonts/master_of_break.ttf"), 14);
-        manageStage(false, "Inserting", true, loadScene(currentLoader), false);
+        Scene scene = loadScene(currentLoader);
+        Platform.runLater(() ->{
+            initStage = new Stage();
+            manageStage(initStage,scene, "Inserting Window", false );
+        });
 
         SettingGameController settingGameController = currentLoader.getController();
-       Button button = (Button) currentLoader.getNamespace().get("confirmButton");
-            button.setOnAction(event -> {
-                settingGameController.setPort();
-                settingGameController.setServerIP();
-                setting(settingGameController);
-    });
+        Button button = (Button) currentLoader.getNamespace().get("confirmButton");
+        button.setOnAction(event -> {
+            settingGameController.setPort();
+            settingGameController.setServerIP();
+            setting(settingGameController);
+        });
 
     }
 
@@ -84,71 +115,72 @@ public class GUIView extends Application implements View  {
     public void showErrorMessage(String text) {
 
         setLoader("/alertDialog.fxml");
-
+        Scene scene = loadScene(currentLoader);
         AlertController settingGameController = currentLoader.getController();
         settingGameController.setErrorLabel(text);
-
-
-            manageStage(false, "Error Message", true, loadScene(currentLoader), false);
+            openErrorStage(false, "Dialog window", scene);
             Button button = (Button) currentLoader.getNamespace().get("errorConfirm");
-            button.setOnAction(event -> currentStage.close());
+            button.setOnAction(event -> errorStage.close());
 
     }
 
+    private void openErrorStage(boolean resizable,String title, Scene scene) {
+        Platform.runLater(() -> {
+            errorStage = new Stage();
+            errorStage.setTitle(title);
+            setScene(scene, errorStage, resizable);
+            errorStage.setAlwaysOnTop(true);
 
-    private void setUsername(String username) {
-        this.username = username;
+        });
+        Button button = (Button) currentLoader.getNamespace().get("errorConfirm");
+        button.setOnAction(event -> errorStage.close());
     }
 
-    private void setLoop(boolean loop) {
-        this.loop = loop;
+    private void setScene(Scene scene, Stage stage, boolean resizable)
+    {
+        Platform.runLater(()->{
+            stage.setScene(scene);
+            stage.setResizable(resizable);
+            stage.show();
+        });
     }
+
 
     @Override
     public String getUsername() {
+        setLoader("/setGame.fxml");
+        Scene scene = loadScene(currentLoader);
+        Platform.runLater(() -> manageStage(initStage,scene, "Inserting", false ));
+       StartGameController startGameController = currentLoader.getController();
+       String username = startGameController.getUsername();
 
-       setLoader("/setGame.fxml");
-        manageStage(false, "Start Config", false, loadScene(currentLoader), false);
-
-
-        StartGameController startGameController = currentLoader.getController();
-        Button button = (Button) currentLoader.getNamespace().get("confirm");
-        loop = true;
-    while(loop) {
-            button.setOnAction(event -> {
-            setUsername(startGameController.getUsernameField());
-            setLoop(false);
-            });
-        }
         return username;
 
     }
 
-    private void setPlayers(int nPlayers){
-        this.nPlayers = nPlayers;
-    }
-
     @Override
     public int getNumberOfPlayers() {
-        ((StartGameController )currentLoader.getController()).setUsernameField(false);
-        ((StartGameController )currentLoader.getController()).setPlayersLabel(true);
-        ((StartGameController )currentLoader.getController()).setUsernameLabel(false);
-        ((StartGameController )currentLoader.getController()).setChoicePlayers(true);
-        Button button = (Button) currentLoader.getNamespace().get("confirm");
-        loop = true;
-        while(loop) {
-            button.setOnAction(event -> {
-                setPlayers( ((StartGameController )currentLoader.getController()).getChoicePlayers());
-                setLoop(false);
-            });
-        }
+        ((StartGameController) currentLoader.getController()).setUserComponents(false);
+        ((StartGameController) currentLoader.getController()).setPlayersComponents(true);
 
+        int nPlayers = ((StartGameController) currentLoader.getController()).getnPlayers();
+        showErrorMessage("Waiting for other players...");
         return nPlayers;
 
     }
 
     @Override
     public void showTitle() {
+        setLoader("/title.fxml");
+        Scene scene = loadScene(currentLoader);
+        Platform.runLater(()->{
+            if(errorStage.isShowing()) errorStage.close();
+            oldStage = initStage;
+            initStage = new Stage();
+            initStage.initStyle(StageStyle.UNDECORATED);
+            initStage.setAlwaysOnTop(true);
+            manageStage(initStage, scene, "", true);
+        });
 
     }
 
@@ -172,14 +204,146 @@ public class GUIView extends Application implements View  {
 
     @Override
     public CommandMsg selectMove(boolean postTurn){
-        System.out.println("message sent");
+        if(firstMain){
+            setLoader("/mainScene.fxml");
+            Scene scene = loadScene(currentLoader);
+            mainSceneController = currentLoader.getController();
+            mainSceneController.setScene(game);
+            Platform.runLater(()->{
+                if(initStage.isShowing()) initStage.close();
+                mainStage = new Stage();
+                manageStage(mainStage, scene, "Main", false);
+            });
+            firstMain = false;
+        }
+
+        mainSceneController.setActionButton(postTurn);
+
+        if(action.equals(Action.DISCARD_LEADER) || action.equals(Action.PLAY_LEADER)) mainSceneController.setLeaderCard();
+        if(action.equals(Action.BUY_RESOURCES)){
+            if(tmpStage.isShowing())
+                Platform.runLater(() ->{
+                    tmpStage.close();
+                });
+            mainSceneController.setResourcesInDepot();
+            mainSceneController.setMarketBoard();
+        }
+        if(action.equals(Action.BUY_CARD)){
+            mainSceneController.setDecks();
+            mainSceneController.setResourcesInDepot();
+        }
+
+        int choice = mainSceneController.getChoice();
+
+        switch (choice){
+            case 1 ->{
+                int cardId = mainSceneController.getCardId();
+                action = Action.PLAY_LEADER;
+                return new PlayLeaderCardMsg(cardId);
+            }
+            case 2 ->{
+                int cardId = mainSceneController.getCardId();
+                action = Action.DISCARD_LEADER;
+                return new DiscardLeaderCardMsg(cardId);
+            }
+            case 3 ->{
+                int buffer = mainSceneController.getBufferId();
+                boolean isRow = false;
+                if(buffer > 4 && buffer < 8 ){
+                    isRow = true;
+                    buffer -= 4;
+                }
+                action = Action.BUY_RESOURCES;
+                return new BuyResourcesMsg(buffer-1, isRow);
+            }
+            case 4->{
+                action=Action.BUY_CARD;
+                return buyCard();
+            }
+            case 6 ->{
+                action = Action.END_TURN;
+                return new EndTurnMsg();
+            }
+        }
         return null;
+    }
+    private CommandMsg buyCard()
+    {
+        mainSceneController.disableCards(false);
+        int cardId = mainSceneController.getCardId();
+        mainSceneController.disableCards(true);
+        mainSceneController.disableSlots(false);
+        int slotId = mainSceneController.getChoice()-1;
+        System.out.println(slotId);
+        mainSceneController.disableSlots(true);
+        SimpleCardParser parser = SimpleCardParser.getInstance();
+        SimpleDevCard card = parser.getSimpleDevelopmentCard(cardId);
+        return new BuyAndAddCardInSlotMsg(card.getColor(), card.getLevel(), slotId);
     }
 
     @Override
     public CommandMsg manageResource(){
-        return null;
+
+        CommandMsg msg = null;
+
+        setLoader("/manageResources.fxml");
+        Scene scene = loadScene(currentLoader);
+        ManageResourcesController manageResourcesController = currentLoader.getController();
+
+        Platform.runLater(() ->{
+            if(tmpStage == null)  tmpStage = new Stage();
+            manageStage(tmpStage, scene, "Manage Resources", false);
+        });
+
+        int choice = manageResourcesController.getChoice();
+
+        switch (choice){
+            case 1 -> {
+                Marble selectedMarble = selectMarble();
+                DepotName selectedDepot = selectDepot();
+                if (selectedMarble == Marble.WHITE) {
+                    Resource selectedResource = selectResource();
+                    msg = new PutResourceMsg(selectedMarble, selectedDepot, selectedResource);
+                }
+                else
+                    msg = new PutResourceMsg(selectedMarble, selectedDepot);
+            }
+            case 2 -> {
+                Marble selectedMarble = selectMarble();
+                msg = new DiscardMarbleMsg(selectedMarble);
+            }
+            case 3 ->{
+                msg = changeDepots();
+            }
+        }
+
+        return msg;
     }
+
+    @Override
+    public CommandMsg changeDepots() {
+        setLoader("/marbleBufferScene.fxml");
+        Scene scene = loadScene(currentLoader);
+        MarbleBufferController marbleBufferController = currentLoader.getController();
+        marbleBufferController.setSimpleModel(game);
+        marbleBufferController.show(false,true,false);
+        marbleBufferController.setSwitchButton(true);
+
+        Platform.runLater(() ->{
+            manageStage(tmpStage, scene, "Select Marble1", false);
+        });
+
+        DepotName depot1 = marbleBufferController.getDepot();
+        DepotName depot2 = marbleBufferController.getDepot();
+
+        if (depot1 == DepotName.FIRST_EXTRA || depot1 == DepotName.SECOND_EXTRA
+                || depot2 == DepotName.FIRST_EXTRA || depot2 == DepotName.SECOND_EXTRA){
+            return new MoveDepotsMsg(depot1, depot2);
+        }else
+            return new SwitchDepotsMsg(depot1,depot2);
+
+    }
+
     @Override
     public void showLeaderCard(SimpleLeaderCard card) {
 
@@ -191,23 +355,63 @@ public class GUIView extends Application implements View  {
         Scene scene = loadScene(currentLoader);
         setUpController controller = currentLoader.getController();
         controller.setGame(game);
-        manageStage(false, "Select Cards", true, scene, true);
-        int id =controller.getResult();
-        while(id==0){
-            id=controller.getResult();
-        }
 
-        /*
-        setLoader("/mainScene.fxml");
-        Scene scene = loadScene(currentLoader);
-        manageStage(false, "main", true, scene, true);
-        */
+        Platform.runLater(()->{
+            if(discardCounter == 0){
+                oldStage = initStage;
+                initStage = new Stage();
+                manageStage(initStage, scene, "Discard Card Window", true);
+            }
+            else if(discardCounter == 1){
+                manageStage(initStage, scene, "Discard Card Window", false);
+
+            }
+        });
+
+
+        int id = controller.getResult();
+
+        discardCounter++;
+
         return new DiscardLeaderCardMsg(id);
 
     }
 
     @Override
     public Marble selectMarble() {
+
+        setLoader("/marbleBufferScene.fxml");
+        Scene scene = loadScene(currentLoader);
+        MarbleBufferController marbleBufferController = currentLoader.getController();
+        marbleBufferController.setSimpleModel(game);
+
+        if((marbleCounter ==0 && !game.getThisPlayer().getUsername().equals(game.getPlayers().get(0).getUsername()))
+                || (marbleCounter == 1 && game.getPlayers().size() == 4 && game.getThisPlayer().getUsername().equals(game.getPlayers().get(3).getUsername()))){
+            Platform.runLater(() -> {
+                oldStage = initStage;
+                initStage = new Stage();
+                manageStage(initStage,scene,"Select Marble", true);
+            });
+        }
+        else if(marbleCounter >= 0 ){
+            //TODO change label when player wants to discard Marble
+
+            marbleBufferController.setMarble();
+            Platform.runLater(() ->{
+                manageStage(tmpStage, scene, "Select Marble1", false);
+            });
+        }
+
+        marble = null;
+        marble = marbleBufferController.getMarble();
+        marbleCounter++;
+
+        if((marbleCounter ==1 && !game.getThisPlayer().getUsername().equals(game.getPlayers().get(0).getUsername()))
+        || (marbleCounter == 2 && game.getPlayers().size() == 4 && game.getThisPlayer().getUsername().equals(game.getPlayers().get(3).getUsername()))){
+            return Marble.WHITE;
+        }
+        else if(marbleCounter >= 1 ) return marble;
+//TODO white marble alias
         return null;
     }
 
@@ -218,10 +422,29 @@ public class GUIView extends Application implements View  {
 
     @Override
     public DepotName selectDepot() {
-        return DepotName.HIGH;
+        MarbleBufferController marbleBufferController = currentLoader.getController();
+        marbleBufferController.show(false, true, false);
+        marbleBufferController.manageButton(false);
+        DepotName depot = marbleBufferController.getDepot();
+        return depot;
     }
 
-    public Resource selectResource(){ return Resource.COIN;}
+    @Override
+    public Resource selectResource(){
+        Resource resource = null;
+        if((marbleCounter == 1 && !game.getThisPlayer().getUsername().equals(game.getPlayers().get(0).getUsername()))
+                || (marbleCounter == 2 && game.getPlayers().size() == 4 && game.getThisPlayer().getUsername().equals(game.getPlayers().get(3).getUsername()))){
+            return marble.getResource();
+        }else if(marbleCounter >= 1 ){
+            //TODO FIX!
+            MarbleBufferController marbleBufferController = currentLoader.getController();
+            marbleBufferController.show(true, false, false);
+            marbleBufferController.manageButton(true);
+            resource = marbleBufferController.getResource();
+        }
+
+        return resource;
+    }
 
     @Override
     public void showTextMessage(String text) {
@@ -233,21 +456,21 @@ public class GUIView extends Application implements View  {
         currentLoader = new FXMLLoader(getClass().getResource(path));
     }
 
-    private void manageStage(boolean resizable, String title, boolean createStage, Scene scene, boolean close){
-        oldStage = currentStage;
+
+    private void manageStage(Stage stage, Scene scene, String title, boolean close){
         Platform.runLater(() -> {
-
-            if(createStage){
-                currentStage = new Stage();
-                currentStage.setTitle(title);
+            if(close){
+                oldStage.close();
             }
-            currentStage.setScene(scene);
-            currentStage.setResizable(resizable);
-            if(close) oldStage.close();
-            currentStage.show();
-        });
+            stage.getIcons().add(new Image(getClass().getResourceAsStream("/Ritagliare.png")));
+            stage.setScene(scene);
+            stage.setTitle(title);
+            stage.setResizable(false);
 
+            stage.show();
+        });
     }
+
 
 
     private Scene loadScene(FXMLLoader loader){

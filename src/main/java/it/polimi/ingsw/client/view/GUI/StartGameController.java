@@ -12,6 +12,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -28,28 +29,72 @@ public class StartGameController implements Initializable {
     private Label userLabel;
     @FXML
     private Label playersLabel;
+    @FXML
+    private Button playersButton;
+    @FXML
+    private Button userButton;
 
+    private String username = "";
+    private int nPlayers = 0;
 
-    public String getUsernameField() {
-        return usernameField.getText();
+    public synchronized String getUsername() {
+        while (username.isEmpty()){
+            try {
+                wait();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+        return username;
     }
 
-    public void setUsernameField(boolean visible){
+    private synchronized void setUsername(String username) {
+        this.username = username;
+        notifyAll();
+    }
+
+    @FXML
+    public void userConfirm(ActionEvent actionEvent){
+        actionEvent.consume();
+        setUsername(usernameField.getText());
+    }
+
+    @FXML
+    public void playersConfirm(ActionEvent mouseEvent){
+        mouseEvent.consume();
+        setnPlayers(choicePlayers.getValue()==null ? -1 : choicePlayers.getValue() );
+    }
+
+    public synchronized int getnPlayers() {
+        while (nPlayers == 0){
+            try {
+                wait();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+        int tmpPlayers = nPlayers;
+        nPlayers = 0;
+        return tmpPlayers;
+    }
+
+    public synchronized void setnPlayers(int nPlayers) {
+        this.nPlayers = nPlayers;
+        notifyAll();
+    }
+
+    public void setUserComponents(boolean visible){
         usernameField.setVisible(visible);
-    }
-    public void setUsernameLabel(boolean visible){
         userLabel.setVisible(visible);
-    }
-    public void setChoicePlayers(boolean visible){
-        choicePlayers.setVisible(visible);
-    }
-    public void setPlayersLabel(boolean visible){
-        playersLabel.setVisible(visible);
+        userButton.setVisible(visible);
     }
 
-    public int getChoicePlayers() {
-        return choicePlayers.getValue();
+    public void setPlayersComponents(boolean visible){
+        choicePlayers.setVisible(visible);
+        playersLabel.setVisible(visible);
+        playersButton.setVisible(visible);
     }
+
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -57,5 +102,6 @@ public class StartGameController implements Initializable {
         choicePlayers.setItems(FXCollections.observableArrayList(1,2,3,4));
         choicePlayers.setVisible(false);
         playersLabel.setVisible(false);
+        playersButton.setVisible(false);
     }
 }

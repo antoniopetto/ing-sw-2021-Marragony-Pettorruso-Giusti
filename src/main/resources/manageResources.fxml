@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.shape.*?>
+<?import java.lang.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<AnchorPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.client.view.GUI.ManageResourcesController">
+   <children>
+
+      <Group>
+         <children>
+            <ImageView fitHeight="398.0" fitWidth="689.0" opacity="0.73" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@maestri-del-rinascimento.jpg" />
+               </image>
+            </ImageView>
+            <ImageView fitHeight="150.0" fitWidth="600.0" layoutX="257.0" layoutY="-16.0" pickOnBounds="true" preserveRatio="true" style="-fx-scale-x: 4; -fx-scale-y: 0.6;">
+               <image>
+                  <Image url="@Pergamena2.png" />
+               </image>
+            </ImageView>
+            <Text fill="#0b67d9" layoutX="188.0" layoutY="68.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Please select a marble action:" wrappingWidth="462.28131103515625">
+               <font>
+                  <Font name="Viner Hand ITC" size="26.0" />
+               </font>
+            </Text>
+            <ImageView fitHeight="20.0" fitWidth="24.0" layoutX="26.0" layoutY="146.0" pickOnBounds="true" preserveRatio="true" rotate="-90.0">
+               <image>
+                  <Image url="@arrowHead.png" />
+               </image>
+            </ImageView>
+            <ImageView fitHeight="20.0" fitWidth="24.0" layoutX="26.0" layoutY="171.0" pickOnBounds="true" preserveRatio="true" rotate="-90.0">
+               <image>
+                  <Image url="@arrowHead.png" />
+               </image>
+            </ImageView>
+            <ImageView fitHeight="20.0" fitWidth="24.0" layoutX="26.0" layoutY="199.0" pickOnBounds="true" preserveRatio="true" rotate="-90.0">
+               <image>
+                  <Image url="@arrowHead.png" />
+               </image>
+            </ImageView>
+            <Label fx:id="insertResource" layoutX="46.0" layoutY="140.0" onMouseClicked="#marbleAction" prefHeight="31.0" prefWidth="164.0" text="Insert Resource" textFill="#0b67d9" underline="true">
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
+            </Label>
+            <Label fx:id="discardMarble" layoutX="46.0" layoutY="171.0" onMouseClicked="#marbleAction" prefHeight="21.0" prefWidth="142.0" text="Discard Marble" textFill="#0b67d9" underline="true">
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
+            </Label>
+            <Label fx:id="switchResources" layoutX="46.0" layoutY="199.0" onMouseClicked="#marbleAction" prefHeight="21.0" prefWidth="142.0" text="Switch Resources" textFill="#0b67d9" underline="true">
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
+            </Label>
+         </children>
+      </Group>
+   </children>
+</AnchorPane>

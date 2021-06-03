@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.Cursor?>
-<?import javafx.scene.control.Button?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
@@ -25,69 +24,38 @@
             <Font name="Vladimir Script" size="50.0" />
          </font>
       </Text>
-      <Button fx:id="confirm" alignment="CENTER" contentDisplay="TOP" layoutX="396.0" layoutY="416.0" mnemonicParsing="false" onMouseClicked="#confirm" prefHeight="118.0" prefWidth="118.0" style="-fx-background-color: transparent;" text="Confirm" textAlignment="CENTER">
-         <graphic>
-            <ImageView fitHeight="53.0" fitWidth="55.0" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="@Ritagliare.png" />
-               </image>
-            </ImageView>
-         </graphic>
-         <font>
-            <Font name="Vladimir Script" size="22.0" />
-         </font>
+      <ImageView fx:id="imCard1" fitHeight="328.0" fitWidth="195.0" layoutX="24.0" layoutY="117.0" onMouseClicked="#selectedCard" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@cards/leader/Leader-101.jpg" />
+         </image>
          <cursor>
             <Cursor fx:constant="HAND" />
          </cursor>
-      </Button>
-      <Button fx:id="card2" layoutX="244.0" layoutY="112.0" mnemonicParsing="false" onMouseClicked="#selectedCard" prefHeight="295.0" prefWidth="195.0" style="-fx-background-color: transparent;">
-         <graphic>
-            <ImageView fx:id="imCard2" fitHeight="328.0" fitWidth="195.0" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="@cards/leader/Leader-101.jpg" />
-               </image>
-            </ImageView>
-         </graphic>
+      </ImageView>
+      <ImageView fx:id="imCard2" fitHeight="328.0" fitWidth="195.0" layoutX="250.0" layoutY="117.0" onMouseClicked="#selectedCard" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@cards/leader/Leader-101.jpg" />
+         </image>
          <cursor>
             <Cursor fx:constant="HAND" />
          </cursor>
-      </Button>
-      <Button fx:id="card1" layoutX="14.0" layoutY="112.0" mnemonicParsing="false" onMouseClicked="#selectedCard" prefHeight="295.0" prefWidth="195.0" style="-fx-background-color: transparent;">
-         <graphic>
-            <ImageView fx:id="imCard1" fitHeight="328.0" fitWidth="195.0" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="@cards/leader/Leader-101.jpg" />
-               </image>
-            </ImageView>
-         </graphic>
+      </ImageView>
+      <ImageView fx:id="imCard3" fitHeight="328.0" fitWidth="195.0" layoutX="475.0" layoutY="117.0" onMouseClicked="#selectedCard" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@cards/leader/Leader-101.jpg" />
+         </image>
          <cursor>
             <Cursor fx:constant="HAND" />
          </cursor>
-      </Button>
-      <Button fx:id="card3" layoutX="466.0" layoutY="112.0" mnemonicParsing="false" onMouseClicked="#selectedCard" prefHeight="295.0" prefWidth="195.0" style="-fx-background-color: transparent;">
-         <graphic>
-            <ImageView fx:id="imCard3" fitHeight="328.0" fitWidth="195.0" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="@cards/leader/Leader-101.jpg" />
-               </image>
-            </ImageView>
-         </graphic>
+      </ImageView>
+      <ImageView fx:id="imCard4" fitHeight="328.0" fitWidth="195.0" layoutX="703.0" layoutY="117.0" onMouseClicked="#selectedCard" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@cards/leader/Leader-101.jpg" />
+         </image>
          <cursor>
             <Cursor fx:constant="HAND" />
          </cursor>
-      </Button>
-      <Button fx:id="card4" layoutX="694.0" layoutY="112.0" mnemonicParsing="false" onMouseClicked="#selectedCard" prefHeight="295.0" prefWidth="195.0" style="-fx-background-color: transparent;">
-         <graphic>
-            <ImageView fx:id="imCard4" fitHeight="328.0" fitWidth="195.0" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="@cards/leader/Leader-101.jpg" />
-               </image>
-            </ImageView>
-         </graphic>
-         <cursor>
-            <Cursor fx:constant="HAND" />
-         </cursor>
-      </Button>
+      </ImageView>
    </children>
    <cursor>
       <Cursor fx:constant="DEFAULT" />

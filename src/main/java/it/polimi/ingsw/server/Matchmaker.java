@@ -37,16 +37,20 @@ public class Matchmaker implements Runnable{
                 }
             }
 
-            handler.writeObject(new NPlayerRequestMsg());
-            int nPlayers = ((NPlayerMsg) handler.readObject()).getNPlayers();
-            if (nPlayers < 1 || nPlayers > 4){
-                handler.writeObject(new ErrorMsg("Illegal number of players"));
-                terminate();
-                return;
-            }
-            else {
-                Server.publicRooms[nPlayers - 1].add(username, handler);
-            }
+
+                handler.writeObject(new NPlayerRequestMsg());
+                int nPlayers = ((NPlayerMsg) handler.readObject()).getNPlayers();
+                if (nPlayers < 1 || nPlayers > 4){
+                    handler.writeObject(new ErrorMsg("Illegal number of players"));
+                    terminate();
+                    return;
+                    //TODO add opportunity to insert again the number of players
+                }
+                else {
+                    Server.publicRooms[nPlayers - 1].add(username, handler);
+                }
+
+
         }
         catch (IOException e){
             e.printStackTrace();
