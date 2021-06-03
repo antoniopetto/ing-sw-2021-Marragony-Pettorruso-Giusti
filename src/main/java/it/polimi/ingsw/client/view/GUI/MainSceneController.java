@@ -79,6 +79,12 @@ public class MainSceneController implements Initializable {
     @FXML
     private Group slots;
 
+    @FXML
+    private Accordion actionButtons;
+
+    @FXML
+    private Group cardsSlots;
+
 
     @FXML
     private GridPane marketGrid;
@@ -260,16 +266,21 @@ public class MainSceneController implements Initializable {
     public void setScene(SimpleModel simpleModel){
         this.simpleModel=simpleModel;
         setActionButton(false);
-        setResourcesInDepot();
+        setWarehouse();
         setLeaderCard();
         setDecks();
         setMarketBoard();
+        setSlots();
         disableCards(true);
         disableSlots(true);
+        disableButtons(false);
+        disableCardsInSlot(true);
     }
 
     public void disableCards(boolean disable) {GUISupport.setDisable(disable, decks);}
     public void disableSlots(boolean disable) {GUISupport.setVisible(!disable, slots);}
+    public void disableButtons(boolean disable) {GUISupport.setDisable(disable, actionButtons);}
+    public void disableCardsInSlot(boolean disable) {GUISupport.setDisable(disable, cardsSlots);}
 
 
 
@@ -356,7 +367,7 @@ public class MainSceneController implements Initializable {
         return tmpId;
     }
 
-    public void setResourcesInDepot(){
+    public void setWarehouse(){
         int quantity;
         GUISupport.setVisible(false, resourceHigh, resourceSXMed, resourceDXMed, resourceSXLow, resourceCLow, resourceDXLow);
 
@@ -371,7 +382,32 @@ public class MainSceneController implements Initializable {
         GUISupport.settingImageView(quantity, resourceSXLow, resourceCLow, resourceDXLow);
     }
 
-
+    public void setSlots()
+    {
+        int slotCounter = 0;
+        int cardCounter = 0;
+        for(Node node : cardsSlots.getChildren())
+        {
+            Group slot = (Group) node;
+            for(Node cardNode : slot.getChildren())
+            {
+                boolean cardPresent = false;
+                ImageView card = (ImageView)cardNode;
+                if(simpleModel.getThisPlayer().getSlots().get(slotCounter).getCards().size()>cardCounter){
+                    SimpleDevCard simpleDevCard =simpleModel.getThisPlayer().getSlots().get(slotCounter).getCards().get(cardCounter);
+                    if(simpleDevCard!=null){
+                        int id = simpleDevCard.getId();
+                        String url = "/cards/development/Development-"+id+".jpg";
+                        card.setImage(new Image(url));
+                        cardPresent=true;
+                    }
+                }
+                if(!cardPresent) GUISupport.setVisible(false, card);
+                cardCounter++;
+            }
+            slotCounter++;
+        }
+    }
     public void devCardSelected(MouseEvent mouseEvent) {
         mouseEvent.consume();
         Platform.runLater(()->{
@@ -379,6 +415,8 @@ public class MainSceneController implements Initializable {
             setCardId(Integer.parseInt(image.getId()));
         });
     }
+
+
 
 
     public void slotSelected(MouseEvent mouseEvent) {

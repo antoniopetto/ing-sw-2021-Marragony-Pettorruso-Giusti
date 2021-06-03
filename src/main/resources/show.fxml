@@ -1,0 +1,227 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.Cursor?>
+<?import javafx.scene.Group?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="548.0" prefWidth="865.0" styleClass="maingrid" stylesheets="@background.css" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.client.view.GUI.ShowController">
+   <children>
+      <ImageView fitHeight="467.0" fitWidth="665.0" layoutY="81.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@PlayerBoard.jpg" />
+         </image>
+      </ImageView>
+      <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="325.0" layoutY="-37.0" pickOnBounds="true" preserveRatio="true" style="-fx-scale-x: 3; -fx-scale-y: 0.5;">
+         <image>
+            <Image url="@Pergamena2.png" />
+         </image>
+      </ImageView>
+      <Button alignment="BOTTOM_CENTER" contentDisplay="TOP" layoutX="710.0" layoutY="450.0" mnemonicParsing="false" onAction="#closeShow" prefHeight="46.0" prefWidth="96.0" styleClass="transparent" stylesheets="@background.css" text="Close" textAlignment="CENTER" textFill="#2f38b1">
+         <font>
+            <Font name="Lucida Calligraphy Italic" size="18.0" />
+         </font>
+         <graphic>
+            <ImageView fitHeight="45.0" fitWidth="66.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@Ritagliare.png" />
+               </image>
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
+            </ImageView>
+         </graphic>
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor>
+      </Button>
+      <Text fill="#2f38b1" layoutX="261.0" layoutY="43.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Player playerboard">
+         <font>
+            <Font name="Lucida Calligraphy Italic" size="25.0" />
+         </font>
+      </Text>
+      <Group layoutX="253.0" layoutY="242.0">
+         <children>
+            <Group>
+               <children>
+                  <ImageView fitHeight="195.0" fitWidth="115.0" layoutY="84.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@cards/development/Development-2.jpg" />
+                     </image>
+                  </ImageView>
+                  <ImageView fitHeight="199.0" fitWidth="115.0" layoutY="42.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@cards/development/Development-2.jpg" />
+                     </image>
+                  </ImageView>
+                  <ImageView fitHeight="194.0" fitWidth="114.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@cards/development/Development-2.jpg" />
+                     </image>
+                  </ImageView>
+               </children>
+            </Group>
+            <Group layoutX="124.0">
+               <children>
+                  <ImageView fitHeight="195.0" fitWidth="115.0" layoutY="84.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@cards/development/Development-2.jpg" />
+                     </image>
+                  </ImageView>
+                  <ImageView fitHeight="199.0" fitWidth="115.0" layoutY="42.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@cards/development/Development-2.jpg" />
+                     </image>
+                  </ImageView>
+                  <ImageView fitHeight="194.0" fitWidth="114.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@cards/development/Development-2.jpg" />
+                     </image>
+                  </ImageView>
+               </children>
+            </Group>
+            <Group layoutX="255.0">
+               <children>
+                  <ImageView fitHeight="195.0" fitWidth="115.0" layoutY="84.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@cards/development/Development-2.jpg" />
+                     </image>
+                  </ImageView>
+                  <ImageView fitHeight="199.0" fitWidth="115.0" layoutY="42.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@cards/development/Development-2.jpg" />
+                     </image>
+                  </ImageView>
+                  <ImageView fitHeight="194.0" fitWidth="114.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@cards/development/Development-2.jpg" />
+                     </image>
+                  </ImageView>
+               </children>
+            </Group>
+         </children>
+      </Group>
+      <ImageView fitHeight="52.0" fitWidth="47.0" layoutX="48.0" layoutY="161.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@res-marbles/faith.png" />
+         </image>
+      </ImageView>
+      <Group layoutX="37.0" layoutY="274.0">
+         <children>
+            <Group layoutX="28.0">
+               <children>
+                  <ImageView fitHeight="34.0" fitWidth="34.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@res-marbles/servant.png" />
+                     </image>
+                  </ImageView>
+               </children>
+            </Group>
+            <Group layoutX="20.0" layoutY="43.0">
+               <children>
+                  <ImageView fitHeight="34.0" fitWidth="34.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@res-marbles/shield.png" />
+                     </image>
+                  </ImageView>
+                  <ImageView fitHeight="34.0" fitWidth="34.0" layoutX="31.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@res-marbles/shield.png" />
+                     </image>
+                  </ImageView>
+               </children>
+            </Group>
+            <Group layoutY="87.0">
+               <children>
+                  <ImageView fitHeight="34.0" fitWidth="34.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@res-marbles/coin.png" />
+                     </image>
+                  </ImageView>
+                  <ImageView fitHeight="34.0" fitWidth="34.0" layoutX="30.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@res-marbles/coin.png" />
+                     </image>
+                  </ImageView>
+                  <ImageView fitHeight="34.0" fitWidth="34.0" layoutX="60.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@res-marbles/coin.png" />
+                     </image>
+                  </ImageView>
+               </children>
+            </Group>
+         </children>
+      </Group>
+      <GridPane layoutX="18.0" layoutY="436.0" prefHeight="75.0" prefWidth="115.0">
+         <columnConstraints>
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+         </columnConstraints>
+         <rowConstraints>
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+         </rowConstraints>
+         <children>
+            <ImageView fitHeight="31.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
+               <image>
+                  <Image url="@res-marbles/shield.png" />
+               </image>
+            </ImageView>
+            <ImageView fitHeight="31.0" fitWidth="24.0" layoutX="45.0" layoutY="16.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1" GridPane.rowIndex="1">
+               <image>
+                  <Image url="@res-marbles/servant.png" />
+               </image>
+            </ImageView>
+            <ImageView fitHeight="31.0" fitWidth="24.0" layoutX="45.0" layoutY="69.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="3">
+               <image>
+                  <Image url="@res-marbles/stone.png" />
+               </image>
+            </ImageView>
+            <ImageView fitHeight="31.0" fitWidth="24.0" layoutX="115.0" layoutY="16.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="3" GridPane.rowIndex="1">
+               <image>
+                  <Image url="@res-marbles/coin.png" />
+               </image>
+            </ImageView>
+            <Text fill="#71cbff" strokeType="OUTSIDE" strokeWidth="0.0" text="1" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
+               <font>
+                  <Font name="Script MT Bold" size="36.0" />
+               </font>
+            </Text>
+            <Text fill="#5f0fbc" strokeType="OUTSIDE" strokeWidth="0.0" text="1" GridPane.halignment="CENTER" GridPane.rowIndex="1">
+               <font>
+                  <Font name="Script MT Bold" size="36.0" />
+               </font>
+            </Text>
+            <Text fill="#afadb1" layoutX="16.0" layoutY="109.0" strokeType="OUTSIDE" strokeWidth="0.0" text="2" GridPane.columnIndex="2" GridPane.halignment="CENTER">
+               <font>
+                  <Font name="Script MT Bold" size="36.0" />
+               </font>
+            </Text>
+            <Text fill="#fff01b" strokeType="OUTSIDE" strokeWidth="0.0" text="3" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="1">
+               <font>
+                  <Font name="Script MT Bold" size="36.0" />
+               </font>
+            </Text>
+         </children>
+      </GridPane>
+      <ImageView fitHeight="215.0" fitWidth="148.0" layoutX="687.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@cards/leader/Leader-102.jpg" />
+         </image>
+      </ImageView>
+      <ImageView fitHeight="215.0" fitWidth="148.0" layoutX="687.0" layoutY="235.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@cards/leader/Leader-101.jpg" />
+         </image>
+      </ImageView>
+   </children>
+</Pane>
