@@ -1,5 +1,6 @@
 package it.polimi.ingsw.client.view.GUI;
 
+import it.polimi.ingsw.client.simplemodel.SimpleAbility;
 import it.polimi.ingsw.client.simplemodel.SimpleLeaderCard;
 import it.polimi.ingsw.client.simplemodel.SimpleModel;
 import it.polimi.ingsw.server.model.playerboard.DepotName;
@@ -152,25 +153,21 @@ public class MarbleBufferController implements Initializable {
 //TODO: print resources in ExtraDepot
     }
 
-
     private void activeExtraDepot(){
         int counter = 0;
-        for(SimpleLeaderCard simpleLeaderCard : simpleModel.getThisPlayer().getLeaderCards()){
-            if(simpleLeaderCard.isActive()){
-                if(simpleLeaderCard.getAbility().equals(SimpleLeaderCard.Ability.EXTRADEPOT)) {
-                    if (counter == 0) {
-                        extraCard1.setImage(new Image("/cards/leader/Leader-" + simpleLeaderCard.getId() + ".jpg"));
-                        extraCard1.setVisible(true);
-                    } else {
-                        extraCard2.setImage(new Image("/cards/leader/Leader-" + simpleLeaderCard.getId() + ".jpg"));
-                        extraCard2.setVisible(true);
-                    }
-                    counter++;
+        for(SimpleLeaderCard card : simpleModel.getThisPlayer().getLeaderCards()){
+            if(card.isActive() && card.getAbility().getType().equals(SimpleAbility.Type.EXTRADEPOT)) {
+                if (counter == 0) {
+                    extraCard1.setImage(new Image("/cards/leader/Leader-" + card.getId() + ".jpg"));
+                    extraCard1.setVisible(true);
+                } else {
+                    extraCard2.setImage(new Image("/cards/leader/Leader-" + card.getId() + ".jpg"));
+                    extraCard2.setVisible(true);
                 }
+                counter++;
             }
         }
     }
-
 
     @FXML
     public void selectResource(MouseEvent mouseEvent) {
