@@ -1,10 +1,9 @@
 package it.polimi.ingsw.server.model.cards;
 
+import it.polimi.ingsw.client.simplemodel.SimpleDevCard;
 import it.polimi.ingsw.server.model.playerboard.Resource;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * This class represents a development card and extends the abstract class "Card". It has an integer attribute for the
@@ -17,8 +16,7 @@ public class DevelopmentCard extends Card{
     private final List<ResourceRequirement> requirements;
     private final ProductionPower power;
 
-    public DevelopmentCard(int id, int victoryPoints, int level, CardColor color, List<ResourceRequirement> requirements, ProductionPower power)
-    {
+    public DevelopmentCard(int id, int victoryPoints, int level, CardColor color, List<ResourceRequirement> requirements, ProductionPower power) {
         super(id, victoryPoints);
         if (level < 1 || level > 3 || color == null || requirements == null || power == null)
             throw new IllegalArgumentException();
@@ -26,6 +24,13 @@ public class DevelopmentCard extends Card{
         this.color = color;
         this.requirements = requirements;
         this.power = power;
+    }
+
+    public SimpleDevCard getSimple(){
+        Map<Resource, Integer> reqMap = new HashMap<>();
+        for (ResourceRequirement requirement : this.requirements)
+            reqMap.put(requirement.getResource(), requirement.getQuantity());
+        return new SimpleDevCard(getId(), getVictoryPoints(), color, level, reqMap, power.getInput(), power.getOutput());
     }
 
     public int getLevel() {
@@ -44,12 +49,12 @@ public class DevelopmentCard extends Card{
         return requirements;
     }
 
-    public List<ResourceRequirement> getDiscountedRequirements (Map<Resource, Integer> discounts){
+    public List<ResourceRequirement> getDiscountedRequirements (Set<Resource> discounts){
         List<ResourceRequirement> discounted = new ArrayList<>();
         for (ResourceRequirement req : requirements){
             Resource res = req.getResource();
             int qty = req.getQuantity();
-            discounted.add(new ResourceRequirement(res, qty - discounts.getOrDefault(res, 0)));
+            discounted.add(new ResourceRequirement(res, qty - (discounts.contains(res) ? 1 : 0)));
         }
         return discounted;
     }

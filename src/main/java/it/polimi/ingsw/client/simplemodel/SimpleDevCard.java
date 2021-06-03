@@ -3,9 +3,10 @@ package it.polimi.ingsw.client.simplemodel;
 import it.polimi.ingsw.server.model.cards.CardColor;
 import it.polimi.ingsw.server.model.playerboard.Resource;
 
+import java.io.Serializable;
 import java.util.Map;
 
-public class SimpleDevCard {
+public class SimpleDevCard implements Serializable {
 
     private  int id;
     private  int victoryPoints;

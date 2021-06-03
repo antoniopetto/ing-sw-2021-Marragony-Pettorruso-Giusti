@@ -1,5 +1,6 @@
 package it.polimi.ingsw.server.model.cards;
 
+import it.polimi.ingsw.client.simplemodel.SimpleAbility;
 import it.polimi.ingsw.server.model.Player;
 
 /**
@@ -12,4 +13,6 @@ public interface SpecialAbility {
      *This method activate the ability of the card on the player passed as parameter
      */
     void activateAbility(Player player);
+
+    SimpleAbility getSimple();
 }

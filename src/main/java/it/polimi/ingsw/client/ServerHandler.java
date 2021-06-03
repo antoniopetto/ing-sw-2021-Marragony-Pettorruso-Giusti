@@ -15,17 +15,18 @@ public class ServerHandler implements Runnable{
     private final Socket serverSocket;
     private ObjectInputStream input;
     private ObjectOutputStream output;
-    private final SimpleModel model;
+    private SimpleModel model;
     private final View view;
+    private boolean running;
 
-    public ServerHandler(Socket socket, View view, SimpleModel game) {
-        serverSocket=socket;
-        this.view=view;
-        model = game;
+    public ServerHandler(Socket socket, View view) {
+        serverSocket = socket;
+        this.view = view;
     }
 
     @Override
     public void run() {
+        running = true;
         try {
             output = new ObjectOutputStream(serverSocket.getOutputStream());
             input = new ObjectInputStream(serverSocket.getInputStream());
@@ -33,7 +34,7 @@ public class ServerHandler implements Runnable{
             System.out.println("Error getting the streams");
             return;
         }
-        while(true) {
+        while(running) {
             try {
                 Object message = input.readObject();
                 System.out.println(message);
@@ -46,8 +47,9 @@ public class ServerHandler implements Runnable{
                     viewMsg.changeView(view, this);
                 }
             } catch (IOException | ClassNotFoundException e) {
-                e.printStackTrace();
-                return;
+                System.out.println("Connection dropped.");
+                view.endGame();
+                running = false;
             }
         }
     }
@@ -56,7 +58,11 @@ public class ServerHandler implements Runnable{
         output.writeObject(o);
     }
 
-    public Object readObject() throws IOException, ClassNotFoundException {
-        return input.readObject();
+    public void setModel(SimpleModel model){
+        this.model = model;
+    }
+
+    public void setRunning(boolean running) {
+        this.running = running;
     }
 }

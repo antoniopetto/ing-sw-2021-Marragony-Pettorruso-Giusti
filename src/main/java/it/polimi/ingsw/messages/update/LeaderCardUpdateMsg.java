@@ -13,9 +13,8 @@ public class LeaderCardUpdateMsg implements UpdateMsg {
 
     @Override
     public void execute(SimpleModel game) {
-        game.getPlayers().stream()
-                .filter(p -> p.getUsername().equals(username)).findAny()
-                .ifPresent(p -> p.activeLeaderCard(cardId));
+
+        game.getPlayer(username).activateLeaderCard(cardId);
     }
 
     @Override

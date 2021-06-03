@@ -23,9 +23,9 @@ import java.io.IOException;
 import java.net.Socket;
 
 import java.util.List;
+import java.util.Map;
 
 public class GUIView extends Application implements View  {
-
 
     private final SimpleModel game;
     private String username;
@@ -38,7 +38,7 @@ public class GUIView extends Application implements View  {
 
     public GUIView() {
 
-        game = new SimpleModel(this);
+        game = new SimpleModel();
         font=Font.loadFont("@fonts/master_of_break.ttf", 14);
     }
 
@@ -69,7 +69,7 @@ public class GUIView extends Application implements View  {
     public void setting(SettingGameController settingGameController){
         try{
             Socket server = new Socket(settingGameController.getServerIP(), Integer.parseInt(settingGameController.getPort()));
-            ServerHandler serverHandler = new ServerHandler(server, this, this.getGame());
+            ServerHandler serverHandler = new ServerHandler(server, this);
             new Thread(serverHandler).start();
 
             settingGameController.setTextError("You are connected to the server!");
@@ -152,7 +152,6 @@ public class GUIView extends Application implements View  {
 
     }
 
-
     @Override
     public void showMarbleBuffer(List<Marble> marbleList) {
 
@@ -165,7 +164,7 @@ public class GUIView extends Application implements View  {
 
 
     @Override
-    public void startSetting() {
+    public void startConnection() {
 
     }
 
@@ -225,7 +224,7 @@ public class GUIView extends Application implements View  {
     public Resource selectResource(){ return Resource.COIN;}
 
     @Override
-    public void showStatusMessage(String text) {
+    public void showTextMessage(String text) {
 
     }
 
@@ -263,4 +262,15 @@ public class GUIView extends Application implements View  {
         return new Scene(root);
     }
 
+    public void showLeaderboard(Map<String , Integer> leaderboard){
+
+    }
+
+    public void endGame(){
+
+    }
+
+    public void setModel(SimpleModel game){
+
+    }
 }

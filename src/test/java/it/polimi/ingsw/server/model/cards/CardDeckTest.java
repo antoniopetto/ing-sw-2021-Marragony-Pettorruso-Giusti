@@ -4,7 +4,6 @@ import it.polimi.ingsw.server.model.playerboard.Resource;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.Mockito;
 
 import java.util.ArrayList;
 import java.util.EmptyStackException;
@@ -129,10 +128,10 @@ public class CardDeckTest {
     @Test
     public void propertiesTest()
     {
-        assertTrue(deck.properties(CardColor.BLUE, 2));
-        assertFalse(deck.properties(CardColor.BLUE, 1));
-        assertFalse(deck.properties(CardColor.GREEN, 1));
-        assertFalse(deck.properties(CardColor.YELLOW, 3));
+        assertTrue(deck.is(CardColor.BLUE, 2));
+        assertFalse(deck.is(CardColor.BLUE, 1));
+        assertFalse(deck.is(CardColor.GREEN, 1));
+        assertFalse(deck.is(CardColor.YELLOW, 3));
     }
 
     @Test

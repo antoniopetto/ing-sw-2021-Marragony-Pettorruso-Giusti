@@ -1,5 +1,6 @@
 package it.polimi.ingsw.server.model.playerboard;
 
+import it.polimi.ingsw.client.simplemodel.SimpleSlot;
 import it.polimi.ingsw.server.VirtualView;
 import it.polimi.ingsw.server.model.cards.Card;
 import it.polimi.ingsw.server.model.cards.DevelopmentCard;
@@ -21,6 +22,14 @@ public class Slot {
      * @return the last <code>DevelopmentCard</code> inserted in this slot
      */
     public DevelopmentCard getLastCard(){ return isEmpty() ? null : this.developmentCardList.peek(); }
+
+    public SimpleSlot getSimple(){
+
+        SimpleSlot slot = new SimpleSlot();
+        for (DevelopmentCard card : developmentCardList)
+            slot.addCard(card.getSimple());
+        return slot;
+    }
 
     /**
      *

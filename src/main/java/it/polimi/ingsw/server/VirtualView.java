@@ -1,13 +1,12 @@
 package it.polimi.ingsw.server;
 
+import it.polimi.ingsw.messages.Msg;
 import it.polimi.ingsw.messages.toview.*;
 import it.polimi.ingsw.server.model.AbstractPlayer;
-import it.polimi.ingsw.server.model.Player;
 import it.polimi.ingsw.server.model.cards.CardColor;
 import it.polimi.ingsw.server.model.cards.ProductionPower;
-import it.polimi.ingsw.server.model.playerboard.Depot;
-import it.polimi.ingsw.server.model.playerboard.DepotName;
 import it.polimi.ingsw.server.model.playerboard.Resource;
+import it.polimi.ingsw.server.model.shared.FaithTrack;
 import it.polimi.ingsw.server.model.shared.Marble;
 import it.polimi.ingsw.messages.update.*;
 import it.polimi.ingsw.messages.command.CommandMsg;
@@ -23,15 +22,20 @@ public class VirtualView implements Runnable{
 
     public VirtualView(Map<String, ClientHandler> players){
         this.players.putAll(players);
-        gameController = new GameController(players.keySet(), this);
-        gameController.firstUpdates();
+        gameController = new GameController(this.players.keySet(), this);
+
+        for (String playerName : players.keySet())
+            sendPlayer(playerName, new InitModelMsg(gameController.getSimple(playerName)));
+
+        sendAll(new TitleMsg());
+        requestDiscardLeaderCard();
     }
 
     @Override
     public void run() {
         while(!exiting){
             try {
-                Object nextMsg = getPlayingHandler().readObject();
+                Object nextMsg = players.get(getPlayingUsername()).readObject();
                 CommandMsg command = (CommandMsg)nextMsg;
                 System.out.println(command);
                 command.execute(gameController);
@@ -42,138 +46,45 @@ public class VirtualView implements Runnable{
         }
     }
 
-    public void showTitle(){
-        ViewMsg msg = new TitleMsg();
-        for (ClientHandler handler : players.values()){
-            try {
-                handler.writeObject(msg);
-            } catch (IOException e) {
-                e.printStackTrace();
-                exitGame();
-            }
-        }
-    }
-
-    public void initPlayersUpdate() {
-
-        for (Map.Entry<String, ClientHandler> entry : players.entrySet()){
-            try {
-                UpdateMsg msg = new InitPlayersUpdateMsg(players.keySet(), entry.getKey());
-                entry.getValue().writeObject(msg);
-            } catch (IOException e) {
-                e.printStackTrace();
-                exitGame();
-            }
-        }
-    }
-
-    public void initCardsUpdate() {
-
-        int[][][] devCardIDs = gameController.getDevelopmentCardDecks().getDecksStatus();
-        List<Player> players = gameController.getPlayers();
-
-        for (Player p : players){
-            try {
-                Set<Integer> leaderCardIds = new HashSet<>();
-                p.getLeaderCardList().forEach(i -> leaderCardIds.add(i.getId()));
-                UpdateMsg msg = new InitCardsUpdateMsg(devCardIDs, leaderCardIds);
-                this.players.get(p.getUsername()).writeObject(msg);
-            } catch (IOException e) {
-                e.printStackTrace();
-                exitGame();
-            }
-        }
-    }
-
     public void requestDiscardLeaderCard(){
-        try {
-            DiscardLeaderRequestMsg msg = new DiscardLeaderRequestMsg();
-            getPlayingHandler().writeObject(msg);
-        } catch (IOException e){
-            e.printStackTrace();
-            exitGame();
-        }
+        sendPlaying(new DiscardLeaderRequestMsg());
     }
-
 
     public void startPlay(){
-        try{
-            getPlayingHandler().writeObject(new TurnMsg(false));
-            for (String player: players.keySet()) {
-                if(!player.equals(getPlayingUsername()))
-                    players.get(player).writeObject(new TextMsg(getPlayingUsername()+ " is playing the turn..."));
-            }
-        }catch (IOException e){
-            System.out.println("Connection dropped");
-            exitGame();
-        }
+        messageFilter(new TurnMsg(false), getPlayingUsername() + " is playing the turn...");
     }
 
-
     public void nextAction(boolean isPostTurn){
-        try{
-            getPlayingHandler().writeObject(new TurnMsg(isPostTurn));
-        }catch (IOException e){
-            System.out.println("Connection dropped");
-            exitGame();
-        }
+        sendPlaying(new TurnMsg(isPostTurn));
     }
 
     public void manageResource(){
-        try{
-            getPlayingHandler().writeObject(new ManageResourceMsg());
-        }catch (IOException e){
-            System.out.println("Connection dropped");
-            exitGame();
-        }
+        sendPlaying(new ManageResourceMsg());
     }
 
     public void discardLeaderCardUpdate(int cardId){
         DiscardLeaderCardUpdateMsg msg = new DiscardLeaderCardUpdateMsg(getPlayingUsername(), cardId);
-        messageFilter(msg, getPlayingUsername()+ " has discarded a leader card");
+        messageFilter(msg, getPlayingUsername() + " has discarded a leader card");
     }
 
     public void createBuffer(List<Marble> marbleBuffer){
-        try{
-            CreateBufferMsg msg = new CreateBufferMsg(marbleBuffer);
-            getPlayingHandler().writeObject(msg);
-        }
-        catch (IOException e){
-            e.printStackTrace();
-            exitGame();
-        }
+        sendAll(new CreateBufferMsg(marbleBuffer));
     }
 
     public void requestPutResource(){
-        try{
-            PutResourceRequestMsg msg = new PutResourceRequestMsg();
-            getPlayingHandler().writeObject(msg);
-        }
-        catch (IOException e){
-            e.printStackTrace();
-            exitGame();
-        }
+        sendPlaying(new PutResourceRequestMsg());
     }
 
-
     public void bufferUpdate(Marble marble){
-        try {
-            BufferUpdateMsg msg = new BufferUpdateMsg(marble);
-            getPlayingHandler().writeObject(msg);
-        } catch (IOException e){
-            e.printStackTrace();
-            exitGame();
-        }
+        sendAll(new BufferUpdateMsg(marble));
     }
 
     public void extraPowerUpdate(ProductionPower power){
-        for (Map.Entry<String, ClientHandler> entry : players.entrySet()) {
-            UpdateMsg msg = new ExtraPowerUpdateMsg(entry.getKey(), power);
-            sendAll(msg);
-        }
+        sendAll(new ExtraPowerUpdateMsg(getPlayingUsername(), power));
     }
 
     public void faithTrackUpdate(){
+
         Map<String, Integer> positions = new HashMap<>();
         for (AbstractPlayer p : gameController.getFaithTrack().getPlayers())
             positions.put(p.getUsername(), p.getPosition().getNumber());
@@ -184,16 +95,7 @@ public class VirtualView implements Runnable{
     public void vaticanReportUpdate(){}
 
     public void warehouseUpdate() {
-        Map<DepotName, Map<Resource, Integer>> warehouse = new LinkedHashMap<>();
-        for (Depot depot: gameController.getPlaying().getPlayerBoard().getWareHouse().getDepots()) {
-            Map<Resource, Integer> resources = new HashMap<>();
-            if(depot.getResource() != null && depot.getQuantity() != 0)
-                resources.put(depot.getResource(), depot.getQuantity());
-            warehouse.put(depot.getName(), resources);
-        }
-
-        UpdateMsg msg = new WarehouseUpdateMsg(warehouse, getPlayingUsername());
-        sendAll(msg);
+        sendAll(new WarehouseUpdateMsg(gameController.getPlaying().getPlayerBoard().getWareHouse().getSimple(), getPlayingUsername()));
     }
 
     public void strongBoxUpdate() {
@@ -203,8 +105,8 @@ public class VirtualView implements Runnable{
     }
 
     public void marketBoardUpdate(){
-        UpdateMsg msg = new MarketBoardUpdate(gameController.getMarketBoard().getMarbleGrid(), gameController.getMarketBoard().getSpareMarble());
-        sendAll(msg);
+        sendAll(new MarketBoardUpdate(gameController.getMarketBoard().getMarbleGrid(),
+                                      gameController.getMarketBoard().getSpareMarble()));
     }
 
     public void addCardInSlotUpdate(int cardId, int slotIdx){
@@ -212,7 +114,7 @@ public class VirtualView implements Runnable{
         messageFilter(msg, getPlayingUsername() + "has bought a development card");
     }
 
-    public void devCardDecksUpdate(int level, CardColor cardcolor){
+    public void devCardDecksUpdate(CardColor cardcolor, int level){
         UpdateMsg msg = new CardDecksUpdateMsg(level, cardcolor);
         sendAll(msg);
     }
@@ -228,58 +130,45 @@ public class VirtualView implements Runnable{
     }
 
     public void endGame(){
-        for (Map.Entry<String, ClientHandler> entry : players.entrySet()){
-            try{
-                entry.getValue().writeObject(new LeaderboardMsg());
-            }
-            catch (IOException e){
-                e.printStackTrace();
-                System.out.println("Connection dropped");
-            }
-        }
+        if (gameController.isSinglePlayer())
+            throw new IllegalStateException();
+        sendAll(new EndGameMsg(gameController.getLeaderboard()));
+        exitGame();
+    }
+
+    public void endSinglePlayerGame(){
+
+        if (!gameController.isSinglePlayer() || gameController.getSoloRival() == null)
+            throw new IllegalStateException();
+        boolean win = (gameController.getPlaying().getPosition().getNumber() == FaithTrack.LAST_POSITION)
+                || (gameController.getPlaying().countDevCards() == 7);
+
+        sendAll(new EndGameMsg(gameController.getLeaderboard(), win));
         exitGame();
     }
 
     public void exitGame(){
-        System.out.println("Exiting gameController");
+        System.out.println("Exiting game");
         exiting = true;
-        for (Map.Entry<String, ClientHandler> entry : players.entrySet()){
-            Server.logOut(entry.getKey());
-            entry.getValue().closeConnection();
+        for (String username : players.keySet()){
+            Server.logOut(username);
+            players.get(username).closeConnection();
         }
+        //TODO here delete file
     }
 
-    /**Auxiliary methods */
-
-    public void messageFilter(UpdateMsg msg, String text) {
-        for (Map.Entry<String, ClientHandler> entry: players.entrySet()) {
-            try {
-                if(!entry.getKey().equals(gameController.getPlaying().getUsername())){
-                    TextMsg textMsg = new TextMsg(text);
-                    entry.getValue().writeObject(textMsg);
-                }
-                if(msg != null)
-                    entry.getValue().writeObject(msg);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
+    public void messageFilter(Msg msg, String text) {
+        Set<String> others = new HashSet<>(players.keySet());
+        others.remove(getPlayingUsername());
+        for (String other : others)
+            sendPlayer(other, new TextMsg(text));
+        if (msg != null)
+            sendPlaying(msg);
     }
 
-    private void sendAll(UpdateMsg msg) {
-        players.values().forEach(c -> {
-            try {
-                c.writeObject(msg);
-            } catch (IOException e) {
-                e.printStackTrace();
-                exitGame();
-            }
-        });
-    }
-
-    public void sendError (String text){
+    private void sendPlayer(String player, Msg msg){
         try {
-            getPlayingHandler().writeObject(new ErrorMsg(text));
+            players.get(player).writeObject(msg);
         }
         catch (IOException e){
             System.out.println("Connection dropped");
@@ -287,12 +176,20 @@ public class VirtualView implements Runnable{
         }
     }
 
-    private ClientHandler getPlayingHandler(){
-        return players.get(gameController.getPlaying().getUsername());
+    private void sendAll(Msg msg) {
+        for (String username : players.keySet())
+            sendPlayer(username, msg);
+    }
+
+    private void sendPlaying(Msg msg) {
+        sendPlayer(getPlayingUsername(), msg);
+    }
+
+    public void sendError (String text){
+        sendPlaying(new ErrorMsg(text));
     }
 
     private String getPlayingUsername(){
         return gameController.getPlaying().getUsername();
     }
-
 }

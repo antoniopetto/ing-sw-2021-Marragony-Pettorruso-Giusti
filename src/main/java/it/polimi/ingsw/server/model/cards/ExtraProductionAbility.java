@@ -1,6 +1,8 @@
 package it.polimi.ingsw.server.model.cards;
 
+import it.polimi.ingsw.client.simplemodel.SimpleAbility;
 import it.polimi.ingsw.server.model.Player;
+import it.polimi.ingsw.server.model.playerboard.Resource;
 
 import java.util.Objects;
 
@@ -17,8 +19,14 @@ public class ExtraProductionAbility implements SpecialAbility{
 
     @Override
     public void activateAbility(Player player) {
-
         player.getPlayerBoard().addExtraProductionPower(productionPower);
+    }
+
+    @Override
+    public SimpleAbility getSimple(){
+        // here we suppose that a special production power has only one known input
+        Resource resource = productionPower.getInput().keySet().iterator().next();
+        return new SimpleAbility(SimpleAbility.Type.EXTRAPRODUCTION, resource);
     }
 
     @Override

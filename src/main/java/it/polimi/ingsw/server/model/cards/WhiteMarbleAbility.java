@@ -1,5 +1,6 @@
 package it.polimi.ingsw.server.model.cards;
 
+import it.polimi.ingsw.client.simplemodel.SimpleAbility;
 import it.polimi.ingsw.server.model.Player;
 import it.polimi.ingsw.server.model.playerboard.Resource;
 
@@ -15,9 +16,15 @@ public class WhiteMarbleAbility implements SpecialAbility{
     {
         this.resource=res;
     }
+
     @Override
     public void activateAbility(Player player) {
         player.addWhiteMarbleAlias(this.resource);
+    }
+
+    @Override
+    public SimpleAbility getSimple(){
+        return new SimpleAbility(SimpleAbility.Type.WHITEMARBLE, resource);
     }
 
     @Override

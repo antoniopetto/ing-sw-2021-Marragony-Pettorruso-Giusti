@@ -67,8 +67,6 @@ public class setUpController implements Initializable {
     public void confirm(MouseEvent mouseEvent) {
     }
 
-
-
     public void setGame(SimpleModel game) {
         this.game = game;
         List<Image> cards = new ArrayList<>();

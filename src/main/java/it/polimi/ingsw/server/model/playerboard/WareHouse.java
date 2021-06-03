@@ -1,10 +1,9 @@
 package it.polimi.ingsw.server.model.playerboard;
 
+import it.polimi.ingsw.client.simplemodel.SimpleWarehouse;
 import it.polimi.ingsw.server.VirtualView;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -31,6 +30,16 @@ public class WareHouse {
         this.depotList.add(new Depot(DepotName.HIGH,1));
         this.depotList.add(new Depot(DepotName.MEDIUM,2));
         this.depotList.add(new Depot(DepotName.LOW,3));
+    }
+
+    public SimpleWarehouse getSimple(){
+
+        Map<DepotName, Map<Resource, Integer>> content = new LinkedHashMap<>();
+        for (Depot depot : depotList)
+            if(depot.getResource() != null && depot.getQuantity() != 0)
+                content.put(depot.getName(), Map.of(depot.getResource(), depot.getQuantity()));
+
+        return new SimpleWarehouse(content);
     }
 
     public List<Depot> getDepots() {

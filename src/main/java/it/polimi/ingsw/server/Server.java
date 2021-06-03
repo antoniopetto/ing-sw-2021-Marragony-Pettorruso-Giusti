@@ -49,13 +49,12 @@ public class Server {
         while (true){
             try{
                 Socket clientSocket = socket.accept();
-                System.out.println(">>>>New connection with client [" + clientSocket.getInetAddress()+"]");
+                System.out.println(">>>>New connection with client [" + clientSocket.getInetAddress() + "]");
                 new Thread(new Matchmaker(clientSocket)).start();
             }
             catch (IOException e){
                 System.out.println("Connection dropped during thread creation");
             }
-
         }
     }
 

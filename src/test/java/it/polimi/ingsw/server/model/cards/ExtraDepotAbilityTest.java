@@ -15,30 +15,18 @@ import static org.junit.Assert.*;
 public class ExtraDepotAbilityTest {
 
     @Test
-    public void constructorTest()
-    {
+    public void constructorTest() {
         ExtraDepotAbility ability;
-        //tries to create an ability with an invalid capacity number
-        try{
-            ability = new ExtraDepotAbility(Resource.COIN, 0);
-            fail();
-        } catch (IllegalArgumentException e)
-        {
-            assertTrue(true);
-        }
-        try
-        {
-            ability = new ExtraDepotAbility(Resource.COIN, 2);
-        }catch (IllegalArgumentException e)
-        {
+        try {
+            ability = new ExtraDepotAbility(Resource.COIN);
+        }catch (IllegalArgumentException e) {
             fail();
         }
     }
 
     @Test
-    public void activateAbilityTest()
-    {
-        ExtraDepotAbility ability = new ExtraDepotAbility(Resource.COIN, 2);
+    public void activateAbilityTest() {
+        ExtraDepotAbility ability = new ExtraDepotAbility(Resource.COIN);
 
         Player player = new Player("Test", Mockito.mock(VirtualView.class));
         //activates the ability and check that there's an extra depot in player's warehouse with right capacity and constraint
@@ -49,11 +37,8 @@ public class ExtraDepotAbilityTest {
             Depot depot = player.getPlayerBoard().getWareHouse().getDepots().get(3);
             assertEquals(Resource.COIN, depot.getConstraint());
             assertEquals(2, depot.getCapacity());
-
-        }catch (Exception e)
-        {
+        }catch (Exception e) {
             fail();
         }
-
     }
 }

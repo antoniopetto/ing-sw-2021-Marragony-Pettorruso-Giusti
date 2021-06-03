@@ -10,25 +10,30 @@ public class SimplePlayer implements Serializable {
     private final String username;
     private int position;
     private SimpleWarehouse warehouse;
-    private final ArrayList<SimpleSlot> slots;
+    private ArrayList<SimpleSlot> slots;
     private Map<Resource, Integer> strongbox = new HashMap<>();
-    private final List<SimpleLeaderCard> leaderCards = new ArrayList<>();
-    private final List<ProductionPower> extraProductionPowers = List.of(new ProductionPower(2, 1));
-    private final Set<Resource> whiteMarbleAliases = new HashSet<>();
+    private List<SimpleLeaderCard> leaderCards = new ArrayList<>();
+    private List<ProductionPower> extraProductionPowers = new ArrayList<>();
+    private Set<Resource> whiteMarbleAliases = new HashSet<>();
+    private Set<Resource> activeDiscounts = new HashSet<>();
 
     public SimplePlayer(String username) {
         this.username = username;
         this.slots = new ArrayList<>();
         this.position = 0;
         this.warehouse = new SimpleWarehouse();
+        extraProductionPowers.add(new ProductionPower(2, 1));
 
-        slots.add(new SimpleSlot(1));
-        slots.add(new SimpleSlot(2));
-        slots.add(new SimpleSlot(3));
+        slots.add(new SimpleSlot());
+        slots.add(new SimpleSlot());
+        slots.add(new SimpleSlot());
     }
 
-    public void addLeaderCards(Collection<Integer> cardIds){
-        cardIds.forEach(cardId -> leaderCards.add(SimpleLeaderCard.parse(cardId)));
+    public void setLeaderCards(List<SimpleLeaderCard> cards){ leaderCards = new ArrayList<>(cards);}
+
+    public void setLeaderCards(Set<Integer> cardIds){
+        leaderCards.clear();
+        cardIds.forEach(i -> leaderCards.add(SimpleLeaderCard.parse(i)));
     }
 
     public Map<Resource, Integer> getStrongbox() {
@@ -43,13 +48,16 @@ public class SimplePlayer implements Serializable {
         return username;
     }
 
-    public void changeWarehouse(SimpleWarehouse warehouse) {
-        this.warehouse = warehouse;
-    }
+    public void activateLeaderCard(int cardId){
 
-    public void activeLeaderCard(int cardId){
-        for (SimpleLeaderCard card : leaderCards)
-            if (card.getId() == cardId) card.setActive(true);
+        Optional<SimpleLeaderCard> card = leaderCards.stream().filter(i -> i.getId() == cardId).findAny();
+        if (card.isPresent())
+            card.get().setActive(true);
+        else {
+            SimpleLeaderCard newCard = SimpleLeaderCard.parse(cardId);
+            newCard.setActive(true);
+            leaderCards.add(newCard);
+        }
     }
 
     public void insertCardInSlot(int cardId, int slotIdx){
@@ -85,8 +93,7 @@ public class SimplePlayer implements Serializable {
     }
 
     public void setWhiteMarbleAliases(Set<Resource> aliases){
-        whiteMarbleAliases.clear();
-        whiteMarbleAliases.addAll(aliases);
+        whiteMarbleAliases = new HashSet<>(aliases);
     }
 
     public Set<Resource> getWhiteMarbleAliases(){
@@ -99,5 +106,33 @@ public class SimplePlayer implements Serializable {
 
     public List<ProductionPower> getExtraProductionPowers(){
         return extraProductionPowers;
+    }
+
+    public void setWarehouse(SimpleWarehouse warehouse){
+        this.warehouse = warehouse;
+    }
+
+    public void setSlots(List<SimpleSlot> slots){
+        this.slots = new ArrayList<>(slots);
+    }
+
+    public void setStrongbox(Map<Resource, Integer> strongbox){
+        this.strongbox = new HashMap<>(strongbox);
+    }
+
+    public void setExtraProductionPowers(List<ProductionPower> powers){
+        extraProductionPowers = new ArrayList<>(powers);
+    }
+
+    public void setActiveDiscounts(Set<Resource> discounts){
+        activeDiscounts = new HashSet<>(discounts);
+    }
+
+    public Set<Resource> getActiveDiscounts(){
+        return activeDiscounts;
+    }
+
+    public void clearLeaderCards(){
+        leaderCards.clear();
     }
 }

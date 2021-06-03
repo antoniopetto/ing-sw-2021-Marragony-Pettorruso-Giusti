@@ -1,5 +1,6 @@
 package it.polimi.ingsw.client.view.CLI;
 
+import it.polimi.ingsw.client.ServerHandler;
 import it.polimi.ingsw.client.simplemodel.*;
 import it.polimi.ingsw.client.view.View;
 import it.polimi.ingsw.messages.command.*;
@@ -9,24 +10,61 @@ import it.polimi.ingsw.server.model.playerboard.DepotName;
 import it.polimi.ingsw.server.model.playerboard.Resource;
 import it.polimi.ingsw.server.model.shared.Marble;
 
+import java.io.IOException;
+import java.net.Socket;
 import java.util.*;
 import java.util.stream.Stream;
 
 public class CLIView implements View {
-    private final CLISettingView settingView;
-    private final SimpleModel game;
 
-    //TODO must be removed from methods and removed
-    private final Scanner input = new Scanner(System.in);
+    private SimpleModel game;
+    private ServerHandler serverHandler;
+    private String ip;
+    private int port;
 
     private final String column1Format = "%-2s";
     private final String column2Format = "%-2s";
     private final String column3Format = "%2s";
     private final String formatInfo = column1Format + " " + column2Format + " " + column3Format + " " + column3Format;
 
-    public CLIView() {
-        this.settingView = new CLISettingView(this);
-        game = new SimpleModel(this);
+    public CLIView(){
+        askConnectionSettings();
+    }
+
+    public void askConnectionSettings(){
+        ip = CLIView.askString("Insert server ip address:");
+        boolean choice = CLIView.askYesNo("Default port is 7777. Do you want to change it?", false);
+        port = (choice) ? CLIView.askNumber("Insert port number", 0, 65535) : 7777;
+    }
+
+    @Override
+    public void startConnection() {
+        for(boolean reachable = false; !reachable;) {
+            try{
+                serverHandler = new ServerHandler(new Socket(ip, port), this);
+                new Thread(serverHandler).start();
+                System.out.println("You are connected to the server!");
+                reachable = true;
+            } catch(IOException e) {
+                showErrorMessage("Server unreachable, try again.");
+                askConnectionSettings();
+            }
+        }
+    }
+
+    @Override
+    public void endGame(){
+        System.out.println("Game over.");
+        serverHandler.setRunning(false);
+        int choice = askChoice("Do you want to:", "Exit game", "Start new game", "Start new game on different server");
+
+        if (choice == 2){
+            startConnection();
+        }
+        else if (choice == 3){
+            askConnectionSettings();
+            startConnection();
+        }
     }
 
     public static int askNumber(String text, int min, int max){
@@ -107,9 +145,6 @@ public class CLIView implements View {
     public SimpleModel getGame() { return game; }
 
     @Override
-    public void startSetting() { settingView.execute(); }
-
-    @Override
     public String getUsername() {
         return askString("Insert your username:");
     }
@@ -131,7 +166,7 @@ public class CLIView implements View {
     @Override
     public void showTitle() {
         System.out.println(Graphics.ANSI_GREEN+Graphics.TITLE+Graphics.ANSI_RESET);
-        System.out.println(Graphics.ANSI_BLUE+"GameController started"+Graphics.ANSI_RESET);
+        System.out.println(Graphics.ANSI_BLUE+"Game started"+Graphics.ANSI_RESET);
         System.out.println(Graphics.ANSI_YELLOW+"Rules: "+ "https://tinyurl.com/mor-rules"+Graphics.ANSI_RESET);
         showLegend();
         System.out.println(Graphics.ANSI_CYAN+"Waiting for your turn to choose the leader cards..."+Graphics.ANSI_RESET);
@@ -153,26 +188,24 @@ public class CLIView implements View {
      */
     public void showLeaderCard(SimpleLeaderCard card) {
         System.out.println(Graphics.ANSI_RESET+ "┌──────────┐");
-        if (card.getResourceRequirements() != null && !card.getResourceRequirements().isEmpty())
+
+        if (!card.getResourceRequirements().isEmpty())
             showResources(card.getResourceRequirements());
-        String[] req = new String[2];
+
+        String[] cardReqs = new String[]{"",""};
         int i = 0;
-        if(card.getCardRequirements()!= null && !card.getCardRequirements().isEmpty()) {
-            for (CardColor color : card.getCardRequirements().keySet()) {
-                for (Integer level : card.getCardRequirements().get(color).keySet()) {
-                    if (level == null) {
-                        req[i] = Graphics.getCardColor(color) + card.getCardRequirements().get(color).get(level) + "■" + Graphics.ANSI_RESET;
-                        i++;
-                    } else {
-                        req[i] = Graphics.getCardColor(color) + " |" + level + "|" + Graphics.ANSI_RESET;
-                    }
-                }
-            }
-            if (req[1] == null) req[1] = "";
-            System.out.format(formatInfo, req[0], "", req[1], "");
-            System.out.println();
+        for (SimpleCardRequirement req : card.getCardRequirements()) {
+            if (req.getLevel() == null) {
+                cardReqs[i] = Graphics.getCardColor(req.getColor()) + req.getQuantity() + "■" + Graphics.ANSI_RESET;
+                i++;
+            } else
+                cardReqs[i] = Graphics.getCardColor(req.getColor()) + " |" + req.getLevel() + "|" + Graphics.ANSI_RESET;
         }
-        System.out.println(Graphics.getAbility(card.getAbility(), card.getAbilityResource()));
+
+        System.out.format(formatInfo, cardReqs[0], "", cardReqs[1], "");
+        System.out.println();
+
+        System.out.println(Graphics.getAbility(card.getAbility().getType(), card.getAbility().getResource()));
 
         System.out.println("     "+Graphics.ANSI_YELLOW+card.getVictoryPoints()+Graphics.ANSI_RESET);
         System.out.println("└──────────┘");
@@ -185,15 +218,9 @@ public class CLIView implements View {
      */
     @Override
     public void printLeaderCards(SimplePlayer player){
-        int counter = 1;
-        boolean showAllCards = player.getUsername().equals(game.getThisPlayer().getUsername());
-
-        for (SimpleLeaderCard card : player.getLeaderCards()) {
-            if(showAllCards || card.isActive()) {
-                System.out.println(Graphics.ANSI_RESET+ counter + ")");
-                showLeaderCard(card);
-                counter++;
-            }
+        for (int i = 0; i < player.getLeaderCards().size(); i++) {
+            System.out.println(i + ")");
+            showLeaderCard(player.getLeaderCards().get(i));
         }
     }
 
@@ -205,7 +232,7 @@ public class CLIView implements View {
     @Override
     public CommandMsg discardLeaderCard() {
 
-        SimplePlayer player = game.getThisPlayer();
+        SimplePlayer player = getThisPlayer();
         if(player.getLeaderCards().isEmpty())
             return new DiscardLeaderCardMsg(0);
         else
@@ -242,8 +269,8 @@ public class CLIView implements View {
     @Override
     public DepotName selectDepot(){
 
-        showWarehouse(game.getThisPlayer());
-        Map<DepotName, Map<Resource, Integer>> depots = game.getThisPlayer().getWarehouse().getDepots();
+        showWarehouse(getThisPlayer());
+        Map<DepotName, Map<Resource, Integer>> depots = getThisPlayer().getWarehouse().getDepots();
 
         int intChoice = askChoice("Choose a depot in which to place the resource:",
                 depots.keySet().stream().map(Enum::name).toArray(String[]::new));
@@ -259,7 +286,7 @@ public class CLIView implements View {
 
     public Resource selectResource(){
 
-        List<Resource> aliases = new ArrayList<>(game.getThisPlayer().getWhiteMarbleAliases());
+        List<Resource> aliases = new ArrayList<>(getThisPlayer().getWhiteMarbleAliases());
         int choice = askChoice("Cast the white marble into one of the following resources:",
                                 aliases.stream().map(Enum::name).toArray(String[]::new));
 
@@ -267,7 +294,7 @@ public class CLIView implements View {
     }
 
     @Override
-    public void showStatusMessage(String text) {
+    public void showTextMessage(String text) {
         System.out.println(Graphics.ANSI_BLUE+text+Graphics.ANSI_RESET);
     }
 
@@ -304,7 +331,7 @@ public class CLIView implements View {
             else if (secondChoice == 2)
                 return discardLeaderCard();
             else if (secondChoice == 3){
-                printLeaderCards(game.getThisPlayer());
+                printLeaderCards(getThisPlayer());
                 return selectMove(postTurn);
             }
             else
@@ -410,7 +437,7 @@ public class CLIView implements View {
 
     public void showWarehouse(SimplePlayer player) {
         SimpleWarehouse warehouse = player.getWarehouse();
-        System.out.println(player.getUsername()+" warehouse");
+        System.out.println(player.getUsername() + " warehouse");
         DepotName depot;
         for (DepotName depotName : warehouse.getDepots().keySet()) {
             depot = depotName;
@@ -422,8 +449,7 @@ public class CLIView implements View {
 
     public CommandMsg changeDepots(){
 
-        showWarehouse(game.getThisPlayer());
-
+        showWarehouse(getThisPlayer());
         int depot1;
         int depot2;
         List<String> depotList = new ArrayList<>();
@@ -431,27 +457,17 @@ public class CLIView implements View {
         depotList.add("MEDIUM");
         depotList.add("LOW");
 
-        int pos = 3;// da cambiare a 4 se si ha intenzione di aggiungere "BACK" nella depotList
-        for(SimpleLeaderCard leaderCard : game.getThisPlayer().getLeaderCards()) {
-            if (leaderCard.isActive()) {
-                if (leaderCard.getAbility() == SimpleLeaderCard.Ability.EXTRADEPOT) pos++;
-            }
-        }
-            if(pos > 3) depotList.add("FIRST_EXTRA");// da cambiare a 4 se si ha intenzione di aggiungere "BACK" nella depotList
-            if(pos > 4) depotList.add("SECOND_EXTRA");// da cambiare a 5 se si ha intenzione di aggiungere "BACK" nella depotList
-
-       // depotList.add("BACK");
+        int pos = getThisPlayer().getWarehouse().getDepots().size();
+        if(pos > 3) depotList.add("FIRST_EXTRA");
+        if(pos > 4) depotList.add("SECOND_EXTRA");
 
         depot1 = askChoice("Choose first Depot", depotList.toArray(new String[pos]));
-
-       // if(depotList.get(depot1-1).equals("BACK")) return new GoBackMsg(State);
 
         DepotName depotName1 = DepotName.valueOf(depotList.get(depot1-1));
             depotList.remove(depot1-1);
             pos--;
 
         depot2 = askChoice(" Choose second Depot", depotList.toArray(new String[pos]));
-       // if(depotList.get(depot1-1).equals("BACK")) return new GoBackMsg(State);
 
         DepotName depotName2 = DepotName.valueOf(depotList.get(depot2-1));
         depotList.clear();
@@ -459,39 +475,21 @@ public class CLIView implements View {
         if (depotName1 == DepotName.FIRST_EXTRA || depotName1 == DepotName.SECOND_EXTRA
             || depotName2 == DepotName.FIRST_EXTRA || depotName2 == DepotName.SECOND_EXTRA){
             return new MoveDepotsMsg(depotName1, depotName2);
-        }else
+        } else
             return new SwitchDepotsMsg(depotName1,depotName2);
     }
 
 
-
-
-
-
-
     private CommandMsg playLeaderCard(){
-        SimplePlayer player = game.getThisPlayer();
-        int cardId = 0;
-
-        if(!player.getLeaderCards().isEmpty()){
+        SimplePlayer player = getThisPlayer();
+        if (player.getLeaderCards().isEmpty())
+            throw new IllegalStateException();
+        else{
             printLeaderCards(player);
-
-            boolean valid = false;
-            int position = 0;
-
-            while(!valid) {
-                System.out.println(Graphics.ANSI_RESET+"Choose leaderCard to play ( number 1-" + player.getLeaderCards().size() + "):");
-                System.out.print(Graphics.ANSI_CYAN+">"+Graphics.ANSI_RESET);
-                position = input.nextInt();
-
-                if(position > player.getLeaderCards().size() || position < 1){
-                    showErrorMessage("Insert a number between 1-" + player.getLeaderCards().size());
-                }
-                else valid = true;
-            }
-            cardId = player.chooseLeaderCard(position);
+            int position = askNumber("Choose leader card to play", 1, player.getLeaderCards().size());
+            int cardId = player.chooseLeaderCard(position);
+            return new PlayLeaderCardMsg(cardId);
         }
-        return new PlayLeaderCardMsg(cardId);
     }
 
     private CommandMsg buyResources(){
@@ -535,7 +533,7 @@ public class CLIView implements View {
 
     private Optional<Integer> selectDevCard() {
 
-        SimpleDevCard[] availableCards = game.getThisPlayer().getSlots().stream()
+        SimpleDevCard[] availableCards = getThisPlayer().getSlots().stream()
                 .map(SimpleSlot::getLastCard).flatMap(Optional::stream).toArray(SimpleDevCard[]::new);
         if (availableCards.length == 0){
             showErrorMessage("No available cards");
@@ -554,7 +552,7 @@ public class CLIView implements View {
     private Map.Entry<Integer, ProductionPower> selectExtraPower() {
 
         System.out.println("Available extra powers:");
-        List<ProductionPower> availablePowers = game.getThisPlayer().getExtraProductionPowers();
+        List<ProductionPower> availablePowers = getThisPlayer().getExtraProductionPowers();
         if (availablePowers.size() == 0)
             throw new IllegalStateException();
 
@@ -604,7 +602,7 @@ public class CLIView implements View {
         showDevCardDecks();
         int position = askNumber("Choose developement card to buy", 1, game.getDevCardDecks().size());
 
-        int slotIdx = -1 + askNumber("Choose the slot where you want to insert the development card", 1, game.getThisPlayer().getSlots().size());
+        int slotIdx = -1 + askNumber("Choose the slot where you want to insert the development card", 1, getThisPlayer().getSlots().size());
 
         CardColor cardColor = game.getDevCardDecks().get(position-1).getColor();
         int level =  game.getDevCardDecks().get(position-1).getLevel();
@@ -612,18 +610,12 @@ public class CLIView implements View {
         return new BuyAndAddCardInSlotMsg(cardColor, level, slotIdx);
     }
 
-    @Deprecated
-    public void showCardLegend() {
-
-        System.out.println("┌──────────┐");
-        System.out.println(Graphics.ANSI_RED+"              <----Card color and level");
-        System.out.println("              <----Card requirements");
-        System.out.println();
-        System.out.println("              <----Input resources");
-        System.out.println("              <----Output resources");
-        System.out.println("              <----Victory points"+Graphics.ANSI_RESET);
-        System.out.println("└──────────┘");
-
+    @Override
+    public void showLeaderboard(Map<String, Integer> leaderboard) {
+        System.out.println("Leaderboard:");
+        int count = 1;
+        for (String username : leaderboard.keySet())
+            System.out.println(count + ")" + username + " [" + leaderboard.get(username) + "]");
     }
 
     public void showCard(SimpleDevCard card) {
@@ -676,7 +668,6 @@ public class CLIView implements View {
         {
             req[i] = (resources.get(res)+ " " + Graphics.getResource(res));
             i++;
-
         }
         for(int j=0; j<4; j++)
         {
@@ -710,4 +701,14 @@ public class CLIView implements View {
         System.out.println(text+Graphics.ANSI_RESET);
     }
 
+    public SimplePlayer getThisPlayer(){
+        return game.getThisPlayer();
+    }
+
+    @Override
+    public void setModel(SimpleModel model){
+
+        this.game = model;
+        serverHandler.setModel(model);
+    }
 }

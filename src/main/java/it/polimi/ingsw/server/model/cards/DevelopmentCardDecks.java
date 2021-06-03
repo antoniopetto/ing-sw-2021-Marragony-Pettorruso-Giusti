@@ -21,6 +21,7 @@ public class DevelopmentCardDecks {
      * @throws IllegalStateException if more than 4 cards in <code>cards</code> belong to a deck
      */
     public DevelopmentCardDecks(List<DevelopmentCard> cards, VirtualView virtualView)  throws IllegalStateException{
+        this.virtualView = virtualView;
         decks.add(new CardDeck(1, CardColor.GREEN));
         decks.add(new CardDeck(2, CardColor.GREEN));
         decks.add(new CardDeck(3, CardColor.GREEN));
@@ -33,30 +34,32 @@ public class DevelopmentCardDecks {
         decks.add(new CardDeck(1, CardColor.PURPLE));
         decks.add(new CardDeck(2, CardColor.PURPLE));
         decks.add(new CardDeck(3, CardColor.PURPLE));
-        for (CardDeck deck: decks) {
+        for (CardDeck deck: decks)
                 cards.stream().filter(deck::belongs).forEach(deck::add);
-        }
-        this.virtualView = virtualView;
+    }
+
+    private CardDeck getDeck(CardColor color, int level){
+        if(level < 1 || level > 3)
+            throw new IllegalArgumentException("Level value not valid");
+
+        for (CardDeck deck : decks)
+            if (deck.is(color, level))
+                return deck;
+
+        throw new IllegalStateException();
     }
 
     /**
-     *
      * @param color is the color of the deck from which the card is drawn
      * @param level is the level of the deck from which the card is drawn
      * @return the first card of the deck with those color and level.
-     * @throws EmptyStackException if the deck with color=<code>color</code> and level = <code>level</code> is empty
      */
     public DevelopmentCard drawCard(CardColor color, int level) throws EmptyStackException{
-        if(level < 1 || level > 3) throw new IllegalArgumentException("Level value not valid");
-        for (CardDeck deck : decks) {
-            if (deck.properties(color, level)) {
-                if (deck.size() > 0) {
-                    virtualView.devCardDecksUpdate(level-1, color);
-                }
-                return deck.pop();
-            }
-        }
-        return null;
+
+        CardDeck deck = getDeck(color, level);
+        DevelopmentCard card =  deck.pop();
+        virtualView.devCardDecksUpdate(color, level);
+        return card;
     }
 
     /**
@@ -64,31 +67,18 @@ public class DevelopmentCardDecks {
      * @param level is the level of the deck from which the card is read
      * @return the card on top of the deck without removing it
      */
-    public DevelopmentCard readTop(CardColor color, int level) throws EmptyStackException
-    {
-        for (CardDeck deck : decks) {
-            if (deck.properties(color, level)) {
-                return deck.peek();
-            }
-        }
-        return null;
+    public DevelopmentCard readTop(CardColor color, int level) throws EmptyStackException{
+        CardDeck deck = getDeck(color, level);
+        return deck.peek();
     }
 
     /**
-     *
      * @param color is the color of the deck of which the size is required
      * @param level is the level of the deck of which the size is required
      * @return the size of the deck
      */
-    public int deckSize(CardColor color, int level)
-    {
-        if(level<1||level>3) throw new IllegalArgumentException("Invalid level value");
-        for (CardDeck deck : decks) {
-            if (deck.properties(color, level)) {
-                return deck.size();
-            }
-        }
-        return 0;
+    public int deckSize(CardColor color, int level) {
+        return getDeck(color, level).size();
     }
 
     /**
@@ -97,22 +87,16 @@ public class DevelopmentCardDecks {
      * @param color is the color of the two cards to be discarded
      */
     public void discard(CardColor color){
-        int level = 1;
-        int toDiscard=2;
-        for (CardDeck deck:decks) {
-            if (deck.properties(color, level)) {
-                while(true) {
-                    try {
-                        deck.pop();
-                        toDiscard--;
-                        if(toDiscard==0) return;
-                    }
-                    catch (EmptyStackException e) {
-                        level++;
-                        break;
-                    }
-                }
+
+        for (int toDiscard = 2, level = 1; toDiscard > 0;){
+            if (getDeck(color, level).size() > 0) {
+                drawCard(color, level);
+                toDiscard--;
             }
+            else level ++;
+            if (level == 4)
+                virtualView.endSinglePlayerGame();
+                return;
         }
     }
 
@@ -120,18 +104,13 @@ public class DevelopmentCardDecks {
      * @return the ids of the cards in the decks. The first index is the color (0-Green,
      * 1-Blue, 2-Yellow, 3-Purple), the second is the level and the third is the position of the card in the deck.
      */
-    public int[][][] getDecksStatus()
-    {
-        int index=0;
+    public int[][][] getDevCardIds() {
+
         int[][][] result = new int[4][3][4];
-        for(int i = 0; i<4; i++)
-        {
-            for(int j=0; j<3; j++)
-            {
-                result[i][j] =decks.get(index).getDeckStatus();
-                index++;
-            }
-        }
+        for(int i = 0; i < 4; i++)
+            for(int j = 0; j < 3; j++)
+                result[i][j] = decks.get(3*i + j).getDeckIds();
+
         return result;
     }
 }

@@ -1,24 +1,20 @@
 package it.polimi.ingsw.server.model.cards;
 
-import it.polimi.ingsw.client.simplemodel.SimpleLeaderCard;
 import it.polimi.ingsw.server.VirtualView;
 import it.polimi.ingsw.server.model.Player;
 import it.polimi.ingsw.server.model.playerboard.Resource;
-import it.polimi.ingsw.server.model.playerboard.Slot;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import static org.junit.Assert.*;
 
 public class LeaderCardTest {
     private LeaderCard card;
-    private SpecialAbility ability = new CardDiscountAbility(Resource.COIN, 2);
+    private final SpecialAbility ability = new CardDiscountAbility(Resource.COIN);
     private final Player player = new Player("AAA", Mockito.mock(VirtualView.class));
 
     @Before
@@ -28,7 +24,6 @@ public class LeaderCardTest {
         requirements.add(new ResourceRequirement(Resource.SHIELD, 1));
         card = new LeaderCard(3,1, requirements, ability);
 
-        List<Slot> slots = new ArrayList<>();
         ProductionPower power = new ProductionPower(1, 1);
 
         player.getPlayerBoard().addCardInSlot(new DevelopmentCard(1,1, 1, CardColor.BLUE, requirements, power), 0);
@@ -80,9 +75,7 @@ public class LeaderCardTest {
             fail();
         }
         assertTrue(card.isPlayed());
-        assertTrue(player.getActiveDiscount().containsKey(Resource.COIN));
-        Integer amount = 2;
-        assertEquals(amount, player.getActiveDiscount().get(Resource.COIN));
+        assertTrue(player.getActiveDiscount().contains(Resource.COIN));
     }
 
     @Test
