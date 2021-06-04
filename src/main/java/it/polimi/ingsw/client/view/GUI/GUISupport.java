@@ -1,5 +1,6 @@
 package it.polimi.ingsw.client.view.GUI;
 
+import it.polimi.ingsw.client.simplemodel.SimplePlayer;
 import it.polimi.ingsw.server.model.playerboard.DepotName;
 import it.polimi.ingsw.server.model.playerboard.Resource;
 import javafx.scene.Node;
@@ -67,6 +68,43 @@ public class GUISupport {
             node.setDisable(disable);
     }
 
+    public static void setFaithTrack(SimplePlayer player, ImageView faithMarker)
+    {
+        int position = player.getPosition();
+        if(position<3){
+            faithMarker.setLayoutX(-55+(position*38));}
+        else if(position<5){
+            position=position-2;
+            faithMarker.setLayoutY(107-(position*38));
+            faithMarker.setLayoutX(19);
+        }
+        else if(position<10){
+            faithMarker.setLayoutY(34);
+            position = position-4;
+            faithMarker.setLayoutX(19+(position*38));
+        }
+        else if (position<12){
+            faithMarker.setLayoutX(203);
+            position=position-9;
+            faithMarker.setLayoutY(31+(position*38));
+        }
+        else if(position<17){
+            faithMarker.setLayoutY(107);
+            position=position-11;
+            faithMarker.setLayoutX(203+(position*38));
+        }
+        else if(position<19){
+            faithMarker.setLayoutX(389);
+            position=position-16;
+            faithMarker.setLayoutY(107-(position*38));
+        }
+        else{
+            faithMarker.setLayoutY(34);
+            position=position-18;
+            faithMarker.setLayoutX(389+(position*38));
+        }
+
+    }
 
     public static void settingImageView(int quantity, ImageView... resources){
         String path = "/res-marbles/";

@@ -1,8 +1,14 @@
 .maingrid {
     -fx-background-image:url('\background.jpg');
     -fx-background-size: cover;
+
 }
 
 .transparent {
 	-fx-background-color:transparent;
+}
+
+@font-face {
+    font-family: Master;
+    src: url('\master_of_break.otf');
 }
