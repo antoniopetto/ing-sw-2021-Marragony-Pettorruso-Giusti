@@ -2,6 +2,7 @@ package it.polimi.ingsw.client.simplemodel;
 
 import it.polimi.ingsw.server.model.cards.ProductionPower;
 import it.polimi.ingsw.server.model.playerboard.Resource;
+import it.polimi.ingsw.server.model.shared.PopeFavourTile;
 
 import java.io.Serializable;
 import java.util.*;
@@ -16,6 +17,7 @@ public class SimplePlayer implements Serializable {
     private List<ProductionPower> extraProductionPowers = new ArrayList<>();
     private Set<Resource> whiteMarbleAliases = new HashSet<>();
     private Set<Resource> activeDiscounts = new HashSet<>();
+    private List<PopeFavourTile> tiles = new ArrayList<>();
 
     public SimplePlayer(String username) {
         this.username = username;
@@ -60,6 +62,10 @@ public class SimplePlayer implements Serializable {
         }
     }
 
+    public void addCardDiscount(Resource resource){
+        activeDiscounts.add(resource);
+    }
+
     public void insertCardInSlot(int cardId, int slotIdx){
         slots.get(slotIdx).addCard(cardId);
     }
@@ -94,6 +100,10 @@ public class SimplePlayer implements Serializable {
 
     public void setWhiteMarbleAliases(Set<Resource> aliases){
         whiteMarbleAliases = new HashSet<>(aliases);
+    }
+
+    public void setTiles(List<PopeFavourTile> tiles){
+        this.tiles = new ArrayList<>(tiles);
     }
 
     public Set<Resource> getWhiteMarbleAliases(){
@@ -134,5 +144,14 @@ public class SimplePlayer implements Serializable {
 
     public void clearLeaderCards(){
         leaderCards.clear();
+    }
+
+    public void gainTile(int tileIdx){
+
+        tiles.get(tileIdx).gain();
+    }
+
+    public List<PopeFavourTile> getTiles(){
+        return tiles;
     }
 }

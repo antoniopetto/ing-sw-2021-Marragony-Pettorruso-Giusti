@@ -1,6 +1,8 @@
 package it.polimi.ingsw.server.model.shared;
 
-public class Position {
+import java.io.Serializable;
+
+public class Position implements Serializable {
 
     private final int number;
     private final int victoryPoints;

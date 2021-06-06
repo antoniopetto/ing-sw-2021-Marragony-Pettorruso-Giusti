@@ -35,7 +35,7 @@ public class ClientHandler {
             clientSocket.close();
         }
         catch (IOException e){
-
+            Server.logger.warn("Error closing the socket");
         }
     }
 

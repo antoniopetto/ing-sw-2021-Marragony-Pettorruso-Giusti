@@ -1,5 +1,7 @@
 package it.polimi.ingsw.server.model.playerboard;
 
+import java.io.Serializable;
+
 /**
  *This class represents the Depot.
  * It will contain a number between 0 and 3 resources
@@ -7,7 +9,7 @@ package it.polimi.ingsw.server.model.playerboard;
  * @see DepotName
  * @see Resource
  */
-public class Depot {
+public class Depot implements Serializable {
 
     /**
      * It indicates the number of resources present in this depot

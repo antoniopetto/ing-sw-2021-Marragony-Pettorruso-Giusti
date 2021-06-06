@@ -1,6 +1,8 @@
 package it.polimi.ingsw.server.model.shared;
 
-public class PopeFavourTile {
+import java.io.Serializable;
+
+public class PopeFavourTile implements Serializable {
 
     private final int value;
     private boolean gained;

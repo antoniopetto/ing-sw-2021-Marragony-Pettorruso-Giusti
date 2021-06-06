@@ -1,21 +1,24 @@
 package it.polimi.ingsw.server;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.HashSet;
-import java.util.InputMismatchException;
-import java.util.Scanner;
-import java.util.Set;
+import java.util.*;
 
 public class Server {
 
+    public static final Logger logger = LogManager.getLogger(Server.class);
     public static final PublicWaitRoom[] publicRooms = new PublicWaitRoom[4];
     private static int SOCKET_PORT = 7777;
     public static final Set<String> activeUsernames = new HashSet<>();
 
     public static void main(String[] args){
 
+        logger.debug(System.lineSeparator());
+        logger.info("Starting server");
         publicRooms[0] = new PublicWaitRoom(1);
         publicRooms[1] = new PublicWaitRoom(2);
         publicRooms[2] = new PublicWaitRoom(3);
@@ -41,26 +44,37 @@ public class Server {
             socket = new ServerSocket(SOCKET_PORT);
         }
         catch (IOException e){
-            System.out.println("Cannot open server socket");
+            logger.fatal("Cannot open server socket. Terminating");
             System.exit(1);
             return;
         }
-        System.out.println("Server ready to accept connections!");
+        logger.info("Server ready to accept connections!");
         while (true){
             try{
                 Socket clientSocket = socket.accept();
-                System.out.println(">>>>New connection with client [" + clientSocket.getInetAddress() + "]");
+                logger.info("New connection with client [" + clientSocket.getInetAddress() + "]");
                 new Thread(new Matchmaker(clientSocket)).start();
             }
             catch (IOException e){
-                System.out.println("Connection dropped during thread creation");
+                logger.warn("Connection dropped");
             }
         }
     }
 
     public static void logOut(String username){
         if (username != null){
+            Server.logger.info("Logging out " + username);
             activeUsernames.remove(username);
         }
+    }
+
+    public static String formatGameName(Collection<String> usernames){
+        List<String> usernameList = new ArrayList<>(usernames);
+        Collections.sort(usernameList);
+        StringBuilder sb = new StringBuilder();
+        sb.append(usernameList.get(0));
+        for (int i = 1; i < usernameList.size(); i++)
+            sb.append("&").append(usernameList.get(i));
+        return sb.toString();
     }
 }

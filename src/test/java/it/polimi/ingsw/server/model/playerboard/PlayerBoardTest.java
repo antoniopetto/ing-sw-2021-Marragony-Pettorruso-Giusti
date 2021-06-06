@@ -21,7 +21,8 @@ public class PlayerBoardTest {
 
     @Before
     public void testInitPlayerBoard(){
-        playerBoard = new PlayerBoard(Mockito.mock(VirtualView.class));
+        playerBoard = new PlayerBoard();
+        playerBoard.setVirtualView(Mockito.mock(VirtualView.class));
         resourceRequirementList = new ArrayList<>();
         productionPower = new ProductionPower(0,0);
     }

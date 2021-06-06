@@ -2,6 +2,7 @@ package it.polimi.ingsw.server.model.playerboard;
 
 import it.polimi.ingsw.server.VirtualView;
 
+import java.io.Serializable;
 import java.util.EnumMap;
 import java.util.Map;
 
@@ -11,16 +12,19 @@ import java.util.Map;
  *
  * @see Resource
  */
-public class StrongBox {
+public class StrongBox implements Serializable {
 
     private final Map<Resource, Integer> content;
-    private final VirtualView virtualView;
+    private transient VirtualView virtualView;
 
     /**
      * Constructs the StrongBox
      */
-    public StrongBox(VirtualView virtualView) {
+    public StrongBox() {
         this.content = new EnumMap<Resource, Integer>(Resource.class);
+    }
+
+    public void setVirtualView(VirtualView virtualView){
         this.virtualView = virtualView;
     }
 

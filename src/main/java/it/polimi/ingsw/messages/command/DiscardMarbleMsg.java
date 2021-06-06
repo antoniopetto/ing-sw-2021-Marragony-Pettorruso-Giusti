@@ -4,7 +4,7 @@ import it.polimi.ingsw.server.GameController;
 import it.polimi.ingsw.server.model.shared.Marble;
 
 public class DiscardMarbleMsg implements CommandMsg {
-    private Marble marble;
+    private final Marble marble;
 
     public DiscardMarbleMsg(Marble marble) {
         this.marble = marble;

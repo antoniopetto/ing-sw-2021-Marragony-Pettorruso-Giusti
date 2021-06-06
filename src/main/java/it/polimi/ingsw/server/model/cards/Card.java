@@ -2,6 +2,7 @@ package it.polimi.ingsw.server.model.cards;
 
 import it.polimi.ingsw.server.model.exceptions.ElementNotFoundException;
 
+import java.io.Serializable;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
@@ -13,7 +14,7 @@ import java.util.stream.Collectors;
  * Two real classes extend this class: DevelopmentCard and LeaderCard
  */
 
-public abstract class Card {
+public abstract class Card implements Serializable {
 
     private final int victoryPoints;
     private final int id;

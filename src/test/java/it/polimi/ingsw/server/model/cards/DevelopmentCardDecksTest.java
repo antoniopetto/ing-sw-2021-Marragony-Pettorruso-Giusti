@@ -41,7 +41,8 @@ public class DevelopmentCardDecksTest {
         cards.add(new DevelopmentCard(13,0, 1, CardColor.BLUE, requirements,power));
         cards.add(new DevelopmentCard(14,0, 1, CardColor.BLUE, requirements,power));
         cards.add(new DevelopmentCard(15,0, 1, CardColor.BLUE, requirements,power));
-        decks = new DevelopmentCardDecks(cards, Mockito.mock(VirtualView.class));
+        decks = new DevelopmentCardDecks(cards);
+        decks.setVirtualView(Mockito.mock(VirtualView.class));
     }
     @After
     public void tearDown()
@@ -51,18 +52,15 @@ public class DevelopmentCardDecksTest {
     @Test
     public void constructorTest()
     {
-        try
-        {
-            DevelopmentCardDecks decks1 = new DevelopmentCardDecks(cards, null);
-        }catch(IllegalStateException e)
-        {
+        try {
+            DevelopmentCardDecks decks1 = new DevelopmentCardDecks(cards);
+        }catch(IllegalStateException e) {
             fail();
         }
         //tries to create a DevelopmentCardDecks with 5 cards in a deck
         cards.add(new DevelopmentCard(16,0, 1, CardColor.BLUE, requirements, power));
-        try
-        {
-            DevelopmentCardDecks decks2 = new DevelopmentCardDecks(cards, null);
+        try {
+            DevelopmentCardDecks decks2 = new DevelopmentCardDecks(cards);
             fail();
         }catch (IllegalStateException e)
         {

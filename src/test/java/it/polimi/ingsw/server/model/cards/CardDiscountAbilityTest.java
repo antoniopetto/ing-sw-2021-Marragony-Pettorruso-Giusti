@@ -34,7 +34,8 @@ public class CardDiscountAbilityTest {
 
     @Test
     public void activateAbilityTest() {
-        Player player = new Player("Test", Mockito.mock(VirtualView.class));
+        Player player = new Player("Test");
+        player.setVirtualView(Mockito.mock(VirtualView.class));
         ability = new CardDiscountAbility(Resource.COIN);
         ability.activateAbility(player);
         assertTrue(player.getActiveDiscount().contains(Resource.COIN));

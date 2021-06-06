@@ -106,16 +106,16 @@ public class Graphics {
     public static String getAbility(SimpleAbility.Type type, Resource res) {
         switch (type){
             case CARDDISCOUNT -> {
-                return "-1 "+ getResource(res);
+                return "   -1 "+ getResource(res);
             }
             case EXTRADEPOT -> {
-                return "Extra depot: " + getResource(res);
+                return "Extra depot" + System.lineSeparator() + "    " + getResource(res) + " " + getResource(res);
             }
             case WHITEMARBLE -> {
                 return ANSI_WHITE+"   ● = "+getResource(res);
             }
             case EXTRAPRODUCTION -> {
-                return "1"+getResource(res)+" } "+"1 ? 1"+getResource(Resource.FAITH);
+                return "1"+getResource(res)+" } "+"1? 1"+getResource(Resource.FAITH);
             }
         }
         return null;

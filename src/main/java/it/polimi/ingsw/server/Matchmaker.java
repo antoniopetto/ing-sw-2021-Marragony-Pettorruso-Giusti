@@ -31,41 +31,37 @@ public class Matchmaker implements Runnable{
                             "containing alphanumeric or special [._-] characters"));
                 else {
                     this.username = username;
-                    System.out.println("Client [" + handler.getIP() + "] chooses username " + username);
+                    Server.logger.info("Client [" + handler.getIP() + "] chose username " + username);
                     Server.activeUsernames.add(this.username);
                     break;
                 }
             }
 
-
+            while (true) {
                 handler.writeObject(new NPlayerRequestMsg());
                 int nPlayers = ((NPlayerMsg) handler.readObject()).getNPlayers();
-                if (nPlayers < 1 || nPlayers > 4){
+                if (nPlayers < 1 || nPlayers > 4) {
                     handler.writeObject(new ErrorMsg("Illegal number of players"));
-                    terminate();
-                    return;
-                    //TODO add opportunity to insert again the number of players
                 }
                 else {
                     Server.publicRooms[nPlayers - 1].add(username, handler);
+                    break;
                 }
-
-
+            }
         }
         catch (IOException e){
-            e.printStackTrace();
-            System.out.println("Connection dropped");
+            Server.logger.warn("Connection dropped with client [" + handler.getIP() + "]");
             terminate();
         }
         catch (ClassNotFoundException e){
-            System.out.println("Illegal object sent to matchmaker");
+            Server.logger.warn("Unrecognized object received by client [" + handler.getIP() + "]");
             terminate();
         }
     }
 
     private void terminate(){
+        Server.logger.info("Disconnecting [" + handler.getIP() + "]");
         handler.closeConnection();
         Server.logOut(username);
     }
-
 }

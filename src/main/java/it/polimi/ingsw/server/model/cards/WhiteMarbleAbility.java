@@ -4,13 +4,14 @@ import it.polimi.ingsw.client.simplemodel.SimpleAbility;
 import it.polimi.ingsw.server.model.Player;
 import it.polimi.ingsw.server.model.playerboard.Resource;
 
+import java.io.Serializable;
 import java.util.Objects;
 
 /**
  * This class represents the white marble power ability. The attribute resource represents the value of the white
  * marble when bought in the market.
  */
-public class WhiteMarbleAbility implements SpecialAbility{
+public class WhiteMarbleAbility implements SpecialAbility, Serializable {
     private final Resource resource;
     public WhiteMarbleAbility(Resource res)
     {

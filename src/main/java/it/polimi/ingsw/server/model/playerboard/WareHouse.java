@@ -3,6 +3,7 @@ package it.polimi.ingsw.server.model.playerboard;
 import it.polimi.ingsw.client.simplemodel.SimpleWarehouse;
 import it.polimi.ingsw.server.VirtualView;
 
+import java.io.Serializable;
 import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -15,21 +16,23 @@ import java.util.stream.Collectors;
  * @see Depot
  * @see Resource
  */
-public class WareHouse {
+public class WareHouse implements Serializable {
     private final List<Depot> depotList;
-    private final VirtualView virtualView;
+    private transient VirtualView virtualView;
 
     /**
      * Constructs the WareHouse
      * Instances 3 Depots
      */
-    public WareHouse(VirtualView virtualView) {
-
-        this.virtualView = virtualView;
+    public WareHouse() {
         this.depotList = new ArrayList<>();
         this.depotList.add(new Depot(DepotName.HIGH,1));
         this.depotList.add(new Depot(DepotName.MEDIUM,2));
         this.depotList.add(new Depot(DepotName.LOW,3));
+    }
+
+    public void setVirtualView(VirtualView virtualView){
+        this.virtualView = virtualView;
     }
 
     public SimpleWarehouse getSimple(){

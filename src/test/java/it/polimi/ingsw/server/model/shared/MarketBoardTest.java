@@ -1,6 +1,8 @@
 package it.polimi.ingsw.server.model.shared;
 
 import it.polimi.ingsw.server.VirtualView;
+import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.mockito.Mockito;
 
@@ -10,7 +12,12 @@ import static org.junit.Assert.assertEquals;
 
 public class MarketBoardTest {
 
-    private final MarketBoard marketBoard = new MarketBoard(Mockito.mock(VirtualView.class));
+    private final MarketBoard marketBoard = new MarketBoard();
+
+    @Before
+    public void setVirtualView(){
+        marketBoard.setVirtualView(Mockito.mock(VirtualView.class));
+    }
 
     @Test
     public void buyColumnTest() {

@@ -6,8 +6,8 @@ public class LeaderCardUpdateMsg implements UpdateMsg {
     private final String username;
     private final int cardId;
 
-    public LeaderCardUpdateMsg(String userName, int cardId) {
-        this.username = userName;
+    public LeaderCardUpdateMsg(String username, int cardId) {
+        this.username = username;
         this.cardId = cardId;
     }
 

@@ -20,11 +20,14 @@ public class FaithTrackTest {
 
     @Before
     public void setUp() {
-        p1 = new Player("First", Mockito.mock(VirtualView.class));
-        p2 = new Player("Second", Mockito.mock(VirtualView.class));
+        p1 = new Player("First");
+        p1.setVirtualView(Mockito.mock(VirtualView.class));
+        p2 = new Player("Second");
+        p2.setVirtualView(Mockito.mock(VirtualView.class));
         GameController gameController = Mockito.mock(GameController.class);
         virtualView = Mockito.mock(VirtualView.class);
-        faithTrack = new FaithTrack(virtualView);
+        faithTrack = new FaithTrack();
+        faithTrack.setVirtualView(Mockito.mock(VirtualView.class));
         faithTrack.addPlayers(List.of(p1, p2));
     }
 
@@ -33,7 +36,7 @@ public class FaithTrackTest {
         for (int i = 0; i < 8; i++){
             faithTrack.advance(p1);
         }
-        Mockito.verify(virtualView, times(1)).vaticanReportUpdate();
+        Mockito.verify(virtualView, times(1)).tileGainedUpdate("First", 0);
         assertTrue(p1.getTiles().get(0).isGained());
         assertFalse(p2.getTiles().get(0).isGained());
     }

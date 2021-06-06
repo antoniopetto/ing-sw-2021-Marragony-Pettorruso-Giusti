@@ -15,7 +15,6 @@ public interface View {
 
     void showErrorMessage(String text);
     SimpleModel getGame();
-    void showMarbleBuffer(List<Marble> marbleList);
     String getUsername();
     int getNumberOfPlayers();
     void showTitle();
@@ -23,10 +22,8 @@ public interface View {
     CommandMsg selectMove(boolean postTurn);
     CommandMsg manageResource();
     CommandMsg changeDepots();
-    void showLeaderCard(SimpleLeaderCard card);
     CommandMsg discardLeaderCard();
     Marble selectMarble();
-    void printLeaderCards(SimplePlayer player);
     DepotName selectDepot();
     Resource selectResource();
     void showTextMessage(String text);

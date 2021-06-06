@@ -6,12 +6,12 @@ import it.polimi.ingsw.messages.command.CommandMsg;
 
 import java.io.IOException;
 
-public class TurnMsg implements ViewMsg{
+public class NextActionMsg implements ViewMsg{
 
     private final boolean postTurn;
 
 
-    public TurnMsg(boolean postTurn) {
+    public NextActionMsg(boolean postTurn) {
         this.postTurn = postTurn;
 
     }

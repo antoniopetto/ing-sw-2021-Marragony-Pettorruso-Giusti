@@ -13,10 +13,10 @@ import it.polimi.ingsw.server.model.shared.PopeFavourTile;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class Player extends AbstractPlayer{
+public class Player extends AbstractPlayer {
 
+    private transient VirtualView virtualView;
     private final String username;
-
     private final List<PopeFavourTile> tiles = List.of(new PopeFavourTile(2),
                                                        new PopeFavourTile(3),
                                                        new PopeFavourTile(4));
@@ -24,7 +24,6 @@ public class Player extends AbstractPlayer{
     private final Set<Resource> whiteMarbleAliases = new HashSet<>();
     private final List<LeaderCard> leaderCardList = new ArrayList<>();
     private final PlayerBoard playerBoard;
-    private final VirtualView virtualView;
 
     /**
      * <code>Player</code> constructor.
@@ -32,10 +31,14 @@ public class Player extends AbstractPlayer{
      *
      * @param username      The player username
      */
-    public Player(String username, VirtualView virtualView){
+    public Player(String username){
         this.username = username;
+        this.playerBoard = new PlayerBoard();
+    }
+
+    public void setVirtualView(VirtualView virtualView) {
         this.virtualView = virtualView;
-        this.playerBoard = new PlayerBoard(virtualView);
+        playerBoard.setVirtualView(virtualView);
     }
 
     public SimplePlayer getSimple(){
@@ -48,6 +51,7 @@ public class Player extends AbstractPlayer{
         player.setLeaderCards(leaderCardList.stream().map(LeaderCard::getSimple).collect(Collectors.toList()));
         player.setExtraProductionPowers(playerBoard.getExtraProductionPowers());
         player.setActiveDiscounts(activeDiscounts);
+        player.setTiles(tiles);
         return player;
     }
 
@@ -77,6 +81,7 @@ public class Player extends AbstractPlayer{
      */
     public void addActiveDiscount(Resource resource) {
         activeDiscounts.add(resource);
+        virtualView.cardDiscountUpdate(username, resource);
     }
 
     public Set<Resource> getWhiteMarbleAliases() {
@@ -133,11 +138,9 @@ public class Player extends AbstractPlayer{
      * @throws ElementNotFoundException     If the if doesn't correspond to any of the players cards
      */
     public void removeLeaderCard(int id) throws ElementNotFoundException {
-        if(id == 0) throw new IllegalArgumentException("All leaderCards have already been discarded");
-            else {
-            leaderCardList.remove(Card.getById(id, leaderCardList));
-            virtualView.discardLeaderCardUpdate(id);
-        }
+
+        leaderCardList.remove(Card.getById(id, leaderCardList));
+        virtualView.discardLeaderCardUpdate(id);
     }
 
     /**
@@ -207,6 +210,7 @@ public class Player extends AbstractPlayer{
     public void vaticanReportEffect(int tileIdx) {
 
         tiles.get(tileIdx).gain();
+        virtualView.tileGainedUpdate(username, tileIdx);
     }
 
     public List<LeaderCard> getLeaderCardList(){

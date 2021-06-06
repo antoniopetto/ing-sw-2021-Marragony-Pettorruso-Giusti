@@ -1,9 +1,15 @@
 package it.polimi.ingsw.client.simplemodel;
 
+import it.polimi.ingsw.server.model.cards.Card;
 import it.polimi.ingsw.server.model.cards.CardColor;
+import it.polimi.ingsw.server.model.cards.CardParser;
 import it.polimi.ingsw.server.model.playerboard.Resource;
+import org.xml.sax.SAXException;
 
+import javax.xml.parsers.ParserConfigurationException;
+import java.io.IOException;
 import java.io.Serializable;
+import java.io.UncheckedIOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -16,30 +22,37 @@ import java.util.Map;
  * <code>levelRequired</code> tells if the integer in the map <code>cardRequirement</code> is the level of the card or the
  * number of cards required.
  */
-public class SimpleLeaderCard implements Serializable {
+public class SimpleLeaderCard extends Card implements Serializable {
 
     private final SimpleAbility ability;
-    private final int id;
-    private final int victoryPoints;
     private final Map<Resource, Integer> resourceRequirements;
     private final List<SimpleCardRequirement> cardRequirements;
 
     private boolean active = false;
 
-    static final private SimpleCardParser simpleCardParser = SimpleCardParser.getInstance();
+    private static final List<SimpleLeaderCard> leaderCards;
 
-    static public SimpleLeaderCard parse(int id) {
-        return simpleCardParser.getSimpleLeaderCard(id);
+    static{
+        try{
+            leaderCards = new ArrayList<>(CardParser.getInstance().parseSimpleLeaderCards());
+        }
+        catch (SAXException | IOException | ParserConfigurationException e){
+            e.printStackTrace();
+            throw new UncheckedIOException(new IOException("Could not initialize the card parser"));
+        }
+    }
+
+    public static SimpleLeaderCard parse(int id){
+        return Card.getById(id, leaderCards);
     }
 
     public SimpleLeaderCard(int id, int victoryPoints, List<SimpleCardRequirement> cardRequirements,
                             Map<Resource, Integer> resourceRequirements, SimpleAbility ability){
 
+        super(id, victoryPoints);
         if(cardRequirements == null || resourceRequirements == null || ability == null)
             throw new IllegalArgumentException();
 
-        this.id = id;
-        this.victoryPoints = victoryPoints;
         this.cardRequirements = new ArrayList<>(cardRequirements);
         this.resourceRequirements = new HashMap<>(resourceRequirements);
         this.ability = ability;
@@ -53,16 +66,8 @@ public class SimpleLeaderCard implements Serializable {
         return active;
     }
 
-    public int getId() {
-        return id;
-    }
-
     public SimpleAbility getAbility() {
         return ability;
-    }
-
-    public int getVictoryPoints() {
-        return victoryPoints;
     }
 
     public List<SimpleCardRequirement> getCardRequirements() {

@@ -2,7 +2,9 @@ package it.polimi.ingsw.server.model;
 
 import it.polimi.ingsw.server.model.shared.Position;
 
-public abstract class AbstractPlayer {
+import java.io.Serializable;
+
+public abstract class AbstractPlayer implements Serializable {
     private Position position;
 
     public Position getPosition() { return position; }

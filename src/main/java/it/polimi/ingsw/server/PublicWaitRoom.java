@@ -1,6 +1,7 @@
 package it.polimi.ingsw.server;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -20,8 +21,7 @@ public class PublicWaitRoom {
         }
 
         if (players.size() == nPlayers) {
-
-            System.out.println(nPlayers +" players game starting");
+            System.out.println(nPlayers +" players game [" + Server.formatGameName(players.keySet()) + "] starting");
             new Thread(new VirtualView(players)).start();
             players.clear();
         }

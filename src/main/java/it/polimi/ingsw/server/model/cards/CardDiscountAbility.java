@@ -4,12 +4,13 @@ import it.polimi.ingsw.client.simplemodel.SimpleAbility;
 import it.polimi.ingsw.server.model.Player;
 import it.polimi.ingsw.server.model.playerboard.Resource;
 
+import java.io.Serializable;
 import java.util.Objects;
 
 /**
  * This class represents the card discount ability. The attribute resource represents the resource of the discount
  */
-public class CardDiscountAbility implements SpecialAbility{
+public class CardDiscountAbility implements SpecialAbility, Serializable {
 
     private final Resource resource;
 

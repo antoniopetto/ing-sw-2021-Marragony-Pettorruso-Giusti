@@ -3,7 +3,6 @@ package it.polimi.ingsw.messages.toview;
 import it.polimi.ingsw.client.ServerHandler;
 import it.polimi.ingsw.client.view.View;
 import it.polimi.ingsw.messages.command.CommandMsg;
-import it.polimi.ingsw.messages.command.GoBackMsg;
 import it.polimi.ingsw.messages.command.PutResourceMsg;
 import it.polimi.ingsw.server.model.playerboard.DepotName;
 import it.polimi.ingsw.server.model.playerboard.Resource;
@@ -19,11 +18,7 @@ public class PutResourceRequestMsg implements ViewMsg {
         CommandMsg msg;
         Marble selectedMarble = view.selectMarble();
         DepotName selectedDepot = view.selectDepot();
-        if (selectedDepot == null) {
-            msg = new GoBackMsg();
-            server.writeObject(msg);
-            return;
-        }
+
         if (selectedMarble.equals(Marble.WHITE)) {
             Resource selectedResource = view.selectResource();
             msg = new PutResourceMsg(selectedMarble, selectedDepot, selectedResource);

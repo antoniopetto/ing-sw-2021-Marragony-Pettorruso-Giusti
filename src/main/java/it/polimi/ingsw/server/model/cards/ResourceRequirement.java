@@ -3,13 +3,14 @@ package it.polimi.ingsw.server.model.cards;
 import it.polimi.ingsw.server.model.Player;
 import it.polimi.ingsw.server.model.playerboard.Resource;
 
+import java.io.Serializable;
 import java.util.Objects;
 
 /**
  * this class implements Requirement and represents a requirement of resources. It has an integer attribute for the
  * quantity of the resource and a Resource attribute for the type of resource.
  */
-public class ResourceRequirement implements Requirement{
+public class ResourceRequirement implements Requirement, Serializable {
     private final int quantity;
     private final Resource resource;
 

@@ -28,7 +28,8 @@ public class ExtraDepotAbilityTest {
     public void activateAbilityTest() {
         ExtraDepotAbility ability = new ExtraDepotAbility(Resource.COIN);
 
-        Player player = new Player("Test", Mockito.mock(VirtualView.class));
+        Player player = new Player("Test");
+        player.setVirtualView(Mockito.mock(VirtualView.class));
         //activates the ability and check that there's an extra depot in player's warehouse with right capacity and constraint
         try {
             ability.activateAbility(player);

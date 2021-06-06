@@ -16,8 +16,8 @@ import java.util.Stack;
  * <code>discardedTokens</code> is a list of the tokens already played
  */
 public class SoloRival extends AbstractPlayer {
-    private Stack<SoloActionToken> activeTokens=new Stack<>();
-    private List<SoloActionToken> discardedTokens= new ArrayList<>();
+    private final Stack<SoloActionToken> activeTokens = new Stack<>();
+    private final List<SoloActionToken> discardedTokens = new ArrayList<>();
     private SoloActionToken lastPlayedToken;
 
     public SoloRival(){

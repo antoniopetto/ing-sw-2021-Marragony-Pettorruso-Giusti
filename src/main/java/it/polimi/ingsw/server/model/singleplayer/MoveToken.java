@@ -2,12 +2,14 @@ package it.polimi.ingsw.server.model.singleplayer;
 
 import it.polimi.ingsw.server.GameController;
 
+import java.io.Serializable;
+
 /**
  * This class represents a move token. If <code>steps</code> == 2 the SoloRival position increases by two;
  * if <code>steps</code> ==1 the SoloRival position increases by one and all the tokens are shuffled and a
  * new stack of tokens is created
  */
-public class MoveToken implements SoloActionToken {
+public class MoveToken implements SoloActionToken, Serializable {
     private final int steps;
     private final int id;
 

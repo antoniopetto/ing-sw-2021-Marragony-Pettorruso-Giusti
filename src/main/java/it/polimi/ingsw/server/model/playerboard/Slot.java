@@ -4,6 +4,8 @@ import it.polimi.ingsw.client.simplemodel.SimpleSlot;
 import it.polimi.ingsw.server.VirtualView;
 import it.polimi.ingsw.server.model.cards.Card;
 import it.polimi.ingsw.server.model.cards.DevelopmentCard;
+
+import java.io.Serializable;
 import java.util.List;
 import java.util.Stack;
 
@@ -13,7 +15,7 @@ import java.util.Stack;
  *
  * @see DevelopmentCard
  */
-public class Slot {
+public class Slot implements Serializable {
 
     private final Stack<DevelopmentCard> developmentCardList = new Stack<>();
 

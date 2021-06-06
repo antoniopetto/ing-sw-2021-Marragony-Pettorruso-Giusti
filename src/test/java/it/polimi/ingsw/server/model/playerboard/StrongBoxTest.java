@@ -13,7 +13,8 @@ public class StrongBoxTest {
 
     @Before
     public void initStrongBox(){
-        strongBox = new StrongBox(Mockito.mock(VirtualView.class));
+        strongBox = new StrongBox();
+        strongBox.setVirtualView(Mockito.mock(VirtualView.class));
     }
 
     @After

@@ -3,24 +3,21 @@ package it.polimi.ingsw.server.model.shared;
 import it.polimi.ingsw.server.VirtualView;
 import it.polimi.ingsw.server.model.AbstractPlayer;
 
+import java.io.Serializable;
 import java.util.*;
 
-public class FaithTrack {
+public class FaithTrack implements Serializable {
 
+    private transient VirtualView virtualView;
     public static final int LAST_POSITION = 24;
     private final List<Position> track = new ArrayList<>();
     private final List<AbstractPlayer> players = new ArrayList<>();
     private int nextVaticanReport = 0;
-    private final VirtualView virtualView;
 
     /**
      * <code>FaithTrack</code> constructor.
-     *
-     * @param virtualView   Virtual view reference, used to send updates
      */
-    public FaithTrack(VirtualView virtualView){
-
-        this.virtualView = virtualView;
+    public FaithTrack(){
 
         Map<Integer, Integer> vPMap = Map.of(3, 1,
                                              6, 2,
@@ -53,6 +50,10 @@ public class FaithTrack {
         }
     }
 
+    public void setVirtualView(VirtualView virtualView) {
+        this.virtualView = virtualView;
+    }
+
     public void addPlayers(List<? extends AbstractPlayer> players){
         this.players.addAll(players);
         for (int i = 0; i < players.size(); i++)
@@ -73,7 +74,6 @@ public class FaithTrack {
                 p.vaticanReportEffect(nextVaticanReport);
         }
         nextVaticanReport ++;
-        virtualView.vaticanReportUpdate();
     }
 
     /**

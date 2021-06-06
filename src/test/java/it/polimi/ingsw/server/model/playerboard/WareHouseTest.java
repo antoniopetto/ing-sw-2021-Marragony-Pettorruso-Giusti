@@ -13,7 +13,8 @@ public class WareHouseTest {
 
     @Before
     public void initWareHouse(){
-        wareHouse = new WareHouse(Mockito.mock(VirtualView.class));
+        wareHouse = new WareHouse();
+        wareHouse.setVirtualView(Mockito.mock(VirtualView.class));
     }
 
     @Test

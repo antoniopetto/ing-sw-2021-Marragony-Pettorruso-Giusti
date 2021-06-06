@@ -6,6 +6,7 @@ import it.polimi.ingsw.server.model.cards.*;
 import it.polimi.ingsw.server.model.exceptions.ElementNotFoundException;
 import it.polimi.ingsw.server.model.shared.FaithTrack;
 
+import java.io.Serializable;
 import java.util.*;
 /**
  * This class represents the PlayerBoard of a Player.
@@ -14,22 +15,27 @@ import java.util.*;
  * @see Slot
  * @see StrongBox
  */
-public class PlayerBoard {
+public class PlayerBoard implements Serializable {
 
     private final StrongBox strongBox;
     private final WareHouse wareHouse;
     private final List<Slot> slotList = List.of(new Slot(), new Slot(), new Slot());
     private final List<ProductionPower> extraProductionPowers = new ArrayList<>(List.of(new ProductionPower(2, 1)));
-    private final VirtualView virtualView;
+    private transient VirtualView virtualView;
 
     /**
      * Constructs the PlayerBoard
      * It will contain a StrongBox, a WareHouse, three Slots
      */
-    public PlayerBoard(VirtualView virtualView) {
+    public PlayerBoard() {
+        wareHouse = new WareHouse();
+        strongBox = new StrongBox();
+    }
+
+    public void setVirtualView(VirtualView virtualView) {
         this.virtualView = virtualView;
-        wareHouse = new WareHouse(virtualView);
-        strongBox = new StrongBox(virtualView);
+        wareHouse.setVirtualView(virtualView);
+        strongBox.setVirtualView(virtualView);
     }
 
     public WareHouse getWareHouse() { return wareHouse; }

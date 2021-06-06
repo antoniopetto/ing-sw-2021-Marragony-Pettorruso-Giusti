@@ -16,7 +16,8 @@ public class WhiteMarbleAbilityTest {
     public void activateAbilityTest()
     {
         ability = new WhiteMarbleAbility(Resource.COIN);
-        Player player = new Player("Test", Mockito.mock(VirtualView.class));
+        Player player = new Player("Test");
+        player.setVirtualView(Mockito.mock(VirtualView.class));
         try {
             ability.activateAbility(player);
         }catch (NullPointerException e) {

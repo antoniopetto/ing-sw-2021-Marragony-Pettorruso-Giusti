@@ -182,11 +182,6 @@ public class GUIView extends Application implements View  {
 
     }
 
-    @Override
-    public void showMarbleBuffer(List<Marble> marbleList) {
-
-    }
-
     public static void main(String[] args)
     {
         launch(args);
@@ -276,8 +271,7 @@ public class GUIView extends Application implements View  {
         int slotId = mainSceneController.getChoice()-1;
         System.out.println(slotId);
         mainSceneController.disableSlots(true);
-        SimpleCardParser parser = SimpleCardParser.getInstance();
-        SimpleDevCard card = parser.getSimpleDevelopmentCard(cardId);
+        SimpleDevCard card = SimpleDevCard.parse(cardId);
         return new BuyAndAddCardInSlotMsg(card.getColor(), card.getLevel(), slotId);
     }
 
@@ -345,11 +339,6 @@ public class GUIView extends Application implements View  {
     }
 
     @Override
-    public void showLeaderCard(SimpleLeaderCard card) {
-
-    }
-
-    @Override
     public CommandMsg discardLeaderCard() {
         setLoader("/setUp.fxml");
         Scene scene = loadScene(currentLoader);
@@ -413,11 +402,6 @@ public class GUIView extends Application implements View  {
         else if(marbleCounter >= 1 ) return marble;
 //TODO white marble alias
         return null;
-    }
-
-    @Override
-    public void printLeaderCards(SimplePlayer player) {
-
     }
 
     @Override

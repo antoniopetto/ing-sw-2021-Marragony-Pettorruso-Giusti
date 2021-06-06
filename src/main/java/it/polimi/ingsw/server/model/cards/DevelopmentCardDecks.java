@@ -3,6 +3,7 @@ package it.polimi.ingsw.server.model.cards;
 
 import it.polimi.ingsw.server.VirtualView;
 
+import java.io.Serializable;
 import java.util.*;
 
 
@@ -10,9 +11,10 @@ import java.util.*;
  * This class represents the group of decks from which the development cards are bought. The decks are saved in the
  * ArrayList decks.
  */
-public class DevelopmentCardDecks {
+public class DevelopmentCardDecks implements Serializable {
+
+    private transient VirtualView virtualView;
     private final List<CardDeck> decks = new ArrayList<>();
-    private final VirtualView virtualView;
 
     /**
      * The constructor creates 12 decks with all the possible combinations of colors and levels and add each card
@@ -20,8 +22,8 @@ public class DevelopmentCardDecks {
      * @param cards is a list of development cards which have to be divided in different decks.
      * @throws IllegalStateException if more than 4 cards in <code>cards</code> belong to a deck
      */
-    public DevelopmentCardDecks(List<DevelopmentCard> cards, VirtualView virtualView)  throws IllegalStateException{
-        this.virtualView = virtualView;
+    public DevelopmentCardDecks(List<DevelopmentCard> cards)  throws IllegalStateException{
+
         decks.add(new CardDeck(1, CardColor.GREEN));
         decks.add(new CardDeck(2, CardColor.GREEN));
         decks.add(new CardDeck(3, CardColor.GREEN));
@@ -36,6 +38,10 @@ public class DevelopmentCardDecks {
         decks.add(new CardDeck(3, CardColor.PURPLE));
         for (CardDeck deck: decks)
                 cards.stream().filter(deck::belongs).forEach(deck::add);
+    }
+
+    public void setVirtualView(VirtualView virtualView) {
+        this.virtualView = virtualView;
     }
 
     private CardDeck getDeck(CardColor color, int level){

@@ -20,7 +20,7 @@ public class CardParserTest {
     @Before
     public void setup(){
         try {
-            parser = new CardParser();
+            parser = CardParser.getInstance();
         }
         catch (ParserConfigurationException | IOException | SAXException e){
             fail();

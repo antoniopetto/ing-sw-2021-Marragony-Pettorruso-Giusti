@@ -24,7 +24,7 @@ public class MarketBoardUpdate implements UpdateMsg{
     @Override
     public String toString() {
         return "MarketBoardUpdate{" +
-                "marketBoard=" + Arrays.toString(marketBoard) +
+                "marketBoard=" + Arrays.deepToString(marketBoard) +
                 ", spareMarble=" + spareMarble +
                 '}';
     }

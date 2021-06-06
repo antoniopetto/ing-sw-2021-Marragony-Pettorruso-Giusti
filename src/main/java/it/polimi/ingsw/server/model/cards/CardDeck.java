@@ -1,5 +1,6 @@
 package it.polimi.ingsw.server.model.cards;
 
+import java.io.Serializable;
 import java.util.*;
 
 /**
@@ -7,7 +8,7 @@ import java.util.*;
  * the number of cards in the deck, attributes with the level and the color of the cards in the deck and a stack
  * attribute which contains the cards.
  */
-public class CardDeck {
+public class CardDeck implements Serializable {
     private static final int num_of_cards = 4;
     private final int level;
     private final CardColor color;

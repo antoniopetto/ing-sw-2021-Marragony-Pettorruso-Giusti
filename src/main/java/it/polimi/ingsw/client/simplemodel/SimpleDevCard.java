@@ -1,40 +1,51 @@
 package it.polimi.ingsw.client.simplemodel;
 
+import it.polimi.ingsw.server.model.cards.Card;
 import it.polimi.ingsw.server.model.cards.CardColor;
+import it.polimi.ingsw.server.model.cards.CardParser;
 import it.polimi.ingsw.server.model.playerboard.Resource;
+import org.xml.sax.SAXException;
 
+import javax.xml.parsers.ParserConfigurationException;
+import java.io.IOException;
 import java.io.Serializable;
+import java.io.UncheckedIOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
-public class SimpleDevCard implements Serializable {
+public class SimpleDevCard extends Card implements Serializable {
 
-    private  int id;
-    private  int victoryPoints;
-    private  Map<Resource, Integer> requirements;
-    private  CardColor color;
-    private  int level;
-    private  Map<Resource, Integer> input;
-    private  Map<Resource, Integer> output;
+    private Map<Resource, Integer> requirements;
+    private CardColor color;
+    private int level;
+    private Map<Resource, Integer> input;
+    private Map<Resource, Integer> output;
 
-    private static final SimpleCardParser simpleCardParser = SimpleCardParser.getInstance();
+    private static final List<SimpleDevCard> devCards;
+
+    static{
+        try{
+            devCards = new ArrayList<>(CardParser.getInstance().parseSimpleDevelopmentCards());
+        }
+        catch (SAXException | IOException | ParserConfigurationException e){
+            e.printStackTrace();
+            throw new UncheckedIOException(new IOException("Could not initialize the card parser"));
+        }
+    }
 
     public static SimpleDevCard parse(int id){
-        return simpleCardParser.getSimpleDevelopmentCard(id);
+        return Card.getById(id, devCards);
     }
 
     public SimpleDevCard(int id, int victoryPoints, CardColor color, int level, Map<Resource, Integer> requirements,
                          Map<Resource, Integer> input, Map<Resource, Integer> output) {
-        this.id = id;
-        this.victoryPoints = victoryPoints;
+        super(id, victoryPoints);
         this.requirements = requirements;
         this.color = color;
         this.level = level;
         this.input = input;
         this.output = output;
-    }
-
-    public int getId() {
-        return id;
     }
 
     public Map<Resource, Integer> getRequirements() {
@@ -55,18 +66,6 @@ public class SimpleDevCard implements Serializable {
 
     public Map<Resource, Integer> getOutput() {
         return output;
-    }
-
-    public int getVictoryPoints() {
-        return victoryPoints;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public void setVictoryPoints(int victoryPoints) {
-        this.victoryPoints = victoryPoints;
     }
 
     public void setRequirements(Map<Resource, Integer> requirements) {

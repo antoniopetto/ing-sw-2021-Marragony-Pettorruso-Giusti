@@ -13,10 +13,11 @@ import static org.junit.Assert.*;
 
 public class ResourceRequirementTest {
     private ResourceRequirement requirement;
-    private Player player = new Player("AAA", Mockito.mock(VirtualView.class));
+    private Player player = new Player("AAA");
 
     @Before
     public void setUp() {
+        player.setVirtualView(Mockito.mock(VirtualView.class));
         player.getPlayerBoard().getStrongBox().addResource(Resource.COIN, 2);
         player.getPlayerBoard().getStrongBox().addResource(Resource.SHIELD, 3);
         player.getPlayerBoard().getStrongBox().addResource(Resource.STONE, 1);

@@ -15,11 +15,12 @@ import static org.junit.Assert.*;
 public class LeaderCardTest {
     private LeaderCard card;
     private final SpecialAbility ability = new CardDiscountAbility(Resource.COIN);
-    private final Player player = new Player("AAA", Mockito.mock(VirtualView.class));
+    private final Player player = new Player("AAA");
 
     @Before
     public void setUp() {
 
+        player.setVirtualView(Mockito.mock(VirtualView.class));
         List<ResourceRequirement> requirements = new ArrayList<>();
         requirements.add(new ResourceRequirement(Resource.SHIELD, 1));
         card = new LeaderCard(3,1, requirements, ability);

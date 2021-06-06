@@ -4,6 +4,7 @@ import it.polimi.ingsw.client.simplemodel.SimpleCardRequirement;
 import it.polimi.ingsw.server.model.Player;
 import it.polimi.ingsw.server.model.playerboard.Slot;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -13,7 +14,7 @@ import java.util.Optional;
  * There are three attributes: color, which represents the CardColor required; level, which is an Optional integer
  * because a level is not always required in the leader card; quantity, an integer which represents the quantity required.
  */
-public class CardRequirement implements Requirement{
+public class CardRequirement implements Requirement, Serializable {
     private final CardColor color;
     private final Integer level;
     private final int quantity;

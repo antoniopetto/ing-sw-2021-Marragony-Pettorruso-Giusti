@@ -4,13 +4,14 @@ import it.polimi.ingsw.client.simplemodel.SimpleAbility;
 import it.polimi.ingsw.server.model.Player;
 import it.polimi.ingsw.server.model.playerboard.Resource;
 
+import java.io.Serializable;
 import java.util.Objects;
 
 /**
  * This class represents the extra production power ability. The attribute resource represents the input resource of
  * the production power
  */
-public class ExtraProductionAbility implements SpecialAbility{
+public class ExtraProductionAbility implements SpecialAbility, Serializable {
     private final ProductionPower productionPower;
 
     public ExtraProductionAbility(ProductionPower productionPower) {

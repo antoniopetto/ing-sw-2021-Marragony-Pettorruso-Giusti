@@ -1,5 +1,7 @@
 package it.polimi.ingsw.server.model.cards;
 
+import it.polimi.ingsw.client.simplemodel.SimpleDevCard;
+import it.polimi.ingsw.client.simplemodel.SimpleLeaderCard;
 import it.polimi.ingsw.server.model.exceptions.IllegalConfigXMLException;
 import it.polimi.ingsw.server.model.playerboard.Resource;
 import org.w3c.dom.*;
@@ -12,6 +14,7 @@ import javax.xml.xpath.*;
 import java.io.File;
 import java.io.IOException;
 import java.util.*;
+import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 import static java.util.stream.Collectors.toList;
@@ -25,6 +28,13 @@ public class CardParser {
     private static final String CONFIG_PATH = "src/main/resources/cards/config.xml";
     private final Node config;
     private final XPath xPath = XPathFactory.newInstance().newXPath();
+    private static CardParser instance;
+
+    public static CardParser getInstance() throws ParserConfigurationException, IOException, SAXException{
+        if (instance == null)
+            instance = new CardParser();
+        return instance;
+    }
 
     /**
      * <code>CardParser</code> constructor.
@@ -34,7 +44,7 @@ public class CardParser {
      * @throws IOException                      If there's an I/O error when retrieving the file
      * @throws SAXException                     If the <code>DocumentBuilder</code> can't parse the file
      */
-    public CardParser() throws ParserConfigurationException, IOException, SAXException{
+    private CardParser() throws ParserConfigurationException, IOException, SAXException{
 
         File configFile = new File(CONFIG_PATH);
         DocumentBuilderFactory domBuilderFactory = DocumentBuilderFactory.newInstance();
@@ -43,6 +53,14 @@ public class CardParser {
         dom.getDocumentElement().normalize();
         config = getChildNode("config", dom)
                 .orElseThrow(() -> new IllegalConfigXMLException("Missing root config node"));
+    }
+
+    public List<SimpleDevCard> parseSimpleDevelopmentCards(){
+        return parseDevelopmentCards().stream().map(DevelopmentCard::getSimple).collect(Collectors.toList());
+    }
+
+    public List<SimpleLeaderCard> parseSimpleLeaderCards() {
+        return parseLeaderCards().stream().map(LeaderCard::getSimple).collect(Collectors.toList());
     }
 
     /**

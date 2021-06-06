@@ -13,7 +13,8 @@ public class ExtraProductionAbilityTest {
     public void activateAbilityTest() {
         ProductionPower power = new ProductionPower(1,2);
         ExtraProductionAbility ability = new ExtraProductionAbility(power);
-        Player player = new Player("Test", Mockito.mock(VirtualView.class));
+        Player player = new Player("Test");
+        player.setVirtualView(Mockito.mock(VirtualView.class));
         ability.activateAbility(player);
         int input = player.getPlayerBoard().getExtraProductionPowers().get(1).getAgnosticInput();
         int output = player.getPlayerBoard().getExtraProductionPowers().get(1).getAgnosticOutput();

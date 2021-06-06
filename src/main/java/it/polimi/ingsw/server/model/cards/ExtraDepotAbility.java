@@ -5,13 +5,14 @@ import it.polimi.ingsw.client.simplemodel.SimpleWarehouse;
 import it.polimi.ingsw.server.model.Player;
 import it.polimi.ingsw.server.model.playerboard.Resource;
 
+import java.io.Serializable;
 import java.util.Objects;
 
 /**
  * This class represents the extra depot ability, which creates an extra depot in the warehouse. The attribute
  * constraints represents the type of resource that the depot can contain
  */
-public class ExtraDepotAbility implements SpecialAbility{
+public class ExtraDepotAbility implements SpecialAbility, Serializable {
 
     private final Resource constraint;
     private final int capacity = 2;
