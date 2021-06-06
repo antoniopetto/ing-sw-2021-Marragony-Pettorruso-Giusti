@@ -30,8 +30,9 @@ import java.util.Map;
 
 public class GUIView extends Application implements View  {
 
-    private final SimpleModel game;
+    private SimpleModel game;
     private FXMLLoader currentLoader;
+    private ServerHandler serverHandler;
     public static Font font;
     private Stage initStage;
     private Stage oldStage;
@@ -62,8 +63,6 @@ public class GUIView extends Application implements View  {
     }
 
     public GUIView() {
-
-        game = new SimpleModel();
         font=Font.loadFont("@fonts/master_of_break.ttf", 14);
     }
 
@@ -98,7 +97,7 @@ public class GUIView extends Application implements View  {
     public void setting(SettingGameController settingGameController){
         try{
             Socket server = new Socket(settingGameController.getServerIP(), Integer.parseInt(settingGameController.getPort()));
-            ServerHandler serverHandler = new ServerHandler(server, this);
+            serverHandler = new ServerHandler(server, this);
             new Thread(serverHandler).start();
 
             settingGameController.setTextError("You are connected to the server!");
@@ -210,7 +209,10 @@ public class GUIView extends Application implements View  {
             firstMain = false;
         }
 
+        mainSceneController.disableButtons(false);
         mainSceneController.setActionButton(postTurn);
+
+        mainSceneController.setFaithTrack();
 
         if(action.equals(Action.DISCARD_LEADER) || action.equals(Action.PLAY_LEADER)) mainSceneController.setLeaderCard();
         if(action.equals(Action.BUY_RESOURCES)){
@@ -478,6 +480,7 @@ public class GUIView extends Application implements View  {
     }
 
     public void setModel(SimpleModel game){
-
+        this.game=game;
+        serverHandler.setModel(game);
     }
 }

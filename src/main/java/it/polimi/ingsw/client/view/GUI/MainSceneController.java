@@ -92,6 +92,8 @@ public class MainSceneController implements Initializable {
     private ImageView spareMarble;
     @FXML
     private Group resourceArrow;
+    @FXML
+    private ImageView faithMarker;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -283,6 +285,7 @@ public class MainSceneController implements Initializable {
     public void disableCardsInSlot(boolean disable) {GUISupport.setDisable(disable, cardsSlots);}
 
 
+    public void setFaithTrack(){GUISupport.setFaithTrack(simpleModel.getThisPlayer(), faithMarker);}
 
     public void setDecks()
     {
