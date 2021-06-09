@@ -16,6 +16,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.text.Text;
 
 import java.net.URL;
 import java.util.ArrayList;
@@ -42,15 +43,15 @@ public class MainSceneController implements Initializable {
     @FXML
     private Button lCardButton;
     @FXML
-    private Label activeCard1;
-    @FXML
-    private Label activeCard2;
-    @FXML
     private ImageView leaderCard1;
     @FXML
     private ImageView leaderCard2;
     @FXML
     private ToggleGroup leaderCardGroup;
+    @FXML
+    private Rectangle rectCard1;
+    @FXML
+    private Rectangle rectCard2;
     //End
 
     @FXML
@@ -94,6 +95,8 @@ public class MainSceneController implements Initializable {
     private Group resourceArrow;
     @FXML
     private ImageView faithMarker;
+    @FXML
+    private Text logText;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -178,38 +181,31 @@ public class MainSceneController implements Initializable {
                     GUISupport.setVisible(true, leaderCard1, leaderCard2);
 
                     if(active.get(0)){
-                        GUISupport.setVisible(true, activeCard1);
+                        GUISupport.setVisible(true, rectCard1);
 
                     }else{
-                        GUISupport.setVisible(false, activeCard1);
+                        GUISupport.setVisible(false, rectCard1);
 
                     }
 
                     if(active.get(1)){
-                        GUISupport.setVisible(true, activeCard2);
+                        GUISupport.setVisible(true, rectCard2);
 
                     }else{
-                        GUISupport.setVisible(false, activeCard2);
+                        GUISupport.setVisible(false, rectCard2);
 
                     }
-
-
                 }
                 case 1 -> {
                     leaderCard1.setImage(cards.get(0));
                     leaderCard1.setVisible(true);
                     leaderCard2.setVisible(false);
-
-                    if(active.get(0)){
-                        activeCard1.setVisible(true);
-                    }else{
-                        activeCard1.setVisible(false);
-                    }
+                    GUISupport.setVisible(active.get(0), rectCard1);
                 }
 
             }
         } else {
-            GUISupport.setVisible(false, leaderCard1, leaderCard2, activeCard1, activeCard2);
+            GUISupport.setVisible(false, leaderCard1, leaderCard2, rectCard1, rectCard2);
 
         }
 
@@ -388,10 +384,11 @@ public class MainSceneController implements Initializable {
     public void setSlots()
     {
         int slotCounter = 0;
-        int cardCounter = 0;
+        int cardCounter;
         for(Node node : cardsSlots.getChildren())
         {
             Group slot = (Group) node;
+            cardCounter=0;
             for(Node cardNode : slot.getChildren())
             {
                 boolean cardPresent = false;
@@ -405,7 +402,7 @@ public class MainSceneController implements Initializable {
                         cardPresent=true;
                     }
                 }
-                if(!cardPresent) GUISupport.setVisible(false, card);
+                GUISupport.setVisible(cardPresent, card);
                 cardCounter++;
             }
             slotCounter++;
@@ -433,5 +430,13 @@ public class MainSceneController implements Initializable {
                 case "slot3" -> setChoice(3);
             }
         });
+    }
+
+    public void addTextInLog(String text)
+    {
+        if(text!=null){
+            String previous = logText.getText();
+            logText.setText(previous+"\n"+text);
+        }
     }
 }

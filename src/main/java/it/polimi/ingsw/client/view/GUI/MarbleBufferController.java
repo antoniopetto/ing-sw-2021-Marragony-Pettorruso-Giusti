@@ -15,6 +15,7 @@ import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.text.Text;
 
 import java.net.URL;
 import java.util.ArrayList;
@@ -82,6 +83,8 @@ public class MarbleBufferController implements Initializable {
     private ImageView switchExtra1;
     @FXML
     private ImageView switchExtra2;
+    @FXML
+    private Text titleLabel;
 
 
     @Override
@@ -304,6 +307,11 @@ public class MarbleBufferController implements Initializable {
         DepotName tmpDepot = depot;
         depot = null;
         return tmpDepot;
+    }
+
+    public void changeTitle(String text)
+    {
+        titleLabel.setText(text);
     }
 
 }
