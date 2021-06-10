@@ -25,6 +25,7 @@ import javafx.stage.StageStyle;
 import java.io.IOException;
 import java.net.Socket;
 
+import java.net.URL;
 import java.util.List;
 import java.util.Map;
 
@@ -227,8 +228,13 @@ public class GUIView extends Application implements View  {
             mainSceneController.setDecks();
             mainSceneController.setWarehouse();
             mainSceneController.setSlots();
+            mainSceneController.setFaithTrack();
         }
-
+        if(action.equals(Action.END_TURN)){
+            mainSceneController.setDecks();
+            mainSceneController.setMarketBoard();
+            mainSceneController.setFaithTrack();
+        }
         int choice = mainSceneController.getChoice();
 
         switch (choice){
@@ -243,6 +249,7 @@ public class GUIView extends Application implements View  {
                 return new DiscardLeaderCardMsg(cardId);
             }
             case 3 ->{
+                mainSceneController.disableButtons(true);
                 int buffer = mainSceneController.getBufferId();
                 boolean isRow = false;
                 if(buffer > 4 && buffer < 8 ){
@@ -305,6 +312,7 @@ public class GUIView extends Application implements View  {
                     msg = new PutResourceMsg(selectedMarble, selectedDepot);
             }
             case 2 -> {
+
                 Marble selectedMarble = selectMarble();
                 msg = new DiscardMarbleMsg(selectedMarble);
             }
@@ -324,6 +332,7 @@ public class GUIView extends Application implements View  {
         marbleBufferController.setSimpleModel(game);
         marbleBufferController.show(false,true,false);
         marbleBufferController.setSwitchButton(true);
+        marbleBufferController.changeTitle("Please select two depots to change");
 
         Platform.runLater(() ->{
             manageStage(tmpStage, scene, "Select Marble1", false);
@@ -375,7 +384,7 @@ public class GUIView extends Application implements View  {
         Scene scene = loadScene(currentLoader);
         MarbleBufferController marbleBufferController = currentLoader.getController();
         marbleBufferController.setSimpleModel(game);
-
+        marbleBufferController.changeTitle("Please select the marble");
         if((marbleCounter ==0 && !game.getThisPlayer().getUsername().equals(game.getPlayers().get(0).getUsername()))
                 || (marbleCounter == 1 && game.getPlayers().size() == 4 && game.getThisPlayer().getUsername().equals(game.getPlayers().get(3).getUsername()))){
             Platform.runLater(() -> {
@@ -411,6 +420,7 @@ public class GUIView extends Application implements View  {
         MarbleBufferController marbleBufferController = currentLoader.getController();
         marbleBufferController.show(false, true, false);
         marbleBufferController.manageButton(false);
+        marbleBufferController.changeTitle("Please select where to put the resource");
         DepotName depot = marbleBufferController.getDepot();
         return depot;
     }
@@ -434,7 +444,10 @@ public class GUIView extends Application implements View  {
 
     @Override
     public void showTextMessage(String text) {
-
+        //URL path = getClass().getResource("/mainScene.fxml");
+        if(mainSceneController!=null){
+            mainSceneController.addTextInLog(text);
+        }
     }
 
 
