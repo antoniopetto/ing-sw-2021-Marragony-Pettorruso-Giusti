@@ -1,10 +1,9 @@
 package it.polimi.ingsw.client.view.GUI;
 
-import it.polimi.ingsw.client.simplemodel.SimpleAbility;
-import it.polimi.ingsw.client.simplemodel.SimpleLeaderCard;
-import it.polimi.ingsw.client.simplemodel.SimpleModel;
+import it.polimi.ingsw.client.simplemodel.*;
 import it.polimi.ingsw.server.model.playerboard.DepotName;
 import it.polimi.ingsw.server.model.playerboard.Resource;
+import it.polimi.ingsw.server.model.playerboard.WareHouse;
 import it.polimi.ingsw.server.model.shared.Marble;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
@@ -104,7 +103,6 @@ public class MarbleBufferController implements Initializable {
 
     }
 
-
     @FXML
     public void selectMarble(MouseEvent mouseEvent) {
         mouseEvent.consume();
@@ -137,17 +135,15 @@ public class MarbleBufferController implements Initializable {
     }
 
     private void setDepotResources() {
-        int quantity;
         GUISupport.setVisible(false, resourceHigh, resourceSXMed, resourceDXMed, resourceSXLow, resourceCLow, resourceDXLow);
 
-        quantity = GUISupport.quantityOfResources(simpleModel.getThisPlayer().getWarehouse().getDepots().get(DepotName.HIGH));
+        int quantity = simpleModel.getThisPlayer().getWarehouse().getDepot(DepotName.HIGH).getQuantity();
         GUISupport.settingImageView(quantity, resourceHigh);
 
-        quantity = GUISupport.quantityOfResources(simpleModel.getThisPlayer().getWarehouse().getDepots().get(DepotName.MEDIUM));
+        quantity = simpleModel.getThisPlayer().getWarehouse().getDepot(DepotName.MEDIUM).getQuantity();
         GUISupport.settingImageView(quantity, resourceSXMed, resourceDXMed);
 
-
-        quantity = GUISupport.quantityOfResources(simpleModel.getThisPlayer().getWarehouse().getDepots().get(DepotName.LOW));
+        quantity = simpleModel.getThisPlayer().getWarehouse().getDepot(DepotName.LOW).getQuantity();
         GUISupport.settingImageView(quantity, resourceSXLow, resourceCLow, resourceDXLow);
 
 //TODO: print resources in ExtraDepot

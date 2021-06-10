@@ -107,8 +107,8 @@ public class DevelopmentCardDecks implements Serializable {
     }
 
     /**
-     * @return the ids of the cards in the decks. The first index is the color (0-Green,
-     * 1-Blue, 2-Yellow, 3-Purple), the second is the level and the third is the position of the card in the deck.
+     * @return the ids of the cards in the decks. The first index is the color,
+     * the second is the level and the third is the position of the card in the deck.
      */
     public int[][][] getDevCardIds() {
 

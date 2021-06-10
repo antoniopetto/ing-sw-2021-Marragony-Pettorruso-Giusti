@@ -74,7 +74,7 @@ public class SoloRival extends AbstractPlayer {
 
     @Override
     public String getUsername() {
-        return null;
+        return "Lorenzo il Magnifico";
     }
 
     public SoloActionToken getLastPlayedToken() {

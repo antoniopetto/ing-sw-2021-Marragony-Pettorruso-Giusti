@@ -1,5 +1,6 @@
 package it.polimi.ingsw.server.model.playerboard;
 
+import it.polimi.ingsw.client.simplemodel.SimpleDepot;
 import it.polimi.ingsw.client.simplemodel.SimpleWarehouse;
 import it.polimi.ingsw.server.VirtualView;
 
@@ -37,10 +38,9 @@ public class WareHouse implements Serializable {
 
     public SimpleWarehouse getSimple(){
 
-        Map<DepotName, Map<Resource, Integer>> content = new LinkedHashMap<>();
+        List<SimpleDepot> content = new ArrayList<>();
         for (Depot depot : depotList)
-            if(depot.getResource() != null && depot.getQuantity() != 0)
-                content.put(depot.getName(), Map.of(depot.getResource(), depot.getQuantity()));
+            content.add(depot.getSimple());
 
         return new SimpleWarehouse(content);
     }
@@ -62,8 +62,8 @@ public class WareHouse implements Serializable {
         else if(depotList.size() == 4)
             depotList.add(new Depot(DepotName.SECOND_EXTRA, capacity, constraint));
         else throw new IllegalArgumentException("Trying to add too many extraDepots");
-        if(virtualView !=null)
-            virtualView.warehouseUpdate();
+
+        virtualView.warehouseUpdate();
     }
 
     /**

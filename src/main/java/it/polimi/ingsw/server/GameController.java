@@ -243,7 +243,7 @@ public class GameController implements Serializable {
             return;
 
         marbleBuffer.remove(listId);
-        faithTrack.advanceAllBut(playing);
+        advanceAllBut(playing);
         virtualView.bufferUpdate(marble);
         if (marbleBuffer.size() == 0)
             state = State.POSTTURN;
@@ -284,12 +284,12 @@ public class GameController implements Serializable {
      */
     public void activateProduction(Set<Integer> selectedCardIds, Map<Integer, ProductionPower> selectedExtraPowers){
 
-        if (invalidState(null, State.PRETURN))
+        if (invalidState(!selectedCardIds.isEmpty() || !selectedExtraPowers.isEmpty(), State.PRETURN))
             return;
         try {
             int steps = playing.activateProduction(selectedCardIds, selectedExtraPowers);
             for (int i = 0; i < steps; i++)
-                faithTrack.advance(playing);
+                advance(playing);
             state = State.POSTTURN;
         } catch (IllegalArgumentException e){
             virtualView.sendError(e.getMessage());
@@ -430,24 +430,15 @@ public class GameController implements Serializable {
 
     public Map<String, Integer> getLeaderboard(){
         List<Map.Entry<String, Integer>> pointsList = new ArrayList<>();
+        players.forEach(i -> pointsList.add(new AbstractMap.SimpleEntry<>(i.getUsername(), i.countPoints())));
+        pointsList.sort(Collections.reverseOrder(Map.Entry.comparingByValue()));
         Map<String, Integer> leaderboard = new LinkedHashMap<>();
-        for (Player player : players)
-            pointsList.add(new AbstractMap.SimpleEntry<>(player.getUsername(), player.countPoints()));
-        Collections.reverse(pointsList);
-        pointsList.sort(Map.Entry.comparingByValue());
-        for (Map.Entry<String, Integer> entry : pointsList)
-            leaderboard.put(entry.getKey(), entry.getValue());
+        pointsList.forEach(i -> leaderboard.put(i.getKey(), i.getValue()));
         return leaderboard;
     }
 
     public boolean isSinglePlayer(){
         return singlePlayer;
-    }
-
-    public void advance(AbstractPlayer player){
-        faithTrack.advance(player);
-        if (faithTrack.someoneFinished())
-            lastRound = true;
     }
 
     public SimpleModel getSimple(String requirerName){
@@ -464,12 +455,23 @@ public class GameController implements Serializable {
         game.setSpareMarble(marketBoard.getSpareMarble());
         game.setDevCardDecks(getDevelopmentCardDecks().getDevCardIds());
 
+        if (soloRival != null)
+            game.setRivalPosition(soloRival.getPosition().getNumber());
+
         return game;
     }
 
-    private boolean invalidState(Boolean condition, State... validStates){
+    public void advance (AbstractPlayer player){
+        lastRound = faithTrack.advance(player);
+    }
 
-        if (condition == null || condition) {
+    public void advanceAllBut (AbstractPlayer player){
+        lastRound = faithTrack.advanceAllBut(player);
+    }
+
+    private boolean invalidState(Boolean validCondition, State... validStates){
+
+        if (validCondition == null || validCondition) {
             if (validStates == null)
                 return false;
             for (State valid : validStates)

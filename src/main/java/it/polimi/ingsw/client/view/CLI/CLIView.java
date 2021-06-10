@@ -16,6 +16,7 @@ import org.apache.logging.log4j.ThreadContext;
 import java.io.IOException;
 import java.net.Socket;
 import java.util.*;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class CLIView implements View {
@@ -155,7 +156,7 @@ public class CLIView implements View {
      */
     public int getNumberOfPlayers(){
         int choice = askNumber("Insert the number of players for your game", 1, 4);
-        System.out.println(Graphics.ANSI_BLUE+"Waiting for other players to join the game..."+Graphics.ANSI_RESET);
+        showTextMessage("Waiting for other players to join the game...");
         return choice;
     }
 
@@ -166,7 +167,7 @@ public class CLIView implements View {
     @Override
     public void showTitle() {
         System.out.println(Graphics.ANSI_GREEN+Graphics.TITLE+Graphics.ANSI_RESET);
-        System.out.println(Graphics.ANSI_BLUE+"Game started"+Graphics.ANSI_RESET);
+        showTextMessage("Game started");
         System.out.println(Graphics.ANSI_YELLOW+"Rules: "+ "https://tinyurl.com/mor-rules"+Graphics.ANSI_RESET);
         showLegend();
     }
@@ -271,10 +272,10 @@ public class CLIView implements View {
     public DepotName selectDepot(){
 
         showWarehouse(getThisPlayer());
-        Map<DepotName, Map<Resource, Integer>> depots = getThisPlayer().getWarehouse().getDepots();
+        List<SimpleDepot> depots = getThisPlayer().getWarehouse().getDepots();
 
         int intChoice = askChoice("Choose a depot in which to place the resource:",
-                depots.keySet().stream().map(Enum::name).toArray(String[]::new));
+                depots.stream().map(i -> i.getName().toString()).toArray(String[]::new));
         DepotName choice;
         if (intChoice == 1)         choice = DepotName.HIGH;
         else if (intChoice == 2)    choice = DepotName.MEDIUM;
@@ -401,13 +402,13 @@ public class CLIView implements View {
 
         if(player == null) throw new IllegalStateException();
         showWarehouse(player);
-        System.out.println(Graphics.ANSI_BLUE+"Strongbox:"+Graphics.ANSI_RESET);
+        showTextMessage("Strongbox:");
         System.out.println("----------------");
         showResources(player.getStrongbox());
         System.out.println("----------------");
-        System.out.println(Graphics.ANSI_BLUE+"Leader cards:"+Graphics.ANSI_RESET);
+        showTextMessage("Leader cards:");
         printLeaderCards(player);
-        System.out.println(Graphics.ANSI_BLUE+"Slots:"+Graphics.ANSI_RESET);
+        showTextMessage("Slots:");
         List<SimpleSlot> slots = player.getSlots();
         for (int i = 0; i < slots.size(); i++) {
             System.out.println("Slot "+ (i+1) +":");
@@ -428,6 +429,8 @@ public class CLIView implements View {
             }
             System.out.println(Graphics.ANSI_RESET);
         }
+        if (game.getRivalPosition() != null)
+            System.out.println("Lorenzo il Magnifico position: " + game.getRivalPosition());
         Graphics.showPositions();
     }
 
@@ -443,13 +446,14 @@ public class CLIView implements View {
     }
 
     public void showWarehouse(SimplePlayer player) {
-        SimpleWarehouse warehouse = player.getWarehouse();
-        System.out.println(player.getUsername() + " warehouse");
-        DepotName depot;
-        for (DepotName depotName : warehouse.getDepots().keySet()) {
-            depot = depotName;
-            System.out.println(depot.toString());
-            showResources(warehouse.getDepots().get(depot));
+
+        showTextMessage(player.getUsername() + " warehouse");
+
+        for (SimpleDepot depot : player.getWarehouse().getDepots()) {
+            System.out.print(depot.getName());
+            System.out.println((depot.getConstraint() != null) ? ("(" + Graphics.getResource(depot.getConstraint()) + ")") : "");
+            if (depot.getResource() != null && depot.getQuantity() != 0)
+                showResources(Map.of(depot.getResource(), depot.getQuantity()));
             System.out.println("____________");
         }
     }
@@ -520,29 +524,51 @@ public class CLIView implements View {
         if (selectedCardIds == null || selectedExtraPowers == null)
             throw new IllegalArgumentException();
 
-        int choice = askChoice("Select action:", "Select development card", "Select special production power", "Reset", "Confirm", "Back...");
+        int choice = askChoice("Select action:", "Select development card", "Select special production power", "Show selected", "Reset", "Confirm", "Back...");
 
         if (choice == 1) {
-            selectDevCard().map(selectedCardIds::add);
+            selectDevCard(selectedCardIds).map(selectedCardIds::add);
             return activateProduction(selectedCardIds, selectedExtraPowers);
         }
         else if (choice == 2){
-            Map.Entry<Integer, ProductionPower> extraPower = selectExtraPower();
-            selectedExtraPowers.put(extraPower.getKey(), extraPower.getValue());
+            selectExtraPower(selectedExtraPowers).map(i -> selectedExtraPowers.put(i.getKey(), i.getValue()));
             return activateProduction(selectedCardIds, selectedExtraPowers);
         }
-        else if (choice == 3)
-            return activateProduction(new HashSet<>(), new HashMap<>());
+        else if (choice == 3){
+            showProductionSelection(selectedCardIds, selectedExtraPowers);
+            return activateProduction(selectedCardIds, selectedExtraPowers);
+        }
         else if (choice == 4)
-            return new ActivateProductionMsg(selectedCardIds, selectedExtraPowers);
+            return activateProduction(new HashSet<>(), new HashMap<>());
+        else if (choice == 5)
+            if (!selectedCardIds.isEmpty() || !selectedExtraPowers.isEmpty())
+                return new ActivateProductionMsg(selectedCardIds, selectedExtraPowers);
+            else return activateProduction(selectedCardIds, selectedExtraPowers);
 
         return selectMove(false);
     }
 
-    private Optional<Integer> selectDevCard() {
+    private void showProductionSelection(Set<Integer> selectedCardIds, Map<Integer, ProductionPower> selectedExtraPowers){
+        System.out.println("Selected development cards:");
+        for (Integer i : selectedCardIds)
+            showDevCard(SimpleDevCard.parse(i));
+        System.out.println("Selected extra powers:");
+        for (Integer i : selectedExtraPowers.keySet()) {
+            Map<Resource, Integer> totalInput = new HashMap<>();
+            Map<Resource, Integer> totalOutput = new HashMap<>();
+            getThisPlayer().getExtraProductionPowers().get(i).getInput().forEach(totalInput::put);
+            getThisPlayer().getExtraProductionPowers().get(i).getOutput().forEach(totalOutput::put);
+            selectedExtraPowers.get(i).getInput().forEach((k, v) -> totalInput.merge(k, v, Integer::sum));
+            selectedExtraPowers.get(i).getOutput().forEach((k, v) -> totalOutput.merge(k, v, Integer::sum));
+            showRealProductionPower(new ProductionPower(totalInput, totalOutput));
+        }
+    }
+
+    private Optional<Integer> selectDevCard(Set<Integer> selectedCardIds) {
 
         SimpleDevCard[] availableCards = getThisPlayer().getSlots().stream()
-                .map(SimpleSlot::getLastCard).flatMap(Optional::stream).toArray(SimpleDevCard[]::new);
+                .map(SimpleSlot::getLastCard).flatMap(Optional::stream)
+                .filter(i -> !selectedCardIds.contains(i.getId())).toArray(SimpleDevCard[]::new);
         if (availableCards.length == 0){
             showErrorMessage("No available cards");
             return Optional.empty();
@@ -557,12 +583,17 @@ public class CLIView implements View {
         return Optional.of(availableCards[choice - 1].getId());
     }
 
-    private Map.Entry<Integer, ProductionPower> selectExtraPower() {
+    private Optional<Map.Entry<Integer, ProductionPower>> selectExtraPower(Map<Integer, ProductionPower> selectedExtraPowers) {
 
         System.out.println("Available extra powers:");
-        List<ProductionPower> availablePowers = getThisPlayer().getExtraProductionPowers();
-        if (availablePowers.size() == 0)
-            throw new IllegalStateException();
+        List<ProductionPower> extraPowers = getThisPlayer().getExtraProductionPowers();
+        List<ProductionPower> availablePowers = extraPowers.stream()
+                .filter(i -> !selectedExtraPowers.containsKey(extraPowers.indexOf(i))).collect(Collectors.toList());
+
+        if (availablePowers.size() == 0) {
+            showErrorMessage("No available extra powers");
+            return Optional.empty();
+        }
 
         for (int i = 0; i < availablePowers.size(); i++){
             System.out.println(i + 1 + ")");
@@ -570,8 +601,8 @@ public class CLIView implements View {
         }
         int choice = askNumber("Select power",1, availablePowers.size());
         ProductionPower chosenPower = availablePowers.get(choice - 1);
-        Map<Resource, Integer> realInput = new HashMap<>(chosenPower.getInput());
-        Map<Resource, Integer> realOutput = new HashMap<>(chosenPower.getOutput());
+        Map<Resource, Integer> realInput = new HashMap<>();
+        Map<Resource, Integer> realOutput = new HashMap<>();
         for (int i = 0; i < chosenPower.getAgnosticInput(); i++){
             Resource inputChoice = Resource.valueOf(askChoiceValue("Choose an input resource:", "COIN", "SERVANT", "SHIELD", "STONE"));
             if (!realInput.containsKey(inputChoice))
@@ -586,21 +617,23 @@ public class CLIView implements View {
             else
                 realOutput.put(outputChoice, realInput.get(outputChoice) + 1);
         }
-        return new AbstractMap.SimpleEntry<>(choice - 1, new ProductionPower(realInput, realOutput));
+        return Optional.of(new AbstractMap.SimpleEntry<>(extraPowers.indexOf(chosenPower), new ProductionPower(realInput, realOutput)));
     }
 
     private void showRealProductionPower(ProductionPower power){
 
-        System.out.println(" Input:");
-        System.out.print(power.getAgnosticInput() + " ?");
+        System.out.print(" Input: ");
+        if (power.getAgnosticInput() != 0)
+            System.out.print(power.getAgnosticInput() + "?");
         for (Map.Entry<Resource, Integer> entry : power.getInput().entrySet())
-            System.out.print(", " + entry.getValue() + Graphics.getResource(entry.getKey()));
+            System.out.print(" " + entry.getValue() + Graphics.getResource(entry.getKey()));
         System.out.println();
 
-        System.out.println(" Output:");
-        System.out.print(power.getAgnosticOutput() + " ?");
+        System.out.print(" Output: ");
+        if (power.getAgnosticOutput() != 0)
+            System.out.print(power.getAgnosticOutput() + "?");
         for (Map.Entry<Resource, Integer> entry : power.getOutput().entrySet())
-            System.out.print(", " + entry.getValue() + Graphics.getResource(entry.getKey()));
+            System.out.print(" " + entry.getValue() + Graphics.getResource(entry.getKey()));
         System.out.println();
         System.out.println();
     }
@@ -622,8 +655,10 @@ public class CLIView implements View {
     public void showLeaderboard(Map<String, Integer> leaderboard) {
         System.out.println("Leaderboard:");
         int count = 1;
-        for (String username : leaderboard.keySet())
-            System.out.println(count + ")" + username + " [" + leaderboard.get(username) + "]");
+        for (String username : leaderboard.keySet()) {
+            System.out.println(count + ") " + username + " [" + leaderboard.get(username) + "]");
+            count++;
+        }
     }
 
     public void showDevCard(SimpleDevCard card) {

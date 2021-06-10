@@ -1,5 +1,3 @@
-*.ser
-
 # TEMPLATE GITIGNORE
 # Prova Finale Ing.Sw. 2020/21
 
@@ -217,3 +215,6 @@ $RECYCLE.BIN/
 # http://www.sonarlint.org/commandline/
 # SonarLint working directories, configuration files (including credentials)
 .sonarlint/
+
+*.log.gz
+*.ser

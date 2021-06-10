@@ -7,8 +7,8 @@ import it.polimi.ingsw.server.model.playerboard.Resource;
 import java.util.Map;
 
 public class StrongBoxUpdateMsg implements UpdateMsg{
-    private Map<Resource, Integer> strongbox;
-    private String username;
+    private final Map<Resource, Integer> strongbox;
+    private final String username;
 
     public StrongBoxUpdateMsg(Map<Resource, Integer> strongbox, String player) {
         this.strongbox = strongbox;

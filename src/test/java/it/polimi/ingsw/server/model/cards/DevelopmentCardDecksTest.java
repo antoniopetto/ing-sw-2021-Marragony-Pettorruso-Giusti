@@ -62,8 +62,7 @@ public class DevelopmentCardDecksTest {
         try {
             DevelopmentCardDecks decks2 = new DevelopmentCardDecks(cards);
             fail();
-        }catch (IllegalStateException e)
-        {
+        }catch (IllegalStateException e) {
             assertTrue(true);
         }
     }
@@ -73,28 +72,23 @@ public class DevelopmentCardDecksTest {
         DevelopmentCard card = decks.drawCard(CardColor.YELLOW, 3);
         assertEquals(6, card.getId());
         //tries to draw a card of level 4, which is impossible
-        try
-        {
+        try {
             decks.drawCard(CardColor.BLUE, 4);
             fail();
-        }catch(IllegalArgumentException e)
-        {
+        }catch(IllegalArgumentException e) {
             assertTrue(true);
         }
         //tries to draw a card from an empty deck
-        try
-        {
+        try {
             decks.drawCard(CardColor.YELLOW, 3);
             fail();
-        }catch (EmptyStackException e)
-        {
+        }catch (EmptyStackException e) {
             assertTrue(true);
         }
     }
 
     @Test
-    public void readTopTest()
-    {
+    public void readTopTest() {
         DevelopmentCard card = decks.readTop(CardColor.PURPLE, 2);
         assertEquals(8, card.getId());
         //checks if the card has been removed from the deck after readTop
@@ -118,12 +112,10 @@ public class DevelopmentCardDecksTest {
     public void deckSizeTest()
     {
         //tries to get the size of a deck of level 4 (impossible)
-        try
-        {
+        try {
             decks.deckSize(CardColor.PURPLE, 4);
             fail();
-        }catch (IllegalArgumentException e)
-        {
+        }catch (IllegalArgumentException e) {
             assertTrue(true);
         }
         //checks correctness of the method

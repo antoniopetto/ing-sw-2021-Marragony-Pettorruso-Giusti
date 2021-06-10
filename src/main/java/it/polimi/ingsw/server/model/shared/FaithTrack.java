@@ -55,12 +55,21 @@ public class FaithTrack implements Serializable {
     }
 
     public void addPlayers(List<? extends AbstractPlayer> players){
+
         this.players.addAll(players);
         for (int i = 0; i < players.size(); i++)
             if (i < 2)
                 this.players.get(i).setPosition(track.get(0));
             else
                 this.players.get(i).setPosition(track.get(1));
+
+        // endgame tester
+        /*this.players.addAll(players);
+        for (int i = 0; i < players.size(); i++)
+            if (i < 2)
+                this.players.get(i).setPosition(track.get(20));
+            else
+                this.players.get(i).setPosition(track.get(21));*/
     }
 
     /**
@@ -96,7 +105,7 @@ public class FaithTrack implements Serializable {
      *
      * @param player        The player that is advancing
      */
-    public void advance(AbstractPlayer player){
+    public boolean advance(AbstractPlayer player){
 
         Position currentPos = player.getPosition();
         int currentIndex = track.indexOf(currentPos);
@@ -108,6 +117,7 @@ public class FaithTrack implements Serializable {
         }
 
         virtualView.faithTrackUpdate();
+        return someoneFinished();
     }
 
     /**
@@ -116,7 +126,7 @@ public class FaithTrack implements Serializable {
      *
      * @param excludedPlayer        The player that is not advancing
      */
-    public void advanceAllBut(AbstractPlayer excludedPlayer){
+    public boolean advanceAllBut(AbstractPlayer excludedPlayer){
 
         boolean isVaticanReportDue = false;
 
@@ -135,6 +145,7 @@ public class FaithTrack implements Serializable {
             vaticanReport();
 
         virtualView.faithTrackUpdate();
+        return someoneFinished();
     }
 
     public boolean someoneFinished(){
@@ -147,5 +158,4 @@ public class FaithTrack implements Serializable {
     public List<AbstractPlayer> getPlayers() {
         return new ArrayList<>(players);
     }
-
 }

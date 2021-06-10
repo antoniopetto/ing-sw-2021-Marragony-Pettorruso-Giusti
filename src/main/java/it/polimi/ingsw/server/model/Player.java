@@ -25,6 +25,7 @@ public class Player extends AbstractPlayer {
     private final List<LeaderCard> leaderCardList = new ArrayList<>();
     private final PlayerBoard playerBoard;
 
+
     /**
      * <code>Player</code> constructor.
      * Gives the player three <code>PopeFavourTile</code>, of value 2, 3 and 4 respectively.
@@ -244,8 +245,8 @@ public class Player extends AbstractPlayer {
      *
      * @param selectedExtraPowers               A <code>Map</code> linking <code>id</code> and desired composition of a special <code>ProductionPower</code>.
      *                                          The <code>Map</code> stores an <code>Integer</code> representing the <code>id</code>,
-     *                                          and a <code>ProductionPower</code> that contains the same fixed <code>Resources</code>
-     *                                          of the corresponding power, plus the agnostic <code>Resource</code>s converted in concrete ones.
+     *                                          and a <code>ProductionPower</code> the agnostic <code>Resource</code>s
+     *                                          converted in concrete ones.
      *
      * @return                                  The number of positions to advance
      * @see ProductionPower
@@ -263,7 +264,7 @@ public class Player extends AbstractPlayer {
             throw new IllegalArgumentException("Cannot activate production");
         }
         int faithCounter = 0;
-        for(Resource r: totalProductionPower.getOutput().keySet()) {
+        for(Resource r : totalProductionPower.getOutput().keySet()) {
             if (r == Resource.FAITH)
                 faithCounter ++;
             else

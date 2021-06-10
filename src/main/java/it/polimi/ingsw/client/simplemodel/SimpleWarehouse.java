@@ -4,29 +4,35 @@ import it.polimi.ingsw.server.model.playerboard.DepotName;
 import it.polimi.ingsw.server.model.playerboard.Resource;
 
 import java.io.Serializable;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.Map;
+import java.util.*;
 
 public class SimpleWarehouse implements Serializable {
 
-    //TODO wrong type for depot representation (a depot could contain different resources)
-    private Map<DepotName, Map<Resource, Integer>> depots = new LinkedHashMap<>();
+    private final List<SimpleDepot> depots;
 
     public SimpleWarehouse() {
-        depots.put(DepotName.HIGH, null);
-        depots.put(DepotName.MEDIUM, null);
-        depots.put(DepotName.LOW, null);
+        depots = new ArrayList<>();
+        depots.add(new SimpleDepot(DepotName.HIGH, 1, null, null, 0));
+        depots.add(new SimpleDepot(DepotName.MEDIUM, 2, null, null, 0));
+        depots.add(new SimpleDepot(DepotName.LOW, 3, null, null, 0));
     }
 
-    public SimpleWarehouse(Map<DepotName, Map<Resource, Integer>> content) {
-        this();
-        for (DepotName depotName : content.keySet()){
-            depots.replace(depotName, content.get(depotName));
-        }
+    public SimpleWarehouse(List<SimpleDepot> depots) {
+        this.depots = new ArrayList<>(depots);
     }
 
-    public Map<DepotName, Map<Resource, Integer>> getDepots() {
+    public List<SimpleDepot> getDepots() {
         return depots;
+    }
+
+    public SimpleDepot getDepot(DepotName name){
+        return depots.stream().filter(i -> i.getName() == name).findFirst().orElse(null);
+    }
+
+    @Override
+    public String toString() {
+        return "SimpleWarehouse{" +
+                "depots=" + depots +
+                '}';
     }
 }

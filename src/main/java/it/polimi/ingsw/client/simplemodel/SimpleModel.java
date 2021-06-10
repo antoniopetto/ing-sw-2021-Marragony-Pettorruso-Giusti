@@ -7,6 +7,8 @@ import java.io.Serializable;
 import java.util.*;
 
 public class SimpleModel implements Serializable {
+
+    private Integer rivalPosition;
     private List<SimplePlayer> players;
     private SimplePlayer thisPlayer;
     private List<Marble> marbleBuffer;
@@ -32,9 +34,12 @@ public class SimpleModel implements Serializable {
 
     public void updateDevCardDecks(int level, CardColor cardColor){
         for(int i = 0; i < 4; i++) {
-            if(devCardDecks[i][level - 1][0] != null && devCardDecks[i][level - 1][0].getColor().equals(cardColor)){
-                int size = devCardDecks[i][level - 1].length;
-                devCardDecks[i][level - 1][size-1] = null;
+            if(devCardDecks[i][level - 1][0] != null && devCardDecks[i][level - 1][0].getColor() == cardColor){
+                for (int j = 3; j >= 0; j--)
+                    if (devCardDecks[i][level - 1][j] != null){
+                        devCardDecks[i][level - 1][j] = null;
+                        return;
+                    }
             }
         }
     }
@@ -68,6 +73,14 @@ public class SimpleModel implements Serializable {
 
     public Marble getSpareMarble() {
         return spareMarble;
+    }
+
+    public void setRivalPosition(Integer rivalPosition){
+        this.rivalPosition = rivalPosition;
+    }
+
+    public Integer getRivalPosition(){
+        return rivalPosition;
     }
 
     public void setDevCardDecks(int[][][] devCardIds){

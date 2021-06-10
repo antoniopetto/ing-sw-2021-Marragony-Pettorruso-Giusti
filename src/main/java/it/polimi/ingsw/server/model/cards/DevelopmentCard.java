@@ -53,8 +53,9 @@ public class DevelopmentCard extends Card{
         List<ResourceRequirement> discounted = new ArrayList<>();
         for (ResourceRequirement req : requirements){
             Resource res = req.getResource();
-            int qty = req.getQuantity();
-            discounted.add(new ResourceRequirement(res, qty - (discounts.contains(res) ? 1 : 0)));
+            int qty = req.getQuantity() - (discounts.contains(res) ? 1 : 0);
+            if (qty > 0)
+                discounted.add(new ResourceRequirement(res, qty));
         }
         return discounted;
     }

@@ -10,8 +10,8 @@ import java.util.Map;
 
 public class WarehouseUpdateMsg implements UpdateMsg {
 
-    private SimpleWarehouse warehouse;
-    private String username;
+    private final SimpleWarehouse warehouse;
+    private final String username;
 
     public WarehouseUpdateMsg(SimpleWarehouse warehouse, String username) {
         this.warehouse = warehouse;

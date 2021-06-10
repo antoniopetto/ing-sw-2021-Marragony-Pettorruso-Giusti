@@ -1,5 +1,6 @@
 package it.polimi.ingsw.client.view.GUI;
 
+import it.polimi.ingsw.client.simplemodel.SimpleDepot;
 import it.polimi.ingsw.client.simplemodel.SimpleDevCard;
 import it.polimi.ingsw.client.simplemodel.SimpleLeaderCard;
 import it.polimi.ingsw.client.simplemodel.SimpleModel;
@@ -20,6 +21,7 @@ import javafx.scene.shape.Rectangle;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.ResourceBundle;
 
 public class MainSceneController implements Initializable {
@@ -371,22 +373,19 @@ public class MainSceneController implements Initializable {
     }
 
     public void setWarehouse(){
-        int quantity;
         GUISupport.setVisible(false, resourceHigh, resourceSXMed, resourceDXMed, resourceSXLow, resourceCLow, resourceDXLow);
 
-        quantity = GUISupport.quantityOfResources(simpleModel.getThisPlayer().getWarehouse().getDepots().get(DepotName.HIGH));
+        int quantity = simpleModel.getThisPlayer().getWarehouse().getDepot(DepotName.HIGH).getQuantity();
         GUISupport.settingImageView(quantity, resourceHigh);
 
-        quantity = GUISupport.quantityOfResources(simpleModel.getThisPlayer().getWarehouse().getDepots().get(DepotName.MEDIUM));
+        quantity = simpleModel.getThisPlayer().getWarehouse().getDepot(DepotName.MEDIUM).getQuantity();
         GUISupport.settingImageView(quantity, resourceSXMed, resourceDXMed);
 
-
-        quantity = GUISupport.quantityOfResources(simpleModel.getThisPlayer().getWarehouse().getDepots().get(DepotName.LOW));
+        quantity = simpleModel.getThisPlayer().getWarehouse().getDepot(DepotName.LOW).getQuantity();
         GUISupport.settingImageView(quantity, resourceSXLow, resourceCLow, resourceDXLow);
     }
 
-    public void setSlots()
-    {
+    public void setSlots() {
         int slotCounter = 0;
         int cardCounter = 0;
         for(Node node : cardsSlots.getChildren())

@@ -63,7 +63,7 @@ public class Server {
 
     public static void logOut(String username){
         if (username != null){
-            Server.logger.info("Logging out " + username);
+            Server.logger.info("Logging out [" + username + "]");
             activeUsernames.remove(username);
         }
     }

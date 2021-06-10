@@ -18,6 +18,8 @@ public class TrackUpdateMsg implements UpdateMsg {
         for (SimplePlayer simplePlayer : model.getPlayers()) {
             simplePlayer.setPosition(positions.get(simplePlayer.getUsername()));
         }
+        if (positions.containsKey("Lorenzo il Magnifico"))
+            model.setRivalPosition(positions.get("Lorenzo il Magnifico"));
     }
 
     @Override

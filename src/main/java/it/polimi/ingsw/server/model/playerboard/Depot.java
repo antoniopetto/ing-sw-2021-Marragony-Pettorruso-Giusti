@@ -1,5 +1,7 @@
 package it.polimi.ingsw.server.model.playerboard;
 
+import it.polimi.ingsw.client.simplemodel.SimpleDepot;
+
 import java.io.Serializable;
 
 /**
@@ -33,7 +35,6 @@ public class Depot implements Serializable {
         this.capacity = capacity;
         this.constraint = constraint;
         this.resource = constraint;
-
     }
 
     public Depot(DepotName name, int capacity){
@@ -129,5 +130,9 @@ public class Depot implements Serializable {
      */
     public boolean isFull(){
         return (capacity == quantity);
+    }
+
+    public SimpleDepot getSimple(){
+        return new SimpleDepot(name, capacity, constraint, resource, quantity);
     }
 }

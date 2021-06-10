@@ -17,6 +17,7 @@ import java.util.*;
 public class VirtualView implements Runnable{
 
     private static final String SAVES_PATH = "src/main/resources/saves/";
+    private static final File saveDir = new File(SAVES_PATH);
 
     private final File saveFile;
     private boolean exiting = false;
@@ -58,6 +59,8 @@ public class VirtualView implements Runnable{
 
     private void saveGameState(){
         try {
+            if (!saveDir.exists() && !saveDir.mkdir())
+                throw new IOException();
             if (saveFile.exists() && !saveFile.delete())
                 throw new IOException();
             ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(saveFile));
@@ -65,8 +68,7 @@ public class VirtualView implements Runnable{
             oos.close();
         }
         catch (IOException e){
-            Server.logger.error("Could not update save file. Exiting");
-            exitGame();
+            Server.logger.error("Could not update save file.");
         }
     }
 
