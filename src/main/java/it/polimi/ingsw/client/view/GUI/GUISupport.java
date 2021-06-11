@@ -121,7 +121,7 @@ public class GUISupport {
 
         if(simpleDepots != null) {
            int  quantity = simpleDepots.getQuantity();
-                resourceString = returnPath(simpleDepots.getResource().toString());
+           if(simpleDepots.getResource() !=null) resourceString = returnPath(simpleDepots.getResource().toString());
             return quantity;
         }else return 0;
 
