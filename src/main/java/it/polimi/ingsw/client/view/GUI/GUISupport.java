@@ -1,5 +1,6 @@
 package it.polimi.ingsw.client.view.GUI;
 
+import it.polimi.ingsw.client.simplemodel.SimpleDepot;
 import it.polimi.ingsw.client.simplemodel.SimplePlayer;
 import it.polimi.ingsw.server.model.playerboard.DepotName;
 import it.polimi.ingsw.server.model.playerboard.Resource;
@@ -7,6 +8,7 @@ import javafx.scene.Node;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
+import java.util.List;
 import java.util.Map;
 
 public class GUISupport {
@@ -115,15 +117,11 @@ public class GUISupport {
         }
     }
 
-    public static int quantityOfResources(Map<Resource, Integer> map){
+    public static int quantityOfResources(SimpleDepot simpleDepots){
 
-        if(map != null) {
-            int quantity = 0;
-
-            for (Resource resource1 : map.keySet()) {
-                quantity = map.get(resource1);
-                resourceString = returnPath(resource1.toString());
-            }
+        if(simpleDepots != null) {
+           int  quantity = simpleDepots.getQuantity();
+                resourceString = returnPath(simpleDepots.getResource().toString());
             return quantity;
         }else return 0;
 

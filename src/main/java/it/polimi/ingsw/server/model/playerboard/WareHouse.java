@@ -193,7 +193,7 @@ public class WareHouse implements Serializable {
                 return compareResourceType(depotToEmpty,depotToFill);
         };
 
-        if ( !depotByName(depotToFill).isEmpty()  || controlResource.apply(depotToEmpty)){
+        if ( !depotByName(depotToFill).isEmpty() || controlResource.apply(depotToEmpty)){
             fillTheOtherDepot(depotToEmpty, depotToFill);
             virtualView.warehouseUpdate();
         }

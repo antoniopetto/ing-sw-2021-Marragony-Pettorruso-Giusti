@@ -140,13 +140,13 @@ public class MarbleBufferController implements Initializable {
     private void setDepotResources() {
         GUISupport.setVisible(false, resourceHigh, resourceSXMed, resourceDXMed, resourceSXLow, resourceCLow, resourceDXLow);
 
-        int quantity = simpleModel.getThisPlayer().getWarehouse().getDepot(DepotName.HIGH).getQuantity();
+        int quantity = GUISupport.quantityOfResources(simpleModel.getThisPlayer().getWarehouse().getDepot(DepotName.HIGH));
         GUISupport.settingImageView(quantity, resourceHigh);
 
-        quantity = simpleModel.getThisPlayer().getWarehouse().getDepot(DepotName.MEDIUM).getQuantity();
+        quantity =  GUISupport.quantityOfResources(simpleModel.getThisPlayer().getWarehouse().getDepot(DepotName.MEDIUM));
         GUISupport.settingImageView(quantity, resourceSXMed, resourceDXMed);
 
-        quantity = simpleModel.getThisPlayer().getWarehouse().getDepot(DepotName.LOW).getQuantity();
+        quantity =  GUISupport.quantityOfResources(simpleModel.getThisPlayer().getWarehouse().getDepot(DepotName.LOW));
         GUISupport.settingImageView(quantity, resourceSXLow, resourceCLow, resourceDXLow);
 
 //TODO: print resources in ExtraDepot

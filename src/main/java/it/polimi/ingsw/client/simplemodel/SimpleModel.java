@@ -86,8 +86,11 @@ public class SimpleModel implements Serializable {
     public void setDevCardDecks(int[][][] devCardIds){
         for(int i=0; i<4; i++)
             for(int j=0; j<3; j++)
-                for(int k=0; k<4; k++)
-                    devCardDecks[i][j][k] = SimpleDevCard.parse(devCardIds[i][j][k]);
+                for(int k=0; k<4; k++){
+                    if(devCardIds[i][j][k] != 0) {
+                        devCardDecks[i][j][k] = SimpleDevCard.parse(devCardIds[i][j][k]);
+                    }else  devCardDecks[i][j][k] = null;
+                }
     }
 
     public List<SimpleDevCard> getDevCardDecks() {
