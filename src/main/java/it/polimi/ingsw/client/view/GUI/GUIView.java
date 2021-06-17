@@ -7,6 +7,7 @@ import it.polimi.ingsw.messages.command.BuyAndAddCardInSlotMsg;
 import it.polimi.ingsw.messages.command.DiscardLeaderCardMsg;
 import it.polimi.ingsw.messages.command.PlayLeaderCardMsg;
 import it.polimi.ingsw.messages.command.*;
+import it.polimi.ingsw.server.model.cards.ProductionPower;
 import it.polimi.ingsw.server.model.playerboard.DepotName;
 import it.polimi.ingsw.server.model.playerboard.Resource;
 import it.polimi.ingsw.server.model.shared.Marble;
@@ -26,8 +27,7 @@ import java.io.IOException;
 import java.net.Socket;
 
 import java.net.URL;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class GUIView extends Application implements View  {
 
@@ -210,6 +210,7 @@ public class GUIView extends Application implements View  {
             firstMain = false;
         }
 
+        mainSceneController.showBasePower(false);
         mainSceneController.disableButtons(false);
         mainSceneController.setActionButton(postTurn);
 
@@ -234,6 +235,13 @@ public class GUIView extends Application implements View  {
             mainSceneController.setDecks();
             mainSceneController.setMarketBoard();
             mainSceneController.setFaithTrack();
+        }
+        if(action.equals(Action.ACTIVE_PRODUCTION))
+        {
+            mainSceneController.removeEffects();
+            mainSceneController.setWarehouse();
+            mainSceneController.setFaithTrack();
+            mainSceneController.setStrongbox();
         }
         int choice = mainSceneController.getChoice();
 
@@ -263,9 +271,71 @@ public class GUIView extends Application implements View  {
                 action=Action.BUY_CARD;
                 return buyCard();
             }
+            case 5->{
+                action=Action.ACTIVE_PRODUCTION;
+                mainSceneController.showConfirmButton(true);
+                return activateProduction(new HashSet<>(), new HashMap<>());
+            }
             case 6 ->{
                 action = Action.END_TURN;
                 return new EndTurnMsg();
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Choice=1 when confirm button is pressed, choice=2 when a card is selected, choice=3 when base power is selected,
+     * choice=4 when leader card1 production power is selected, choice=5 when leader card 2 production power is selected
+     * @param selectedCardIds
+     * @param selectedExtraPowers
+     * @return
+     */
+    private CommandMsg activateProduction(Set<Integer> selectedCardIds, Map<Integer, ProductionPower> selectedExtraPowers)
+    {
+        mainSceneController.disableCardsInSlot(false);
+        int choice= mainSceneController.getChoice();
+        switch (choice)
+        {
+            case 1 -> {
+                if (!selectedCardIds.isEmpty() || !selectedExtraPowers.isEmpty()){
+                    mainSceneController.disableSlots(true);
+                    mainSceneController.showConfirmButton(false);
+                    return new ActivateProductionMsg(selectedCardIds, selectedExtraPowers);
+                }
+                else return activateProduction(selectedCardIds, selectedExtraPowers);
+            }
+            case 2-> {
+                selectedCardIds.add(mainSceneController.getCardId());
+                return activateProduction(selectedCardIds, selectedExtraPowers);
+            }
+            case 3->{
+                setLoader("/BasePower.fxml");
+                Scene scene = loadScene(currentLoader);
+                BasePowerController controller=currentLoader.getController();
+                controller.setPower(game.getThisPlayer().getExtraProductionPowers().get(0));
+                Platform.runLater(() ->{
+                    if(tmpStage == null)  tmpStage = new Stage();
+                    manageStage(tmpStage, scene, "Base Power", false);
+                });
+                Resource input1=controller.getChoice();
+                String url = "/res-marble/"+GUISupport.returnPath(input1.name());
+                controller.setResIn1(input1);
+                Map<Resource, Integer> realInput = new HashMap<>();
+                Map<Resource, Integer> realOutput = new HashMap<>();
+                realInput.put(input1, 1);
+                Resource input2 = controller.getChoice();
+                controller.setResIn2(input2);
+                if(input1.equals(input2)) realInput.put(input1, 2);
+                else realInput.put(input2, 1);
+                Resource output = controller.getChoice();
+                realOutput.put(output, 1);
+                selectedExtraPowers.put(0, new ProductionPower(realInput, realOutput));
+                Platform.runLater(()->{
+                    tmpStage.close();
+                });
+                mainSceneController.showBasePower(false);
+                return activateProduction(selectedCardIds, selectedExtraPowers);
             }
         }
         return null;

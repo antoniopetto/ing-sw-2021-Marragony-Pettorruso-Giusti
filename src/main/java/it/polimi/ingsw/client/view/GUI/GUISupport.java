@@ -5,6 +5,8 @@ import it.polimi.ingsw.client.simplemodel.SimplePlayer;
 import it.polimi.ingsw.server.model.playerboard.DepotName;
 import it.polimi.ingsw.server.model.playerboard.Resource;
 import javafx.scene.Node;
+import javafx.scene.effect.Bloom;
+import javafx.scene.effect.Effect;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
@@ -115,6 +117,13 @@ public class GUISupport {
             resources[i].setImage(new Image(path + resourceString));
             resources[i].setVisible(true);
         }
+    }
+
+    public static void setEffect(boolean active, Node element)
+    {
+        Bloom bloom=new Bloom();
+        if(active)element.setEffect(bloom);
+        else element.setEffect(null);
     }
 
     public static int quantityOfResources(SimpleDepot simpleDepots){

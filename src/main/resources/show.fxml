@@ -14,7 +14,7 @@
 
 <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="548.0" prefWidth="865.0" styleClass="maingrid" stylesheets="@background.css" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.client.view.GUI.ShowController">
    <children>
-      <ImageView fitHeight="467.0" fitWidth="665.0" layoutY="81.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fitHeight="467.0" fitWidth="665.0" layoutY="76.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@PlayerBoard.jpg" />
          </image>
@@ -108,7 +108,7 @@
             </Group>
          </children>
       </Group>
-      <ImageView fitHeight="52.0" fitWidth="47.0" layoutX="48.0" layoutY="161.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fitHeight="52.0" fitWidth="47.0" layoutX="86.0" layoutY="161.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@res-marbles/faith.png" />
          </image>
