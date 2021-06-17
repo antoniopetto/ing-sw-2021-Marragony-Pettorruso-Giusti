@@ -72,9 +72,8 @@ public class GUISupport {
             node.setDisable(disable);
     }
 
-    public static void setFaithTrack(SimplePlayer player, ImageView faithMarker)
+    public static void setFaithTrack(int position, ImageView faithMarker)
     {
-        int position = player.getPosition();
         if(position<3){
             faithMarker.setLayoutX(-55+(position*38));}
         else if(position<5){

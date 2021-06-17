@@ -82,7 +82,8 @@ public class MainSceneController implements Initializable {
     private Button confirmSelectionButton;
     @FXML
     private GridPane decks;
-
+    @FXML
+    private TitledPane showOthers;
     @FXML
     private Group slots;
     @FXML
@@ -110,6 +111,8 @@ public class MainSceneController implements Initializable {
     private ImageView faithMarker;
     @FXML
     private Text logText;
+    @FXML
+    private ImageView blackCross;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -309,8 +312,13 @@ public class MainSceneController implements Initializable {
         }
     }
 
-    public void setFaithTrack(){GUISupport.setFaithTrack(simpleModel.getThisPlayer(), faithMarker);}
+    public void setFaithTrack(){GUISupport.setFaithTrack(simpleModel.getThisPlayer().getPosition(), faithMarker);}
+    public void setRival(){GUISupport.setFaithTrack(simpleModel.getRivalPosition(), blackCross);}
+    public void setSinglePlayerGame(){
+        GUISupport.setVisible(true, blackCross);
+        GUISupport.setVisible(false, showOthers);
 
+    }
     public void setDecks()
     {
         List<Integer> ids = new ArrayList<>();

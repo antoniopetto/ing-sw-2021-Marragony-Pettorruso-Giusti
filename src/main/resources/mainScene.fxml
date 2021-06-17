@@ -148,7 +148,7 @@
                <children>
                   <Accordion fx:id="actionButtons" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="149.0" prefWidth="394.0" styleClass="transparent" stylesheets="@background.css" GridPane.columnIndex="1" GridPane.valignment="TOP">
                     <panes>
-                      <TitledPane animated="false" text="show others...">
+                      <TitledPane fx:id="showOthers" animated="false" text="show others...">
                         <content>
                           <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" styleClass="maingrid" stylesheets="@background.css">
                                  <children>
@@ -417,6 +417,11 @@
             <ImageView fx:id="resourceDXLow" fitHeight="32.0" fitWidth="29.0" layoutX="29.0" layoutY="342.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@res-marbles/coin.png" />
+               </image>
+            </ImageView>
+            <ImageView fx:id="blackCross" fitHeight="43.0" fitWidth="40.0" layoutX="-48.0" layoutY="127.0" pickOnBounds="true" preserveRatio="true" visible="false">
+               <image>
+                  <Image url="@croce.png" />
                </image>
             </ImageView>
             <ImageView fx:id="faithMarker" fitHeight="41.0" fitWidth="43.0" layoutX="-55.0" layoutY="107.0" pickOnBounds="true" preserveRatio="true">

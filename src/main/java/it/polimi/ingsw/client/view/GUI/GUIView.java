@@ -202,6 +202,7 @@ public class GUIView extends Application implements View  {
             Scene scene = loadScene(currentLoader);
             mainSceneController = currentLoader.getController();
             mainSceneController.setScene(game);
+            if(game.getPlayers().size()==1) mainSceneController.setSinglePlayerGame();
             Platform.runLater(()->{
                 if(initStage.isShowing()) initStage.close();
                 mainStage = new Stage();
@@ -210,6 +211,7 @@ public class GUIView extends Application implements View  {
             firstMain = false;
         }
 
+        if(game.getPlayers().size()==1) mainSceneController.setRival();
         mainSceneController.showBasePower(false);
         mainSceneController.disableButtons(false);
         mainSceneController.setActionButton(postTurn);
