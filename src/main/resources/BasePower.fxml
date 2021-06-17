@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.Group?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.shape.Circle?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="346.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.client.view.GUI.BasePowerController">
+   <children>
+      <ImageView fitHeight="364.0" fitWidth="600.0" opacity="0.7" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@maestri-del-rinascimento.jpg" />
+         </image>
+      </ImageView>
+      <ImageView fitHeight="327.0" fitWidth="315.0" layoutX="146.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@basePower.png" />
+         </image>
+      </ImageView>
+      <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="230.0" layoutY="-16.0" pickOnBounds="true" preserveRatio="true" style="-fx-scale-x: 3; -fx-scale-y: 0.6;">
+         <image>
+            <Image url="@Pergamena2.png" />
+         </image>
+      </ImageView>
+      <Text fill="#1d25b7" layoutX="163.0" layoutY="63.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Please select the resources">
+         <font>
+            <Font name="Lucida Calligraphy Italic" size="25.0" />
+         </font>
+      </Text>
+      <Circle fx:id="circleIn1" fill="#1f93ff00" layoutX="259.0" layoutY="165.0" radius="25.0" stroke="RED" strokeType="INSIDE" strokeWidth="3.0" />
+      <Circle fx:id="circleIn2" fill="#1f93ff00" layoutX="259.0" layoutY="217.0" radius="25.0" stroke="RED" strokeType="INSIDE" strokeWidth="3.0" visible="false" />
+      <Circle fx:id="circleOut" fill="#1f93ff00" layoutX="358.0" layoutY="192.0" radius="25.0" stroke="RED" strokeType="INSIDE" strokeWidth="3.0" visible="false" />
+      <Group fx:id="inputResources" layoutX="87.0" layoutY="95.0">
+         <children>
+            <ImageView fitHeight="60.0" fitWidth="55.0" onMouseClicked="#resSelected" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@res-marbles/servant.png" />
+               </image>
+            </ImageView>
+            <ImageView fitHeight="60.0" fitWidth="55.0" layoutY="56.0" onMouseClicked="#resSelected" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@res-marbles/stone.png" />
+               </image>
+            </ImageView>
+            <ImageView fitHeight="60.0" fitWidth="55.0" layoutY="117.0" onMouseClicked="#resSelected" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@res-marbles/coin.png" />
+               </image>
+            </ImageView>
+            <ImageView fitHeight="60.0" fitWidth="55.0" layoutY="172.0" onMouseClicked="#resSelected" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@res-marbles/shield.png" />
+               </image>
+            </ImageView>
+         </children>
+      </Group>
+      <Group fx:id="outputResources" layoutX="452.0" layoutY="95.0" visible="false">
+         <children>
+            <ImageView fitHeight="60.0" fitWidth="55.0" onMouseClicked="#resSelected" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@res-marbles/servant.png" />
+               </image>
+            </ImageView>
+            <ImageView fitHeight="60.0" fitWidth="55.0" layoutY="56.0" onMouseClicked="#resSelected" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@res-marbles/stone.png" />
+               </image>
+            </ImageView>
+            <ImageView fitHeight="60.0" fitWidth="55.0" layoutY="117.0" onMouseClicked="#resSelected" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@res-marbles/coin.png" />
+               </image>
+            </ImageView>
+            <ImageView fitHeight="60.0" fitWidth="55.0" layoutY="172.0" onMouseClicked="#resSelected" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@res-marbles/shield.png" />
+               </image>
+            </ImageView>
+         </children>
+      </Group>
+      <ImageView fx:id="resIn1" fitHeight="60.0" fitWidth="50.0" layoutX="234.0" layoutY="134.0" pickOnBounds="true" preserveRatio="true" visible="false">
+         <image>
+            <Image url="@res-marbles/shield.png" />
+         </image>
+      </ImageView>
+      <ImageView fx:id="resIn2" fitHeight="60.0" fitWidth="50.0" layoutX="234.0" layoutY="192.0" pickOnBounds="true" preserveRatio="true" visible="false">
+         <image>
+            <Image url="@res-marbles/shield.png" />
+         </image>
+      </ImageView>
+      <ImageView fx:id="resOut" fitHeight="60.0" fitWidth="50.0" layoutX="333.0" layoutY="162.0" pickOnBounds="true" preserveRatio="true" visible="false">
+         <image>
+            <Image url="@res-marbles/shield.png" />
+         </image>
+      </ImageView>
+   </children>
+</Pane>

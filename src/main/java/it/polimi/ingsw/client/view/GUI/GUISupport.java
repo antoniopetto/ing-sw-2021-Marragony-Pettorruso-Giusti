@@ -5,6 +5,8 @@ import it.polimi.ingsw.client.simplemodel.SimplePlayer;
 import it.polimi.ingsw.server.model.playerboard.DepotName;
 import it.polimi.ingsw.server.model.playerboard.Resource;
 import javafx.scene.Node;
+import javafx.scene.effect.Bloom;
+import javafx.scene.effect.Effect;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
@@ -70,9 +72,8 @@ public class GUISupport {
             node.setDisable(disable);
     }
 
-    public static void setFaithTrack(SimplePlayer player, ImageView faithMarker)
+    public static void setFaithTrack(int position, ImageView faithMarker)
     {
-        int position = player.getPosition();
         if(position<3){
             faithMarker.setLayoutX(-55+(position*38));}
         else if(position<5){
@@ -115,6 +116,13 @@ public class GUISupport {
             resources[i].setImage(new Image(path + resourceString));
             resources[i].setVisible(true);
         }
+    }
+
+    public static void setEffect(boolean active, Node element)
+    {
+        Bloom bloom=new Bloom();
+        if(active)element.setEffect(bloom);
+        else element.setEffect(null);
     }
 
     public static int quantityOfResources(SimpleDepot simpleDepots){

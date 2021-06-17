@@ -5,6 +5,7 @@ import it.polimi.ingsw.client.simplemodel.SimpleDevCard;
 import it.polimi.ingsw.client.simplemodel.SimpleLeaderCard;
 import it.polimi.ingsw.client.simplemodel.SimpleModel;
 import it.polimi.ingsw.server.model.playerboard.DepotName;
+import it.polimi.ingsw.server.model.playerboard.Resource;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -31,6 +32,7 @@ public class MainSceneController implements Initializable {
     private SimpleModel simpleModel = null;
     private int cardId = 0;
     private int bufferId = 0;
+    private List<Node> elementsWithEffects = new ArrayList<>();
 
 
     //LeaderCard Action
@@ -77,18 +79,28 @@ public class MainSceneController implements Initializable {
     @FXML
     private Button buyResourcesButton;
     @FXML
+    private Button confirmSelectionButton;
+    @FXML
     private GridPane decks;
-
+    @FXML
+    private TitledPane showOthers;
     @FXML
     private Group slots;
-
+    @FXML
+    private Group strbxServant;
+    @FXML
+    private Group strbxCoin;
+    @FXML
+    private Group strbxShield;
+    @FXML
+    private Group strbxStone;
     @FXML
     private Accordion actionButtons;
 
     @FXML
     private Group cardsSlots;
-
-
+    @FXML
+    private Rectangle basePower;
     @FXML
     private GridPane marketGrid;
     @FXML
@@ -99,6 +111,8 @@ public class MainSceneController implements Initializable {
     private ImageView faithMarker;
     @FXML
     private Text logText;
+    @FXML
+    private ImageView blackCross;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -135,6 +149,11 @@ public class MainSceneController implements Initializable {
             case "buyResourcesButton" ->{
                 setChoice(3);
                 resourceArrow.setVisible(true);
+                setActionButton(false);
+            }
+            case "activateProductionButton" ->{
+                showBasePower(true);
+                setChoice(5);
                 setActionButton(false);
             }
             case "endTurnButton" -> setChoice(6);
@@ -271,6 +290,7 @@ public class MainSceneController implements Initializable {
         setDecks();
         setMarketBoard();
         setSlots();
+        setStrongbox();
         disableCards(true);
         disableSlots(true);
         disableButtons(false);
@@ -281,10 +301,24 @@ public class MainSceneController implements Initializable {
     public void disableSlots(boolean disable) {GUISupport.setVisible(!disable, slots);}
     public void disableButtons(boolean disable) {GUISupport.setDisable(disable, actionButtons);}
     public void disableCardsInSlot(boolean disable) {GUISupport.setDisable(disable, cardsSlots);}
+    public void showBasePower(boolean show){GUISupport.setVisible(show, basePower);}
+    public void showConfirmButton(boolean show){
+        GUISupport.setVisible(!show, buyCardButton, buyResourcesButton, activateProductionButton);
+        GUISupport.setVisible(show, confirmSelectionButton);
+    }
+    public void removeEffects(){
+        for (Node node:elementsWithEffects) {
+            GUISupport.setEffect(false, node);
+        }
+    }
 
+    public void setFaithTrack(){GUISupport.setFaithTrack(simpleModel.getThisPlayer().getPosition(), faithMarker);}
+    public void setRival(){GUISupport.setFaithTrack(simpleModel.getRivalPosition(), blackCross);}
+    public void setSinglePlayerGame(){
+        GUISupport.setVisible(true, blackCross);
+        GUISupport.setVisible(false, showOthers);
 
-    public void setFaithTrack(){GUISupport.setFaithTrack(simpleModel.getThisPlayer(), faithMarker);}
-
+    }
     public void setDecks()
     {
         List<Integer> ids = new ArrayList<>();
@@ -296,7 +330,7 @@ public class MainSceneController implements Initializable {
 
         for (Node node: decks.getChildren()) {
             ImageView imageview = (ImageView) node;
-            if(ids.get(i)!=null)
+            if(i<ids.size()&&ids.get(i)!=null)
             {
                 String url = "/cards/development/Development-" + ids.get(i) + ".jpg";
                 imageview.setImage(new Image(url));
@@ -398,15 +432,86 @@ public class MainSceneController implements Initializable {
                         int id = simpleDevCard.getId();
                         String url = "/cards/development/Development-"+id+".jpg";
                         card.setImage(new Image(url));
+                        card.setId(String.valueOf(id));
                         cardPresent=true;
                     }
                 }
                 GUISupport.setVisible(cardPresent, card);
+                GUISupport.setDisable(!cardPresent, card);
                 cardCounter++;
             }
             slotCounter++;
         }
     }
+
+    public void setStrongbox()
+    {
+        int count=0;
+        for (Node node:strbxCoin.getChildren()) {
+            if(count==1){
+                Text text = (Text)node;
+                int quantity;
+                if(simpleModel.getThisPlayer().getStrongbox().get(Resource.COIN)!=null)
+                    quantity = simpleModel.getThisPlayer().getStrongbox().get(Resource.COIN);
+                else quantity=0;
+                if(quantity>0) {
+                    GUISupport.setVisible(true, strbxCoin);
+                    text.setText(String.valueOf(quantity));
+                }
+                else GUISupport.setVisible(false, strbxCoin);
+            }
+            count++;
+        }
+        count=0;
+        for (Node node:strbxShield.getChildren()) {
+            if(count==1){
+                Text text = (Text)node;
+                int quantity;
+                if(simpleModel.getThisPlayer().getStrongbox().get(Resource.SHIELD)!=null)
+                    quantity = simpleModel.getThisPlayer().getStrongbox().get(Resource.SHIELD);
+                else quantity=0;
+                if(quantity>0) {
+                    GUISupport.setVisible(true, strbxShield);
+                    text.setText(String.valueOf(quantity));
+                }
+                else GUISupport.setVisible(false, strbxShield);
+            }
+            count++;
+        }
+        count=0;
+        for (Node node:strbxStone.getChildren()) {
+            if(count==1){
+                Text text = (Text)node;
+                int quantity;
+                if(simpleModel.getThisPlayer().getStrongbox().get(Resource.STONE)!=null)
+                    quantity = simpleModel.getThisPlayer().getStrongbox().get(Resource.STONE);
+                else quantity=0;
+                if(quantity>0) {
+                    GUISupport.setVisible(true, strbxStone);
+                    text.setText(String.valueOf(quantity));
+                }
+                else GUISupport.setVisible(false, strbxStone);
+            }
+            count++;
+        }
+        count=0;
+        for (Node node:strbxServant.getChildren()) {
+            if(count==1){
+                Text text = (Text)node;
+                int quantity;
+                if(simpleModel.getThisPlayer().getStrongbox().get(Resource.SERVANT)!=null)
+                    quantity = simpleModel.getThisPlayer().getStrongbox().get(Resource.SERVANT);
+                else quantity=0;
+                if(quantity>0) {
+                    GUISupport.setVisible(true, strbxServant);
+                    text.setText(String.valueOf(quantity));
+                }
+                else GUISupport.setVisible(false, strbxServant);
+            }
+            count++;
+        }
+    }
+
     public void devCardSelected(MouseEvent mouseEvent) {
         mouseEvent.consume();
         Platform.runLater(()->{
@@ -437,5 +542,26 @@ public class MainSceneController implements Initializable {
             String previous = logText.getText();
             logText.setText(previous+"\n"+text);
         }
+    }
+
+    public void prodCardSelected(MouseEvent mouseEvent) {
+        mouseEvent.consume();
+        Platform.runLater(()->{
+            setChoice(2);
+            ImageView image = (ImageView)mouseEvent.getSource();
+            GUISupport.setEffect(true, image);
+            elementsWithEffects.add(image);
+            setCardId(Integer.parseInt(image.getId()));
+        });
+    }
+
+    public void confirmProduction(ActionEvent actionEvent) {
+        actionEvent.consume();
+        Platform.runLater(()->setChoice(1));
+    }
+
+    public void basePowerSelected(MouseEvent mouseEvent) {
+        mouseEvent.consume();
+        Platform.runLater(()->setChoice(3));
     }
 }
