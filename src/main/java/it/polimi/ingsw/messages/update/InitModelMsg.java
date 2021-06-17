@@ -17,4 +17,11 @@ public class InitModelMsg implements ViewMsg {
     public void changeView(View view, ServerHandler serverHandler) {
         view.setModel(game);
     }
+
+    @Override
+    public String toString() {
+        return "InitModelMsg{" +
+                "game=" + game +
+                '}';
+    }
 }

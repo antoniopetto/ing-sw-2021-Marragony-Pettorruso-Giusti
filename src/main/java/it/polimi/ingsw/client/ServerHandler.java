@@ -43,7 +43,7 @@ public class ServerHandler implements Runnable{
         }
         while(running) {
             try {
-                Object message = input.readObject();
+                Object message = input.readUnshared();
                 Client.logger.debug(message);
                 if(message instanceof UpdateMsg) {
                     UpdateMsg updateMsg = (UpdateMsg)message;

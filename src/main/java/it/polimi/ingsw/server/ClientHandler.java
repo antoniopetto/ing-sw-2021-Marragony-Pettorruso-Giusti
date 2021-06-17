@@ -21,7 +21,8 @@ public class ClientHandler {
     }
 
     public void writeObject(Object o) throws IOException{
-        output.writeObject(o);
+        output.writeUnshared(o);
+        output.reset();
     }
 
     public Object readObject() throws IOException, ClassNotFoundException {

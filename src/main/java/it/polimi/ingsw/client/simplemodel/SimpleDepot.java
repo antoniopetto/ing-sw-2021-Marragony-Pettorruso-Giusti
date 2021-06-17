@@ -49,12 +49,10 @@ public class SimpleDepot implements Serializable {
 
     @Override
     public String toString() {
-        return "SimpleDepot{" +
-                "resource=" + resource +
-                ", quantity=" + quantity +
-                ", name=" + name +
-                ", capacity=" + capacity +
-                ", constraint=" + constraint +
+        return name + "{" +
+                resource +
+                " x " + quantity +
+                ((constraint != null) ? " ("+ constraint +")" : "") +
                 '}';
     }
 }

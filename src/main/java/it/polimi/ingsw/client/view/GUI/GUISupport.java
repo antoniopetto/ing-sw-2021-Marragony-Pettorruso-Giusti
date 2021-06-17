@@ -123,7 +123,7 @@ public class GUISupport {
            int  quantity = simpleDepots.getQuantity();
            if(simpleDepots.getResource() !=null) resourceString = returnPath(simpleDepots.getResource().toString());
             return quantity;
-        }else return 0;
+        } else return 0;
 
     }
 }

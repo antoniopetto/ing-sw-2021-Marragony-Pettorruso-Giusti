@@ -270,4 +270,8 @@ public class VirtualView implements Runnable{
     public void setTurnJustFinished(Boolean turnJustFinished) {
         this.turnJustFinished = turnJustFinished;
     }
+
+    public GameController getGameController(){
+        return gameController;
+    }
 }

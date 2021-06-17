@@ -84,7 +84,7 @@ public class Depot implements Serializable {
      */
     public void addResource(Resource r) {
 
-        if (constraint == null  || constraint.equals(r)){
+        if (constraint == null || constraint.equals(r)){
             if (this.isFull())
                 throw new IllegalArgumentException("The Depot is full!");
 

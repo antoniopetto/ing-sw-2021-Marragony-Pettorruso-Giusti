@@ -5,6 +5,8 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
 
+import java.io.Serializable;
+
 import static org.junit.Assert.*;
 
 public class WareHouseTest {
@@ -142,8 +144,32 @@ public class WareHouseTest {
 
     }
 
+    @Test
+    public void moveDepotsTest(){
 
+        WareHouse wareHouse = new WareHouse();
+        wareHouse.setVirtualView(Mockito.mock(VirtualView.class));
+        wareHouse.createExtraDepot(Resource.SERVANT, 2);
+        wareHouse.insert(DepotName.HIGH, Resource.SERVANT);
+        wareHouse.moveDepots(DepotName.HIGH, DepotName.FIRST_EXTRA);
+        wareHouse.insert(DepotName.MEDIUM, Resource.SERVANT);
+        wareHouse.moveDepots(DepotName.FIRST_EXTRA, DepotName.MEDIUM);
+        wareHouse.insert(DepotName.LOW, Resource.COIN);
+        wareHouse.insert(DepotName.LOW, Resource.COIN);
+        wareHouse.moveDepots(DepotName.MEDIUM, DepotName.LOW);
+        wareHouse.insert(DepotName.FIRST_EXTRA, Resource.SERVANT);
+        wareHouse.moveDepots(DepotName.LOW, DepotName.FIRST_EXTRA);
 
+        assertNull(wareHouse.depotByName(DepotName.HIGH).getResource());
+        assertEquals(0, wareHouse.depotByName(DepotName.HIGH).getQuantity());
 
+        assertEquals(Resource.COIN, wareHouse.depotByName(DepotName.MEDIUM).getResource());
+        assertEquals(2, wareHouse.depotByName(DepotName.MEDIUM).getQuantity());
 
+        assertEquals(Resource.SERVANT, wareHouse.depotByName(DepotName.LOW).getResource());
+        assertEquals(1, wareHouse.depotByName(DepotName.LOW).getQuantity());
+
+        assertEquals(Resource.SERVANT, wareHouse.depotByName(DepotName.FIRST_EXTRA).getResource());
+        assertEquals(2, wareHouse.depotByName(DepotName.FIRST_EXTRA).getQuantity());
+    }
 }

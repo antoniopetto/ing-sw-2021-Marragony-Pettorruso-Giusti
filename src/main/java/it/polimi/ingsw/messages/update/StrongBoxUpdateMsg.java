@@ -4,6 +4,7 @@ import it.polimi.ingsw.client.simplemodel.SimpleModel;
 import it.polimi.ingsw.client.simplemodel.SimplePlayer;
 import it.polimi.ingsw.server.model.playerboard.Resource;
 
+import java.util.HashMap;
 import java.util.Map;
 
 public class StrongBoxUpdateMsg implements UpdateMsg{
@@ -11,7 +12,7 @@ public class StrongBoxUpdateMsg implements UpdateMsg{
     private final String username;
 
     public StrongBoxUpdateMsg(Map<Resource, Integer> strongbox, String player) {
-        this.strongbox = strongbox;
+        this.strongbox = new HashMap<>(strongbox);
         this.username = player;
     }
 

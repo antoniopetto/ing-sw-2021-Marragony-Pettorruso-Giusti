@@ -98,7 +98,7 @@ public class DepotTest {
         try {
             extraDepot.addResource(Resource.SHIELD);
             fail();
-        }catch (IllegalArgumentException e){
+        }catch (IllegalStateException e){
             assertTrue(true);
         }
 

@@ -1,18 +1,20 @@
 package it.polimi.ingsw.server.model;
 
+import it.polimi.ingsw.messages.Msg;
+import it.polimi.ingsw.messages.update.StrongBoxUpdateMsg;
+import it.polimi.ingsw.server.ClientHandler;
 import it.polimi.ingsw.server.GameController;
 import it.polimi.ingsw.server.VirtualView;
-import it.polimi.ingsw.server.model.cards.CardColor;
-import it.polimi.ingsw.server.model.cards.DevelopmentCard;
-import it.polimi.ingsw.server.model.cards.ProductionPower;
+import it.polimi.ingsw.server.model.cards.*;
 import it.polimi.ingsw.server.model.playerboard.DepotName;
 import it.polimi.ingsw.server.model.playerboard.PlayerBoard;
 import it.polimi.ingsw.server.model.playerboard.Resource;
 import it.polimi.ingsw.server.model.shared.FaithTrack;
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.Mockito;
+import org.mockito.*;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -24,14 +26,14 @@ public class PlayerTest {
 
     private Player player;
     private PlayerBoard playerBoard;
+    private ClientHandler clientHandler;
 
     @Before
     public void setUp(){
-        player = new Player("AAA");
-        player.setVirtualView(Mockito.mock(VirtualView.class));
-        FaithTrack faithTrack = new FaithTrack();
-        faithTrack.setVirtualView(Mockito.mock(VirtualView.class));
-        faithTrack.addPlayers(List.of(player));
+
+        clientHandler = Mockito.mock(ClientHandler.class);
+        VirtualView virtualView = new VirtualView(Map.of("PlayerOne", clientHandler));
+        player = virtualView.getGameController().getPlayers().get(0);
         playerBoard = player.getPlayerBoard();
     }
 
@@ -66,5 +68,38 @@ public class PlayerTest {
         assertNull(playerBoard.getWareHouse().getDepots().get(2).getResource());
         assertEquals(1, playerBoard.getStrongBox().getQuantity(Resource.SERVANT));
         assertEquals(0, steps);
+    }
+
+    @Test
+    public void activateComplexProductionTest(){
+
+        // card 15 production power:
+        //    input = SHIELD 1, STONE 1
+        //    output = SERVANT 2, FAITH 2
+
+        try {
+            Mockito.doAnswer(i -> {System.out.println(i.getArgument(0).toString()); return null;})
+                    .when(clientHandler).writeObject(Mockito.any());
+            List<DevelopmentCard> devCards = CardParser.getInstance().parseDevelopmentCards();
+            playerBoard.getSlotList().get(0).addCard(Card.getById(15, devCards));
+            playerBoard.getWareHouse().insert(DepotName.HIGH, Resource.SHIELD);
+            playerBoard.getWareHouse().insert(DepotName.MEDIUM, Resource.STONE);
+            playerBoard.getStrongBox().addResource(Resource.STONE, 2);
+            ProductionPower specialPower = new ProductionPower(Map.of(Resource.STONE, 2), Map.of(Resource.COIN, 1));
+            player.activateProduction(Set.of(15), Map.of(0, specialPower));
+            assertEquals(1, playerBoard.getStrongBox().getQuantity(Resource.COIN));
+            assertEquals(2, playerBoard.getStrongBox().getQuantity(Resource.SERVANT));
+            playerBoard.getWareHouse().insert(DepotName.HIGH, Resource.SHIELD);
+            playerBoard.getWareHouse().insert(DepotName.MEDIUM, Resource.STONE);
+            player.activateProduction(Set.of(15), Map.of());
+            assertEquals(1, playerBoard.getStrongBox().getQuantity(Resource.COIN));
+            assertEquals(4, playerBoard.getStrongBox().getQuantity(Resource.SERVANT));
+            specialPower = new ProductionPower(Map.of(Resource.SERVANT, 2), Map.of(Resource.COIN, 1));
+            player.activateProduction(Set.of(), Map.of(0, specialPower));
+            assertEquals(2, playerBoard.getStrongBox().getQuantity(Resource.COIN));
+            assertEquals(2, playerBoard.getStrongBox().getQuantity(Resource.SERVANT));
+        } catch (Exception e){
+            fail();
+        }
     }
 }

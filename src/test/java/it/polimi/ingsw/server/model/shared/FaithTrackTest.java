@@ -20,14 +20,14 @@ public class FaithTrackTest {
 
     @Before
     public void setUp() {
-        p1 = new Player("First");
-        p1.setVirtualView(Mockito.mock(VirtualView.class));
-        p2 = new Player("Second");
-        p2.setVirtualView(Mockito.mock(VirtualView.class));
-        GameController gameController = Mockito.mock(GameController.class);
         virtualView = Mockito.mock(VirtualView.class);
+        p1 = new Player("First");
+        p1.setVirtualView(virtualView);
+        p2 = new Player("Second");
+        p2.setVirtualView(virtualView);
+        GameController gameController = Mockito.mock(GameController.class);
         faithTrack = new FaithTrack();
-        faithTrack.setVirtualView(Mockito.mock(VirtualView.class));
+        faithTrack.setVirtualView(virtualView);
         faithTrack.addPlayers(List.of(p1, p2));
     }
 

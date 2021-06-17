@@ -11,4 +11,9 @@ public class TitleMsg implements ViewMsg{
     public void changeView(View view, ServerHandler server) {
         view.showTitle();
     }
+
+    @Override
+    public String toString() {
+        return "TitleMsg{}";
+    }
 }

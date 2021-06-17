@@ -31,8 +31,6 @@ public class SimpleWarehouse implements Serializable {
 
     @Override
     public String toString() {
-        return "SimpleWarehouse{" +
-                "depots=" + depots +
-                '}';
+        return depots.toString();
     }
 }

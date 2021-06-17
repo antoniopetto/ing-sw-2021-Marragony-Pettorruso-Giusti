@@ -50,8 +50,7 @@ public class DevelopmentCardDecksTest {
         cards.clear();
     }
     @Test
-    public void constructorTest()
-    {
+    public void constructorTest() {
         try {
             DevelopmentCardDecks decks1 = new DevelopmentCardDecks(cards);
         }catch(IllegalStateException e) {
@@ -94,23 +93,20 @@ public class DevelopmentCardDecksTest {
         //checks if the card has been removed from the deck after readTop
         try{
             decks.drawCard(CardColor.PURPLE, 2);
-        }catch (EmptyStackException e)
-        {
+        }catch (EmptyStackException e) {
             fail();
         }
         //tries to read the top of an empty deck
         try{
             decks.readTop(CardColor.PURPLE, 2);
             fail();
-        }catch (EmptyStackException e)
-        {
+        }catch (EmptyStackException e) {
             assertTrue(true);
         }
     }
 
     @Test
-    public void deckSizeTest()
-    {
+    public void deckSizeTest() {
         //tries to get the size of a deck of level 4 (impossible)
         try {
             decks.deckSize(CardColor.PURPLE, 4);
@@ -123,8 +119,7 @@ public class DevelopmentCardDecksTest {
     }
 
     @Test
-    public void discardTest()
-    {
+    public void discardTest() {
         //checks correctness of the method
         decks.discard(CardColor.YELLOW);
         assertTrue(decks.deckSize(CardColor.YELLOW,1)==0&&decks.deckSize(CardColor.YELLOW,2)==0);
