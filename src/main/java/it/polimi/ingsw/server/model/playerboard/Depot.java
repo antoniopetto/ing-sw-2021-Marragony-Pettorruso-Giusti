@@ -94,7 +94,7 @@ public class Depot implements Serializable {
             }
             else if (this.getResource().equals(r))
                 this.quantity++;
-            else
+            else if(!this.getResource().equals(r))
                 throw new IllegalArgumentException("The type of resource that the player wants to insert does not match the type of resource already present");
         }
         else throw new IllegalStateException("The inserted Resource r doesn't match the special resource");

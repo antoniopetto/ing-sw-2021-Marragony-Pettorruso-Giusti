@@ -145,7 +145,7 @@ public class WareHouseTest {
     }
 
     @Test
-    public void moveDepotsTest(){
+    public void moveDepotsTest() throws Exception {
 
         WareHouse wareHouse = new WareHouse();
         wareHouse.setVirtualView(Mockito.mock(VirtualView.class));
@@ -156,7 +156,7 @@ public class WareHouseTest {
         wareHouse.moveDepots(DepotName.FIRST_EXTRA, DepotName.MEDIUM);
         wareHouse.insert(DepotName.LOW, Resource.COIN);
         wareHouse.insert(DepotName.LOW, Resource.COIN);
-        wareHouse.moveDepots(DepotName.MEDIUM, DepotName.LOW);
+        wareHouse.switchDepots(DepotName.MEDIUM, DepotName.LOW);
         wareHouse.insert(DepotName.FIRST_EXTRA, Resource.SERVANT);
         wareHouse.moveDepots(DepotName.LOW, DepotName.FIRST_EXTRA);
 

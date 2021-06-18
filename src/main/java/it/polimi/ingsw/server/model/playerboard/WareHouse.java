@@ -189,11 +189,16 @@ public class WareHouse implements Serializable {
         if( depotByName(depotToEmpty).isEmpty() ) throw new IllegalStateException("Depot to remove resources from is already empty");
 
         Function<DepotName,Boolean> controlResource = (depotName) -> {
+            //from normal depot to extra
             if(depotByName(depotName).getConstraint() == null) return compareResourceType(depotToFill,depotToEmpty);
-                return compareResourceType(depotToEmpty,depotToFill);
+                else //from extra to normal
+            {
+                if(depotByName(depotToFill).isEmpty()) return true;
+                    else return compareResourceType(depotToEmpty,depotToFill);
+            }
         };
 
-        if ( !depotByName(depotToFill).isEmpty() || controlResource.apply(depotToEmpty)){
+        if ( controlResource.apply(depotToEmpty) ){
             fillTheOtherDepot(depotToEmpty, depotToFill);
             virtualView.warehouseUpdate();
         }
@@ -220,7 +225,7 @@ public class WareHouse implements Serializable {
      */
     private void fillTheOtherDepot(DepotName depotToEmpty, DepotName depotToFill){
 
-        while(!depotByName(depotToFill).isFull() || !depotByName(depotToEmpty).isEmpty()){
+        while(!depotByName(depotToFill).isFull() && !depotByName(depotToEmpty).isEmpty()){
             depotByName(depotToFill).addResource(depotByName(depotToEmpty).getResource());
             depotByName(depotToEmpty).removeResource();
         }
