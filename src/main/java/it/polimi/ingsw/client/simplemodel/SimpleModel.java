@@ -1,5 +1,6 @@
 package it.polimi.ingsw.client.simplemodel;
 
+import it.polimi.ingsw.client.view.View;
 import it.polimi.ingsw.server.model.cards.CardColor;
 import it.polimi.ingsw.server.model.shared.Marble;
 
@@ -15,11 +16,12 @@ public class SimpleModel implements Serializable {
     private final Marble[][] marketBoard = new Marble[3][4];
     private Marble spareMarble;
     private final SimpleDevCard[][][] devCardDecks = new SimpleDevCard[4][3][4];
+    private View view;
 
     public List<Marble> getMarbleBuffer() {
         return marbleBuffer;
     }
-
+    public void setView(View view){this.view=view;}
     public void setPlayers(List<SimplePlayer> players, String requirerName){
 
         this.players = new ArrayList<>(players);
@@ -38,12 +40,15 @@ public class SimpleModel implements Serializable {
                 for (int j = 3; j >= 0; j--)
                     if (devCardDecks[i][level - 1][j] != null){
                         devCardDecks[i][level - 1][j] = null;
+                        update("decks");
                         return;
                     }
             }
         }
+
     }
 
+    public void update(String updated){if(view!=null) view.update(updated);}
     public void setMarbleBuffer(List<Marble> marbleBuffer) {
         this.marbleBuffer = new ArrayList<>(marbleBuffer);
     }
@@ -65,6 +70,7 @@ public class SimpleModel implements Serializable {
         for (int i = 0; i < 3; i++){
             this.marketBoard[i] = Arrays.copyOf(marketBoard[i], 4);
         }
+        update("market");
     }
 
     public void setSpareMarble(Marble spareMarble) {

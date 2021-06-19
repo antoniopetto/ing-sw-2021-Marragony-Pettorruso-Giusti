@@ -220,7 +220,7 @@ public class GUIView extends Application implements View  {
 
         if(action.equals(Action.DISCARD_LEADER) || action.equals(Action.PLAY_LEADER)) mainSceneController.setLeaderCard();
         if(action.equals(Action.BUY_RESOURCES)){
-            if(tmpStage.isShowing())
+            if(tmpStage!=null&&tmpStage.isShowing())
                 Platform.runLater(() ->{
                     tmpStage.close();
                 });
@@ -564,7 +564,19 @@ public class GUIView extends Application implements View  {
 
     }
 
+    @Override
+    public void update(String updated) {
+        if(mainSceneController!=null) {
+            switch (updated) {
+                case "faith" -> mainSceneController.setFaithTrack();
+                case "decks" -> mainSceneController.setDecks();
+                case "market" -> mainSceneController.setMarketBoard();
+            }
+        }
+    }
+
     public void setModel(SimpleModel game){
+        game.setView(this);
         this.game=game;
         serverHandler.setModel(game);
     }

@@ -75,6 +75,11 @@ public class CLIView implements View {
         Client.logger.info("Closing client");
     }
 
+    @Override
+    public void update(String updated) {
+
+    }
+
     private static int inputNumber(int min, int max){
         System.out.print(">");
         Scanner input = new Scanner(System.in);
@@ -740,6 +745,7 @@ public class CLIView implements View {
 
     @Override
     public void setModel(SimpleModel model){
+        model.setView(this);
         this.game = model;
         serverHandler.setModel(model);
     }
