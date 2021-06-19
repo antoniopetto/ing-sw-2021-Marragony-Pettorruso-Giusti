@@ -1,11 +1,9 @@
 package it.polimi.ingsw.client.view.GUI;
 
-import it.polimi.ingsw.client.simplemodel.SimpleDepot;
-import it.polimi.ingsw.client.simplemodel.SimpleDevCard;
-import it.polimi.ingsw.client.simplemodel.SimpleLeaderCard;
-import it.polimi.ingsw.client.simplemodel.SimpleModel;
+import it.polimi.ingsw.client.simplemodel.*;
 import it.polimi.ingsw.server.model.playerboard.DepotName;
 import it.polimi.ingsw.server.model.playerboard.Resource;
+import it.polimi.ingsw.server.model.shared.PopeFavourTile;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -33,6 +31,7 @@ public class MainSceneController implements Initializable {
     private int cardId = 0;
     private int bufferId = 0;
     private List<Node> elementsWithEffects = new ArrayList<>();
+    private int numberOfVaticanReport =0;
 
 
     //LeaderCard Action
@@ -96,7 +95,12 @@ public class MainSceneController implements Initializable {
     private Group strbxStone;
     @FXML
     private Accordion actionButtons;
-
+    @FXML
+    private ImageView tile1;
+    @FXML
+    private ImageView tile2;
+    @FXML
+    private ImageView tile3;
     @FXML
     private Group cardsSlots;
     @FXML
@@ -111,6 +115,8 @@ public class MainSceneController implements Initializable {
     private ImageView faithMarker;
     @FXML
     private Text logText;
+    @FXML
+    private ScrollPane log;
     @FXML
     private ImageView blackCross;
 
@@ -415,6 +421,23 @@ public class MainSceneController implements Initializable {
         GUISupport.settingImageView(quantity, resourceSXLow, resourceCLow, resourceDXLow);
     }
 
+    public void setTiles(){
+        List<PopeFavourTile> tiles=simpleModel.getThisPlayer().getTiles();
+        if(tiles.get(0).isGained()) tile1.setImage(new Image("/pope-favor/pope_favor1_front.png"));
+        else if(getMaxPosition()>8) GUISupport.setVisible(false, tile1);
+        if(tiles.get(1).isGained()) tile2.setImage(new Image("/pope-favor/pope_favor2_front.png"));
+        else if(getMaxPosition()>16) GUISupport.setVisible(false, tile2);
+        if(tiles.get(2).isGained()) tile3.setImage(new Image("/pope-favor/pope_favor3_front.png"));
+    }
+
+    private int getMaxPosition(){
+        int max=0;
+        for (SimplePlayer player: simpleModel.getPlayers()) {
+            if(player.getPosition()>max) max=player.getPosition();
+        }
+        return max;
+    }
+
     public void setSlots() {
         int slotCounter = 0;
         int cardCounter;
@@ -541,7 +564,9 @@ public class MainSceneController implements Initializable {
         if(text!=null){
             String previous = logText.getText();
             logText.setText(previous+"\n"+text);
+            log.setVvalue(1.0);
         }
+
     }
 
     public void prodCardSelected(MouseEvent mouseEvent) {

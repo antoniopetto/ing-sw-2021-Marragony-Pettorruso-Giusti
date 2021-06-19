@@ -215,7 +215,7 @@ public class GUIView extends Application implements View  {
         mainSceneController.showBasePower(false);
         mainSceneController.disableButtons(false);
         mainSceneController.setActionButton(postTurn);
-
+        mainSceneController.setTiles();
         mainSceneController.setFaithTrack();
 
         if(action.equals(Action.DISCARD_LEADER) || action.equals(Action.PLAY_LEADER)) mainSceneController.setLeaderCard();
@@ -347,10 +347,10 @@ public class GUIView extends Application implements View  {
         mainSceneController.disableButtons(true);
         mainSceneController.disableCards(false);
         int cardId = mainSceneController.getCardId();
+        System.out.println(cardId);
         mainSceneController.disableCards(true);
         mainSceneController.disableSlots(false);
         int slotId = mainSceneController.getChoice()-1;
-        System.out.println(slotId);
         mainSceneController.disableSlots(true);
         SimpleDevCard card = SimpleDevCard.parse(cardId);
         return new BuyAndAddCardInSlotMsg(card.getColor(), card.getLevel(), slotId);
