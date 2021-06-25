@@ -41,12 +41,15 @@ public class GUIView extends Application implements View  {
     private Stage errorStage;
     private Stage mainStage;
     private Stage tmpStage;
+    private Stage endStage=null;
     private int discardCounter = 0;
     private int marbleCounter = 0;
     private Marble marble;
     private boolean firstMain = true;
     private Action action = Action.INIT;
     private MainSceneController mainSceneController = null;
+    private String serverIp;
+    private int port;
 
 
     private enum Action{
@@ -97,15 +100,20 @@ public class GUIView extends Application implements View  {
 
     public void setting(SettingGameController settingGameController){
         try{
-            Socket server = new Socket(settingGameController.getServerIP(), Integer.parseInt(settingGameController.getPort()));
+            if(settingGameController!=null)
+            {
+                serverIp=settingGameController.getServerIP();
+                port=Integer.parseInt(settingGameController.getPort());
+            }
+            Socket server = new Socket(serverIp, port);
             serverHandler = new ServerHandler(server, this);
             new Thread(serverHandler).start();
 
-            settingGameController.setTextError("You are connected to the server!");
+            if(settingGameController!=null)settingGameController.setTextError("You are connected to the server!");
 
         }catch(IOException e)
         {
-            settingGameController.setTextError("Server unreachable, try again.");
+            if(settingGameController!=null)settingGameController.setTextError("Server unreachable, try again.");
         }
     }
 
@@ -202,6 +210,7 @@ public class GUIView extends Application implements View  {
             if(game.getPlayers().size()==1) mainSceneController.setSinglePlayerGame();
             Platform.runLater(()->{
                 if(initStage.isShowing()) initStage.close();
+                if(endStage!=null) endStage.close();
                 mainStage = new Stage();
                 manageStage(mainStage, scene, "Main", false);
             });
@@ -233,6 +242,7 @@ public class GUIView extends Application implements View  {
             mainSceneController.setWarehouse();
             mainSceneController.setSlots();
             mainSceneController.setFaithTrack();
+            mainSceneController.setStrongbox();
         }
         if(action.equals(Action.END_TURN)){
             mainSceneController.setDecks();
@@ -560,7 +570,7 @@ public class GUIView extends Application implements View  {
 
     private void manageStage(Stage stage, Scene scene, String title, boolean close){
         Platform.runLater(() -> {
-            if(close){
+            if(close&&oldStage!=null){
                 oldStage.close();
             }
             stage.getIcons().add(new Image(getClass().getResourceAsStream("/Ritagliare.png")));
@@ -591,7 +601,28 @@ public class GUIView extends Application implements View  {
     }
 
     public void endGame(){
+        setLoader("/endGame.fxml");
+        Scene scene = loadScene(currentLoader);
+        EndGameController controller = currentLoader.getController();
+        Platform.runLater(()->{
+            oldStage=mainStage;
+            manageStage(mainStage, scene, "End game", true);
+        });
+        int choice = controller.getChoice();
+        switch(choice){
+            case 1 -> Platform.runLater(()->mainStage.close());//endgame
+            case 2 -> {
+                endStage=mainStage;
+                firstMain=true;
+                setting(null); //newGame
 
+            }
+            case 3-> {
+                endStage=mainStage;
+                firstMain=true;
+                start(null); //new server
+            }
+        }
     }
 
     @Override

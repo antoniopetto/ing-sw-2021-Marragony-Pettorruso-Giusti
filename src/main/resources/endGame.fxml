@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.Cursor?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="350.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.2" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.client.view.GUI.EndGameController">
+   <children>
+      <ImageView fitHeight="380.0" fitWidth="600.0" opacity="0.7" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@maestri-del-rinascimento.jpg" />
+         </image>
+      </ImageView>
+      <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="221.0" layoutY="-8.0" pickOnBounds="true" preserveRatio="true" style="-fx-scale-x: 2.5; -fx-scale-y: 0.7;">
+         <image>
+            <Image url="@Pergamena2.png" />
+         </image>
+      </ImageView>
+      <Text fill="#3530d9" layoutX="204.0" layoutY="80.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Game Over">
+         <font>
+            <Font name="Lucida Calligraphy Italic" size="40.0" />
+         </font>
+      </Text>
+      <ImageView fitHeight="54.0" fitWidth="66.0" layoutX="185.0" layoutY="112.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@Ritagliare.png" />
+         </image>
+      </ImageView>
+      <ImageView fitHeight="79.0" fitWidth="54.0" layoutX="150.0" layoutY="166.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@Ritagliare.png" />
+         </image>
+      </ImageView>
+      <ImageView fitHeight="79.0" fitWidth="54.0" layoutX="123.0" layoutY="233.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@Ritagliare.png" />
+         </image>
+      </ImageView>
+      <Text fx:id="exit" fill="#3530d9" layoutX="231.0" layoutY="158.0" onMouseClicked="#actionSelected" strokeType="OUTSIDE" strokeWidth="0.0" text="Exit game" textAlignment="CENTER" underline="true">
+         <font>
+            <Font name="Lucida Calligraphy Italic" size="25.0" />
+         </font>
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor>
+      </Text>
+      <Text fx:id="newGame" fill="#3530d9" layoutX="194.0" layoutY="201.0" onMouseClicked="#actionSelected" stroke="#2b1e8f" strokeWidth="0.0" text="Start new game" textAlignment="CENTER" underline="true">
+         <font>
+            <Font name="Lucida Calligraphy Italic" size="25.0" />
+         </font>
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor>
+      </Text>
+      <Text fx:id="newServer" fill="#3530d9" layoutX="149.0" layoutY="249.0" onMouseClicked="#actionSelected" strokeType="OUTSIDE" strokeWidth="0.0" text="Start new game on different server" textAlignment="CENTER" underline="true" wrappingWidth="300.0">
+         <font>
+            <Font name="Lucida Calligraphy Italic" size="25.0" />
+         </font>
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor>
+      </Text>
+   </children>
+</Pane>
