@@ -182,15 +182,12 @@ public class GUIView extends Application implements View  {
 
     }
 
-    public static void main(String[] args)
-    {
-        launch(args);
-    }
+   // public static void main(String[] args) { launch(args); }
 
 
     @Override
     public void startConnection() {
-
+        Application.launch();
     }
 
 
