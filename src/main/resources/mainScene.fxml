@@ -1,5 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.canvas.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.shape.*?>
+<?import javafx.scene.text.*?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.Cursor?>
 <?import javafx.scene.Group?>
@@ -20,7 +29,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<GridPane alignment="CENTER_RIGHT" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1280.0" styleClass="maingrid" stylesheets="@background.css" xmlns="http://javafx.com/javafx/11.0.2" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.client.view.GUI.MainSceneController">
+<GridPane alignment="CENTER_RIGHT" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1280.0" styleClass="maingrid" stylesheets="@background.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.client.view.GUI.MainSceneController">
   <columnConstraints>
     <ColumnConstraints />
     <ColumnConstraints hgrow="SOMETIMES" maxWidth="1276.7999267578125" minWidth="10.0" prefWidth="778.2000244140625" />
@@ -128,6 +137,16 @@
                         <Image url="@cards/leader/Leader-101.jpg" />
                      </image>
                   </ImageView>
+                  <ImageView fx:id="resourceSXExtra2" fitHeight="32.0" fitWidth="29.0" layoutX="40.0" layoutY="169.0" pickOnBounds="true" preserveRatio="true" visible="false">
+                     <image>
+                        <Image url="@res-marbles/coin.png" />
+                     </image>
+                  </ImageView>
+                  <ImageView fx:id="resourceDXExtra2" fitHeight="32.0" fitWidth="29.0" layoutX="88.0" layoutY="169.0" pickOnBounds="true" preserveRatio="true" visible="false">
+                     <image>
+                        <Image url="@res-marbles/coin.png" />
+                     </image>
+                  </ImageView>
                </children>
             </Group>
             <Group GridPane.columnIndex="1" GridPane.valignment="TOP">
@@ -138,6 +157,16 @@
                      </image>
                   </ImageView>
                   <Rectangle fx:id="rectCard1" arcHeight="5.0" arcWidth="5.0" fill="#1f93ff00" height="219.0" stroke="#0aff50" strokeType="INSIDE" strokeWidth="5.0" visible="false" width="152.0" />
+                  <ImageView fx:id="resourceSXExtra1" fitHeight="32.0" fitWidth="29.0" layoutX="33.0" layoutY="159.0" pickOnBounds="true" preserveRatio="true" visible="false">
+                     <image>
+                        <Image url="@res-marbles/coin.png" />
+                     </image>
+                  </ImageView>
+                  <ImageView fx:id="resourceDXExtra1" fitHeight="32.0" fitWidth="29.0" layoutX="94.0" layoutY="159.0" pickOnBounds="true" preserveRatio="true" visible="false">
+                     <image>
+                        <Image url="@res-marbles/coin.png" />
+                     </image>
+                  </ImageView>
                </children>
             </Group>
             <GridPane styleClass="transparent" stylesheets="@background.css" GridPane.columnIndex="2">
@@ -152,25 +181,25 @@
                         <content>
                           <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" styleClass="maingrid" stylesheets="@background.css">
                                  <children>
-                                    <Button layoutX="24.0" layoutY="3.0" mnemonicParsing="false" prefHeight="61.0" prefWidth="105.0" styleClass="transparent" stylesheets="@background.css" text="Show Player1" textAlignment="CENTER" textFill="#3426cf" wrapText="true">
+                                    <Button fx:id="show1" layoutX="24.0" layoutY="3.0" mnemonicParsing="false" onAction="#clickActionButton" prefHeight="61.0" prefWidth="105.0" styleClass="transparent" stylesheets="@background.css" text="Show Player1" textAlignment="CENTER" textFill="#3426cf" wrapText="true">
                                        <font>
-                                          <Font name="Lucida Calligraphy Italic" size="16.0" />
+                                          <Font size="10.0" />
                                        </font>
                                        <cursor>
                                           <Cursor fx:constant="HAND" />
                                        </cursor>
                                     </Button>
-                                    <Button layoutX="143.0" layoutY="3.0" mnemonicParsing="false" prefHeight="61.0" prefWidth="105.0" styleClass="transparent" stylesheets="@background.css" text="Show player2" textAlignment="CENTER" textFill="#3426cf" wrapText="true">
+                                    <Button fx:id="show2" layoutX="143.0" layoutY="3.0" mnemonicParsing="false" onAction="#clickActionButton" prefHeight="61.0" prefWidth="105.0" styleClass="transparent" stylesheets="@background.css" text="Show player2" textAlignment="CENTER" textFill="#3426cf" wrapText="true">
                                        <font>
-                                          <Font name="Lucida Calligraphy Italic" size="16.0" />
+                                          <Font size="10.0" />
                                        </font>
                                        <cursor>
                                           <Cursor fx:constant="HAND" />
                                        </cursor>
                                     </Button>
-                                    <Button layoutX="262.0" layoutY="3.0" mnemonicParsing="false" prefHeight="61.0" prefWidth="105.0" styleClass="transparent" stylesheets="@background.css" text="Show player3" textAlignment="CENTER" textFill="#3426cf" wrapText="true">
+                                    <Button fx:id="show3" layoutX="262.0" layoutY="3.0" mnemonicParsing="false" onAction="#clickActionButton" prefHeight="61.0" prefWidth="105.0" styleClass="transparent" stylesheets="@background.css" text="Show player3" textAlignment="CENTER" textFill="#3426cf" wrapText="true">
                                        <font>
-                                          <Font name="Lucida Calligraphy Italic" size="16.0" />
+                                          <Font size="10.0" />
                                        </font>
                                        <cursor>
                                           <Cursor fx:constant="HAND" />

@@ -30,12 +30,18 @@ public class PlayerBoard implements Serializable {
     public PlayerBoard() {
         wareHouse = new WareHouse();
         strongBox = new StrongBox();
+
+
+
+
+
     }
 
     public void setVirtualView(VirtualView virtualView) {
         this.virtualView = virtualView;
         wareHouse.setVirtualView(virtualView);
         strongBox.setVirtualView(virtualView);
+
     }
 
     public WareHouse getWareHouse() { return wareHouse; }

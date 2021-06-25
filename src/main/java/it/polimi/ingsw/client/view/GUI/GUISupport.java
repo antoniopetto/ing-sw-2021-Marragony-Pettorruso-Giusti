@@ -116,6 +116,15 @@ public class GUISupport {
             resources[i].setImage(new Image(path + resourceString));
             resources[i].setVisible(true);
         }
+        for(int i = quantity; i < resources.length; i++) resources[i].setVisible(false);
+    }
+
+    public static void settingImageView(ImageView resource, String resourceLeaderCard){
+        String path = "/res-marbles/";
+        resourceString = returnPath(resourceLeaderCard);
+        resource.setImage(new Image(path + resourceString));
+        resource.setVisible(true);
+
     }
 
     public static void setEffect(boolean active, Node element)
@@ -134,4 +143,6 @@ public class GUISupport {
         } else return 0;
 
     }
+
+
 }

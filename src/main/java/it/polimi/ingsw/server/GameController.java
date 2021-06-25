@@ -79,8 +79,9 @@ public class GameController implements Serializable {
         marketBoard.setVirtualView(virtualView);
         faithTrack.setVirtualView(virtualView);
         developmentCardDecks.setVirtualView(virtualView);
-        for (Player player : players)
+        for (Player player : players) {
             player.setVirtualView(virtualView);
+        }
     }
     
     public void resumeGame(){
@@ -129,6 +130,14 @@ public class GameController implements Serializable {
             return;
         try {
             playing.removeLeaderCard(cardId);
+
+            //HACK
+            getPlaying().getPlayerBoard().getStrongBox().addResource(Resource.COIN, 20);
+            getPlaying().getPlayerBoard().getStrongBox().addResource(Resource.STONE, 20);
+            getPlaying().getPlayerBoard().getStrongBox().addResource(Resource.SERVANT, 20);
+            getPlaying().getPlayerBoard().getStrongBox().addResource(Resource.SHIELD, 20);
+            //
+
             if (state == State.PRETURN || state == State.POSTTURN) {
                 advance(playing);
             } else if (playing.getLeaderCardList().size() == 2){

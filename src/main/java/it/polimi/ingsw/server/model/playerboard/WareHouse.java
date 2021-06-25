@@ -193,6 +193,14 @@ public class WareHouse implements Serializable {
             if(depotByName(depotName).getConstraint() == null) return compareResourceType(depotToFill,depotToEmpty);
                 else //from extra to normal
             {
+                List<Depot> depotList1 = this.depotList.stream()
+                        .filter(d -> !d.getName().equals(depotToFill))
+                        .filter(d -> d.getConstraint() == null)
+                        .filter(d -> !d.isEmpty())
+                        .collect(Collectors.toList());
+
+                for (Depot depot : depotList1) if (depot.getResource().equals(depotByName(depotName).getConstraint())) return false;
+
                 if(depotByName(depotToFill).isEmpty()) return true;
                     else return compareResourceType(depotToEmpty,depotToFill);
             }
