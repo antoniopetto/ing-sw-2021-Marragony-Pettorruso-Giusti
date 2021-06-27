@@ -749,4 +749,13 @@ public class CLIView implements View {
         this.game = model;
         serverHandler.setModel(model);
     }
+
+    @Override
+    public void victory(Boolean win, Map<String, Integer> leaderboard) {
+        showTextMessage("The game has ended");
+        if (win != null)
+            showTextMessage(win ? "You won!" : "You lost.");
+        showLeaderboard(leaderboard);
+        endGame();
+    }
 }

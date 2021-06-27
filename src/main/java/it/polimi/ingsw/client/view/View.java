@@ -31,4 +31,5 @@ public interface View {
     void setModel(SimpleModel game);
     void endGame();
     void update(String updated);
+    void victory(Boolean win, Map<String, Integer> leaderboard);
 }

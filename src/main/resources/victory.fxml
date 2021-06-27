@@ -10,30 +10,24 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="373.0" prefWidth="637.0" xmlns="http://javafx.com/javafx/11.0.2" xmlns:fx="http://javafx.com/fxml/1">
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="373.0" prefWidth="637.0" xmlns="http://javafx.com/javafx/11.0.2" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.client.view.GUI.VictoryController">
    <children>
       <ImageView fitHeight="374.0" fitWidth="652.0" opacity="0.7" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@maestri-del-rinascimento.jpg" />
          </image>
       </ImageView>
-      <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="240.0" layoutY="38.0" pickOnBounds="true" preserveRatio="true" style="-fx-scale-x: 3; -fx-scale-y: 1.5;">
+      <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="239.0" layoutY="3.0" pickOnBounds="true" preserveRatio="true" style="-fx-scale-x: 3; -fx-scale-y: 1;">
          <image>
             <Image url="@Pergamena2.png" />
          </image>
       </ImageView>
-      <Text fill="#22159c" layoutX="178.0" layoutY="85.0" strokeType="OUTSIDE" strokeWidth="0.0" text="The winner is...">
+      <Text fx:id="title" fill="#22159c" layoutX="177.0" layoutY="94.0" strokeType="OUTSIDE" strokeWidth="0.0" text="You won!">
          <font>
-            <Font name="Lucida Calligraphy Italic" size="40.0" />
+            <Font name="Lucida Calligraphy Italic" size="45.0" />
          </font>
       </Text>
-      <Text fill="#22159c" layoutX="209.0" layoutY="161.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Username" textAlignment="CENTER">
-         <font>
-            <Font name="Lucida Calligraphy Italic" size="40.0" />
-         </font>
-      </Text>
-      <Group layoutX="214.0" layoutY="229.0">
+      <Group fx:id="leaderboard" layoutX="214.0" layoutY="167.0">
          <children>
             <Text fill="#22159c" layoutX="1.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Player 1 - 5 points" textAlignment="CENTER" underline="true">
                <font>
@@ -57,7 +51,7 @@
             </Text>
          </children>
       </Group>
-      <Button contentDisplay="TOP" layoutX="477.0" layoutY="241.0" mnemonicParsing="false" prefHeight="109.0" prefWidth="137.0" styleClass="transparent" stylesheets="@background.css" text="Close">
+      <Button fx:id="closeButton" contentDisplay="TOP" layoutX="477.0" layoutY="241.0" mnemonicParsing="false" prefHeight="109.0" prefWidth="137.0" styleClass="transparent" stylesheets="@background.css" text="Close">
          <font>
             <Font name="Lucida Calligraphy Italic" size="28.0" />
          </font>

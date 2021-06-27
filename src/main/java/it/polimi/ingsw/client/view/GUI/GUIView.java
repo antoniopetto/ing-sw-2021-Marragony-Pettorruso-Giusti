@@ -50,6 +50,7 @@ public class GUIView extends Application implements View  {
     private MainSceneController mainSceneController = null;
     private String serverIp;
     private int port;
+    private boolean victory = false;
 
 
     private enum Action{
@@ -388,7 +389,6 @@ public class GUIView extends Application implements View  {
         mainSceneController.disableButtons(true);
         mainSceneController.disableCards(false);
         int cardId = mainSceneController.getCardId();
-        System.out.println(cardId);
         mainSceneController.disableCards(true);
         mainSceneController.disableSlots(false);
         int slotId = mainSceneController.getChoice()-1;
@@ -601,26 +601,28 @@ public class GUIView extends Application implements View  {
     }
 
     public void endGame(){
-        setLoader("/endGame.fxml");
-        Scene scene = loadScene(currentLoader);
-        EndGameController controller = currentLoader.getController();
-        Platform.runLater(()->{
-            oldStage=mainStage;
-            manageStage(mainStage, scene, "End game", true);
-        });
-        int choice = controller.getChoice();
-        switch(choice){
-            case 1 -> Platform.runLater(()->mainStage.close());//endgame
-            case 2 -> {
-                endStage=mainStage;
-                firstMain=true;
-                setting(null); //newGame
+        if(!victory) {
+            setLoader("/endGame.fxml");
+            Scene scene = loadScene(currentLoader);
+            EndGameController controller = currentLoader.getController();
+            Platform.runLater(() -> {
+                oldStage = mainStage;
+                manageStage(mainStage, scene, "End game", true);
+            });
+            int choice = controller.getChoice();
+            switch (choice) {
+                case 1 -> Platform.runLater(() -> mainStage.close());//endgame
+                case 2 -> {
+                    endStage = mainStage;
+                    firstMain = true;
+                    setting(null); //newGame
 
-            }
-            case 3-> {
-                endStage=mainStage;
-                firstMain=true;
-                start(null); //new server
+                }
+                case 3 -> {
+                    endStage = mainStage;
+                    firstMain = true;
+                    start(null); //new server
+                }
             }
         }
     }
@@ -640,5 +642,23 @@ public class GUIView extends Application implements View  {
         game.setView(this);
         this.game=game;
         serverHandler.setModel(game);
+    }
+
+    @Override
+    public void victory(Boolean win, Map<String, Integer> leaderboard) {
+        victory=true;
+        setLoader("/victory.fxml");
+        Scene scene = loadScene(currentLoader);
+        VictoryController controller = currentLoader.getController();
+        controller.setScene(win, leaderboard);
+        Platform.runLater(()->{
+            oldStage=mainStage;
+            manageStage(mainStage, scene, "Victory", true);
+        });
+        Button button = (Button) currentLoader.getNamespace().get("closeButton");
+        button.setOnAction(event->{
+            victory=false;
+            endGame();
+        });
     }
 }

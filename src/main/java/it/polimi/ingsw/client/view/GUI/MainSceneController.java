@@ -16,8 +16,11 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
+import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.text.Font;
 import javafx.scene.text.Text;
+import javafx.scene.text.TextFlow;
 
 import java.net.URL;
 import java.util.ArrayList;
@@ -129,7 +132,7 @@ public class MainSceneController implements Initializable {
     @FXML
     private ImageView faithMarker;
     @FXML
-    private Text logText;
+    private TextFlow logText;
     @FXML
     private ScrollPane log;
     @FXML
@@ -651,9 +654,16 @@ public class MainSceneController implements Initializable {
     public void addTextInLog(String text)
     {
         if(text!=null){
+            Text newText = new Text(text+"\n");
+            newText.setFill(Color.BLACK);
+            newText.setFont(Font.font("Lucida Calligraphy", 17));
+            /*
             String previous = logText.getText();
             logText.setText(previous+"\n"+text);
+             */
+            Platform.runLater(()->logText.getChildren().add(newText));
             log.setVvalue(1.0);
+
         }
 
     }
