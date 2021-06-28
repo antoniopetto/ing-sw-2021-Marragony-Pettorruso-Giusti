@@ -314,6 +314,7 @@ public class GUIView extends Application implements View  {
         showController.setLeaderCard();
         showController.setSlots();
         showController.setStrongBox();
+        showController.setTrack();
         Platform.runLater(() ->{
             if(tmpStage == null)  tmpStage = new Stage();
             manageStage(tmpStage, scene, "Show PlayerBoard", false);

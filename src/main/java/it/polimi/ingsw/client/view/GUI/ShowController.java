@@ -36,7 +36,8 @@ public class ShowController implements Initializable {
     private ImageView resLow2;
     @FXML
     private ImageView resLow3;
-
+    @FXML
+    private ImageView faithMarker;
     @FXML
     private Group slotsTot;
     @FXML
@@ -130,49 +131,84 @@ public class ShowController implements Initializable {
         }
     }
 
+    public void setTrack(){
+        int position= thisPlayer.getPosition();
+        if(position<3){
+            faithMarker.setLayoutX(15+(position*32));}
+        else if(position<5){
+            position=position-2;
+            faithMarker.setLayoutY(161-(position*32));
+            faithMarker.setLayoutX(79);
+        }
+        else if(position<10){
+            faithMarker.setLayoutY(97);
+            position = position-4;
+            faithMarker.setLayoutX(79+(position*32));
+        }
+        else if (position<12){
+            faithMarker.setLayoutX(240);
+            position=position-9;
+            faithMarker.setLayoutY(97+(position*32));
+        }
+        else if(position<17){
+            faithMarker.setLayoutY(161);
+            position=position-11;
+            faithMarker.setLayoutX(240+(position*32));
+        }
+        else if(position<19){
+            faithMarker.setLayoutX(400);
+            position=position-16;
+            faithMarker.setLayoutY(161-(position*32));
+        }
+        else{
+            faithMarker.setLayoutY(97);
+            position=position-18;
+            faithMarker.setLayoutX(400+(position*32));
+        }
+    }
+
     public void setStrongBox(){
-
-                int quantity;
-                if(thisPlayer.getStrongbox().get(Resource.COIN)!=null)
-                    quantity = thisPlayer.getStrongbox().get(Resource.COIN);
-                else quantity=0;
-                if(quantity>0) {
-                    GUISupport.setVisible(true, coin);
-                    n4.setText(String.valueOf(quantity));
-                }
-                else GUISupport.setVisible(false, coin);
-
-
-
-                if(thisPlayer.getStrongbox().get(Resource.SHIELD)!=null)
-                    quantity = thisPlayer.getStrongbox().get(Resource.SHIELD);
-                else quantity=0;
-                if(quantity>0) {
-                    GUISupport.setVisible(true, shield);
-                    n1.setText(String.valueOf(quantity));
-                }
-                else GUISupport.setVisible(false, shield);
+        int quantity;
+        if(thisPlayer.getStrongbox().get(Resource.COIN)!=null)
+            quantity = thisPlayer.getStrongbox().get(Resource.COIN);
+        else quantity=0;
+        if(quantity>0) {
+            GUISupport.setVisible(true, coin);
+            n4.setText(String.valueOf(quantity));
+        }
+        else GUISupport.setVisible(false, coin);
 
 
 
-                if(thisPlayer.getStrongbox().get(Resource.STONE)!=null)
-                    quantity = thisPlayer.getStrongbox().get(Resource.STONE);
-                else quantity=0;
-                if(quantity>0) {
-                    GUISupport.setVisible(true, stone);
-                    n2.setText(String.valueOf(quantity));
-                }
-                else GUISupport.setVisible(false, stone);
+        if(thisPlayer.getStrongbox().get(Resource.SHIELD)!=null)
+            quantity = thisPlayer.getStrongbox().get(Resource.SHIELD);
+        else quantity=0;
+        if(quantity>0) {
+            GUISupport.setVisible(true, shield);
+            n1.setText(String.valueOf(quantity));
+        }
+        else GUISupport.setVisible(false, shield);
 
 
-                if(thisPlayer.getStrongbox().get(Resource.SERVANT)!=null)
-                    quantity = thisPlayer.getStrongbox().get(Resource.SERVANT);
-                else quantity=0;
-                if(quantity>0) {
-                    GUISupport.setVisible(true, servant);
-                    n3.setText(String.valueOf(quantity));
-                }
-                else GUISupport.setVisible(false, servant);
+
+        if(thisPlayer.getStrongbox().get(Resource.STONE)!=null)
+            quantity = thisPlayer.getStrongbox().get(Resource.STONE);
+        else quantity=0;
+        if(quantity>0) {
+            GUISupport.setVisible(true, stone);
+            n2.setText(String.valueOf(quantity));
+        }
+        else GUISupport.setVisible(false, stone);
+
+
+        if(thisPlayer.getStrongbox().get(Resource.SERVANT)!=null)
+            quantity = thisPlayer.getStrongbox().get(Resource.SERVANT);
+        else quantity=0;
+        if(quantity>0) {
+            GUISupport.setVisible(true, servant);
+            n3.setText(String.valueOf(quantity));
+        }
+        else GUISupport.setVisible(false, servant);
 
     }
 
