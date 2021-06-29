@@ -1,7 +1,6 @@
 package it.polimi.ingsw.client.view.GUI;
 
 import it.polimi.ingsw.client.simplemodel.*;
-import it.polimi.ingsw.server.model.cards.SpecialAbility;
 import it.polimi.ingsw.server.model.playerboard.DepotName;
 import it.polimi.ingsw.server.model.playerboard.Resource;
 import it.polimi.ingsw.server.model.shared.PopeFavourTile;
@@ -111,6 +110,8 @@ public class MainSceneController implements Initializable {
     private Group strbxShield;
     @FXML
     private Group strbxStone;
+    @FXML
+    private Group leaderResources;
     @FXML
     private Accordion actionButtons;
     @FXML
@@ -380,6 +381,11 @@ public class MainSceneController implements Initializable {
     public void disableButtons(boolean disable) {GUISupport.setDisable(disable, actionButtons);}
     public void disableCardsInSlot(boolean disable) {GUISupport.setDisable(disable, cardsSlots);}
     public void showBasePower(boolean show){GUISupport.setVisible(show, basePower);}
+    public void disableLeaderCards(boolean disable){
+        GUISupport.setDisable(disable, leaderCard1);
+        GUISupport.setDisable(disable, leaderCard2);
+    }
+    public void showLeaderResources(boolean show){GUISupport.setVisible(show, leaderResources);}
     public void showConfirmButton(boolean show){
         GUISupport.setVisible(!show, buyCardButton, buyResourcesButton, activateProductionButton);
         GUISupport.setVisible(show, confirmSelectionButton);
@@ -656,7 +662,7 @@ public class MainSceneController implements Initializable {
         if(text!=null){
             Text newText = new Text(text+"\n");
             newText.setFill(Color.BLACK);
-            newText.setFont(Font.font("Lucida Calligraphy", 17));
+            newText.setFont(Font.font("Lucida Calligraphy", 15));
             /*
             String previous = logText.getText();
             logText.setText(previous+"\n"+text);
@@ -687,5 +693,41 @@ public class MainSceneController implements Initializable {
     public void basePowerSelected(MouseEvent mouseEvent) {
         mouseEvent.consume();
         Platform.runLater(()->setChoice(3));
+    }
+
+    public void leaderProductionPower(MouseEvent mouseEvent) {
+        mouseEvent.consume();
+        ImageView card = (ImageView)mouseEvent.getSource();
+        String url = card.getImage().getUrl();
+        int cardId=0;
+        if(url.contains("113")) cardId=113;
+        else if(url.contains("114")) cardId=114;
+        else if (url.contains("115")) cardId=115;
+        else if(url.contains("116")) cardId=116;
+        if(cardId!=0) {
+            GUISupport.setEffect(true, card);
+            elementsWithEffects.add(card);
+            int finalCardId = cardId;
+            Platform.runLater(()->{
+                setChoice(4);
+                setCardId(finalCardId);
+            });
+        }
+
+    }
+
+    public void leaderResourceSelected(MouseEvent mouseEvent) {
+        mouseEvent.consume();
+        ImageView resource = (ImageView)mouseEvent.getSource();
+        int choice =0;
+        switch (resource.getId()){
+            case "shield" ->choice=1;
+            case "stone" ->choice=2;
+            case "servant" ->choice=3;
+            case "coin" ->choice=4;
+        }
+        int finalChoice = choice;
+        Platform.runLater(()->setChoice(finalChoice));
+
     }
 }

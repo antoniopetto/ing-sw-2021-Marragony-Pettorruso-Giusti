@@ -112,7 +112,7 @@ public class GUIView extends Application implements View  {
 
             if(settingGameController!=null)settingGameController.setTextError("You are connected to the server!");
 
-        }catch(IOException e)
+        }catch(Exception e)
         {
             if(settingGameController!=null)settingGameController.setTextError("Server unreachable, try again.");
         }
@@ -226,6 +226,7 @@ public class GUIView extends Application implements View  {
         mainSceneController.setActionButton(postTurn);
         mainSceneController.setTiles();
         mainSceneController.setFaithTrack();
+        mainSceneController.disableLeaderCards(true);
 
         if(action.equals(Action.DISCARD_LEADER) || action.equals(Action.PLAY_LEADER)) mainSceneController.setLeaderCard();
         if(action.equals(Action.BUY_RESOURCES)){
@@ -339,6 +340,7 @@ public class GUIView extends Application implements View  {
     private CommandMsg activateProduction(Set<Integer> selectedCardIds, Map<Integer, ProductionPower> selectedExtraPowers)
     {
         mainSceneController.disableCardsInSlot(false);
+        mainSceneController.disableLeaderCards(false);
         int choice= mainSceneController.getChoice();
         switch (choice)
         {
@@ -364,7 +366,6 @@ public class GUIView extends Application implements View  {
                     manageStage(tmpStage, scene, "Base Power", false);
                 });
                 Resource input1=controller.getChoice();
-                String url = "/res-marble/"+GUISupport.returnPath(input1.name());
                 controller.setResIn1(input1);
                 Map<Resource, Integer> realInput = new HashMap<>();
                 Map<Resource, Integer> realOutput = new HashMap<>();
@@ -380,6 +381,39 @@ public class GUIView extends Application implements View  {
                     tmpStage.close();
                 });
                 mainSceneController.showBasePower(false);
+                return activateProduction(selectedCardIds, selectedExtraPowers);
+            }
+            case 4 ->{
+                mainSceneController.showLeaderResources(true);
+                int cardId= mainSceneController.getCardId();
+                Resource resource = null;
+                boolean active = false;
+                for(SimpleLeaderCard card : game.getThisPlayer().getLeaderCards()){
+                    if(card.getId()==cardId){
+                        resource=card.getAbility().getResource();
+                        active=card.isActive();
+                    }
+                }
+                if(active) {
+                    int index = 0;
+                    int i = 0;
+                    for (ProductionPower pp : game.getThisPlayer().getExtraProductionPowers()) {
+                        if (pp.getInput().containsKey(resource)) index = i;
+                        i++;
+                    }
+                    int res = mainSceneController.getChoice();
+                    switch (res) {
+                        case 1 -> resource = Resource.SHIELD;
+                        case 2 -> resource = Resource.STONE;
+                        case 3 -> resource = Resource.SERVANT;
+                        case 4 -> resource = Resource.COIN;
+                    }
+                    mainSceneController.showLeaderResources(false);
+                    Map<Resource, Integer> realInput = new HashMap<>();
+                    Map<Resource, Integer> realOutput = new HashMap<>();
+                    realOutput.put(resource, 1);
+                    selectedExtraPowers.put(index, new ProductionPower(realInput, realOutput));
+                }
                 return activateProduction(selectedCardIds, selectedExtraPowers);
             }
         }
