@@ -47,6 +47,12 @@ public class SimpleLeaderCard extends Card implements Serializable {
     }
 
     public SimpleLeaderCard(int id, int victoryPoints, List<SimpleCardRequirement> cardRequirements,
+                            Map<Resource, Integer> resourceRequirements, SimpleAbility ability, boolean active){
+        this(id, victoryPoints, cardRequirements, resourceRequirements, ability);
+        this.active = active;
+    }
+
+    public SimpleLeaderCard(int id, int victoryPoints, List<SimpleCardRequirement> cardRequirements,
                             Map<Resource, Integer> resourceRequirements, SimpleAbility ability){
 
         super(id, victoryPoints);

@@ -16,7 +16,6 @@ public class NextActionMsg implements ViewMsg{
 
     }
 
-
     @Override
     public void changeView(View view, ServerHandler server) throws IOException {
         CommandMsg msg = view.selectMove(postTurn);

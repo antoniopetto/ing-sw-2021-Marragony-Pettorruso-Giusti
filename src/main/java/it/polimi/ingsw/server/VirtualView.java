@@ -90,7 +90,7 @@ public class VirtualView implements Runnable{
 
     public void notifyNewTurn(){
         if (turnJustFinished == null || turnJustFinished){
-            messageFilter(null, getPlayingUsername() + " is playing the turn");
+            messageFilter(null, getPlayingUsername() + " is playing");
             turnJustFinished = false;
         }
     }
@@ -99,7 +99,7 @@ public class VirtualView implements Runnable{
         if (!gameController.isSinglePlayer())
             throw new IllegalStateException();
 
-        sendPlaying(new TextMsg("Lorenzo il Magnifico is playing the turn"));
+        sendPlaying(new TextMsg("Lorenzo il Magnifico is playing"));
     }
 
     public void requestDiscardLeaderCard(){

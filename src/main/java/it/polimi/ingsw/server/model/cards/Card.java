@@ -46,7 +46,7 @@ public abstract class Card implements Serializable {
                 .filter(x -> x.getId() == id)
                 .findFirst().orElse(null);
         if (result == null)
-            throw new ElementNotFoundException("No object has the specified id");
+            throw new ElementNotFoundException("No object with id " + id);
         return result;
     }
 

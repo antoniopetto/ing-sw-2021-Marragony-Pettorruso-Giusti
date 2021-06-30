@@ -342,15 +342,14 @@ public class GUIView extends Application implements View  {
         }
         return null;
     }
-    private CommandMsg buyCard()
-    {
+    private CommandMsg buyCard() {
         mainSceneController.disableButtons(true);
         mainSceneController.disableCards(false);
         int cardId = mainSceneController.getCardId();
+        System.out.println(cardId);
         mainSceneController.disableCards(true);
         mainSceneController.disableSlots(false);
         int slotId = mainSceneController.getChoice()-1;
-        System.out.println(slotId);
         mainSceneController.disableSlots(true);
         SimpleDevCard card = SimpleDevCard.parse(cardId);
         return new BuyAndAddCardInSlotMsg(card.getColor(), card.getLevel(), slotId);

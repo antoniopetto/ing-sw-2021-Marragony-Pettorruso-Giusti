@@ -40,7 +40,7 @@ public class LeaderCard extends Card{
             else if (req instanceof CardRequirement)
                 cardReqList.add(((CardRequirement) req).getSimple());
         }
-        return new SimpleLeaderCard(getId(), getVictoryPoints(), cardReqList, resReqMap, ability);
+        return new SimpleLeaderCard(getId(), getVictoryPoints(), cardReqList, resReqMap, ability, played);
     }
 
     /**
