@@ -83,8 +83,9 @@ public class GUIView extends Application implements View  {
         Font.loadFont(getClass().getResourceAsStream("/resources/fonts/master_of_break.ttf"), 14);
         Scene scene = loadScene(currentLoader);
         Platform.runLater(() ->{
+            if(mainStage!=null) oldStage=mainStage;
             initStage = new Stage();
-            manageStage(initStage,scene, "Inserting Window", false );
+            manageStage(initStage,scene, "Inserting Window", true );
         });
 
         SettingGameController settingGameController = currentLoader.getController();
@@ -157,9 +158,12 @@ public class GUIView extends Application implements View  {
     public String getUsername() {
         setLoader("/setGame.fxml");
         Scene scene = loadScene(currentLoader);
-        Platform.runLater(() -> manageStage(initStage,scene, "Inserting", false ));
-       StartGameController startGameController = currentLoader.getController();
-       String username = startGameController.getUsername();
+        Platform.runLater(() -> {
+            if(mainStage!=null) oldStage=mainStage;
+            manageStage(initStage,scene, "Inserting", true );
+        });
+        StartGameController startGameController = currentLoader.getController();
+        String username = startGameController.getUsername();
 
         return username;
 
