@@ -266,7 +266,7 @@ public class Player extends AbstractPlayer {
         int faithCounter = 0;
         for(Resource r : totalProductionPower.getOutput().keySet()) {
             if (r == Resource.FAITH)
-                faithCounter ++;
+                faithCounter += totalProductionPower.getOutput().get(Resource.FAITH);
             else
                 playerBoard.getStrongBox().addResource(r, totalProductionPower.getOutput().get(r));
         }
