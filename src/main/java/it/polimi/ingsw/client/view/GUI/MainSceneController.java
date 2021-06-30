@@ -1,11 +1,9 @@
 package it.polimi.ingsw.client.view.GUI;
 
-import it.polimi.ingsw.client.simplemodel.SimpleDepot;
-import it.polimi.ingsw.client.simplemodel.SimpleDevCard;
-import it.polimi.ingsw.client.simplemodel.SimpleLeaderCard;
-import it.polimi.ingsw.client.simplemodel.SimpleModel;
+import it.polimi.ingsw.client.simplemodel.*;
 import it.polimi.ingsw.server.model.playerboard.DepotName;
 import it.polimi.ingsw.server.model.playerboard.Resource;
+import it.polimi.ingsw.server.model.shared.PopeFavourTile;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -17,8 +15,11 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
+import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.text.Font;
 import javafx.scene.text.Text;
+import javafx.scene.text.TextFlow;
 
 import java.net.URL;
 import java.util.ArrayList;
@@ -33,6 +34,7 @@ public class MainSceneController implements Initializable {
     private int cardId = 0;
     private int bufferId = 0;
     private List<Node> elementsWithEffects = new ArrayList<>();
+    private int numberOfVaticanReport =0;
 
 
     //LeaderCard Action
@@ -71,6 +73,14 @@ public class MainSceneController implements Initializable {
     @FXML
     private ImageView resourceDXLow;
     @FXML
+    private ImageView resourceSXExtra1;
+    @FXML
+    private ImageView resourceDXExtra1;
+    @FXML
+    private ImageView resourceSXExtra2;
+    @FXML
+    private ImageView resourceDXExtra2;
+    @FXML
     private Button buyCardButton;
     @FXML
     private Button activateProductionButton;
@@ -85,6 +95,12 @@ public class MainSceneController implements Initializable {
     @FXML
     private TitledPane showOthers;
     @FXML
+    private Button show1;
+    @FXML
+    private Button show2;
+    @FXML
+    private Button show3;
+    @FXML
     private Group slots;
     @FXML
     private Group strbxServant;
@@ -95,8 +111,15 @@ public class MainSceneController implements Initializable {
     @FXML
     private Group strbxStone;
     @FXML
+    private Group leaderResources;
+    @FXML
     private Accordion actionButtons;
-
+    @FXML
+    private ImageView tile1;
+    @FXML
+    private ImageView tile2;
+    @FXML
+    private ImageView tile3;
     @FXML
     private Group cardsSlots;
     @FXML
@@ -110,9 +133,15 @@ public class MainSceneController implements Initializable {
     @FXML
     private ImageView faithMarker;
     @FXML
-    private Text logText;
+    private TextFlow logText;
+    @FXML
+    private ScrollPane log;
     @FXML
     private ImageView blackCross;
+
+    private String username;
+    private List<String> allUsername = new ArrayList<>();
+
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -156,11 +185,32 @@ public class MainSceneController implements Initializable {
                 setChoice(5);
                 setActionButton(false);
             }
-            case "endTurnButton" -> setChoice(6);
+            case "endTurnButton" ->{
+                setChoice(6);
+                setActionButton(false);
+            }
+            case "show1" ->{
+                if(allUsername.size() > 0) username = allUsername.get(0);
+                setChoice(7);
+                setActionButton(false);
+            }
+            case "show2" ->{
+                if(allUsername.size() > 1) username = allUsername.get(1);
+                setChoice(7);
+                setActionButton(false);
+            }
+            case "show3" ->{
+                if(allUsername.size() > 2) username = allUsername.get(2);
+                setChoice(7);
+                setActionButton(false);
+            }
 
         }
     }
 
+    public String getUser(){
+        return username;
+    }
     private void activeLeaderCardComponents(boolean active, int counter){
         if(counter > 0){
         GUISupport.setVisible(active, activeCard1Radio, lCardButton);
@@ -186,13 +236,13 @@ public class MainSceneController implements Initializable {
 
         if(simpleModel.getThisPlayer().getLeaderCards().size() > 0){
             List<Image> cards = new ArrayList<>();
-            List<Boolean> active = new ArrayList<>();
+            List<SimpleLeaderCard> simpleLeaderCards = new ArrayList<>();
+
             for (SimpleLeaderCard card : simpleModel.getThisPlayer().getLeaderCards()) {
                 int cardId = card.getId();
                 String imUrl = "/cards/leader/Leader-" + cardId + ".jpg";
                 cards.add(new Image(imUrl));
-                if(card.isActive()) active.add(true);
-                    else active.add(false);
+                simpleLeaderCards.add(card);
             }
 
             switch (cards.size()) {
@@ -201,27 +251,56 @@ public class MainSceneController implements Initializable {
                     leaderCard2.setImage(cards.get(1));
                     GUISupport.setVisible(true, leaderCard1, leaderCard2);
 
-                    if(active.get(0)){
-                        GUISupport.setVisible(true, rectCard1);
+                    if(simpleLeaderCards.get(0).isActive()){
+                        rectCard1.setVisible(true);
+                        if(simpleLeaderCards.get(0).getAbility().getType().equals(SimpleAbility.Type.EXTRADEPOT)){
+                            int quantity = 0;
+                            if(simpleLeaderCards.get(0).getAbility().getResource().equals(simpleModel.getThisPlayer().getWarehouse().getDepot(DepotName.FIRST_EXTRA).getConstraint()))
+                              quantity =GUISupport.quantityOfResources(simpleModel.getThisPlayer().getWarehouse().getDepot(DepotName.FIRST_EXTRA));
+                                else  quantity =GUISupport.quantityOfResources(simpleModel.getThisPlayer().getWarehouse().getDepot(DepotName.SECOND_EXTRA));
 
+                            GUISupport.settingImageView(quantity, resourceSXExtra1, resourceDXExtra1);
+                        }
+                        else GUISupport.setVisible(false, resourceSXExtra1, resourceDXExtra1);
                     }else{
-                        GUISupport.setVisible(false, rectCard1);
-
+                        rectCard1.setVisible(false);
                     }
 
-                    if(active.get(1)){
-                        GUISupport.setVisible(true, rectCard2);
 
+                    if(simpleLeaderCards.get(1).isActive()){
+                        rectCard2.setVisible(true);
+                        if(simpleLeaderCards.get(1).getAbility().getType().equals(SimpleAbility.Type.EXTRADEPOT)){
+                            int quantity;
+                            if(simpleLeaderCards.get(1).getAbility().getResource().equals(simpleModel.getThisPlayer().getWarehouse().getDepot(DepotName.FIRST_EXTRA).getConstraint()))
+                                quantity =GUISupport.quantityOfResources(simpleModel.getThisPlayer().getWarehouse().getDepot(DepotName.FIRST_EXTRA));
+                            else  quantity =GUISupport.quantityOfResources(simpleModel.getThisPlayer().getWarehouse().getDepot(DepotName.SECOND_EXTRA));
+
+                            GUISupport.settingImageView(quantity, resourceSXExtra2, resourceDXExtra2);
+                        }
+                        else GUISupport.setVisible(false, resourceSXExtra2, resourceDXExtra2);
                     }else{
-                        GUISupport.setVisible(false, rectCard2);
-
+                        rectCard2.setVisible(false);
                     }
                 }
                 case 1 -> {
                     leaderCard1.setImage(cards.get(0));
                     leaderCard1.setVisible(true);
                     leaderCard2.setVisible(false);
-                    GUISupport.setVisible(active.get(0), rectCard1);
+
+                    if(simpleLeaderCards.get(0).isActive()){
+                        rectCard1.setVisible(true);
+                        if(simpleLeaderCards.get(0).getAbility().getType().equals(SimpleAbility.Type.EXTRADEPOT)){
+                            int quantity;
+                            if(simpleLeaderCards.get(0).getAbility().getResource().equals(simpleModel.getThisPlayer().getWarehouse().getDepot(DepotName.FIRST_EXTRA).getConstraint()))
+                                quantity =GUISupport.quantityOfResources(simpleModel.getThisPlayer().getWarehouse().getDepot(DepotName.FIRST_EXTRA));
+                            else  quantity =GUISupport.quantityOfResources(simpleModel.getThisPlayer().getWarehouse().getDepot(DepotName.SECOND_EXTRA));
+
+                            GUISupport.settingImageView(quantity, resourceSXExtra1, resourceDXExtra1);
+                        }
+                        else GUISupport.setVisible(false, resourceSXExtra1, resourceDXExtra1);
+                    }else{
+                        rectCard1.setVisible(false);
+                    }
                 }
 
             }
@@ -302,6 +381,11 @@ public class MainSceneController implements Initializable {
     public void disableButtons(boolean disable) {GUISupport.setDisable(disable, actionButtons);}
     public void disableCardsInSlot(boolean disable) {GUISupport.setDisable(disable, cardsSlots);}
     public void showBasePower(boolean show){GUISupport.setVisible(show, basePower);}
+    public void disableLeaderCards(boolean disable){
+        GUISupport.setDisable(disable, leaderCard1);
+        GUISupport.setDisable(disable, leaderCard2);
+    }
+    public void showLeaderResources(boolean show){GUISupport.setVisible(show, leaderResources);}
     public void showConfirmButton(boolean show){
         GUISupport.setVisible(!show, buyCardButton, buyResourcesButton, activateProductionButton);
         GUISupport.setVisible(show, confirmSelectionButton);
@@ -319,6 +403,25 @@ public class MainSceneController implements Initializable {
         GUISupport.setVisible(false, showOthers);
 
     }
+    public void setUsernameShow(){
+        if(allUsername.size() > 0) allUsername.clear();
+        for(SimplePlayer simplePlayer : simpleModel.getPlayers()){
+            if(!simplePlayer.getUsername().equals(simpleModel.getThisPlayer().getUsername()))
+                allUsername.add(simplePlayer.getUsername());
+        }
+        showUsername(allUsername, show1, show2, show3);
+    }
+
+    public void showUsername(List<String> username, Button... showButtons){
+        for(int i = 0; i < username.size(); i++){
+            showButtons[i].setVisible(true);
+            showButtons[i].setText("Show " + username.get(i));
+        }
+        for(int i = username.size(); i < showButtons.length; i++){
+            showButtons[i].setVisible(false);
+        }
+    }
+
     public void setDecks()
     {
         List<Integer> ids = new ArrayList<>();
@@ -415,6 +518,23 @@ public class MainSceneController implements Initializable {
         GUISupport.settingImageView(quantity, resourceSXLow, resourceCLow, resourceDXLow);
     }
 
+    public void setTiles(){
+        List<PopeFavourTile> tiles=simpleModel.getThisPlayer().getTiles();
+        if(tiles.get(0).isGained()) tile1.setImage(new Image("/pope-favor/pope_favor1_front.png"));
+        else if(getMaxPosition()>8) GUISupport.setVisible(false, tile1);
+        if(tiles.get(1).isGained()) tile2.setImage(new Image("/pope-favor/pope_favor2_front.png"));
+        else if(getMaxPosition()>16) GUISupport.setVisible(false, tile2);
+        if(tiles.get(2).isGained()) tile3.setImage(new Image("/pope-favor/pope_favor3_front.png"));
+    }
+
+    private int getMaxPosition(){
+        int max=0;
+        for (SimplePlayer player: simpleModel.getPlayers()) {
+            if(player.getPosition()>max) max=player.getPosition();
+        }
+        return max;
+    }
+
     public void setSlots() {
         int slotCounter = 0;
         int cardCounter;
@@ -443,6 +563,7 @@ public class MainSceneController implements Initializable {
             slotCounter++;
         }
     }
+
 
     public void setStrongbox()
     {
@@ -539,9 +660,18 @@ public class MainSceneController implements Initializable {
     public void addTextInLog(String text)
     {
         if(text!=null){
+            Text newText = new Text(text+"\n");
+            newText.setFill(Color.BLACK);
+            newText.setFont(Font.font("Lucida Calligraphy", 15));
+            /*
             String previous = logText.getText();
             logText.setText(previous+"\n"+text);
+             */
+            Platform.runLater(()->logText.getChildren().add(newText));
+            log.setVvalue(1.0);
+
         }
+
     }
 
     public void prodCardSelected(MouseEvent mouseEvent) {
@@ -563,5 +693,41 @@ public class MainSceneController implements Initializable {
     public void basePowerSelected(MouseEvent mouseEvent) {
         mouseEvent.consume();
         Platform.runLater(()->setChoice(3));
+    }
+
+    public void leaderProductionPower(MouseEvent mouseEvent) {
+        mouseEvent.consume();
+        ImageView card = (ImageView)mouseEvent.getSource();
+        String url = card.getImage().getUrl();
+        int cardId=0;
+        if(url.contains("113")) cardId=113;
+        else if(url.contains("114")) cardId=114;
+        else if (url.contains("115")) cardId=115;
+        else if(url.contains("116")) cardId=116;
+        if(cardId!=0) {
+            GUISupport.setEffect(true, card);
+            elementsWithEffects.add(card);
+            int finalCardId = cardId;
+            Platform.runLater(()->{
+                setChoice(4);
+                setCardId(finalCardId);
+            });
+        }
+
+    }
+
+    public void leaderResourceSelected(MouseEvent mouseEvent) {
+        mouseEvent.consume();
+        ImageView resource = (ImageView)mouseEvent.getSource();
+        int choice =0;
+        switch (resource.getId()){
+            case "shield" ->choice=1;
+            case "stone" ->choice=2;
+            case "servant" ->choice=3;
+            case "coin" ->choice=4;
+        }
+        int finalChoice = choice;
+        Platform.runLater(()->setChoice(finalChoice));
+
     }
 }

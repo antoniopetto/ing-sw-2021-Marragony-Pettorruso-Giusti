@@ -15,12 +15,14 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
+<?import javafx.scene.text.TextFlow?>
 
-<GridPane alignment="CENTER_RIGHT" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1280.0" styleClass="maingrid" stylesheets="@background.css" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.client.view.GUI.MainSceneController">
+<GridPane alignment="CENTER_RIGHT" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1280.0" styleClass="maingrid" stylesheets="@background.css" xmlns="http://javafx.com/javafx/11.0.2" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.client.view.GUI.MainSceneController">
   <columnConstraints>
     <ColumnConstraints />
     <ColumnConstraints hgrow="SOMETIMES" maxWidth="1276.7999267578125" minWidth="10.0" prefWidth="778.2000244140625" />
@@ -111,8 +113,9 @@
       </GridPane>
       <GridPane styleClass="transparent" stylesheets="@background.css" GridPane.columnIndex="1">
         <columnConstraints>
-          <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="248.79991149902344" minWidth="10.0" prefWidth="160.79991149902344" />
-          <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="359.20008850097656" minWidth="10.0" prefWidth="171.20007324218744" />
+          <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="248.79991149902344" minWidth="10.0" prefWidth="182.8" />
+            <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="248.79991149902344" minWidth="10.0" prefWidth="47.866674804687506" />
+          <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="359.20008850097656" minWidth="10.0" prefWidth="190.53332519531253" />
             <ColumnConstraints hgrow="SOMETIMES" maxWidth="419.0" minWidth="10.0" prefWidth="367.7999267578125" />
         </columnConstraints>
         <rowConstraints>
@@ -123,54 +126,80 @@
             <Group GridPane.valignment="TOP">
                <children>
                   <Rectangle fx:id="rectCard2" arcHeight="5.0" arcWidth="5.0" fill="#1f93ff00" height="219.0" stroke="#0aff50" strokeType="INSIDE" strokeWidth="5.0" visible="false" width="152.0" />
-                  <ImageView fx:id="leaderCard2" fitHeight="213.0" fitWidth="141.0" layoutX="6.0" layoutY="5.0" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fx:id="leaderCard2" fitHeight="213.0" fitWidth="141.0" layoutX="6.0" layoutY="5.0" onMouseClicked="#leaderProductionPower" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@cards/leader/Leader-101.jpg" />
                      </image>
+                     <cursor>
+                        <Cursor fx:constant="HAND" />
+                     </cursor>
+                  </ImageView>
+                  <ImageView fx:id="resourceSXExtra2" fitHeight="32.0" fitWidth="29.0" layoutX="40.0" layoutY="169.0" pickOnBounds="true" preserveRatio="true" visible="false">
+                     <image>
+                        <Image url="@res-marbles/coin.png" />
+                     </image>
+                  </ImageView>
+                  <ImageView fx:id="resourceDXExtra2" fitHeight="32.0" fitWidth="29.0" layoutX="88.0" layoutY="169.0" pickOnBounds="true" preserveRatio="true" visible="false">
+                     <image>
+                        <Image url="@res-marbles/coin.png" />
+                     </image>
                   </ImageView>
                </children>
             </Group>
-            <Group GridPane.columnIndex="1" GridPane.valignment="TOP">
+            <Group GridPane.columnIndex="2" GridPane.valignment="TOP">
                <children>
-                  <ImageView fx:id="leaderCard1" fitHeight="214.0" fitWidth="248.0" layoutX="5.0" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fx:id="leaderCard1" fitHeight="214.0" fitWidth="248.0" layoutX="5.0" onMouseClicked="#leaderProductionPower" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@cards/leader/Leader-102.jpg" />
                      </image>
+                     <cursor>
+                        <Cursor fx:constant="HAND" />
+                     </cursor>
                   </ImageView>
-                  <Rectangle fx:id="rectCard1" arcHeight="5.0" arcWidth="5.0" fill="#1f93ff00" height="219.0" stroke="#0aff50" strokeType="INSIDE" strokeWidth="5.0" visible="false" width="152.0" />
+                  <Rectangle fx:id="rectCard1" arcHeight="5.0" arcWidth="5.0" disable="true" fill="#1f93ff00" height="219.0" stroke="#0aff50" strokeType="INSIDE" strokeWidth="5.0" visible="false" width="152.0" />
+                  <ImageView fx:id="resourceSXExtra1" fitHeight="32.0" fitWidth="29.0" layoutX="33.0" layoutY="159.0" pickOnBounds="true" preserveRatio="true" visible="false">
+                     <image>
+                        <Image url="@res-marbles/coin.png" />
+                     </image>
+                  </ImageView>
+                  <ImageView fx:id="resourceDXExtra1" fitHeight="32.0" fitWidth="29.0" layoutX="94.0" layoutY="159.0" pickOnBounds="true" preserveRatio="true" visible="false">
+                     <image>
+                        <Image url="@res-marbles/coin.png" />
+                     </image>
+                  </ImageView>
                </children>
             </Group>
-            <GridPane styleClass="transparent" stylesheets="@background.css" GridPane.columnIndex="2">
+            <GridPane styleClass="transparent" stylesheets="@background.css" GridPane.columnIndex="3">
               <rowConstraints>
                 <RowConstraints maxHeight="148.4666732788086" minHeight="10.0" prefHeight="148.4666732788086" vgrow="SOMETIMES" />
                 <RowConstraints maxHeight="108.9999984741211" minHeight="10.0" prefHeight="82.33332672119141" vgrow="SOMETIMES" />
               </rowConstraints>
                <children>
-                  <Accordion fx:id="actionButtons" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="149.0" prefWidth="394.0" styleClass="transparent" stylesheets="@background.css" GridPane.columnIndex="1" GridPane.valignment="TOP">
+                  <Accordion fx:id="actionButtons" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="150.0" prefWidth="362.0" styleClass="transparent" stylesheets="@background.css" GridPane.columnIndex="1" GridPane.valignment="TOP">
                     <panes>
                       <TitledPane fx:id="showOthers" animated="false" text="show others...">
                         <content>
                           <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" styleClass="maingrid" stylesheets="@background.css">
                                  <children>
-                                    <Button layoutX="24.0" layoutY="3.0" mnemonicParsing="false" prefHeight="61.0" prefWidth="105.0" styleClass="transparent" stylesheets="@background.css" text="Show Player1" textAlignment="CENTER" textFill="#3426cf" wrapText="true">
+                                    <Button fx:id="show1" layoutX="24.0" layoutY="3.0" mnemonicParsing="false" onAction="#clickActionButton" prefHeight="61.0" prefWidth="105.0" styleClass="transparent" stylesheets="@background.css" text="Show Player1" textAlignment="CENTER" textFill="#3426cf" wrapText="true">
                                        <font>
-                                          <Font name="Lucida Calligraphy Italic" size="16.0" />
+                                          <Font name="Lucida Calligraphy Italic" size="15.0" />
                                        </font>
                                        <cursor>
                                           <Cursor fx:constant="HAND" />
                                        </cursor>
                                     </Button>
-                                    <Button layoutX="143.0" layoutY="3.0" mnemonicParsing="false" prefHeight="61.0" prefWidth="105.0" styleClass="transparent" stylesheets="@background.css" text="Show player2" textAlignment="CENTER" textFill="#3426cf" wrapText="true">
+                                    <Button fx:id="show2" layoutX="143.0" layoutY="3.0" mnemonicParsing="false" onAction="#clickActionButton" prefHeight="61.0" prefWidth="105.0" styleClass="transparent" stylesheets="@background.css" text="Show player2" textAlignment="CENTER" textFill="#3426cf" wrapText="true">
                                        <font>
-                                          <Font name="Lucida Calligraphy Italic" size="16.0" />
+                                          <Font name="Lucida Calligraphy Italic" size="15.0" />
                                        </font>
                                        <cursor>
                                           <Cursor fx:constant="HAND" />
                                        </cursor>
                                     </Button>
-                                    <Button layoutX="262.0" layoutY="3.0" mnemonicParsing="false" prefHeight="61.0" prefWidth="105.0" styleClass="transparent" stylesheets="@background.css" text="Show player3" textAlignment="CENTER" textFill="#3426cf" wrapText="true">
+                                    <Button fx:id="show3" layoutX="262.0" layoutY="3.0" mnemonicParsing="false" onAction="#clickActionButton" prefHeight="61.0" prefWidth="105.0" styleClass="transparent" stylesheets="@background.css" text="Show player3" textAlignment="CENTER" textFill="#3426cf" wrapText="true">
                                        <font>
-                                          <Font name="Lucida Calligraphy Italic" size="16.0" />
+                                          <Font name="Lucida Calligraphy Italic" size="15.0" />
                                        </font>
                                        <cursor>
                                           <Cursor fx:constant="HAND" />
@@ -200,14 +229,14 @@
                                        <cursor>
                                           <Cursor fx:constant="HAND" />
                                        </cursor></Button>
-                                    <Button fx:id="buyCardButton" layoutX="137.0" layoutY="2.0" mnemonicParsing="false" onAction="#clickActionButton" prefHeight="65.0" prefWidth="120.0" styleClass="transparent" stylesheets="@background.css" text="Buy card" textAlignment="CENTER" textFill="#3426cf" wrapText="true">
+                                    <Button fx:id="buyCardButton" layoutX="120.0" layoutY="2.0" mnemonicParsing="false" onAction="#clickActionButton" prefHeight="65.0" prefWidth="120.0" styleClass="transparent" stylesheets="@background.css" text="Buy card" textAlignment="CENTER" textFill="#3426cf" wrapText="true">
                                        <font>
                                           <Font name="Lucida Calligraphy Italic" size="16.0" />
                                        </font>
                                        <cursor>
                                           <Cursor fx:constant="HAND" />
                                        </cursor></Button>
-                                    <Button fx:id="activateProductionButton" layoutX="264.0" layoutY="2.0" mnemonicParsing="false" onAction="#clickActionButton" prefHeight="65.0" prefWidth="120.0" styleClass="transparent" stylesheets="@background.css" text="Activate Production" textAlignment="CENTER" textFill="#3426cf" wrapText="true">
+                                    <Button fx:id="activateProductionButton" layoutX="241.0" layoutY="2.0" mnemonicParsing="false" onAction="#clickActionButton" prefHeight="66.0" prefWidth="119.0" styleClass="transparent" stylesheets="@background.css" text="Activate Production" textAlignment="CENTER" textFill="#3426cf" wrapText="true">
                                        <font>
                                           <Font name="Lucida Calligraphy Italic" size="16.0" />
                                        </font>
@@ -263,33 +292,61 @@
             </GridPane>
             <RadioButton fx:id="activeCard2Radio" mnemonicParsing="false" prefHeight="21.0" prefWidth="13.0" visible="false" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="BOTTOM">
                <GridPane.margin>
-                  <Insets bottom="-10.0" left="20.0" />
+                  <Insets bottom="-10.0" left="-5.0" />
                </GridPane.margin>
                <toggleGroup>
                   <ToggleGroup fx:id="leaderCardGroup" />
                </toggleGroup>
             </RadioButton>
-            <RadioButton fx:id="activeCard1Radio" mnemonicParsing="false" prefHeight="21.0" prefWidth="13.0" toggleGroup="$leaderCardGroup" visible="false" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="BOTTOM">
+            <RadioButton fx:id="activeCard1Radio" mnemonicParsing="false" prefHeight="21.0" prefWidth="13.0" toggleGroup="$leaderCardGroup" visible="false" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="BOTTOM">
                <GridPane.margin>
-                  <Insets bottom="-10.0" left="20.0" />
+                  <Insets bottom="-10.0" />
                </GridPane.margin></RadioButton>
-            <Button fx:id="lCardButton" mnemonicParsing="false" onAction="#selectLCard" text="Select" visible="false" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="1" GridPane.valignment="BOTTOM">
+            <Button fx:id="lCardButton" mnemonicParsing="false" onAction="#selectLCard" text="Select" visible="false" GridPane.columnIndex="2" GridPane.halignment="RIGHT" GridPane.rowIndex="1" GridPane.valignment="BOTTOM">
                <GridPane.margin>
                   <Insets bottom="-15.0" />
                </GridPane.margin>
             </Button>
-          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="69.0" prefWidth="394.0" styleClass="transparent" stylesheets="@background.css" GridPane.columnIndex="2" GridPane.rowIndex="1">
+          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="69.0" prefWidth="394.0" style="-fx-background-color: transparent;" styleClass="transparent" stylesheets="@background.css" GridPane.columnIndex="3" GridPane.rowIndex="1">
                <children>
-                  <ScrollPane fx:id="log" layoutY="-1.0" prefHeight="80.0" prefWidth="394.0" styleClass="transparent" stylesheets="@background.css">
+                  <ScrollPane fx:id="log" layoutY="-1.0" prefHeight="80.0" prefWidth="362.0" styleClass="transparent" stylesheets="@backgroundStart.css">
                      <content>
-                        <Text fx:id="logText" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="387.7501220703125">
-                           <font>
-                              <Font name="Lucida Calligraphy Italic" size="14.0" />
-                           </font></Text>
+                        <TextFlow fx:id="logText" prefHeight="78.0" prefWidth="351.0" styleClass="transparent" stylesheets="@backgroundStart.css" />
                      </content>
                   </ScrollPane>
                </children>
             </AnchorPane>
+            <Pane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1">
+               <children>
+                  <Group fx:id="leaderResources" layoutX="9.0" layoutY="15.0" visible="false">
+                     <children>
+                        <ImageView fx:id="shield" fitHeight="32.0" fitWidth="29.0" onMouseClicked="#leaderResourceSelected" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@res-marbles/shield.png" />
+                           </image>
+                        </ImageView>
+                        <ImageView fx:id="servant" fitHeight="32.0" fitWidth="29.0" layoutY="40.0" onMouseClicked="#leaderResourceSelected" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@res-marbles/servant.png" />
+                           </image>
+                        </ImageView>
+                        <ImageView fx:id="stone" fitHeight="32.0" fitWidth="29.0" layoutY="80.0" onMouseClicked="#leaderResourceSelected" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@res-marbles/stone.png" />
+                           </image>
+                        </ImageView>
+                        <ImageView fx:id="coin" fitHeight="32.0" fitWidth="29.0" layoutY="121.0" onMouseClicked="#leaderResourceSelected" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@res-marbles/coin.png" />
+                           </image>
+                        </ImageView>
+                     </children>
+                     <cursor>
+                        <Cursor fx:constant="HAND" />
+                     </cursor>
+                  </Group>
+               </children>
+            </Pane>
          </children>
       </GridPane>
       <Group GridPane.columnIndex="1" GridPane.rowIndex="1">
@@ -459,7 +516,7 @@
                         <Image url="@res-marbles/servant.png" />
                      </image>
                   </ImageView>
-                  <Text fill="WHITE" layoutX="7.0" layoutY="38.0" strokeType="OUTSIDE" strokeWidth="0.0" text="1" textAlignment="CENTER" wrappingWidth="37.075008392333984">
+                  <Text fill="WHITE" layoutX="7.0" layoutY="38.0" strokeType="OUTSIDE" strokeWidth="0.0" text="1" textAlignment="CENTER" wrappingWidth="42.67501449584961">
                      <font>
                         <Font name="Lucida Calligraphy Italic" size="32.0" />
                      </font>
@@ -473,7 +530,7 @@
                         <Image url="@res-marbles/coin.png" />
                      </image>
                   </ImageView>
-                  <Text fill="#c42e2e" layoutX="13.0" layoutY="33.0" strokeType="OUTSIDE" strokeWidth="0.0" text="1" textAlignment="CENTER" wrappingWidth="37.075008392333984">
+                  <Text fill="#c42e2e" layoutX="13.0" layoutY="33.0" strokeType="OUTSIDE" strokeWidth="0.0" text="1" textAlignment="CENTER" wrappingWidth="42.67501449584961">
                      <font>
                         <Font name="Lucida Calligraphy Italic" size="32.0" />
                      </font>
@@ -487,7 +544,7 @@
                         <Image url="@res-marbles/stone.png" />
                      </image>
                   </ImageView>
-                  <Text fill="WHITE" layoutX="6.0" layoutY="38.0" strokeType="OUTSIDE" strokeWidth="0.0" text="1" textAlignment="CENTER" wrappingWidth="37.075008392333984">
+                  <Text fill="WHITE" layoutX="6.0" layoutY="38.0" strokeType="OUTSIDE" strokeWidth="0.0" text="1" textAlignment="CENTER" wrappingWidth="42.67501449584961">
                      <font>
                         <Font name="Lucida Calligraphy Italic" size="32.0" />
                      </font>
@@ -501,13 +558,28 @@
                         <Image url="@res-marbles/shield.png" />
                      </image>
                   </ImageView>
-                  <Text fill="WHITE" layoutY="38.0" strokeType="OUTSIDE" strokeWidth="0.0" text="1" textAlignment="CENTER" wrappingWidth="37.075008392333984">
+                  <Text fill="WHITE" layoutY="38.0" strokeType="OUTSIDE" strokeWidth="0.0" text="1" textAlignment="CENTER" wrappingWidth="42.67501449584961">
                      <font>
                         <Font name="Lucida Calligraphy Italic" size="32.0" />
                      </font>
                   </Text>
                </children>
             </Group>
+            <ImageView fx:id="tile1" fitHeight="67.0" fitWidth="60.0" layoutX="103.0" layoutY="80.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@pope-favor/pope_favor1_back.png" />
+               </image>
+            </ImageView>
+            <ImageView fx:id="tile2" fitHeight="67.0" fitWidth="60.0" layoutX="289.0" layoutY="43.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@pope-favor/pope_favor2_back.png" />
+               </image>
+            </ImageView>
+            <ImageView fx:id="tile3" fitHeight="67.0" fitWidth="60.0" layoutX="511.0" layoutY="80.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@pope-favor/pope_favor3_back.png" />
+               </image>
+            </ImageView>
          </children>
       </Group>
       <Group GridPane.columnIndex="2">

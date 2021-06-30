@@ -12,7 +12,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="548.0" prefWidth="865.0" styleClass="maingrid" stylesheets="@background.css" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.client.view.GUI.ShowController">
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="548.0" prefWidth="865.0" styleClass="maingrid" stylesheets="@background.css" xmlns="http://javafx.com/javafx/11.0.2" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.client.view.GUI.ShowController">
    <children>
       <ImageView fitHeight="467.0" fitWidth="665.0" layoutY="76.0" pickOnBounds="true" preserveRatio="true">
          <image>
@@ -47,59 +47,59 @@
             <Font name="Lucida Calligraphy Italic" size="25.0" />
          </font>
       </Text>
-      <Group layoutX="253.0" layoutY="242.0">
+      <Group fx:id="slotsTot" layoutX="253.0" layoutY="242.0">
          <children>
-            <Group>
+            <Group fx:id="slotA">
                <children>
-                  <ImageView fitHeight="195.0" fitWidth="115.0" layoutY="84.0" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fx:id="slotA1" fitHeight="195.0" fitWidth="115.0" layoutY="84.0" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@cards/development/Development-2.jpg" />
                      </image>
                   </ImageView>
-                  <ImageView fitHeight="199.0" fitWidth="115.0" layoutY="42.0" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fx:id="slotA2" fitHeight="199.0" fitWidth="115.0" layoutY="42.0" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@cards/development/Development-2.jpg" />
                      </image>
                   </ImageView>
-                  <ImageView fitHeight="194.0" fitWidth="114.0" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fx:id="slotA3" fitHeight="194.0" fitWidth="114.0" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@cards/development/Development-2.jpg" />
                      </image>
                   </ImageView>
                </children>
             </Group>
-            <Group layoutX="124.0">
+            <Group fx:id="slotB" layoutX="124.0">
                <children>
-                  <ImageView fitHeight="195.0" fitWidth="115.0" layoutY="84.0" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fx:id="slotB3" fitHeight="195.0" fitWidth="115.0" layoutY="84.0" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@cards/development/Development-2.jpg" />
                      </image>
                   </ImageView>
-                  <ImageView fitHeight="199.0" fitWidth="115.0" layoutY="42.0" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fx:id="slotB2" fitHeight="199.0" fitWidth="115.0" layoutY="42.0" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@cards/development/Development-2.jpg" />
                      </image>
                   </ImageView>
-                  <ImageView fitHeight="194.0" fitWidth="114.0" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fx:id="slotB1" fitHeight="194.0" fitWidth="114.0" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@cards/development/Development-2.jpg" />
                      </image>
                   </ImageView>
                </children>
             </Group>
-            <Group layoutX="255.0">
+            <Group fx:id="slotC" layoutX="255.0">
                <children>
-                  <ImageView fitHeight="195.0" fitWidth="115.0" layoutY="84.0" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fx:id="slotC3" fitHeight="195.0" fitWidth="115.0" layoutY="84.0" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@cards/development/Development-2.jpg" />
                      </image>
                   </ImageView>
-                  <ImageView fitHeight="199.0" fitWidth="115.0" layoutY="42.0" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fx:id="slotC2" fitHeight="199.0" fitWidth="115.0" layoutY="42.0" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@cards/development/Development-2.jpg" />
                      </image>
                   </ImageView>
-                  <ImageView fitHeight="194.0" fitWidth="114.0" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fx:id="slotC1" fitHeight="194.0" fitWidth="114.0" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@cards/development/Development-2.jpg" />
                      </image>
@@ -108,16 +108,16 @@
             </Group>
          </children>
       </Group>
-      <ImageView fitHeight="52.0" fitWidth="47.0" layoutX="86.0" layoutY="161.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fx:id="faithMarker" fitHeight="52.0" fitWidth="47.0" layoutX="15.0" layoutY="161.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@res-marbles/faith.png" />
          </image>
       </ImageView>
-      <Group layoutX="37.0" layoutY="274.0">
+      <Group fx:id="wareHouse" layoutX="37.0" layoutY="274.0">
          <children>
             <Group layoutX="28.0">
                <children>
-                  <ImageView fitHeight="34.0" fitWidth="34.0" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fx:id="resHigh" fitHeight="34.0" fitWidth="34.0" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@res-marbles/servant.png" />
                      </image>
@@ -126,12 +126,12 @@
             </Group>
             <Group layoutX="20.0" layoutY="43.0">
                <children>
-                  <ImageView fitHeight="34.0" fitWidth="34.0" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fx:id="resMed1" fitHeight="34.0" fitWidth="34.0" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@res-marbles/shield.png" />
                      </image>
                   </ImageView>
-                  <ImageView fitHeight="34.0" fitWidth="34.0" layoutX="31.0" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fx:id="resMed2" fitHeight="34.0" fitWidth="34.0" layoutX="31.0" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@res-marbles/shield.png" />
                      </image>
@@ -140,17 +140,17 @@
             </Group>
             <Group layoutY="87.0">
                <children>
-                  <ImageView fitHeight="34.0" fitWidth="34.0" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fx:id="resLow1" fitHeight="34.0" fitWidth="34.0" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@res-marbles/coin.png" />
                      </image>
                   </ImageView>
-                  <ImageView fitHeight="34.0" fitWidth="34.0" layoutX="30.0" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fx:id="resLow2" fitHeight="34.0" fitWidth="34.0" layoutX="30.0" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@res-marbles/coin.png" />
                      </image>
                   </ImageView>
-                  <ImageView fitHeight="34.0" fitWidth="34.0" layoutX="60.0" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fx:id="resLow3" fitHeight="34.0" fitWidth="34.0" layoutX="60.0" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@res-marbles/coin.png" />
                      </image>
@@ -171,54 +171,54 @@
             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
          </rowConstraints>
          <children>
-            <ImageView fitHeight="31.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
+            <ImageView fx:id="shield" fitHeight="31.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
                <image>
                   <Image url="@res-marbles/shield.png" />
                </image>
             </ImageView>
-            <ImageView fitHeight="31.0" fitWidth="24.0" layoutX="45.0" layoutY="16.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1" GridPane.rowIndex="1">
+            <ImageView fx:id="servant" fitHeight="31.0" fitWidth="24.0" layoutX="45.0" layoutY="16.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1" GridPane.rowIndex="1">
                <image>
                   <Image url="@res-marbles/servant.png" />
                </image>
             </ImageView>
-            <ImageView fitHeight="31.0" fitWidth="24.0" layoutX="45.0" layoutY="69.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="3">
+            <ImageView fx:id="stone" fitHeight="31.0" fitWidth="24.0" layoutX="45.0" layoutY="69.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="3">
                <image>
                   <Image url="@res-marbles/stone.png" />
                </image>
             </ImageView>
-            <ImageView fitHeight="31.0" fitWidth="24.0" layoutX="115.0" layoutY="16.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="3" GridPane.rowIndex="1">
+            <ImageView fx:id="coin" fitHeight="31.0" fitWidth="24.0" layoutX="115.0" layoutY="16.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="3" GridPane.rowIndex="1">
                <image>
                   <Image url="@res-marbles/coin.png" />
                </image>
             </ImageView>
-            <Text fill="#71cbff" strokeType="OUTSIDE" strokeWidth="0.0" text="1" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
+            <Text fx:id="n1" fill="#71cbff" strokeType="OUTSIDE" strokeWidth="0.0" text="1" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
                <font>
                   <Font name="Script MT Bold" size="36.0" />
                </font>
             </Text>
-            <Text fill="#5f0fbc" strokeType="OUTSIDE" strokeWidth="0.0" text="1" GridPane.halignment="CENTER" GridPane.rowIndex="1">
+            <Text fx:id="n3" fill="#5f0fbc" strokeType="OUTSIDE" strokeWidth="0.0" text="1" GridPane.halignment="CENTER" GridPane.rowIndex="1">
                <font>
                   <Font name="Script MT Bold" size="36.0" />
                </font>
             </Text>
-            <Text fill="#afadb1" layoutX="16.0" layoutY="109.0" strokeType="OUTSIDE" strokeWidth="0.0" text="2" GridPane.columnIndex="2" GridPane.halignment="CENTER">
+            <Text fx:id="n2" fill="#afadb1" layoutX="16.0" layoutY="109.0" strokeType="OUTSIDE" strokeWidth="0.0" text="2" GridPane.columnIndex="2" GridPane.halignment="CENTER">
                <font>
                   <Font name="Script MT Bold" size="36.0" />
                </font>
             </Text>
-            <Text fill="#fff01b" strokeType="OUTSIDE" strokeWidth="0.0" text="3" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="1">
+            <Text fx:id="n4" fill="#fff01b" strokeType="OUTSIDE" strokeWidth="0.0" text="3" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="1">
                <font>
                   <Font name="Script MT Bold" size="36.0" />
                </font>
             </Text>
          </children>
       </GridPane>
-      <ImageView fitHeight="215.0" fitWidth="148.0" layoutX="687.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fx:id="leaderCard1" fitHeight="215.0" fitWidth="148.0" layoutX="687.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@cards/leader/Leader-102.jpg" />
          </image>
       </ImageView>
-      <ImageView fitHeight="215.0" fitWidth="148.0" layoutX="687.0" layoutY="235.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fx:id="leaderCard2" fitHeight="215.0" fitWidth="148.0" layoutX="687.0" layoutY="235.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@cards/leader/Leader-101.jpg" />
          </image>

@@ -14,6 +14,7 @@ import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.GridPane;
 import javafx.scene.text.Text;
 
 import java.net.URL;
@@ -67,6 +68,14 @@ public class MarbleBufferController implements Initializable {
     @FXML
     private ImageView resourceDXLow;
     @FXML
+    private ImageView resourceSxExtra1;
+    @FXML
+    private ImageView resourceDxExtra1;
+    @FXML
+    private ImageView resourceSxExtra2;
+    @FXML
+    private ImageView resourceDxExtra2;
+    @FXML
     private Button highDepot;
     @FXML
     private Button mediumDepot;
@@ -84,6 +93,8 @@ public class MarbleBufferController implements Initializable {
     private ImageView switchExtra2;
     @FXML
     private Text titleLabel;
+    @FXML
+    private GridPane insertResource;
 
 
     @Override
@@ -94,7 +105,6 @@ public class MarbleBufferController implements Initializable {
     @FXML
     public void insertResource(ActionEvent actionEvent) {
         actionEvent.consume();
-
         Platform.runLater(() -> {
             Button button = (Button) actionEvent.getSource();
             switch (button.getId()) {
@@ -126,20 +136,34 @@ public class MarbleBufferController implements Initializable {
         lowDepot.setDisable(disable);
         mediumDepot.setDisable(disable);
         highDepot.setDisable(disable);
-
+        extraCard2.setDisable(disable);
+        extraCard1.setDisable(disable);
     }
 
     public void show(boolean resources, boolean depot, boolean marble) {
-        GUISupport.setVisible(resources, res1, res2, res3, res4);
         GUISupport.setVisible(marble, marble1, marble2, marble3, marble4);
+        insertResource.setVisible(marble);
+        if(resources){
+            insertResource.setVisible(true);
+            //scalarlo in ordine!
+            if(simpleModel.getThisPlayer().getLeaderCards().get(0).getAbility().getType().equals(SimpleAbility.Type.WHITEMARBLE)
+              && simpleModel.getThisPlayer().getLeaderCards().get(0).isActive()){
+                GUISupport.settingImageView(res1, simpleModel.getThisPlayer().getLeaderCards().get(0).getAbility().getResource().toString());
+            }
+            if(simpleModel.getThisPlayer().getLeaderCards().get(1).getAbility().getType().equals(SimpleAbility.Type.WHITEMARBLE)
+                    && simpleModel.getThisPlayer().getLeaderCards().get(1).isActive()){
+                GUISupport.settingImageView(res2, simpleModel.getThisPlayer().getLeaderCards().get(1).getAbility().getResource().toString());
+            }
+        }
+
         if (depot) setDepotResources();
+            else GUISupport.setVisible(false, resourceHigh, resourceSXMed, resourceDXMed, resourceSXLow, resourceCLow, resourceDXLow);
         wareHouse.setVisible(depot);
         if (depot) activeExtraDepot();
     }
 
     private void setDepotResources() {
         GUISupport.setVisible(false, resourceHigh, resourceSXMed, resourceDXMed, resourceSXLow, resourceCLow, resourceDXLow);
-
         int quantity = GUISupport.quantityOfResources(simpleModel.getThisPlayer().getWarehouse().getDepot(DepotName.HIGH));
         GUISupport.settingImageView(quantity, resourceHigh);
 
@@ -149,21 +173,24 @@ public class MarbleBufferController implements Initializable {
         quantity =  GUISupport.quantityOfResources(simpleModel.getThisPlayer().getWarehouse().getDepot(DepotName.LOW));
         GUISupport.settingImageView(quantity, resourceSXLow, resourceCLow, resourceDXLow);
 
-//TODO: print resources in ExtraDepot
     }
 
     private void activeExtraDepot(){
-        int counter = 0;
+
         for(SimpleLeaderCard card : simpleModel.getThisPlayer().getLeaderCards()){
             if(card.isActive() && card.getAbility().getType().equals(SimpleAbility.Type.EXTRADEPOT)) {
-                if (counter == 0) {
-                    extraCard1.setImage(new Image("/cards/leader/Leader-" + card.getId() + ".jpg"));
-                    extraCard1.setVisible(true);
+                int quantity = 0;
+                if(card.getAbility().getResource().equals(simpleModel.getThisPlayer().getWarehouse().getDepot(DepotName.FIRST_EXTRA).getConstraint())){
+                 extraCard1.setImage(new Image("/cards/leader/Leader-" + card.getId() + ".jpg"));
+                 extraCard1.setVisible(true);
+                 quantity =  GUISupport.quantityOfResources(simpleModel.getThisPlayer().getWarehouse().getDepot(DepotName.FIRST_EXTRA));
+                 GUISupport.settingImageView(quantity, resourceSxExtra1, resourceDxExtra1);
                 } else {
                     extraCard2.setImage(new Image("/cards/leader/Leader-" + card.getId() + ".jpg"));
                     extraCard2.setVisible(true);
+                    quantity =  GUISupport.quantityOfResources(simpleModel.getThisPlayer().getWarehouse().getDepot(DepotName.SECOND_EXTRA));
+                    GUISupport.settingImageView(quantity, resourceSxExtra2, resourceDxExtra2);
                 }
-                counter++;
             }
         }
     }
@@ -174,8 +201,8 @@ public class MarbleBufferController implements Initializable {
         Platform.runLater(() -> {
             ImageView imageView = (ImageView) mouseEvent.getSource();
             switch (imageView.getId()){
-                case "res1" -> setResource(Resource.SHIELD);
-                case "res2" -> setResource(Resource.COIN);
+                case "res1" -> setResource(simpleModel.getThisPlayer().getLeaderCards().get(0).getAbility().getResource());
+                case "res2" -> setResource(simpleModel.getThisPlayer().getLeaderCards().get(1).getAbility().getResource());
                 case "res3" -> setResource(Resource.SERVANT);
                 case "res4" -> setResource(Resource.STONE);
             }
@@ -259,8 +286,9 @@ public class MarbleBufferController implements Initializable {
     @FXML
     public void switchDepot(MouseEvent mouseEvent) {
         mouseEvent.consume();
-
         ImageView button = (ImageView) mouseEvent.getSource();
+        System.out.println("button:" + button.getId());
+
         switch (button.getId()){
             case "switchLow" ->{
                 setDepot(DepotName.LOW);

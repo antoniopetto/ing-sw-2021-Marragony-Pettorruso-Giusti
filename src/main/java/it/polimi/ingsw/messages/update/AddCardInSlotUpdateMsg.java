@@ -18,6 +18,7 @@ public class AddCardInSlotUpdateMsg implements UpdateMsg {
 
     @Override
     public void execute(SimpleModel model) {
+        model.update("decks");
         for (SimplePlayer player: model.getPlayers()) {
             if(player.getUsername().equals(this.username))
                 player.insertCardInSlot(cardId, slotIdx);

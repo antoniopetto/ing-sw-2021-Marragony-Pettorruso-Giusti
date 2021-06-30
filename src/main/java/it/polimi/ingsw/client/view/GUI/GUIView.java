@@ -41,12 +41,16 @@ public class GUIView extends Application implements View  {
     private Stage errorStage;
     private Stage mainStage;
     private Stage tmpStage;
+    private Stage endStage=null;
     private int discardCounter = 0;
     private int marbleCounter = 0;
     private Marble marble;
     private boolean firstMain = true;
     private Action action = Action.INIT;
     private MainSceneController mainSceneController = null;
+    private String serverIp;
+    private int port;
+    private boolean victory = false;
 
 
     private enum Action{
@@ -97,15 +101,20 @@ public class GUIView extends Application implements View  {
 
     public void setting(SettingGameController settingGameController){
         try{
-            Socket server = new Socket(settingGameController.getServerIP(), Integer.parseInt(settingGameController.getPort()));
+            if(settingGameController!=null)
+            {
+                serverIp=settingGameController.getServerIP();
+                port=Integer.parseInt(settingGameController.getPort());
+            }
+            Socket server = new Socket(serverIp, port);
             serverHandler = new ServerHandler(server, this);
             new Thread(serverHandler).start();
 
-            settingGameController.setTextError("You are connected to the server!");
+            if(settingGameController!=null)settingGameController.setTextError("You are connected to the server!");
 
-        }catch(IOException e)
+        }catch(Exception e)
         {
-            settingGameController.setTextError("Server unreachable, try again.");
+            if(settingGameController!=null)settingGameController.setTextError("Server unreachable, try again.");
         }
     }
 
@@ -182,15 +191,12 @@ public class GUIView extends Application implements View  {
 
     }
 
-    public static void main(String[] args)
-    {
-        launch(args);
-    }
+   // public static void main(String[] args) { launch(args); }
 
 
     @Override
     public void startConnection() {
-
+        Application.launch();
     }
 
 
@@ -205,6 +211,7 @@ public class GUIView extends Application implements View  {
             if(game.getPlayers().size()==1) mainSceneController.setSinglePlayerGame();
             Platform.runLater(()->{
                 if(initStage.isShowing()) initStage.close();
+                if(endStage!=null) endStage.close();
                 mainStage = new Stage();
                 manageStage(mainStage, scene, "Main", false);
             });
@@ -212,26 +219,32 @@ public class GUIView extends Application implements View  {
         }
 
         if(game.getPlayers().size()==1) mainSceneController.setRival();
+            else mainSceneController.setUsernameShow();
+
         mainSceneController.showBasePower(false);
         mainSceneController.disableButtons(false);
         mainSceneController.setActionButton(postTurn);
-
+        mainSceneController.setTiles();
         mainSceneController.setFaithTrack();
+        mainSceneController.disableLeaderCards(true);
 
         if(action.equals(Action.DISCARD_LEADER) || action.equals(Action.PLAY_LEADER)) mainSceneController.setLeaderCard();
         if(action.equals(Action.BUY_RESOURCES)){
-            if(tmpStage.isShowing())
+            if(tmpStage!=null&&tmpStage.isShowing())
                 Platform.runLater(() ->{
                     tmpStage.close();
                 });
+            mainSceneController.setLeaderCard();
             mainSceneController.setWarehouse();
             mainSceneController.setMarketBoard();
         }
         if(action.equals(Action.BUY_CARD)){
+            mainSceneController.setLeaderCard();
             mainSceneController.setDecks();
             mainSceneController.setWarehouse();
             mainSceneController.setSlots();
             mainSceneController.setFaithTrack();
+            mainSceneController.setStrongbox();
         }
         if(action.equals(Action.END_TURN)){
             mainSceneController.setDecks();
@@ -279,11 +292,42 @@ public class GUIView extends Application implements View  {
                 return activateProduction(new HashSet<>(), new HashMap<>());
             }
             case 6 ->{
+                mainSceneController.disableButtons(true);
                 action = Action.END_TURN;
                 return new EndTurnMsg();
             }
+
+            case 7 ->{
+                return show(mainSceneController.getUser(), postTurn);
+            }
         }
         return null;
+    }
+
+
+    private CommandMsg show(String username, boolean postTurn){
+        setLoader("/show.fxml");
+        Scene scene = loadScene(currentLoader);
+        ShowController showController = currentLoader.getController();
+
+        showController.setGame(game, username);
+        showController.setWareHouse();
+        showController.setLeaderCard();
+        showController.setSlots();
+        showController.setStrongBox();
+        showController.setTrack();
+        Platform.runLater(() ->{
+            if(tmpStage == null)  tmpStage = new Stage();
+            manageStage(tmpStage, scene, "Show PlayerBoard", false);
+        });
+
+        boolean close = showController.isCloseWindow();
+        if(close) {
+            Platform.runLater(() -> {
+                tmpStage.close();
+            });
+        }
+        return selectMove(postTurn);
     }
 
     /**
@@ -296,6 +340,7 @@ public class GUIView extends Application implements View  {
     private CommandMsg activateProduction(Set<Integer> selectedCardIds, Map<Integer, ProductionPower> selectedExtraPowers)
     {
         mainSceneController.disableCardsInSlot(false);
+        mainSceneController.disableLeaderCards(false);
         int choice= mainSceneController.getChoice();
         switch (choice)
         {
@@ -321,7 +366,6 @@ public class GUIView extends Application implements View  {
                     manageStage(tmpStage, scene, "Base Power", false);
                 });
                 Resource input1=controller.getChoice();
-                String url = "/res-marble/"+GUISupport.returnPath(input1.name());
                 controller.setResIn1(input1);
                 Map<Resource, Integer> realInput = new HashMap<>();
                 Map<Resource, Integer> realOutput = new HashMap<>();
@@ -337,6 +381,39 @@ public class GUIView extends Application implements View  {
                     tmpStage.close();
                 });
                 mainSceneController.showBasePower(false);
+                return activateProduction(selectedCardIds, selectedExtraPowers);
+            }
+            case 4 ->{
+                mainSceneController.showLeaderResources(true);
+                int cardId= mainSceneController.getCardId();
+                Resource resource = null;
+                boolean active = false;
+                for(SimpleLeaderCard card : game.getThisPlayer().getLeaderCards()){
+                    if(card.getId()==cardId){
+                        resource=card.getAbility().getResource();
+                        active=card.isActive();
+                    }
+                }
+                if(active) {
+                    int index = 0;
+                    int i = 0;
+                    for (ProductionPower pp : game.getThisPlayer().getExtraProductionPowers()) {
+                        if (pp.getInput().containsKey(resource)) index = i;
+                        i++;
+                    }
+                    int res = mainSceneController.getChoice();
+                    switch (res) {
+                        case 1 -> resource = Resource.SHIELD;
+                        case 2 -> resource = Resource.STONE;
+                        case 3 -> resource = Resource.SERVANT;
+                        case 4 -> resource = Resource.COIN;
+                    }
+                    mainSceneController.showLeaderResources(false);
+                    Map<Resource, Integer> realInput = new HashMap<>();
+                    Map<Resource, Integer> realOutput = new HashMap<>();
+                    realOutput.put(resource, 1);
+                    selectedExtraPowers.put(index, new ProductionPower(realInput, realOutput));
+                }
                 return activateProduction(selectedCardIds, selectedExtraPowers);
             }
         }
@@ -374,16 +451,17 @@ public class GUIView extends Application implements View  {
         switch (choice){
             case 1 -> {
                 Marble selectedMarble = selectMarble();
-                DepotName selectedDepot = selectDepot();
                 if (selectedMarble == Marble.WHITE) {
                     Resource selectedResource = selectResource();
+                    DepotName selectedDepot = selectDepot();
                     msg = new PutResourceMsg(selectedMarble, selectedDepot, selectedResource);
                 }
-                else
+                else{
+                    DepotName selectedDepot = selectDepot();
                     msg = new PutResourceMsg(selectedMarble, selectedDepot);
+                }
             }
             case 2 -> {
-
                 Marble selectedMarble = selectMarble();
                 msg = new DiscardMarbleMsg(selectedMarble);
             }
@@ -401,6 +479,7 @@ public class GUIView extends Application implements View  {
         Scene scene = loadScene(currentLoader);
         MarbleBufferController marbleBufferController = currentLoader.getController();
         marbleBufferController.setSimpleModel(game);
+        marbleBufferController.manageButton(true);
         marbleBufferController.show(false,true,false);
         marbleBufferController.setSwitchButton(true);
         marbleBufferController.changeTitle("Please select two depots to change");
@@ -466,7 +545,6 @@ public class GUIView extends Application implements View  {
         }
         else if(marbleCounter >= 0 ){
             //TODO change label when player wants to discard Marble
-
             marbleBufferController.setMarble();
             Platform.runLater(() ->{
                 manageStage(tmpStage, scene, "Select Marble1", false);
@@ -482,7 +560,6 @@ public class GUIView extends Application implements View  {
             return Marble.WHITE;
         }
         else if(marbleCounter >= 1 ) return marble;
-//TODO white marble alias
         return null;
     }
 
@@ -491,7 +568,7 @@ public class GUIView extends Application implements View  {
         MarbleBufferController marbleBufferController = currentLoader.getController();
         marbleBufferController.show(false, true, false);
         marbleBufferController.manageButton(false);
-        marbleBufferController.changeTitle("Please select where to put the resource");
+        marbleBufferController.changeTitle("Please select where to put  resource");
         DepotName depot = marbleBufferController.getDepot();
         return depot;
     }
@@ -503,7 +580,6 @@ public class GUIView extends Application implements View  {
                 || (marbleCounter == 2 && game.getPlayers().size() == 4 && game.getThisPlayer().getUsername().equals(game.getPlayers().get(3).getUsername()))){
             return marble.getResource();
         }else if(marbleCounter >= 1 ){
-            //TODO FIX!
             MarbleBufferController marbleBufferController = currentLoader.getController();
             marbleBufferController.show(true, false, false);
             marbleBufferController.manageButton(true);
@@ -529,7 +605,7 @@ public class GUIView extends Application implements View  {
 
     private void manageStage(Stage stage, Scene scene, String title, boolean close){
         Platform.runLater(() -> {
-            if(close){
+            if(close&&oldStage!=null){
                 oldStage.close();
             }
             stage.getIcons().add(new Image(getClass().getResourceAsStream("/Ritagliare.png")));
@@ -560,11 +636,64 @@ public class GUIView extends Application implements View  {
     }
 
     public void endGame(){
+        if(!victory) {
+            setLoader("/endGame.fxml");
+            Scene scene = loadScene(currentLoader);
+            EndGameController controller = currentLoader.getController();
+            Platform.runLater(() -> {
+                oldStage = mainStage;
+                manageStage(mainStage, scene, "End game", true);
+            });
+            int choice = controller.getChoice();
+            switch (choice) {
+                case 1 -> Platform.runLater(() -> mainStage.close());//endgame
+                case 2 -> {
+                    endStage = mainStage;
+                    firstMain = true;
+                    setting(null); //newGame
 
+                }
+                case 3 -> {
+                    endStage = mainStage;
+                    firstMain = true;
+                    start(null); //new server
+                }
+            }
+        }
+    }
+
+    @Override
+    public void update(String updated) {
+        if(mainSceneController!=null) {
+            switch (updated) {
+                case "faith" -> mainSceneController.setFaithTrack();
+                case "decks" -> mainSceneController.setDecks();
+                case "market" -> mainSceneController.setMarketBoard();
+            }
+        }
     }
 
     public void setModel(SimpleModel game){
+        game.setView(this);
         this.game=game;
         serverHandler.setModel(game);
+    }
+
+    @Override
+    public void victory(Boolean win, Map<String, Integer> leaderboard) {
+        victory=true;
+        setLoader("/victory.fxml");
+        Scene scene = loadScene(currentLoader);
+        VictoryController controller = currentLoader.getController();
+        controller.setScene(win, leaderboard);
+        Platform.runLater(()->{
+            oldStage=mainStage;
+            manageStage(mainStage, scene, "Victory", true);
+        });
+        Button button = (Button) currentLoader.getNamespace().get("closeButton");
+        button.setOnAction(event->{
+            victory=false;
+            endGame();
+        });
     }
 }

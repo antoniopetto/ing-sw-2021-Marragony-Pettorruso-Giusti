@@ -1,5 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.*?>
+<?import java.lang.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.effect.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 <?import javafx.scene.Cursor?>
 <?import javafx.scene.Group?>
 <?import javafx.scene.control.Button?>
@@ -15,7 +23,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.client.view.GUI.MarbleBufferController">
+<AnchorPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.client.view.GUI.MarbleBufferController">
    <children>
 
       <Group>
@@ -29,7 +37,7 @@
                <children>
                   <Pane prefHeight="200.0" prefWidth="200.0">
                      <children>
-                        <ImageView fx:id="extraCard1" fitHeight="230.0" fitWidth="240.0" layoutX="285.0" layoutY="20.0" onMouseClicked="#insertAResource" pickOnBounds="true" preserveRatio="true" visible="false">
+                        <ImageView fx:id="extraCard1" fitHeight="223.0" fitWidth="160.0" onMouseClicked="#insertAResource" pickOnBounds="true" preserveRatio="true" visible="false" x="325.0" y="15.0">
                            <image>
                               <Image url="@cards/leader/Leader-105.jpg" />
                            </image>
@@ -37,7 +45,23 @@
                               <Cursor fx:constant="HAND" />
                            </cursor>
                         </ImageView>
-                        <ImageView fx:id="extraCard2" fitHeight="230.0" fitWidth="240.0" layoutX="110.0" layoutY="20.0" onMouseClicked="#insertAResource" pickOnBounds="true" preserveRatio="true" visible="false">
+                        <ImageView fx:id="resourceSxExtra1" fitHeight="38.0" fitWidth="90.0" pickOnBounds="true" preserveRatio="true" visible="false" x="350.0" y="188.0">
+                           <cursor>
+                              <Cursor fx:constant="HAND" />
+                           </cursor>
+                           <image>
+                              <Image url="@res-marbles/coin.png" />
+                           </image>
+                        </ImageView>
+                        <ImageView fx:id="switchExtra1" fitHeight="90.0" fitWidth="164.0" layoutX="294.0" layoutY="171.0" onMouseClicked="#switchDepot" pickOnBounds="true" preserveRatio="true" scaleX="1.1" scaleY="0.75" visible="false" x="35.0" y="-10.0">
+                           <image>
+                              <Image url="@rectangle.png" />
+                           </image>
+                           <cursor>
+                              <Cursor fx:constant="HAND" />
+                           </cursor>
+                        </ImageView>
+                        <ImageView fx:id="extraCard2" fitHeight="223.0" fitWidth="152.0" onMouseClicked="#insertAResource" pickOnBounds="true" preserveRatio="true" visible="false" x="120.0" y="15.0">
                            <image>
                               <Image url="@cards/leader/Leader-105.jpg" />
                            </image>
@@ -45,14 +69,36 @@
                               <Cursor fx:constant="HAND" />
                            </cursor>
                         </ImageView>
-                        <ImageView fx:id="switchExtra1" fitHeight="84.0" fitWidth="171.0" layoutX="294.0" layoutY="171.0" onMouseClicked="#switchDepot" pickOnBounds="true" preserveRatio="true" visible="false">
+                        <ImageView fx:id="switchExtra2" fitHeight="90.0" fitWidth="164.0" layoutX="99.0" layoutY="171.0" onMouseClicked="#switchDepot" pickOnBounds="true" preserveRatio="true" scaleX="1.1" scaleY="0.75" visible="false" x="25.0" y="-10.0">
                            <image>
                               <Image url="@rectangle.png" />
                            </image>
+                           <cursor>
+                              <Cursor fx:constant="HAND" />
+                           </cursor>
                         </ImageView>
-                        <ImageView fx:id="switchExtra2" fitHeight="84.0" fitWidth="134.0" layoutX="99.0" layoutY="171.0" onMouseClicked="#switchDepot" pickOnBounds="true" preserveRatio="true" visible="false" x="20.0">
+                        <ImageView fx:id="resourceSxExtra2" fitHeight="38.0" fitWidth="90.0" pickOnBounds="true" preserveRatio="true" visible="false" x="145.0" y="185.0">
+                           <cursor>
+                              <Cursor fx:constant="HAND" />
+                           </cursor>
                            <image>
-                              <Image url="@rectangle.png" />
+                              <Image url="@res-marbles/coin.png" />
+                           </image>
+                        </ImageView>
+                        <ImageView fx:id="resourceDxExtra2" fitHeight="38.0" fitWidth="90.0" pickOnBounds="true" preserveRatio="true" visible="false" x="200.0" y="187.0">
+                           <cursor>
+                              <Cursor fx:constant="HAND" />
+                           </cursor>
+                           <image>
+                              <Image url="@res-marbles/coin.png" />
+                           </image>
+                        </ImageView>
+                        <ImageView fx:id="resourceDxExtra1" fitHeight="38.0" fitWidth="90.0" pickOnBounds="true" preserveRatio="true" visible="false" x="405.0" y="187.0">
+                           <cursor>
+                              <Cursor fx:constant="HAND" />
+                           </cursor>
+                           <image>
+                              <Image url="@res-marbles/coin.png" />
                            </image>
                         </ImageView>
                      </children>
@@ -104,7 +150,7 @@
                               <Cursor fx:constant="HAND" />
                            </cursor>
                         </ImageView>
-                        <ImageView fx:id="res1" disable="true" fitHeight="96.0" fitWidth="71.0" onMouseClicked="#selectResource" pickOnBounds="true" preserveRatio="true" visible="false" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="3">
+                        <ImageView fx:id="res1" fitHeight="96.0" fitWidth="71.0" onMouseClicked="#selectResource" pickOnBounds="true" preserveRatio="true" visible="false" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="3">
                            <image>
                               <Image url="@res-marbles/shield.png" />
                            </image>
@@ -112,7 +158,7 @@
                               <Cursor fx:constant="HAND" />
                            </cursor>
                         </ImageView>
-                        <ImageView fx:id="res2" disable="true" fitHeight="96.0" fitWidth="71.0" layoutX="145.0" layoutY="300.0" onMouseClicked="#selectResource" pickOnBounds="true" preserveRatio="true" visible="false" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="3">
+                        <ImageView fx:id="res2" fitHeight="96.0" fitWidth="71.0" layoutX="145.0" layoutY="300.0" onMouseClicked="#selectResource" pickOnBounds="true" preserveRatio="true" visible="false" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="3">
                            <image>
                               <Image url="@res-marbles/coin.png" />
                            </image>
@@ -120,7 +166,7 @@
                               <Cursor fx:constant="HAND" />
                            </cursor>
                         </ImageView>
-                        <ImageView fx:id="res3" disable="true" fitHeight="96.0" fitWidth="71.0" layoutX="145.0" layoutY="300.0" onMouseClicked="#selectResource" pickOnBounds="true" preserveRatio="true" visible="false" GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.rowIndex="3">
+                        <ImageView fx:id="res3" fitHeight="96.0" fitWidth="71.0" layoutX="145.0" layoutY="300.0" onMouseClicked="#selectResource" pickOnBounds="true" preserveRatio="true" visible="false" GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.rowIndex="3">
                            <image>
                               <Image url="@res-marbles/servant.png" />
                            </image>

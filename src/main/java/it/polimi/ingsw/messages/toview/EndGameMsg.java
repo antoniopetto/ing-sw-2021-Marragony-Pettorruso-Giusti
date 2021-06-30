@@ -21,11 +21,7 @@ public class EndGameMsg implements ViewMsg{
 
     @Override
     public void changeView(View view, ServerHandler handler) {
-        view.showTextMessage("The game has ended!");
-        if (win != null)
-            view.showTextMessage(win ? "You won!" : "You lost.");
-        view.showLeaderboard(leaderboard);
-        view.endGame();
+        view.victory(win, leaderboard);
     }
 
     @Override
