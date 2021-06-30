@@ -24,12 +24,13 @@ public class EndGameController implements Initializable {
                 e.printStackTrace();
             }
         }
-        int tmpChoice =choice;
-        choice=0;
+        int tmpChoice = choice;
+        choice = 0;
         return tmpChoice;
     }
+
     public synchronized void setChoice(int choice){
-        this.choice=choice;
+        this.choice = choice;
         notifyAll();
     }
 
@@ -39,8 +40,8 @@ public class EndGameController implements Initializable {
         String id = source.getId();
         switch (id){
             case "exit" -> setChoice(1);
-            case "newGame" ->setChoice(2);
-            case "newServer"->setChoice(3);
+            case "newGame" -> setChoice(2);
+            case "newServer"-> setChoice(3);
         }
     }
 }

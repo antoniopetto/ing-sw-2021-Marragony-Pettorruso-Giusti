@@ -26,10 +26,10 @@ public interface View {
     Marble selectMarble();
     DepotName selectDepot();
     Resource selectResource();
-    void showTextMessage(String text);
-    void showLeaderboard(Map<String, Integer> leaderboard);
+    void showTextMessage(String text, boolean loud);
     void setModel(SimpleModel game);
     void endGame();
     void update(String updated);
     void victory(Boolean win, Map<String, Integer> leaderboard);
+    void endInit();
 }

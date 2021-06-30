@@ -7,15 +7,23 @@ import it.polimi.ingsw.client.view.View;
 import java.io.IOException;
 
 public class TextMsg implements ViewMsg {
+
     private final String text;
+    private final boolean loud;
 
     public TextMsg(String text) {
         this.text = text;
+        loud = false;
+    }
+
+    public TextMsg(String text, boolean loud){
+        this.text = text;
+        this.loud = loud;
     }
 
     @Override
     public void changeView(View view, ServerHandler server){
-        view.showTextMessage(text);
+        view.showTextMessage(text, loud);
     }
 
     @Override

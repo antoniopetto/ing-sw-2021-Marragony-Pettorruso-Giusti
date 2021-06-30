@@ -103,6 +103,7 @@ public class VirtualView implements Runnable{
     }
 
     public void requestDiscardLeaderCard(){
+        sendOthers(new TextMsg("Waiting for " + getPlayingUsername() + "to choose", true));
         sendPlaying(new DiscardLeaderRequestMsg());
     }
 
@@ -125,6 +126,7 @@ public class VirtualView implements Runnable{
     }
 
     public void requestPutResource(){
+        sendOthers(new TextMsg("Waiting for" + getPlayingUsername() + " to choose his resources", true));
         sendPlaying(new PutResourceRequestMsg());
     }
 
@@ -201,6 +203,10 @@ public class VirtualView implements Runnable{
         sendAll(new CardDiscountUpdateMsg(username, resource));
     }
 
+    public void endInit(){
+        sendAll(new EndInitMsg());
+    }
+
     public void endGame(){
         if (gameController.isSinglePlayer())
             throw new IllegalStateException();
@@ -232,12 +238,16 @@ public class VirtualView implements Runnable{
     }
 
     public void messageFilter(Msg msg, String text) {
+        sendOthers(new TextMsg(text));
+        if (msg != null)
+            sendAll(msg);
+    }
+
+    private void sendOthers(Msg msg){
         Set<String> others = new HashSet<>(players.keySet());
         others.remove(getPlayingUsername());
         for (String other : others)
-            sendPlayer(other, new TextMsg(text));
-        if (msg != null)
-            sendAll(msg);
+            sendPlayer(other, msg);
     }
 
     private void sendPlayer(String player, Msg msg){

@@ -131,7 +131,7 @@ public class GameController implements Serializable {
         try {
             playing.removeLeaderCard(cardId);
 
-            //HACK
+            //TODO remove
             getPlaying().getPlayerBoard().getStrongBox().addResource(Resource.COIN, 20);
             getPlaying().getPlayerBoard().getStrongBox().addResource(Resource.STONE, 20);
             getPlaying().getPlayerBoard().getStrongBox().addResource(Resource.SERVANT, 20);
@@ -384,8 +384,14 @@ public class GameController implements Serializable {
         }
         playing = players.get(nextIndex);
         virtualView.setTurnJustFinished(true);
-        if (state == State.INIT_CARDS || state == State.INIT_RES)
-            state = (nextIndex == 0) ? State.PRETURN : State.INIT_CARDS;
+        if (state == State.INIT_CARDS || state == State.INIT_RES){
+            if (nextIndex == 0){
+                state = State.PRETURN;
+                virtualView.endInit();
+            }
+            else
+                state = State.INIT_CARDS;
+        }
         else if (state == State.POSTTURN){
             if (singlePlayer) {
                 virtualView.notifyRivalTurn();

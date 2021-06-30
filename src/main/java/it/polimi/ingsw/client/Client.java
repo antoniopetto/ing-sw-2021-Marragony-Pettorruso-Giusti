@@ -23,7 +23,6 @@ public class Client {
 
         int choice = CLIView.askChoice("Please select how to play:", "CLI", "GUI");
         View view = ((choice == 1) ? new CLIView() : new GUIView());
-            view.startConnection();
-
+        view.startConnection();
     }
 }

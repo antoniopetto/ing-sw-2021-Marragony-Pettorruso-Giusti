@@ -15,7 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 
-public class setUpController implements Initializable {
+public class DiscardLeaderCardController implements Initializable {
 
 
     @FXML
@@ -49,8 +49,6 @@ public class setUpController implements Initializable {
                     case "imCard4" -> setResult(cardIds.get(3));
                 }
             });
-
-
     }
 
 
@@ -59,7 +57,6 @@ public class setUpController implements Initializable {
         this.result = result;
         notifyAll();
     }
-
 
     public void setGame(SimpleModel game) {
         this.game = game;
@@ -103,7 +100,6 @@ public class setUpController implements Initializable {
             }
             case 0 -> setResult(0);
         }
-
     }
 
     public synchronized int getResult() {

@@ -26,7 +26,6 @@ import javafx.stage.StageStyle;
 import java.io.IOException;
 import java.net.Socket;
 
-import java.net.URL;
 import java.util.*;
 
 public class GUIView extends Application implements View  {
@@ -41,7 +40,7 @@ public class GUIView extends Application implements View  {
     private Stage errorStage;
     private Stage mainStage;
     private Stage tmpStage;
-    private Stage endStage=null;
+    private Stage endStage = null;
     private int discardCounter = 0;
     private int marbleCounter = 0;
     private Marble marble;
@@ -63,8 +62,6 @@ public class GUIView extends Application implements View  {
         MOVE_DEPOT,
         INIT,
         SWITCH_DEPOT;
-
-
     }
 
     public GUIView() {
@@ -84,7 +81,7 @@ public class GUIView extends Application implements View  {
         Scene scene = loadScene(currentLoader);
         Platform.runLater(() ->{
             initStage = new Stage();
-            manageStage(initStage,scene, "Inserting Window", false );
+            manageStage(initStage, scene, "Masters of Renaissance", false );
         });
 
         SettingGameController settingGameController = currentLoader.getController();
@@ -94,15 +91,11 @@ public class GUIView extends Application implements View  {
             settingGameController.setServerIP();
             setting(settingGameController);
         });
-
     }
-
-
 
     public void setting(SettingGameController settingGameController){
         try{
-            if(settingGameController!=null)
-            {
+            if(settingGameController!=null) {
                 serverIp=settingGameController.getServerIP();
                 port=Integer.parseInt(settingGameController.getPort());
             }
@@ -111,9 +104,7 @@ public class GUIView extends Application implements View  {
             new Thread(serverHandler).start();
 
             if(settingGameController!=null)settingGameController.setTextError("You are connected to the server!");
-
-        }catch(Exception e)
-        {
+        }catch(Exception e) {
             if(settingGameController!=null)settingGameController.setTextError("Server unreachable, try again.");
         }
     }
@@ -121,14 +112,16 @@ public class GUIView extends Application implements View  {
     @Override
     public void showErrorMessage(String text) {
 
+        Platform.runLater(() -> {
+            if (errorStage != null && errorStage.isShowing())
+                errorStage.close();
+        });
+
         setLoader("/alertDialog.fxml");
         Scene scene = loadScene(currentLoader);
         AlertController settingGameController = currentLoader.getController();
         settingGameController.setErrorLabel(text);
-            openErrorStage(false, "Dialog window", scene);
-            Button button = (Button) currentLoader.getNamespace().get("errorConfirm");
-            button.setOnAction(event -> errorStage.close());
-
+        openErrorStage(false, "Dialog window", scene);
     }
 
     private void openErrorStage(boolean resizable,String title, Scene scene) {
@@ -137,14 +130,12 @@ public class GUIView extends Application implements View  {
             errorStage.setTitle(title);
             setScene(scene, errorStage, resizable);
             errorStage.setAlwaysOnTop(true);
-
         });
         Button button = (Button) currentLoader.getNamespace().get("errorConfirm");
         button.setOnAction(event -> errorStage.close());
     }
 
-    private void setScene(Scene scene, Stage stage, boolean resizable)
-    {
+    private void setScene(Scene scene, Stage stage, boolean resizable) {
         Platform.runLater(()->{
             stage.setScene(scene);
             stage.setResizable(resizable);
@@ -152,54 +143,67 @@ public class GUIView extends Application implements View  {
         });
     }
 
-
     @Override
     public String getUsername() {
-        setLoader("/setGame.fxml");
+        setLoader("/gameSettings.fxml");
         Scene scene = loadScene(currentLoader);
-        Platform.runLater(() -> manageStage(initStage,scene, "Inserting", false ));
-       StartGameController startGameController = currentLoader.getController();
-       String username = startGameController.getUsername();
+        Platform.runLater(() -> manageStage(initStage, scene,"Masters of Renaissance",false ));
+        GameSettingsController gameSettingsController = currentLoader.getController();
+        String username = gameSettingsController.getUsername();
 
         return username;
-
     }
 
     @Override
     public int getNumberOfPlayers() {
-        ((StartGameController) currentLoader.getController()).setUserComponents(false);
-        ((StartGameController) currentLoader.getController()).setPlayersComponents(true);
+        ((GameSettingsController) currentLoader.getController()).setUserComponents(false);
+        ((GameSettingsController) currentLoader.getController()).setPlayersComponents(true);
 
-        int nPlayers = ((StartGameController) currentLoader.getController()).getnPlayers();
+        int nPlayers = ((GameSettingsController) currentLoader.getController()).getnPlayers();
         showErrorMessage("Waiting for other players...");
         return nPlayers;
-
     }
 
     @Override
     public void showTitle() {
-        setLoader("/title.fxml");
-        Scene scene = loadScene(currentLoader);
-        Platform.runLater(()->{
-            if(errorStage.isShowing()) errorStage.close();
-            oldStage = initStage;
-            initStage = new Stage();
-            initStage.initStyle(StageStyle.UNDECORATED);
-            initStage.setAlwaysOnTop(true);
-            manageStage(initStage, scene, "", true);
+        Platform.runLater(() -> {
+            if (initStage != null && initStage.isShowing())
+                initStage.close();
         });
-
     }
-
-   // public static void main(String[] args) { launch(args); }
-
 
     @Override
     public void startConnection() {
         Application.launch();
     }
 
+    public void endInit(){
 
+        setLoader("/mainScene.fxml");
+        Scene scene = loadScene(currentLoader);
+        mainSceneController = currentLoader.getController();
+        mainSceneController.setScene(game);
+        if(game.getPlayers().size()==1)
+            mainSceneController.setSinglePlayerGame();
+        Platform.runLater(()->{
+            if(errorStage != null && errorStage.isShowing()) errorStage.close();
+            if(initStage.isShowing()) initStage.close();
+            if(endStage!=null) endStage.close();
+            mainStage = new Stage();
+            manageStage(mainStage, scene, "Masters of Renaissance", false);
+        });
+        firstMain = false;
+
+        if(game.getPlayers().size()==1) mainSceneController.setRival();
+        else mainSceneController.setUsernameShow();
+
+        mainSceneController.showBasePower(false);
+        mainSceneController.disableButtons(true);
+        mainSceneController.setActionButton(false);
+        mainSceneController.setTiles();
+        mainSceneController.setFaithTrack();
+        mainSceneController.disableLeaderCards(true);
+    }
 
     @Override
     public CommandMsg selectMove(boolean postTurn){
@@ -208,12 +212,13 @@ public class GUIView extends Application implements View  {
             Scene scene = loadScene(currentLoader);
             mainSceneController = currentLoader.getController();
             mainSceneController.setScene(game);
-            if(game.getPlayers().size()==1) mainSceneController.setSinglePlayerGame();
+            if(game.getPlayers().size()==1)
+                mainSceneController.setSinglePlayerGame();
             Platform.runLater(()->{
                 if(initStage.isShowing()) initStage.close();
                 if(endStage!=null) endStage.close();
                 mainStage = new Stage();
-                manageStage(mainStage, scene, "Main", false);
+                manageStage(mainStage, scene, "Masters of Renaissance", false);
             });
             firstMain = false;
         }
@@ -304,7 +309,6 @@ public class GUIView extends Application implements View  {
         return null;
     }
 
-
     private CommandMsg show(String username, boolean postTurn){
         setLoader("/show.fxml");
         Scene scene = loadScene(currentLoader);
@@ -357,7 +361,7 @@ public class GUIView extends Application implements View  {
                 return activateProduction(selectedCardIds, selectedExtraPowers);
             }
             case 3->{
-                setLoader("/BasePower.fxml");
+                setLoader("/basePower.fxml");
                 Scene scene = loadScene(currentLoader);
                 BasePowerController controller=currentLoader.getController();
                 controller.setPower(game.getThisPlayer().getExtraProductionPowers().get(0));
@@ -419,6 +423,7 @@ public class GUIView extends Application implements View  {
         }
         return null;
     }
+
     private CommandMsg buyCard() {
         mainSceneController.disableButtons(true);
         mainSceneController.disableCards(false);
@@ -469,7 +474,6 @@ public class GUIView extends Application implements View  {
                 msg = changeDepots();
             }
         }
-
         return msg;
     }
 
@@ -494,37 +498,31 @@ public class GUIView extends Application implements View  {
         if (depot1 == DepotName.FIRST_EXTRA || depot1 == DepotName.SECOND_EXTRA
                 || depot2 == DepotName.FIRST_EXTRA || depot2 == DepotName.SECOND_EXTRA){
             return new MoveDepotsMsg(depot1, depot2);
-        }else
+        } else
             return new SwitchDepotsMsg(depot1,depot2);
-
     }
 
     @Override
     public CommandMsg discardLeaderCard() {
-        setLoader("/setUp.fxml");
+        setLoader("/discardLeaderCard.fxml");
         Scene scene = loadScene(currentLoader);
-        setUpController controller = currentLoader.getController();
+        DiscardLeaderCardController controller = currentLoader.getController();
         controller.setGame(game);
 
         Platform.runLater(()->{
             if(discardCounter == 0){
                 oldStage = initStage;
                 initStage = new Stage();
-                manageStage(initStage, scene, "Discard Card Window", true);
+                manageStage(initStage, scene, "Discard Leader Card", true);
             }
             else if(discardCounter == 1){
-                manageStage(initStage, scene, "Discard Card Window", false);
-
+                manageStage(initStage, scene, "Discard Leader Card", false);
             }
         });
 
-
         int id = controller.getResult();
-
         discardCounter++;
-
         return new DiscardLeaderCardMsg(id);
-
     }
 
     @Override
@@ -535,7 +533,7 @@ public class GUIView extends Application implements View  {
         MarbleBufferController marbleBufferController = currentLoader.getController();
         marbleBufferController.setSimpleModel(game);
         marbleBufferController.changeTitle("Please select the marble");
-        if((marbleCounter ==0 && !game.getThisPlayer().getUsername().equals(game.getPlayers().get(0).getUsername()))
+        if((marbleCounter == 0 && !game.getThisPlayer().getUsername().equals(game.getPlayers().get(0).getUsername()))
                 || (marbleCounter == 1 && game.getPlayers().size() == 4 && game.getThisPlayer().getUsername().equals(game.getPlayers().get(3).getUsername()))){
             Platform.runLater(() -> {
                 oldStage = initStage;
@@ -546,9 +544,7 @@ public class GUIView extends Application implements View  {
         else if(marbleCounter >= 0 ){
             //TODO change label when player wants to discard Marble
             marbleBufferController.setMarble();
-            Platform.runLater(() ->{
-                manageStage(tmpStage, scene, "Select Marble1", false);
-            });
+            manageStage(tmpStage, scene, "Select Marble1", false);
         }
 
         marble = null;
@@ -590,22 +586,22 @@ public class GUIView extends Application implements View  {
     }
 
     @Override
-    public void showTextMessage(String text) {
+    public void showTextMessage(String text, boolean loud) {
         //URL path = getClass().getResource("/mainScene.fxml");
-        if(mainSceneController!=null){
+        if(mainSceneController != null){
             mainSceneController.addTextInLog(text);
         }
+        else if (loud)
+            showErrorMessage(text);
     }
-
 
     private void setLoader(String path){
         currentLoader = new FXMLLoader(getClass().getResource(path));
     }
 
-
     private void manageStage(Stage stage, Scene scene, String title, boolean close){
         Platform.runLater(() -> {
-            if(close&&oldStage!=null){
+            if(close && oldStage!=null){
                 oldStage.close();
             }
             stage.getIcons().add(new Image(getClass().getResourceAsStream("/Ritagliare.png")));
@@ -617,22 +613,14 @@ public class GUIView extends Application implements View  {
         });
     }
 
-
-
-    private Scene loadScene(FXMLLoader loader){
+    private Scene loadScene(FXMLLoader loader) {
         Parent root = null;
         try {
             root = loader.load();
-
         } catch (IOException e) {
             e.printStackTrace();
         }
-
         return new Scene(root);
-    }
-
-    public void showLeaderboard(Map<String , Integer> leaderboard){
-
     }
 
     public void endGame(){
@@ -640,18 +628,21 @@ public class GUIView extends Application implements View  {
             setLoader("/endGame.fxml");
             Scene scene = loadScene(currentLoader);
             EndGameController controller = currentLoader.getController();
+            closeAllStages();
             Platform.runLater(() -> {
-                oldStage = mainStage;
+                if (mainStage == null)
+                    mainStage = new Stage();
                 manageStage(mainStage, scene, "End game", true);
             });
             int choice = controller.getChoice();
             switch (choice) {
-                case 1 -> Platform.runLater(() -> mainStage.close());//endgame
+                case 1 -> Platform.runLater(() -> {
+                    mainStage.close();
+                }); //endgame
                 case 2 -> {
                     endStage = mainStage;
                     firstMain = true;
                     setting(null); //newGame
-
                 }
                 case 3 -> {
                     endStage = mainStage;
@@ -660,6 +651,17 @@ public class GUIView extends Application implements View  {
                 }
             }
         }
+    }
+
+    private void closeAllStages(){
+        Platform.runLater(() -> {
+            if (oldStage != null) oldStage.close();
+            if (mainStage != null) mainStage.close();
+            if (errorStage != null) errorStage.close();
+            if (initStage != null) initStage.close();
+            if (endStage != null) endStage.close();
+            if (tmpStage != null) tmpStage.close();
+        });
     }
 
     @Override
@@ -686,10 +688,10 @@ public class GUIView extends Application implements View  {
         Scene scene = loadScene(currentLoader);
         VictoryController controller = currentLoader.getController();
         controller.setScene(win, leaderboard);
-        Platform.runLater(()->{
-            oldStage=mainStage;
-            manageStage(mainStage, scene, "Victory", true);
-        });
+
+        oldStage = mainStage;
+        manageStage(mainStage, scene, "Victory", true);
+
         Button button = (Button) currentLoader.getNamespace().get("closeButton");
         button.setOnAction(event->{
             victory=false;

@@ -301,6 +301,9 @@ public class CLIView implements View {
     }
 
     @Override
+    public void showTextMessage(String text, boolean loud) {
+        showTextMessage(text);
+    }
     public void showTextMessage(String text) {
         System.out.println(Graphics.ANSI_BLUE+text+Graphics.ANSI_RESET);
     }
@@ -656,7 +659,6 @@ public class CLIView implements View {
         return new BuyAndAddCardInSlotMsg(cardColor, level, slotIdx);
     }
 
-    @Override
     public void showLeaderboard(Map<String, Integer> leaderboard) {
         System.out.println("Leaderboard:");
         int count = 1;
@@ -757,5 +759,10 @@ public class CLIView implements View {
             showTextMessage(win ? "You won!" : "You lost.");
         showLeaderboard(leaderboard);
         endGame();
+    }
+
+    @Override
+    public void endInit(){
+        showTextMessage("Finished initialization");
     }
 }
