@@ -80,8 +80,9 @@ public class GUIView extends Application implements View  {
         Font.loadFont(getClass().getResourceAsStream("/resources/fonts/master_of_break.ttf"), 14);
         Scene scene = loadScene(currentLoader);
         Platform.runLater(() ->{
+            if(mainStage!=null) oldStage=mainStage;
             initStage = new Stage();
-            manageStage(initStage, scene, "Masters of Renaissance", false );
+            manageStage(initStage, scene, "Masters of Renaissance", true);
         });
 
         SettingGameController settingGameController = currentLoader.getController();
@@ -112,22 +113,19 @@ public class GUIView extends Application implements View  {
     @Override
     public void showErrorMessage(String text) {
 
-        Platform.runLater(() -> {
-            if (errorStage != null && errorStage.isShowing())
-                errorStage.close();
-        });
-
         setLoader("/alertDialog.fxml");
         Scene scene = loadScene(currentLoader);
+        openErrorStage(false, "Dialog window", scene);
         AlertController settingGameController = currentLoader.getController();
         settingGameController.setErrorLabel(text);
-        openErrorStage(false, "Dialog window", scene);
     }
 
     private void openErrorStage(boolean resizable,String title, Scene scene) {
         Platform.runLater(() -> {
-            errorStage = new Stage();
-            errorStage.setTitle(title);
+            if (errorStage == null || !errorStage.isShowing()){
+                errorStage = new Stage();
+                errorStage.setTitle(title);
+            }
             setScene(scene, errorStage, resizable);
             errorStage.setAlwaysOnTop(true);
         });
@@ -147,9 +145,12 @@ public class GUIView extends Application implements View  {
     public String getUsername() {
         setLoader("/gameSettings.fxml");
         Scene scene = loadScene(currentLoader);
-        Platform.runLater(() -> manageStage(initStage, scene,"Masters of Renaissance",false ));
-        GameSettingsController gameSettingsController = currentLoader.getController();
-        String username = gameSettingsController.getUsername();
+        Platform.runLater(() -> {
+            if(mainStage!=null) oldStage=mainStage;
+            manageStage(initStage,scene, "Masters of Renaissance", true );
+        });
+        GameSettingsController startGameController = currentLoader.getController();
+        String username = startGameController.getUsername();
 
         return username;
     }
@@ -322,6 +323,8 @@ public class GUIView extends Application implements View  {
         showController.setTrack();
         Platform.runLater(() ->{
             if(tmpStage == null)  tmpStage = new Stage();
+            tmpStage.initStyle(StageStyle.UNDECORATED);
+            tmpStage.setAlwaysOnTop(true);
             manageStage(tmpStage, scene, "Show PlayerBoard", false);
         });
 
@@ -624,6 +627,7 @@ public class GUIView extends Application implements View  {
     }
 
     public void endGame(){
+
         if(!victory) {
             setLoader("/endGame.fxml");
             Scene scene = loadScene(currentLoader);
@@ -688,14 +692,16 @@ public class GUIView extends Application implements View  {
         Scene scene = loadScene(currentLoader);
         VictoryController controller = currentLoader.getController();
         controller.setScene(win, leaderboard);
+        Platform.runLater(()->{
+            oldStage = mainStage;
+            manageStage(mainStage, scene, "Victory", true);
+        });
 
-        oldStage = mainStage;
-        manageStage(mainStage, scene, "Victory", true);
-
-        Button button = (Button) currentLoader.getNamespace().get("closeButton");
-        button.setOnAction(event->{
+        boolean close = controller.isCloseWindow();
+        if(close){
             victory=false;
             endGame();
-        });
+        }
+
     }
 }

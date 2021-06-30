@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 <?import javafx.scene.Cursor?>
 <?import javafx.scene.Group?>
 <?import javafx.scene.control.Button?>
@@ -12,7 +18,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="548.0" prefWidth="865.0" styleClass="maingrid" stylesheets="@background.css" xmlns="http://javafx.com/javafx/11.0.2" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.client.view.GUI.ShowController">
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="548.0" prefWidth="865.0" styleClass="maingrid" stylesheets="@background.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.client.view.GUI.ShowController">
    <children>
       <ImageView fitHeight="467.0" fitWidth="665.0" layoutY="76.0" pickOnBounds="true" preserveRatio="true">
          <image>
@@ -221,6 +227,26 @@
       <ImageView fx:id="leaderCard2" fitHeight="215.0" fitWidth="148.0" layoutX="687.0" layoutY="235.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@cards/leader/Leader-101.jpg" />
+         </image>
+      </ImageView>
+      <ImageView fx:id="resExtra1s" fitHeight="34.0" fitWidth="34.0" layoutX="711.0" layoutY="170.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@res-marbles/shield.png" />
+         </image>
+      </ImageView>
+      <ImageView fx:id="resExtra1d" fitHeight="34.0" fitWidth="34.0" layoutX="769.0" layoutY="170.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@res-marbles/shield.png" />
+         </image>
+      </ImageView>
+      <ImageView fx:id="resExtra2s" fitHeight="34.0" fitWidth="34.0" layoutX="711.0" layoutY="390.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@res-marbles/shield.png" />
+         </image>
+      </ImageView>
+      <ImageView fx:id="resExtra2d" fitHeight="34.0" fitWidth="34.0" layoutX="769.0" layoutY="390.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@res-marbles/shield.png" />
          </image>
       </ImageView>
    </children>

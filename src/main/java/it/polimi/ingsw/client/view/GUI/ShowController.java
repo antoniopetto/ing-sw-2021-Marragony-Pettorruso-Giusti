@@ -37,6 +37,14 @@ public class ShowController implements Initializable {
     @FXML
     private ImageView resLow3;
     @FXML
+    private ImageView resExtra1s;
+    @FXML
+    private ImageView resExtra1d;
+    @FXML
+    private ImageView resExtra2s;
+    @FXML
+    private ImageView resExtra2d;
+    @FXML
     private ImageView faithMarker;
     @FXML
     private Group slotsTot;
@@ -82,12 +90,27 @@ public class ShowController implements Initializable {
         int counter = 0;
         for(SimpleLeaderCard card : thisPlayer.getLeaderCards()){
             if(card.isActive()) {
+
+                int quantity = 0;
+                if(card.getAbility().getType().equals(SimpleAbility.Type.EXTRADEPOT)){
+                    if(card.getAbility().getResource().equals(thisPlayer.getWarehouse().getDepot(DepotName.FIRST_EXTRA).getConstraint()))
+                        quantity =GUISupport.quantityOfResources(thisPlayer.getWarehouse().getDepot(DepotName.FIRST_EXTRA));
+                    else  quantity =GUISupport.quantityOfResources(thisPlayer.getWarehouse().getDepot(DepotName.SECOND_EXTRA));
+                }
+
                 if(counter == 0){
                     leaderCard1.setImage(new Image("/cards/leader/Leader-" + card.getId() + ".jpg"));
                     leaderCard1.setVisible(true);
+
+                    if(quantity > 0) GUISupport.settingImageView(quantity, resExtra1s, resExtra1d);
+                        else GUISupport.setVisible(false, resExtra1s, resExtra1d);
+
                 } else {
                     leaderCard2.setImage(new Image("/cards/leader/Leader-" + card.getId() + ".jpg"));
                     leaderCard2.setVisible(true);
+
+                    if(quantity > 0) GUISupport.settingImageView(quantity, resExtra2s, resExtra2d);
+                         else GUISupport.setVisible(false, resExtra2s, resExtra2d);
                 }
                 counter++;
             }
@@ -212,6 +235,7 @@ public class ShowController implements Initializable {
 
     }
 
+    @FXML
     public void closeShow(ActionEvent actionEvent) {
         actionEvent.consume();
         setCloseWindow(true);

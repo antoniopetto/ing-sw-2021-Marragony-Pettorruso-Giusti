@@ -1,5 +1,6 @@
 package it.polimi.ingsw.client.view.GUI;
 
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Group;
@@ -17,6 +18,8 @@ public class VictoryController implements Initializable {
     private Text title;
     @FXML
     private Group leaderboard;
+
+    private boolean closeWindow = false;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {}
@@ -39,5 +42,28 @@ public class VictoryController implements Initializable {
             }
             else GUISupport.setVisible(false, text);
         }
+    }
+
+    public synchronized boolean isCloseWindow() {
+        while(!closeWindow){
+            try {
+                wait();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+        return closeWindow;
+    }
+
+    private synchronized void setCloseWindow(boolean close){
+        closeWindow = close;
+        notifyAll();
+    }
+
+    @FXML
+    public void close(ActionEvent actionEvent){
+        actionEvent.consume();
+        setCloseWindow(true);
+
     }
 }
