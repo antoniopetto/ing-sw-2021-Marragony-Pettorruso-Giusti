@@ -1,16 +1,16 @@
 .anchor {
-    -fx-background-image:url('\maestri-del-rinascimento.jpg');
+    -fx-background-image:url('images/settingsBackground.jpg');
     -fx-background-size: cover;
 }
 
 .anchor2 {
-    -fx-background-image:url('\maestri-del-rinascimento.jpg');
+    -fx-background-image:url('images/settingsBackground.jpg');
     -fx-background-size: cover;
     -fx-opacity: 0.7
 }
 
 .playerBoardPane {
-    -fx-background-image:url('\PlayerBoard.jpg');
+    -fx-background-image:url('images/playerBoard.jpg');
     -fx-background-repeat: stretch;
     -fx-background-size: 1600 400;
     -fx-background-position: center center;

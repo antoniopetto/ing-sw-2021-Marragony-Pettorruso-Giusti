@@ -5,7 +5,6 @@ import it.polimi.ingsw.client.simplemodel.SimpleLeaderCard;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
@@ -64,7 +63,7 @@ public class DiscardLeaderCardController implements Initializable {
         for (SimpleLeaderCard card : game.getThisPlayer().getLeaderCards()) {
             int cardId = card.getId();
             cardIds.add(cardId);
-            String imUrl = "/cards/leader/Leader-" + cardId + ".jpg";
+            String imUrl = "/images/leader/Leader-" + cardId + ".jpg";
             cards.add(new Image(imUrl));
         }
         switch (cards.size()) {

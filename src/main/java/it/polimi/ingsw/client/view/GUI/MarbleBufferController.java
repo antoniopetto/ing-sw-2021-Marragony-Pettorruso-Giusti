@@ -3,13 +3,11 @@ package it.polimi.ingsw.client.view.GUI;
 import it.polimi.ingsw.client.simplemodel.*;
 import it.polimi.ingsw.server.model.playerboard.DepotName;
 import it.polimi.ingsw.server.model.playerboard.Resource;
-import it.polimi.ingsw.server.model.playerboard.WareHouse;
 import it.polimi.ingsw.server.model.shared.Marble;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -18,12 +16,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.text.Text;
 
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
 import java.util.ResourceBundle;
-
-import static it.polimi.ingsw.client.view.GUI.GUISupport.returnPath;
 
 public class MarbleBufferController implements Initializable {
 
@@ -181,12 +174,12 @@ public class MarbleBufferController implements Initializable {
             if(card.isActive() && card.getAbility().getType().equals(SimpleAbility.Type.EXTRADEPOT)) {
                 int quantity = 0;
                 if(card.getAbility().getResource().equals(simpleModel.getThisPlayer().getWarehouse().getDepot(DepotName.FIRST_EXTRA).getConstraint())){
-                 extraCard1.setImage(new Image("/cards/leader/Leader-" + card.getId() + ".jpg"));
+                 extraCard1.setImage(new Image("/images/leader/Leader-" + card.getId() + ".jpg"));
                  extraCard1.setVisible(true);
                  quantity =  GUISupport.quantityOfResources(simpleModel.getThisPlayer().getWarehouse().getDepot(DepotName.FIRST_EXTRA));
                  GUISupport.settingImageView(quantity, resourceSxExtra1, resourceDxExtra1);
                 } else {
-                    extraCard2.setImage(new Image("/cards/leader/Leader-" + card.getId() + ".jpg"));
+                    extraCard2.setImage(new Image("/images/leader/Leader-" + card.getId() + ".jpg"));
                     extraCard2.setVisible(true);
                     quantity =  GUISupport.quantityOfResources(simpleModel.getThisPlayer().getWarehouse().getDepot(DepotName.SECOND_EXTRA));
                     GUISupport.settingImageView(quantity, resourceSxExtra2, resourceDxExtra2);
@@ -216,7 +209,7 @@ public class MarbleBufferController implements Initializable {
 
     private void marbleCast(int quantity, ImageView... marbleBuffer){
         for(int i = 0; i < quantity; i++){
-            marbleBuffer[i].setImage(new Image("/res-marbles/" + GUISupport.getMarblePath(simpleModel.getMarbleBuffer().get(i).toString())));
+            marbleBuffer[i].setImage(new Image("/images/res-marbles/" + GUISupport.getMarblePath(simpleModel.getMarbleBuffer().get(i).toString())));
             marbleBuffer[i].setVisible(true);
             marbleBuffer[i].setDisable(false);
         }

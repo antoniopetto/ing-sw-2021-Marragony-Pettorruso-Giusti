@@ -13,7 +13,7 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="565.0" prefWidth="886.0" styleClass="anchor" stylesheets="@backgroundStart.css" xmlns="http://javafx.com/javafx/11.0.2" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.client.view.GUI.ConnectionSettingsController">
+<AnchorPane prefHeight="565.0" prefWidth="886.0" styleClass="anchor" stylesheets="@../backgroundStart.css" xmlns="http://javafx.com/javafx/11.0.2" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.client.view.GUI.ConnectionSettingsController">
     <children>
         <GridPane layoutX="-2.0" layoutY="-1.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="360.0" prefWidth="609.0" AnchorPane.bottomAnchor="-7.0" AnchorPane.leftAnchor="-2.0" AnchorPane.rightAnchor="-7.0" AnchorPane.topAnchor="-1.0">
             <columnConstraints>
@@ -35,12 +35,12 @@
             <children>
                 <ImageView fitHeight="110.0" fitWidth="97.0" pickOnBounds="true" preserveRatio="true" style="-fx-scale-x: 3; -fx-scale-y: 0.7;" GridPane.columnIndex="3" GridPane.rowIndex="2">
                     <image>
-                        <Image url="@Pergamena2.png" />
+                        <Image url="@../images/scroll.png" />
                     </image>
                 </ImageView>
                 <ImageView fitHeight="110.0" fitWidth="97.0" pickOnBounds="true" preserveRatio="true" style="-fx-scale-x: 3; -fx-scale-y: 0.7;" GridPane.columnIndex="3" GridPane.columnSpan="2" GridPane.rowIndex="1" GridPane.valignment="BOTTOM">
                     <image>
-                        <Image url="@Pergamena2.png" />
+                        <Image url="@../images/scroll.png" />
                     </image>
                     <GridPane.margin>
                         <Insets />
@@ -59,7 +59,7 @@
                     <graphic>
                         <ImageView fitHeight="70.0" fitWidth="215.0" pickOnBounds="true" preserveRatio="true" x="10.0">
                             <image>
-                                <Image url="@Ritagliare.png" />
+                                <Image url="@../images/inkwell.png" />
                             </image>
                      <cursor>
                         <Cursor fx:constant="HAND" />

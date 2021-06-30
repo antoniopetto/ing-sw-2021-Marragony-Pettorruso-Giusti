@@ -12,14 +12,14 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" styleClass="anchor" stylesheets="@backgroundStart.css" xmlns="http://javafx.com/javafx/11.0.2" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.client.view.GUI.GameSettingsController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" styleClass="anchor" stylesheets="@../backgroundStart.css" xmlns="http://javafx.com/javafx/11.0.2" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.client.view.GUI.GameSettingsController">
    <children>
       <Pane prefHeight="400.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
             <Button fx:id="userButton" layoutX="441.0" layoutY="185.0" mnemonicParsing="false" onAction="#userConfirm" text="Confirm" />
             <ImageView fitHeight="110.0" fitWidth="97.0" layoutX="240.0" layoutY="154.0" pickOnBounds="true" preserveRatio="true" style="-fx-scale-x: 3; -fx-scale-y: 0.7;">
                <image>
-                  <Image url="@Pergamena2.png" />
+                  <Image url="@../images/scroll.png" />
                </image>
             </ImageView>
             <TextField fx:id="usernameField" layoutX="200.0" layoutY="177.0" prefHeight="31.0" prefWidth="218.0" style="-fx-background-color: transparent;">

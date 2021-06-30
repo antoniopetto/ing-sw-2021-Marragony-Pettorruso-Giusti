@@ -11,8 +11,6 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.shape.Circle;
 
 
-import javax.print.DocFlavor;
-import java.io.InputStream;
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -48,7 +46,7 @@ public class BasePowerController implements Initializable {
     public void showInput(boolean show){GUISupport.setVisible(show, inputResources);}
     public void setResIn1(Resource resource){
         GUISupport.setVisible(false, circleIn1);
-        String path = "/res-marbles/"+GUISupport.returnPath(resource.name());
+        String path = "/images/res-marbles/" +GUISupport.returnPath(resource.name());
         resIn1.setImage(new Image(path));
         GUISupport.setVisible(true, resIn1);
         GUISupport.setVisible(true, circleIn2);
@@ -58,7 +56,7 @@ public class BasePowerController implements Initializable {
         GUISupport.setVisible(false, inputResources);
         GUISupport.setVisible(true, outputResources);
         GUISupport.setVisible(true, circleOut);
-        String path = "/res-marbles/"+GUISupport.returnPath(resource.name());
+        String path = "/images/res-marbles/" +GUISupport.returnPath(resource.name());
         resIn2.setImage(new Image(path));
         GUISupport.setVisible(true, resIn2);
     }

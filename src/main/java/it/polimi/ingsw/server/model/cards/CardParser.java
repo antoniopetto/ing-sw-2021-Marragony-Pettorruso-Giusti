@@ -25,7 +25,7 @@ import static java.util.stream.Collectors.toMap;
  */
 public class CardParser {
 
-    private static final String CONFIG_PATH = "src/main/resources/cards/config.xml";
+    private static final String CONFIG_PATH = "src/main/resources/config.xml";
     private final Node config;
     private final XPath xPath = XPathFactory.newInstance().newXPath();
     private static CardParser instance;

@@ -4,6 +4,9 @@ import it.polimi.ingsw.server.model.playerboard.Resource;
 
 import java.io.Serializable;
 
+/**
+ *
+ */
 public class SimpleAbility implements Serializable {
 
     public enum Type {

@@ -24,7 +24,6 @@ import javafx.scene.text.TextFlow;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.ResourceBundle;
 
 public class MainSceneController implements Initializable {
@@ -241,7 +240,7 @@ public class MainSceneController implements Initializable {
 
             for (SimpleLeaderCard card : simpleModel.getThisPlayer().getLeaderCards()) {
                 int cardId = card.getId();
-                String imUrl = "/cards/leader/Leader-" + cardId + ".jpg";
+                String imUrl = "/images/leader/Leader-" + cardId + ".jpg";
                 cards.add(new Image(imUrl));
                 simpleLeaderCards.add(card);
             }
@@ -436,7 +435,7 @@ public class MainSceneController implements Initializable {
             ImageView imageview = (ImageView) node;
             if(i<ids.size()&&ids.get(i)!=null)
             {
-                String url = "/cards/development/Development-" + ids.get(i) + ".jpg";
+                String url = "/images/development/Development-" + ids.get(i) + ".jpg";
                 imageview.setImage(new Image(url));
                 imageview.setId(String.valueOf(ids.get(i)));
             }
@@ -461,14 +460,14 @@ public class MainSceneController implements Initializable {
             ImageView imageview = (ImageView) node;
             if(marbleColor.get(i)!=null)
             {
-                String url = "/res-marbles/" + GUISupport.getMarblePath(marbleColor.get(i));
+                String url = "/images/res-marbles/" + GUISupport.getMarblePath(marbleColor.get(i));
                 imageview.setImage(new Image(url));
             }
             else imageview.setVisible(false);
             i++;
         }
 
-        spareMarble.setImage(new Image("/res-marbles/" + GUISupport.getMarblePath(simpleModel.getSpareMarble().toString())));
+        spareMarble.setImage(new Image("/images/res-marbles/" + GUISupport.getMarblePath(simpleModel.getSpareMarble().toString())));
     }
 
     @FXML
@@ -521,11 +520,11 @@ public class MainSceneController implements Initializable {
 
     public void setTiles(){
         List<PopeFavourTile> tiles=simpleModel.getThisPlayer().getTiles();
-        if(tiles.get(0).isGained()) tile1.setImage(new Image("/pope-favor/pope_favor1_front.png"));
+        if(tiles.get(0).isGained()) tile1.setImage(new Image("/images/pope-favor/pope_favor1_front.png"));
         else if(getMaxPosition()>8) GUISupport.setVisible(false, tile1);
-        if(tiles.get(1).isGained()) tile2.setImage(new Image("/pope-favor/pope_favor2_front.png"));
+        if(tiles.get(1).isGained()) tile2.setImage(new Image("/images/pope-favor/pope_favor2_front.png"));
         else if(getMaxPosition()>16) GUISupport.setVisible(false, tile2);
-        if(tiles.get(2).isGained()) tile3.setImage(new Image("/pope-favor/pope_favor3_front.png"));
+        if(tiles.get(2).isGained()) tile3.setImage(new Image("/images/pope-favor/pope_favor3_front.png"));
     }
 
     private int getMaxPosition(){
@@ -551,7 +550,7 @@ public class MainSceneController implements Initializable {
                     SimpleDevCard simpleDevCard =simpleModel.getThisPlayer().getSlots().get(slotCounter).getCards().get(cardCounter);
                     if(simpleDevCard!=null){
                         int id = simpleDevCard.getId();
-                        String url = "/cards/development/Development-"+id+".jpg";
+                        String url = "/images/development/Development-" +id+".jpg";
                         card.setImage(new Image(url));
                         card.setId(String.valueOf(id));
                         cardPresent=true;

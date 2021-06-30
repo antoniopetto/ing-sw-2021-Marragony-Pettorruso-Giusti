@@ -75,7 +75,7 @@ public class GUIView extends Application implements View  {
     @Override
     public void start(Stage stage) {
 
-        setLoader("/connectionSettings.fxml");
+        setLoader("/fxml/connectionSettings.fxml");
         Font.loadFont(getClass().getResourceAsStream("/resources/fonts/master_of_break.ttf"), 14);
         Scene scene = loadScene(currentLoader);
         Platform.runLater(() ->{
@@ -116,7 +116,7 @@ public class GUIView extends Application implements View  {
 
     public void showErrorMessage(String text, boolean closable) {
 
-        setLoader("/alertDialog.fxml");
+        setLoader("/fxml/alertDialog.fxml");
         Scene scene = loadScene(currentLoader);
         AlertController settingGameController = currentLoader.getController();
         settingGameController.setErrorLabel(text);
@@ -143,7 +143,7 @@ public class GUIView extends Application implements View  {
 
     @Override
     public String getUsername() {
-        setLoader("/gameSettings.fxml");
+        setLoader("/fxml/gameSettings.fxml");
         Scene scene = loadScene(currentLoader);
         Platform.runLater(() -> {
             if(mainStage!=null) oldStage=mainStage;
@@ -180,7 +180,7 @@ public class GUIView extends Application implements View  {
 
     public void endInit(){
 
-        setLoader("/mainScene.fxml");
+        setLoader("/fxml/mainScene.fxml");
         Scene scene = loadScene(currentLoader);
         mainSceneController = currentLoader.getController();
         mainSceneController.setScene(game);
@@ -209,7 +209,7 @@ public class GUIView extends Application implements View  {
     @Override
     public CommandMsg selectMove(boolean postTurn){
         if(firstMain){
-            setLoader("/mainScene.fxml");
+            setLoader("/fxml/mainScene.fxml");
             Scene scene = loadScene(currentLoader);
             mainSceneController = currentLoader.getController();
             mainSceneController.setScene(game);
@@ -312,7 +312,7 @@ public class GUIView extends Application implements View  {
     }
 
     private CommandMsg show(String username, boolean postTurn){
-        setLoader("/show.fxml");
+        setLoader("/fxml/show.fxml");
         Scene scene = loadScene(currentLoader);
         ShowController showController = currentLoader.getController();
 
@@ -365,7 +365,7 @@ public class GUIView extends Application implements View  {
                 return activateProduction(selectedCardIds, selectedExtraPowers);
             }
             case 3->{
-                setLoader("/basePower.fxml");
+                setLoader("/fxml/basePower.fxml");
                 Scene scene = loadScene(currentLoader);
                 BasePowerController controller=currentLoader.getController();
                 controller.setPower(game.getThisPlayer().getExtraProductionPowers().get(0));
@@ -446,7 +446,7 @@ public class GUIView extends Application implements View  {
 
         CommandMsg msg = null;
 
-        setLoader("/manageResources.fxml");
+        setLoader("/fxml/manageResources.fxml");
         Scene scene = loadScene(currentLoader);
         ManageResourcesController manageResourcesController = currentLoader.getController();
 
@@ -483,7 +483,7 @@ public class GUIView extends Application implements View  {
 
     @Override
     public CommandMsg changeDepots() {
-        setLoader("/marbleBufferScene.fxml");
+        setLoader("/fxml/marbleBufferScene.fxml");
         Scene scene = loadScene(currentLoader);
         MarbleBufferController marbleBufferController = currentLoader.getController();
         marbleBufferController.setSimpleModel(game);
@@ -508,7 +508,7 @@ public class GUIView extends Application implements View  {
 
     @Override
     public CommandMsg discardLeaderCard() {
-        setLoader("/discardLeaderCard.fxml");
+        setLoader("/fxml/discardLeaderCard.fxml");
         Scene scene = loadScene(currentLoader);
         DiscardLeaderCardController controller = currentLoader.getController();
         controller.setGame(game);
@@ -532,7 +532,7 @@ public class GUIView extends Application implements View  {
     @Override
     public Marble selectMarble() {
 
-        setLoader("/marbleBufferScene.fxml");
+        setLoader("/fxml/marbleBufferScene.fxml");
         Scene scene = loadScene(currentLoader);
         MarbleBufferController marbleBufferController = currentLoader.getController();
         marbleBufferController.setSimpleModel(game);
@@ -608,7 +608,7 @@ public class GUIView extends Application implements View  {
             if(close && oldStage!=null){
                 oldStage.close();
             }
-            stage.getIcons().add(new Image(getClass().getResourceAsStream("/Ritagliare.png")));
+            stage.getIcons().add(new Image(getClass().getResourceAsStream("/images/inkwell.png")));
             stage.setScene(scene);
             stage.setTitle(title);
             stage.setResizable(false);
@@ -629,7 +629,7 @@ public class GUIView extends Application implements View  {
 
     public void endGame(){
 
-        setLoader("/endGame.fxml");
+        setLoader("/fxml/endGame.fxml");
         Scene scene = loadScene(currentLoader);
         EndGameController controller = currentLoader.getController();
         closeAllStages();
@@ -687,7 +687,7 @@ public class GUIView extends Application implements View  {
     @Override
     public void victory(Boolean win, Map<String, Integer> leaderboard) {
 
-        setLoader("/victory.fxml");
+        setLoader("/fxml/victory.fxml");
         Scene scene = loadScene(currentLoader);
         VictoryController controller = currentLoader.getController();
         controller.setScene(win, leaderboard);

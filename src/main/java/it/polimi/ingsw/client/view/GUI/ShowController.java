@@ -99,14 +99,14 @@ public class ShowController implements Initializable {
                 }
 
                 if(counter == 0){
-                    leaderCard1.setImage(new Image("/cards/leader/Leader-" + card.getId() + ".jpg"));
+                    leaderCard1.setImage(new Image("/images/leader/Leader-" + card.getId() + ".jpg"));
                     leaderCard1.setVisible(true);
 
                     if(quantity > 0) GUISupport.settingImageView(quantity, resExtra1s, resExtra1d);
                         else GUISupport.setVisible(false, resExtra1s, resExtra1d);
 
                 } else {
-                    leaderCard2.setImage(new Image("/cards/leader/Leader-" + card.getId() + ".jpg"));
+                    leaderCard2.setImage(new Image("/images/leader/Leader-" + card.getId() + ".jpg"));
                     leaderCard2.setVisible(true);
 
                     if(quantity > 0) GUISupport.settingImageView(quantity, resExtra2s, resExtra2d);
@@ -140,7 +140,7 @@ public class ShowController implements Initializable {
                     SimpleDevCard simpleDevCard =thisPlayer.getSlots().get(slotCounter).getCards().get(cardCounter);
                     if(simpleDevCard!=null){
                         int id = simpleDevCard.getId();
-                        String url = "/cards/development/Development-"+id+".jpg";
+                        String url = "/images/development/Development-" +id+".jpg";
                         card.setImage(new Image(url));
                         card.setId(String.valueOf(id));
                         cardPresent=true;

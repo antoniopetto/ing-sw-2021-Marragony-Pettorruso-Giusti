@@ -16,12 +16,12 @@
          <children>
             <ImageView fitHeight="398.0" fitWidth="689.0" opacity="0.73" pickOnBounds="true" preserveRatio="true">
                <image>
-                  <Image url="@maestri-del-rinascimento.jpg" />
+                  <Image url="@../images/settingsBackground.jpg" />
                </image>
             </ImageView>
             <ImageView fitHeight="150.0" fitWidth="600.0" layoutX="257.0" layoutY="-16.0" pickOnBounds="true" preserveRatio="true" style="-fx-scale-x: 4; -fx-scale-y: 0.6;">
                <image>
-                  <Image url="@Pergamena2.png" />
+                  <Image url="@../images/scroll.png" />
                </image>
             </ImageView>
             <Text fill="#0b67d9" layoutX="142.0" layoutY="68.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Please select a marble action:" wrappingWidth="462.28131103515625">
@@ -31,7 +31,7 @@
             </Text>
             <ImageView fitHeight="44.0" fitWidth="46.0" layoutX="23.0" layoutY="244.0" pickOnBounds="true" preserveRatio="true">
                <image>
-                  <Image url="@Ritagliare.png" />
+                  <Image url="@../images/inkwell.png" />
                </image>
             </ImageView>
             <Label fx:id="insertResource" layoutX="60.0" layoutY="156.0" onMouseClicked="#marbleAction" prefHeight="38.0" prefWidth="226.0" text="Insert Resource" textFill="#0b67d9" underline="true">
@@ -60,12 +60,12 @@
             </Label>
             <ImageView fitHeight="44.0" fitWidth="46.0" layoutX="23.0" layoutY="197.0" pickOnBounds="true" preserveRatio="true">
                <image>
-                  <Image url="@Ritagliare.png" />
+                  <Image url="@../images/inkwell.png" />
                </image>
             </ImageView>
             <ImageView fitHeight="44.0" fitWidth="46.0" layoutX="23.0" layoutY="154.0" pickOnBounds="true" preserveRatio="true">
                <image>
-                  <Image url="@Ritagliare.png" />
+                  <Image url="@../images/inkwell.png" />
                </image>
             </ImageView>
          </children>

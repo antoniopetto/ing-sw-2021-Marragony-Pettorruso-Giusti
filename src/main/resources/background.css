@@ -1,7 +1,6 @@
 .maingrid {
-    -fx-background-image:url('\background.jpg');
+    -fx-background-image:url('images/background.jpg');
     -fx-background-size: cover;
-
 }
 
 .transparent {
@@ -10,5 +9,5 @@
 
 @font-face {
     font-family: Master;
-    src: url('\master_of_break.otf');
+    src: url('fonts/master_of_break.otf');
 }
