@@ -3,7 +3,7 @@ package it.polimi.ingsw.messages.toview;
 import it.polimi.ingsw.client.ServerHandler;
 import it.polimi.ingsw.client.view.View;
 
-public class ErrorMsg implements ViewMsg {
+public class ErrorMsg implements ToViewMsg {
 
     private String text;
 

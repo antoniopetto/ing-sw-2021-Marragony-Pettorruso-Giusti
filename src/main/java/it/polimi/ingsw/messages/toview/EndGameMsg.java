@@ -5,7 +5,7 @@ import it.polimi.ingsw.client.view.View;
 
 import java.util.Map;
 
-public class EndGameMsg implements ViewMsg{
+public class EndGameMsg implements ToViewMsg {
 
     private final Map<String, Integer> leaderboard;
     private Boolean win;

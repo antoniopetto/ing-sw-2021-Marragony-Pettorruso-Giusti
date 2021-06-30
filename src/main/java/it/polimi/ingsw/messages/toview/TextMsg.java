@@ -4,9 +4,7 @@ package it.polimi.ingsw.messages.toview;
 import it.polimi.ingsw.client.ServerHandler;
 import it.polimi.ingsw.client.view.View;
 
-import java.io.IOException;
-
-public class TextMsg implements ViewMsg {
+public class TextMsg implements ToViewMsg {
 
     private final String text;
     private final boolean loud;

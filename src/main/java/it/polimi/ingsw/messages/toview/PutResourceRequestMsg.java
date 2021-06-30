@@ -10,10 +10,10 @@ import it.polimi.ingsw.server.model.shared.Marble;
 
 import java.io.IOException;
 
-public class PutResourceRequestMsg implements ViewMsg {
+public class PutResourceRequestMsg implements ToViewMsg {
 
     @Override
-    public void changeView(View view, ServerHandler server) throws IOException {
+    public void changeView(View view, ServerHandler server){
 
         CommandMsg msg;
         Marble selectedMarble = view.selectMarble();
@@ -25,7 +25,6 @@ public class PutResourceRequestMsg implements ViewMsg {
         } else
             msg = new PutResourceMsg(selectedMarble, selectedDepot);
         server.writeObject(msg);
-
     }
 
     @Override

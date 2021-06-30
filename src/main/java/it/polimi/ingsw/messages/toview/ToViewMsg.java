@@ -7,6 +7,6 @@ import it.polimi.ingsw.messages.Msg;
 import java.io.IOException;
 import java.io.Serializable;
 
-public interface ViewMsg extends Msg {
-    void changeView(View view, ServerHandler server) throws IOException;
+public interface ToViewMsg extends Msg {
+    void changeView(View view, ServerHandler server);
 }

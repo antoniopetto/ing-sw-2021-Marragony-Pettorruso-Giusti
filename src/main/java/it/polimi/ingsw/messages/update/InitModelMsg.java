@@ -3,9 +3,9 @@ package it.polimi.ingsw.messages.update;
 import it.polimi.ingsw.client.ServerHandler;
 import it.polimi.ingsw.client.simplemodel.SimpleModel;
 import it.polimi.ingsw.client.view.View;
-import it.polimi.ingsw.messages.toview.ViewMsg;
+import it.polimi.ingsw.messages.toview.ToViewMsg;
 
-public class InitModelMsg implements ViewMsg {
+public class InitModelMsg implements ToViewMsg {
 
     private final SimpleModel game;
 

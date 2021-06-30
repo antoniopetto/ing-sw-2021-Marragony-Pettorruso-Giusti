@@ -6,7 +6,7 @@ import it.polimi.ingsw.messages.command.CommandMsg;
 
 import java.io.IOException;
 
-public class NextActionMsg implements ViewMsg{
+public class NextActionMsg implements ToViewMsg {
 
     private final boolean postTurn;
 
@@ -17,7 +17,7 @@ public class NextActionMsg implements ViewMsg{
     }
 
     @Override
-    public void changeView(View view, ServerHandler server) throws IOException {
+    public void changeView(View view, ServerHandler server) {
         CommandMsg msg = view.selectMove(postTurn);
         server.writeObject(msg);
     }

@@ -6,9 +6,9 @@ import it.polimi.ingsw.messages.command.CommandMsg;
 
 import java.io.IOException;
 
-public class ManageResourceMsg implements ViewMsg{
+public class ManageResourceMsg implements ToViewMsg {
     @Override
-    public void changeView(View view, ServerHandler server) throws IOException {
+    public void changeView(View view, ServerHandler server){
         CommandMsg msg = view.manageResource();
         server.writeObject(msg);
     }

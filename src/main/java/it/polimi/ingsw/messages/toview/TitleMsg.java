@@ -3,9 +3,7 @@ package it.polimi.ingsw.messages.toview;
 import it.polimi.ingsw.client.ServerHandler;
 import it.polimi.ingsw.client.view.View;
 
-import java.io.IOException;
-
-public class TitleMsg implements ViewMsg{
+public class TitleMsg implements ToViewMsg {
 
     @Override
     public void changeView(View view, ServerHandler server) {

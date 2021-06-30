@@ -49,7 +49,6 @@ public class GUIView extends Application implements View  {
     private MainSceneController mainSceneController = null;
     private String serverIp;
     private int port;
-    private boolean victory = false;
 
 
     private enum Action{
@@ -630,31 +629,29 @@ public class GUIView extends Application implements View  {
 
     public void endGame(){
 
-        if(!victory) {
-            setLoader("/endGame.fxml");
-            Scene scene = loadScene(currentLoader);
-            EndGameController controller = currentLoader.getController();
-            closeAllStages();
-            Platform.runLater(() -> {
-                if (mainStage == null)
-                    mainStage = new Stage();
-                manageStage(mainStage, scene, "End game", true);
-            });
-            int choice = controller.getChoice();
-            switch (choice) {
-                case 1 -> Platform.runLater(() -> {
-                    mainStage.close();
-                }); //endgame
-                case 2 -> {
-                    endStage = mainStage;
-                    firstMain = true;
-                    setting(null); //newGame
-                }
-                case 3 -> {
-                    endStage = mainStage;
-                    firstMain = true;
-                    start(null); //new server
-                }
+        setLoader("/endGame.fxml");
+        Scene scene = loadScene(currentLoader);
+        EndGameController controller = currentLoader.getController();
+        closeAllStages();
+        Platform.runLater(() -> {
+            if (mainStage == null)
+                mainStage = new Stage();
+            manageStage(mainStage, scene, "End game", true);
+        });
+        int choice = controller.getChoice();
+        switch (choice) {
+            case 1 -> Platform.runLater(() -> {
+                mainStage.close();
+            }); //endgame
+            case 2 -> {
+                endStage = mainStage;
+                firstMain = true;
+                setting(null); //newGame
+            }
+            case 3 -> {
+                endStage = mainStage;
+                firstMain = true;
+                start(null); //new server
             }
         }
     }
@@ -689,7 +686,7 @@ public class GUIView extends Application implements View  {
 
     @Override
     public void victory(Boolean win, Map<String, Integer> leaderboard) {
-        victory=true;
+
         setLoader("/victory.fxml");
         Scene scene = loadScene(currentLoader);
         VictoryController controller = currentLoader.getController();
@@ -700,10 +697,7 @@ public class GUIView extends Application implements View  {
         });
 
         boolean close = controller.isCloseWindow();
-        if(close){
-            victory=false;
+        if(close)
             endGame();
-        }
-
     }
 }
