@@ -9,8 +9,7 @@ import javafx.scene.control.TextField;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-public class SettingGameController implements Initializable {
-
+public class ConnectionSettingsController implements Initializable {
 
     private String port;
     private String serverIP;

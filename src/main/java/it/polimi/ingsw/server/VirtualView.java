@@ -103,7 +103,7 @@ public class VirtualView implements Runnable{
     }
 
     public void requestDiscardLeaderCard(){
-        sendOthers(new TextMsg("Waiting for " + getPlayingUsername() + "to choose", true));
+        sendOthers(new TextMsg("Waiting for " + getPlayingUsername() + " to choose his leader cards", true));
         sendPlaying(new DiscardLeaderRequestMsg());
     }
 
@@ -126,7 +126,7 @@ public class VirtualView implements Runnable{
     }
 
     public void requestPutResource(){
-        sendOthers(new TextMsg("Waiting for" + getPlayingUsername() + " to choose his resources", true));
+        sendOthers(new TextMsg("Waiting for " + getPlayingUsername() + " to choose his resources", true));
         sendPlaying(new PutResourceRequestMsg());
     }
 

@@ -3,6 +3,7 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.Cursor?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.ColumnConstraints?>
@@ -12,60 +13,59 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
-<?import javafx.scene.text.Text?>
 
-<Pane prefHeight="200.0" prefWidth="430.0" xmlns="http://javafx.com/javafx/11.0.2" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.client.view.GUI.AlertController">
-   <children>
-      <Pane prefHeight="200.0" prefWidth="429.0" style="-fx-opacity: 0.3;" styleClass="anchor2" stylesheets="@backgroundStart.css" />
-      <GridPane hgap="14.0" layoutX="-7.0" maxHeight="+Infinity" maxWidth="+Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="189.0" prefWidth="436.0" vgap="20.0">
-        <children>
-          <VBox maxHeight="+Infinity" maxWidth="+Infinity" minHeight="-Infinity" prefHeight="62.0" prefWidth="407.0" spacing="7.0" GridPane.rowIndex="0">
-               <children>
-                  <Text fx:id="errorLabel" fill="#2f1489" strokeType="OUTSIDE" strokeWidth="0.0" text="AlertDialogText" wrappingWidth="398.1366729736328">
-                     <font>
-                        <Font name="Lucida Calligraphy Italic" size="22.0" />
-                     </font>
-                  </Text>
-               </children>
-          </VBox>
-          <HBox maxHeight="-Infinity" maxWidth="+Infinity" minHeight="-Infinity" minWidth="-Infinity" GridPane.rowIndex="1">
+<Pane prefHeight="200.0" prefWidth="430.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.client.view.GUI.AlertController">
+    <children>
+        <Pane prefHeight="200.0" prefWidth="429.0" style="-fx-opacity: 0.3;" styleClass="anchor2" stylesheets="@backgroundStart.css" />
+        <GridPane hgap="14.0" layoutX="-7.0" maxHeight="+Infinity" maxWidth="+Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="189.0" prefWidth="436.0" vgap="20.0">
             <children>
-              <Pane maxWidth="+Infinity" HBox.hgrow="ALWAYS" />
-              <HBox fx:id="okParent" alignment="CENTER">
-                <children>
-                  <Button fx:id="errorConfirm" alignment="CENTER" contentDisplay="TOP" minWidth="80.0" mnemonicParsing="false" prefHeight="59.0" prefWidth="98.0" style="-fx-background-color: transparent;" text="OK" textAlignment="CENTER" textFill="#472adc" HBox.hgrow="NEVER">
-                    <HBox.margin>
-                      <Insets left="14.0" />
-                    </HBox.margin>
-                           <font>
-                              <Font name="Vladimir Script" size="12.0" />
-                           </font>
-                           <graphic>
-                              <ImageView fitHeight="61.0" fitWidth="76.0" pickOnBounds="true" preserveRatio="true">
-                                 <image>
-                                    <Image url="@Ritagliare.png" />
-                                 </image>
-                                 <cursor>
-                                    <Cursor fx:constant="HAND" />
-                                 </cursor>
-                              </ImageView>
-                           </graphic>
-                  </Button>
-                </children>
-              </HBox>
+                <VBox maxHeight="+Infinity" maxWidth="+Infinity" minHeight="-Infinity" prefHeight="93.0" prefWidth="400.0" spacing="7.0" GridPane.rowIndex="0">
+                    <children>
+                        <Label fx:id="errorLabel" prefHeight="121.0" prefWidth="400.0" text="Waiting for other players..." textAlignment="LEFT" textFill="#132a76" wrapText="true">
+                            <font>
+                                <Font name="Lucida Calligraphy Italic" size="25.0" />
+                            </font>
+                        </Label>
+                    </children>
+                </VBox>
+                <HBox maxHeight="-Infinity" maxWidth="+Infinity" minHeight="-Infinity" minWidth="-Infinity" GridPane.rowIndex="1">
+                    <children>
+                        <Pane maxWidth="+Infinity" HBox.hgrow="ALWAYS" />
+                        <HBox fx:id="okParent" alignment="CENTER">
+                            <children>
+                                <Button fx:id="errorConfirm" alignment="CENTER" contentDisplay="TOP" minWidth="80.0" mnemonicParsing="false" prefHeight="59.0" prefWidth="98.0" style="-fx-background-color: transparent;" text="OK" textAlignment="CENTER" textFill="#472adc" HBox.hgrow="NEVER">
+                                    <HBox.margin>
+                                        <Insets left="14.0" />
+                                    </HBox.margin>
+                                    <font>
+                                        <Font name="Vladimir Script" size="12.0" />
+                                    </font>
+                                    <graphic>
+                                        <ImageView fitHeight="61.0" fitWidth="76.0" pickOnBounds="true" preserveRatio="true">
+                                            <image>
+                                                <Image url="@Ritagliare.png" />
+                                            </image>
+                                            <cursor>
+                                                <Cursor fx:constant="HAND" />
+                                            </cursor>
+                                        </ImageView>
+                                    </graphic>
+                                </Button>
+                            </children>
+                        </HBox>
+                    </children>
+                </HBox>
             </children>
-          </HBox>
-        </children>
-        <columnConstraints>
-          <ColumnConstraints halignment="CENTER" hgrow="ALWAYS" maxWidth="+Infinity" minWidth="-Infinity" />
-        </columnConstraints>
-        <padding>
-          <Insets bottom="14.0" left="14.0" right="14.0" top="14.0" />
-        </padding>
-        <rowConstraints>
-          <RowConstraints maxHeight="Infinity" minHeight="-Infinity" prefHeight="47.20001220703125" valignment="CENTER" vgrow="ALWAYS" />
-            <RowConstraints maxHeight="160.0" minHeight="-Infinity" prefHeight="119.19998779296876" vgrow="NEVER" />
-        </rowConstraints>
-      </GridPane>
-   </children>
+            <columnConstraints>
+                <ColumnConstraints halignment="CENTER" hgrow="ALWAYS" maxWidth="+Infinity" minWidth="-Infinity" />
+            </columnConstraints>
+            <padding>
+                <Insets bottom="14.0" left="14.0" right="14.0" top="14.0" />
+            </padding>
+            <rowConstraints>
+                <RowConstraints maxHeight="Infinity" minHeight="-Infinity" prefHeight="47.20001220703125" valignment="CENTER" vgrow="ALWAYS" />
+                <RowConstraints maxHeight="160.0" minHeight="-Infinity" prefHeight="119.19998779296876" vgrow="NEVER" />
+            </rowConstraints>
+        </GridPane>
+    </children>
 </Pane>

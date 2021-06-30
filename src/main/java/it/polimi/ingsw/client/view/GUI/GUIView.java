@@ -76,7 +76,7 @@ public class GUIView extends Application implements View  {
     @Override
     public void start(Stage stage) {
 
-        setLoader("/startGame.fxml");
+        setLoader("/connectionSettings.fxml");
         Font.loadFont(getClass().getResourceAsStream("/resources/fonts/master_of_break.ttf"), 14);
         Scene scene = loadScene(currentLoader);
         Platform.runLater(() ->{
@@ -85,52 +85,53 @@ public class GUIView extends Application implements View  {
             manageStage(initStage, scene, "Masters of Renaissance", true);
         });
 
-        SettingGameController settingGameController = currentLoader.getController();
+        ConnectionSettingsController connectionSettingsController = currentLoader.getController();
         Button button = (Button) currentLoader.getNamespace().get("confirmButton");
         button.setOnAction(event -> {
-            settingGameController.setPort();
-            settingGameController.setServerIP();
-            setting(settingGameController);
+            connectionSettingsController.setPort();
+            connectionSettingsController.setServerIP();
+            setting(connectionSettingsController);
         });
     }
 
-    public void setting(SettingGameController settingGameController){
+    public void setting(ConnectionSettingsController connectionSettingsController){
         try{
-            if(settingGameController!=null) {
-                serverIp=settingGameController.getServerIP();
-                port=Integer.parseInt(settingGameController.getPort());
+            if(connectionSettingsController != null) {
+                serverIp= connectionSettingsController.getServerIP();
+                port=Integer.parseInt(connectionSettingsController.getPort());
             }
             Socket server = new Socket(serverIp, port);
             serverHandler = new ServerHandler(server, this);
             new Thread(serverHandler).start();
 
-            if(settingGameController!=null)settingGameController.setTextError("You are connected to the server!");
+            if(connectionSettingsController !=null) connectionSettingsController.setTextError("You are connected to the server!");
         }catch(Exception e) {
-            if(settingGameController!=null)settingGameController.setTextError("Server unreachable, try again.");
+            if(connectionSettingsController !=null) connectionSettingsController.setTextError("Server unreachable, try again.");
         }
     }
 
     @Override
-    public void showErrorMessage(String text) {
+    public void showErrorMessage(String text){
+        showErrorMessage(text, true);
+    }
+
+    public void showErrorMessage(String text, boolean closable) {
 
         setLoader("/alertDialog.fxml");
         Scene scene = loadScene(currentLoader);
-        openErrorStage(false, "Dialog window", scene);
         AlertController settingGameController = currentLoader.getController();
         settingGameController.setErrorLabel(text);
-    }
-
-    private void openErrorStage(boolean resizable,String title, Scene scene) {
         Platform.runLater(() -> {
             if (errorStage == null || !errorStage.isShowing()){
                 errorStage = new Stage();
-                errorStage.setTitle(title);
+                errorStage.setTitle("Dialog window");
             }
-            setScene(scene, errorStage, resizable);
+            setScene(scene, errorStage, false);
             errorStage.setAlwaysOnTop(true);
         });
         Button button = (Button) currentLoader.getNamespace().get("errorConfirm");
         button.setOnAction(event -> errorStage.close());
+        button.setVisible(closable);
     }
 
     private void setScene(Scene scene, Stage stage, boolean resizable) {
@@ -161,7 +162,7 @@ public class GUIView extends Application implements View  {
         ((GameSettingsController) currentLoader.getController()).setPlayersComponents(true);
 
         int nPlayers = ((GameSettingsController) currentLoader.getController()).getnPlayers();
-        showErrorMessage("Waiting for other players...");
+        showErrorMessage("Waiting for other players...", false);
         return nPlayers;
     }
 
@@ -217,7 +218,8 @@ public class GUIView extends Application implements View  {
                 mainSceneController.setSinglePlayerGame();
             Platform.runLater(()->{
                 if(initStage.isShowing()) initStage.close();
-                if(endStage!=null) endStage.close();
+                if(errorStage != null && errorStage.isShowing()) errorStage.close();
+                if(endStage != null) endStage.close();
                 mainStage = new Stage();
                 manageStage(mainStage, scene, "Masters of Renaissance", false);
             });
@@ -514,7 +516,7 @@ public class GUIView extends Application implements View  {
 
         Platform.runLater(()->{
             if(discardCounter == 0){
-                oldStage = initStage;
+                oldStage = errorStage;
                 initStage = new Stage();
                 manageStage(initStage, scene, "Discard Leader Card", true);
             }
@@ -595,7 +597,7 @@ public class GUIView extends Application implements View  {
             mainSceneController.addTextInLog(text);
         }
         else if (loud)
-            showErrorMessage(text);
+            showErrorMessage(text, false);
     }
 
     private void setLoader(String path){
