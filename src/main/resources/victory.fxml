@@ -1,5 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.effect.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 <?import javafx.scene.Cursor?>
 <?import javafx.scene.Group?>
 <?import javafx.scene.control.Button?>
@@ -10,7 +17,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="373.0" prefWidth="637.0" xmlns="http://javafx.com/javafx/11.0.2" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.client.view.GUI.VictoryController">
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="373.0" prefWidth="637.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.client.view.GUI.VictoryController">
    <children>
       <ImageView fitHeight="374.0" fitWidth="652.0" opacity="0.7" pickOnBounds="true" preserveRatio="true">
          <image>
@@ -51,7 +58,7 @@
             </Text>
          </children>
       </Group>
-      <Button fx:id="closeButton" contentDisplay="TOP" layoutX="477.0" layoutY="241.0" mnemonicParsing="false" prefHeight="109.0" prefWidth="137.0" styleClass="transparent" stylesheets="@background.css" text="Close">
+      <Button fx:id="closeButton" contentDisplay="TOP" layoutX="477.0" layoutY="241.0" mnemonicParsing="false" onAction="#close" prefHeight="109.0" prefWidth="137.0" styleClass="transparent" stylesheets="@background.css" text="Close">
          <font>
             <Font name="Lucida Calligraphy Italic" size="28.0" />
          </font>

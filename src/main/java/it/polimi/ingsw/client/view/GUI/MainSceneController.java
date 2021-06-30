@@ -233,6 +233,7 @@ public class MainSceneController implements Initializable {
     }
 
     public void setLeaderCard(){
+        GUISupport.setVisible(false, rectCard1, rectCard2, resourceSXExtra1, resourceDXExtra1, resourceSXExtra2, resourceDXExtra2);
 
         if(simpleModel.getThisPlayer().getLeaderCards().size() > 0){
             List<Image> cards = new ArrayList<>();

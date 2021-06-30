@@ -322,6 +322,8 @@ public class GUIView extends Application implements View  {
         showController.setTrack();
         Platform.runLater(() ->{
             if(tmpStage == null)  tmpStage = new Stage();
+            tmpStage.initStyle(StageStyle.UNDECORATED);
+            tmpStage.setAlwaysOnTop(true);
             manageStage(tmpStage, scene, "Show PlayerBoard", false);
         });
 
@@ -609,7 +611,7 @@ public class GUIView extends Application implements View  {
 
     private void manageStage(Stage stage, Scene scene, String title, boolean close){
         Platform.runLater(() -> {
-            if(close&&oldStage!=null){
+            if(close &&oldStage!=null){
                 oldStage.close();
             }
             stage.getIcons().add(new Image(getClass().getResourceAsStream("/Ritagliare.png")));
@@ -640,6 +642,7 @@ public class GUIView extends Application implements View  {
     }
 
     public void endGame(){
+
         if(!victory) {
             setLoader("/endGame.fxml");
             Scene scene = loadScene(currentLoader);
@@ -655,7 +658,6 @@ public class GUIView extends Application implements View  {
                     endStage = mainStage;
                     firstMain = true;
                     setting(null); //newGame
-
                 }
                 case 3 -> {
                     endStage = mainStage;
@@ -691,13 +693,15 @@ public class GUIView extends Application implements View  {
         VictoryController controller = currentLoader.getController();
         controller.setScene(win, leaderboard);
         Platform.runLater(()->{
-            oldStage=mainStage;
+            oldStage = mainStage;
             manageStage(mainStage, scene, "Victory", true);
         });
-        Button button = (Button) currentLoader.getNamespace().get("closeButton");
-        button.setOnAction(event->{
+
+        boolean close = controller.isCloseWindow();
+        if(close){
             victory=false;
             endGame();
-        });
+        }
+
     }
 }
