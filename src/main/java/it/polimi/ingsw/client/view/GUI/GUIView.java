@@ -100,7 +100,7 @@ public class GUIView extends Application implements View  {
         try{
             if(connectionSettingsController != null) {
                 serverIp= connectionSettingsController.getServerIP();
-                port=Integer.parseInt(connectionSettingsController.getPort());
+                port = Integer.parseInt(connectionSettingsController.getPort());
             }
             Socket server = new Socket(serverIp, port);
             serverHandler = new ServerHandler(server, this);
@@ -463,7 +463,6 @@ public class GUIView extends Application implements View  {
         mainSceneController.disableButtons(true);
         mainSceneController.disableCards(false);
         int cardId = mainSceneController.getCardId();
-        System.out.println(cardId);
         mainSceneController.disableCards(true);
         mainSceneController.disableSlots(false);
         int slotId = mainSceneController.getChoice()-1;
@@ -747,7 +746,7 @@ public class GUIView extends Application implements View  {
      */
     @Override
     public void victory(Boolean win, Map<String, Integer> leaderboard) {
-        victory = true;
+
         setLoader("/fxml/victory.fxml");
         Scene scene = loadScene(currentLoader);
         VictoryController controller = currentLoader.getController();
@@ -773,5 +772,10 @@ public class GUIView extends Application implements View  {
             if (s != null && s.isShowing())
                 Platform.runLater(s::close);
         }
+    }
+
+    @Override
+    public ServerHandler getServerHandler(){
+        return serverHandler;
     }
 }

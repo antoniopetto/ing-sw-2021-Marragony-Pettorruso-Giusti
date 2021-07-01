@@ -154,6 +154,9 @@ public class GameController implements Serializable {
         } catch (ElementNotFoundException e){
             virtualView.sendError("Leader card not found");
         }
+        catch (IllegalStateException e){
+            virtualView.sendError("Played card cannot be discarded");
+        }
         resumeGame();
     }
 

@@ -141,10 +141,15 @@ public class Player extends AbstractPlayer {
      * @param id                            The card id
      * @throws ElementNotFoundException     If the if doesn't correspond to any of the players cards
      */
-    public void removeLeaderCard(int id) throws ElementNotFoundException {
+    public void removeLeaderCard(int id) throws ElementNotFoundException, IllegalStateException {
 
-        leaderCardList.remove(Card.getById(id, leaderCardList));
-        virtualView.discardLeaderCardUpdate(id);
+        LeaderCard card = Card.getById(id, leaderCardList);
+        if (card.isPlayed())
+            throw new IllegalStateException();
+        else {
+            leaderCardList.remove(card);
+            virtualView.discardLeaderCardUpdate(id);
+        }
     }
 
     /**

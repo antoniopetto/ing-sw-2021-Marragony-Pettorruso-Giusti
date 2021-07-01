@@ -20,6 +20,7 @@ public class ServerHandler implements Runnable{
     private SimpleModel model;
     private final View view;
     private boolean running;
+    private Thread workingThread = null;
 
     public ServerHandler(Socket socket, View view) {
         serverSocket = socket;
@@ -33,7 +34,6 @@ public class ServerHandler implements Runnable{
         ThreadContext.put("PID", pid.substring(0, (pid.contains("@")) ? pid.indexOf("@") : pid.length()));
         Client.logger.info("Server handler started");
 
-        Thread workingThread = null;
         running = true;
         try {
             output = new ObjectOutputStream(serverSocket.getOutputStream());
@@ -82,7 +82,9 @@ public class ServerHandler implements Runnable{
         this.model = model;
     }
 
-    public void setRunning(boolean running) {
-        this.running = running;
+    public void stopRunning() {
+
+        running = false;
+        workingThread.interrupt();
     }
 }

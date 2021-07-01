@@ -8,7 +8,6 @@ import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.ThreadContext;
 
 import java.lang.management.ManagementFactory;
-import java.util.Random;
 
 public class Client {
 
@@ -23,6 +22,7 @@ public class Client {
 
         int choice = CLIView.askChoice("Please select how to play:", "CLI", "GUI");
         View view = ((choice == 1) ? new CLIView() : new GUIView());
+        Runtime.getRuntime().addShutdownHook(new Thread( () -> view.getServerHandler().stopRunning()));
         view.startConnection();
     }
 }

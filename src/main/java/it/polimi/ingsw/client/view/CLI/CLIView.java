@@ -62,7 +62,7 @@ public class CLIView implements View {
     @Override
     public void endGame(){
         System.out.println("Game over.");
-        serverHandler.setRunning(false);
+        serverHandler.stopRunning();
         int choice = askChoice("Do you want to:", "Exit game", "Start new game", "Start new game on different server");
 
         if (choice == 2){
@@ -765,5 +765,9 @@ public class CLIView implements View {
     public void endInit(){
         game.setInit(false);
         showTextMessage("Finished initialization");
+    }
+
+    public ServerHandler getServerHandler(){
+        return serverHandler;
     }
 }

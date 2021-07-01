@@ -1,5 +1,6 @@
 package it.polimi.ingsw.client.view;
 
+import it.polimi.ingsw.client.ServerHandler;
 import it.polimi.ingsw.client.simplemodel.SimpleModel;
 import it.polimi.ingsw.shared.DepotName;
 import it.polimi.ingsw.shared.Resource;
@@ -29,4 +30,5 @@ public interface View {
     void update(String updated);
     void victory(Boolean win, Map<String, Integer> leaderboard);
     void endInit();
+    ServerHandler getServerHandler();
 }
