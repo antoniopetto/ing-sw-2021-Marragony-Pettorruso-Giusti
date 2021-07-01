@@ -18,7 +18,7 @@ import javafx.scene.text.Text;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-public class MarbleBufferController implements Initializable {
+public class MarbleBufferController {
 
     private Marble marble = null;
     private SimpleModel simpleModel = null;
@@ -90,11 +90,10 @@ public class MarbleBufferController implements Initializable {
     private GridPane insertResource;
 
 
-    @Override
-    public void initialize(URL url, ResourceBundle resourceBundle) {
-
-    }
-
+    /**
+     * it inserts a previously chosen marble/resource in the clicked depot.
+     * @param actionEvent
+     */
     @FXML
     public void insertResource(ActionEvent actionEvent) {
         actionEvent.consume();
@@ -109,6 +108,10 @@ public class MarbleBufferController implements Initializable {
 
     }
 
+    /**
+     * it returns the selected marble from the MarbleBuffer.
+     * @param mouseEvent
+     */
     @FXML
     public void selectMarble(MouseEvent mouseEvent) {
         mouseEvent.consume();
@@ -125,6 +128,11 @@ public class MarbleBufferController implements Initializable {
         });
     }
 
+
+    /**
+     * it disables or enables Depot buttons.
+     * @param disable
+     */
     public void manageButton(boolean disable) {
         lowDepot.setDisable(disable);
         mediumDepot.setDisable(disable);
@@ -133,6 +141,12 @@ public class MarbleBufferController implements Initializable {
         extraCard1.setDisable(disable);
     }
 
+    /**
+     * it is used to show the warehouse/the marbleBuffer or whiteMarble resources
+     * @param resources if it is true --> the resources associated to whiteMarble are shown
+     * @param depot if it is true -->the Warehouse and its resources is shown
+     * @param marble if it is true --> the MarbleBuffer is shown
+     */
     public void show(boolean resources, boolean depot, boolean marble) {
         GUISupport.setVisible(marble, marble1, marble2, marble3, marble4);
         insertResource.setVisible(marble);
@@ -155,6 +169,9 @@ public class MarbleBufferController implements Initializable {
         if (depot) activeExtraDepot();
     }
 
+    /**
+     * it inserts the resources in its own normal depot.
+     */
     private void setDepotResources() {
         GUISupport.setVisible(false, resourceHigh, resourceSXMed, resourceDXMed, resourceSXLow, resourceCLow, resourceDXLow);
         int quantity = GUISupport.quantityOfResources(simpleModel.getThisPlayer().getWarehouse().getDepot(DepotName.HIGH));
@@ -168,6 +185,11 @@ public class MarbleBufferController implements Initializable {
 
     }
 
+
+    /**
+     * it shows active leaderCards with extraDepot ability.
+     * it inserts the resources in its own extra depot.
+     */
     private void activeExtraDepot(){
 
         for(SimpleLeaderCard card : simpleModel.getThisPlayer().getLeaderCards()){
@@ -188,6 +210,10 @@ public class MarbleBufferController implements Initializable {
         }
     }
 
+    /**
+     * it sets the selected resource associated to whiteMarble.
+     * @param mouseEvent
+     */
     @FXML
     public void selectResource(MouseEvent mouseEvent) {
         mouseEvent.consume();
@@ -196,8 +222,6 @@ public class MarbleBufferController implements Initializable {
             switch (imageView.getId()){
                 case "res1" -> setResource(simpleModel.getThisPlayer().getLeaderCards().get(0).getAbility().getResource());
                 case "res2" -> setResource(simpleModel.getThisPlayer().getLeaderCards().get(1).getAbility().getResource());
-                case "res3" -> setResource(Resource.SERVANT);
-                case "res4" -> setResource(Resource.STONE);
             }
         });
     }
@@ -207,6 +231,11 @@ public class MarbleBufferController implements Initializable {
         marbleCast(bufferSize, marble1, marble2, marble3, marble4);
     }
 
+    /**
+     * it allocates the right marble taken from the MarbleBuffer.
+     * @param quantity: number of resources in MarbleBuffer.
+     * @param marbleBuffer: all Marbles in MarbleBuffer.
+     */
     private void marbleCast(int quantity, ImageView... marbleBuffer){
         for(int i = 0; i < quantity; i++){
             marbleBuffer[i].setImage(new Image("/images/res-marbles/" + GUISupport.getMarblePath(simpleModel.getMarbleBuffer().get(i).toString())));
@@ -257,6 +286,11 @@ public class MarbleBufferController implements Initializable {
         this.simpleModel = simpleModel;
     }
 
+
+    /**
+     * it inserts a previously selected resources in an extra depot.
+     * @param mouseEvent
+     */
     @FXML
     public void insertAResource(MouseEvent mouseEvent) {
         mouseEvent.consume();

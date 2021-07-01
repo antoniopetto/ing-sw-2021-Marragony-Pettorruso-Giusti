@@ -426,7 +426,8 @@ public class MainSceneController implements Initializable {
     {
         List<Integer> ids = new ArrayList<>();
         for (SimpleDevCard card: simpleModel.getDevCardDecks()) {
-            ids.add(card.getId());
+            if(card!=null) ids.add(card.getId());
+            else ids.add(null);
         }
 
         int i =0;

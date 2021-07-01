@@ -746,7 +746,7 @@ public class GUIView extends Application implements View  {
      */
     @Override
     public void victory(Boolean win, Map<String, Integer> leaderboard) {
-
+        victory =true;
         setLoader("/fxml/victory.fxml");
         Scene scene = loadScene(currentLoader);
         VictoryController controller = currentLoader.getController();
@@ -755,7 +755,6 @@ public class GUIView extends Application implements View  {
             oldStage = mainStage;
             manageStage(mainStage, scene, "Victory", true);
         });
-
         boolean close = controller.isCloseWindow();
         if(close){
             victory = false;
