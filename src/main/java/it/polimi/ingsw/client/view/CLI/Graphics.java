@@ -92,12 +92,12 @@ public class Graphics {
     {
         String result = "";
         switch (marble){
-            case YELLOW -> result = ANSI_YELLOW+"\u25fc"+ANSI_RESET;
-            case PURPLE -> result= ANSI_PURPLE+"\u25fc"+ANSI_RESET;
-            case BLUE-> result= ANSI_BLUE+"\u25fc"+ANSI_RESET;
-            case RED -> result= ANSI_RED+"\u25fc"+ANSI_RESET;
-            case GREY -> result= ANSI_GREY+"\u25fc"+ANSI_RESET;
-            case WHITE -> result= ANSI_WHITE+"\u25fc"+ANSI_RESET;
+            case YELLOW -> result = ANSI_YELLOW+"\u25cf"+ANSI_RESET;
+            case PURPLE -> result= ANSI_PURPLE+"\u25cf"+ANSI_RESET;
+            case BLUE-> result= ANSI_BLUE+"\u25cf"+ANSI_RESET;
+            case RED -> result= ANSI_RED+"\u25cf"+ANSI_RESET;
+            case GREY -> result= ANSI_GREY+"\u25cf"+ANSI_RESET;
+            case WHITE -> result= ANSI_WHITE+"\u25cf"+ANSI_RESET;
 
         }
         return result;

@@ -379,6 +379,11 @@ public class MainSceneController {
         disableSlots(true);
         disableButtons(false);
         disableCardsInSlot(true);
+        GUISupport.setFont(16, buyCardButton, buyResourcesButton, activateProductionButton, confirmSelectionButton, dLCardButton, endTurnButton, pLCardButton, show1, show2, show3);
+        Font font = Font.loadFont(GUISupport.class.getResourceAsStream("/fonts/Lucida Calligraphy Italic.ttf"), 18);
+        for (TitledPane pane:actionButtons.getPanes()) {
+            pane.setFont(font);
+        }
     }
 
     public void disableCards(boolean disable) {GUISupport.setDisable(disable, decks);}
@@ -700,7 +705,7 @@ public class MainSceneController {
         if(text!=null){
             Text newText = new Text(text+"\n");
             newText.setFill(Color.BLACK);
-            newText.setFont(Font.font("Lucida Calligraphy", 14));
+            GUISupport.setFont(14, newText);
             Platform.runLater(()->logText.getChildren().add(newText));
             log.setVvalue(1.0);
         }

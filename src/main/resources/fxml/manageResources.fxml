@@ -24,7 +24,7 @@
                   <Image url="@../images/scroll.png" />
                </image>
             </ImageView>
-            <Text fill="#0b67d9" layoutX="142.0" layoutY="68.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Please select a marble action:" wrappingWidth="462.28131103515625">
+            <Text fx:id="title" fill="#0b67d9" layoutX="142.0" layoutY="68.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Please select a marble action:" wrappingWidth="462.28131103515625">
                <font>
                   <Font name="Lucida Calligraphy Italic" size="26.0" />
                </font>

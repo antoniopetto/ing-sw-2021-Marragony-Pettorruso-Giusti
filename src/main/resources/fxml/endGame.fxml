@@ -19,7 +19,7 @@
             <Image url="@../images/scroll.png" />
          </image>
       </ImageView>
-      <Text fill="#3530d9" layoutX="204.0" layoutY="80.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Game Over">
+      <Text fx:id="title" fill="#3530d9" layoutX="204.0" layoutY="80.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Game Over">
          <font>
             <Font name="Lucida Calligraphy Italic" size="40.0" />
          </font>
