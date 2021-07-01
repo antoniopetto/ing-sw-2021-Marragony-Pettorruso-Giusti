@@ -9,6 +9,9 @@ import javafx.scene.control.TextField;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+/**
+ * This class is the controller of the first scene opened when the client starts. In this scene server ip and port are asked.
+ */
 public class ConnectionSettingsController implements Initializable {
 
     private String port;
@@ -44,6 +47,6 @@ public class ConnectionSettingsController implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {
         textIP.setText("");
         textPORT.setText("");
-        textIP.setFont(GUIView.font);
+
     }
 }

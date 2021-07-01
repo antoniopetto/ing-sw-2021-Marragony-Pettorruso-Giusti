@@ -6,10 +6,16 @@ import javafx.scene.effect.Bloom;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
+/**
+ * This is a class with static methods used by many classes of the GUI package.
+ */
 public class GUISupport {
 
     private static String resourceString = null;
 
+    /**
+     * It returns the path of the png file of a resource
+     */
     public static String returnPath(String resource){
         switch (resource) {
             case "COIN" -> {
@@ -28,6 +34,9 @@ public class GUISupport {
         }
     }
 
+    /**
+     * It returns the path of the png file of a marble.
+     */
     public static String getMarblePath(String marble){
         switch (marble) {
             case "GREY" -> {
@@ -55,16 +64,33 @@ public class GUISupport {
 
 
     }
+
+    /**
+     * It handles the visibility of nodes.
+     * @param visible tells if the nodes need to be visible
+     * @param nodes are the nodes to handle.
+     */
     public static void setVisible(boolean visible, Node... nodes){
         for(Node node:nodes){
             node.setVisible(visible);
         }
     }
+
+    /**
+     * It handles the disability of nodes.
+     * @param disable tells if the nodes need to be disabled.
+     * @param nodes are the nodes to handle.
+     */
     public static void setDisable(boolean disable, Node... nodes){
         for (Node node:nodes)
             node.setDisable(disable);
     }
 
+    /**
+     * It sets the position of the faithMarker on the faith track in the main scene.
+     * @param position is the position of the faithMarker.
+     * @param faithMarker is the marker to set.
+     */
     public static void setFaithTrack(int position, ImageView faithMarker)
     {
         if(position<3){
@@ -102,6 +128,7 @@ public class GUISupport {
 
     }
 
+
     public static void settingImageView(int quantity, ImageView... resources){
         String path = "/images/res-marbles/";
 
@@ -120,6 +147,11 @@ public class GUISupport {
 
     }
 
+    /**
+     * It sets the bloom effect on the element selected.
+     * @param active tells if the effect is active
+     * @param element is the element to set the effect
+     */
     public static void setEffect(boolean active, Node element)
     {
         Bloom bloom=new Bloom();
@@ -127,11 +159,14 @@ public class GUISupport {
         else element.setEffect(null);
     }
 
-    public static int quantityOfResources(SimpleDepot simpleDepots){
+    /**
+     * It return the quantity of resources in a simple depot
+     */
+    public static int quantityOfResources(SimpleDepot simpleDepot){
 
-        if(simpleDepots != null) {
-           int  quantity = simpleDepots.getQuantity();
-           if(simpleDepots.getResource() !=null) resourceString = returnPath(simpleDepots.getResource().toString());
+        if(simpleDepot != null) {
+           int  quantity = simpleDepot.getQuantity();
+           if(simpleDepot.getResource() !=null) resourceString = returnPath(simpleDepot.getResource().toString());
             return quantity;
         } else return 0;
 

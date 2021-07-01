@@ -1,20 +1,17 @@
 package it.polimi.ingsw.client.view.GUI;
 
-import it.polimi.ingsw.shared.ProductionPower;
 import it.polimi.ingsw.shared.Resource;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
 import javafx.scene.Group;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.shape.Circle;
 
-
-import java.net.URL;
-import java.util.ResourceBundle;
-
-public class BasePowerController implements Initializable {
+/**
+ * This class is the controller of the base power stage.
+ */
+public class BasePowerController  {
     @FXML
     private Group inputResources;
     @FXML
@@ -29,21 +26,14 @@ public class BasePowerController implements Initializable {
     private ImageView resIn1;
     @FXML
     private ImageView resIn2;
-    @FXML
-    private ImageView resOut;
     private Resource choice=null;
-    private ProductionPower power;
-
-    @Override
-    public void initialize(URL url, ResourceBundle resourceBundle) {
-
-    }
-
-    public void setPower(ProductionPower power) {
-        this.power = power;
-    }
 
     public void showInput(boolean show){GUISupport.setVisible(show, inputResources);}
+
+    /**
+     * It shows the first resource selected as input
+     * @param resource is the resource selected
+     */
     public void setResIn1(Resource resource){
         GUISupport.setVisible(false, circleIn1);
         String path = "/images/res-marbles/" +GUISupport.returnPath(resource.name());
@@ -51,6 +41,11 @@ public class BasePowerController implements Initializable {
         GUISupport.setVisible(true, resIn1);
         GUISupport.setVisible(true, circleIn2);
     }
+
+    /**
+     * It shows the second resource selected as input
+     * @param resource is the resource selected
+     */
     public void setResIn2(Resource resource){
         GUISupport.setVisible(false, circleIn2);
         GUISupport.setVisible(false, inputResources);
@@ -61,6 +56,9 @@ public class BasePowerController implements Initializable {
         GUISupport.setVisible(true, resIn2);
     }
 
+    /**
+     * @return the resource selected.
+     */
     public synchronized Resource getChoice() {
         while (choice == null) {
             try {
@@ -79,6 +77,10 @@ public class BasePowerController implements Initializable {
         notifyAll();
     }
 
+    /**
+     * It's the event handler of the click event on a resource, chosen as input/output resource.
+     * @param mouseEvent is the click event
+     */
     public void resSelected(MouseEvent mouseEvent) {
         mouseEvent.consume();
         ImageView resource=(ImageView)mouseEvent.getSource();

@@ -4,6 +4,9 @@ import it.polimi.ingsw.client.ServerHandler;
 import it.polimi.ingsw.client.view.View;
 import it.polimi.ingsw.shared.messages.command.CommandMsg;
 
+/**
+ * This class is the message sent to tell the player to select a move.
+ */
 public class NextActionMsg implements ToViewMsg {
 
     private final boolean postTurn;
