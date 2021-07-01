@@ -352,9 +352,9 @@ public class GUIView extends Application implements View  {
         showController.setTrack();
         Platform.runLater(() ->{
             if(tmpStage == null)  tmpStage = new Stage();
-            tmpStage.initStyle(StageStyle.UNDECORATED);
             tmpStage.setAlwaysOnTop(true);
             manageStage(tmpStage, scene, "Show PlayerBoard", false);
+            tmpStage.initStyle(StageStyle.UNDECORATED);
         });
 
         if(showController.isCloseWindow()) {
