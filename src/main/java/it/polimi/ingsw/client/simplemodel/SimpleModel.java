@@ -17,6 +17,7 @@ public class SimpleModel implements Serializable {
     private Marble spareMarble;
     private final SimpleDevCard[][][] devCardDecks = new SimpleDevCard[4][3][4];
     private View view;
+    private boolean init;
 
     public List<Marble> getMarbleBuffer() {
         return marbleBuffer;
@@ -125,5 +126,9 @@ public class SimpleModel implements Serializable {
 
     public SimplePlayer getPlayer(String name){
         return players.stream().filter(i -> i.getUsername().equals(name)).findAny().orElseThrow(IllegalArgumentException::new);
+    }
+
+    public void setInit(boolean init) {
+        this.init = init;
     }
 }

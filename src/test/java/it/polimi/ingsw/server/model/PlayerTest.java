@@ -72,8 +72,6 @@ public class PlayerTest {
         //    output = SERVANT 2, FAITH 2
 
         try {
-            Mockito.doAnswer(i -> {System.out.println(i.getArgument(0).toString()); return null;})
-                    .when(clientHandler).writeObject(Mockito.any());
             List<DevelopmentCard> devCards = CardParser.getInstance().parseDevelopmentCards();
             playerBoard.getSlotList().get(0).addCard(Card.getById(15, devCards));
             playerBoard.getWareHouse().insert(DepotName.HIGH, Resource.SHIELD);
