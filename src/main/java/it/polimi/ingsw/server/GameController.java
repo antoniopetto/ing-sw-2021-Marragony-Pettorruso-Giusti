@@ -463,6 +463,7 @@ public class GameController implements Serializable {
             if (!player.getUsername().equals(requirerName))
                 player.clearLeaderCards();
 
+        game.setInit(state == State.INIT_CARDS || state == State.INIT_RES);
         game.setMarbleBuffer(marbleBuffer);
         game.setMarketBoard(marketBoard.getMarbleGrid());
         game.setSpareMarble(marketBoard.getSpareMarble());

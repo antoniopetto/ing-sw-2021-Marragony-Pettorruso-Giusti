@@ -202,6 +202,7 @@ public class GUIView extends Application implements View  {
      */
     public void endInit(){
 
+        game.setInit(false);
         setLoader("/fxml/mainScene.fxml");
         Scene scene = loadScene(currentLoader);
         mainSceneController = currentLoader.getController();

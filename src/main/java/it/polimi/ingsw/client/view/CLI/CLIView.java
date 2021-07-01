@@ -763,6 +763,7 @@ public class CLIView implements View {
 
     @Override
     public void endInit(){
+        game.setInit(false);
         showTextMessage("Finished initialization");
     }
 }
