@@ -46,9 +46,9 @@
                         <Insets />
                     </GridPane.margin>
                 </ImageView>
-                <Label alignment="TOP_LEFT" text="Insert IP" textFill="#35307e" GridPane.columnIndex="2" GridPane.rowIndex="1" GridPane.valignment="TOP">
+                <Label fx:id="ipLabel" alignment="TOP_LEFT" text="Insert IP" textFill="#35307e" GridPane.columnIndex="2" GridPane.rowIndex="1" GridPane.valignment="TOP">
                     <font>
-                        <Font name="Lucida Calligraphy Italic" size="22.0" />
+                        <Font name="System Italic" size="22.0" />
                     </font>
                 </Label>
                 <TextField fx:id="textIP" alignment="CENTER" prefHeight="26.0" prefWidth="185.0" style="-fx-background-color: transparent;" styleClass="text-field" translateY="10.0" GridPane.columnIndex="2" GridPane.columnSpan="3" GridPane.rowIndex="1" GridPane.valignment="CENTER">
@@ -80,7 +80,7 @@
                <font>
                   <Font name="Lucida Calligraphy Italic" size="20.0" />
                </font></TextField>
-                <Label alignment="TOP_LEFT" prefHeight="44.0" prefWidth="330.0" text="Insert Port (default: 7777)" textFill="#352f7d" GridPane.columnIndex="2" GridPane.columnSpan="2147483647" GridPane.rowIndex="2" GridPane.valignment="TOP">
+                <Label fx:id="portLabel" alignment="TOP_LEFT" prefHeight="44.0" prefWidth="330.0" text="Insert Port (default: 7777)" textFill="#352f7d" GridPane.columnIndex="2" GridPane.columnSpan="2147483647" GridPane.rowIndex="2" GridPane.valignment="TOP">
                     <font>
                         <Font name="Lucida Calligraphy Italic" size="22.0" />
                     </font>

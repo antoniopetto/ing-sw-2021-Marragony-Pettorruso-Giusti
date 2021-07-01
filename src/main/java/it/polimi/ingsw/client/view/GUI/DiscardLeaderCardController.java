@@ -8,6 +8,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.text.Text;
 
 import java.net.URL;
 import java.util.ArrayList;
@@ -28,6 +29,8 @@ public class DiscardLeaderCardController  {
     private ImageView imCard3;
     @FXML
     private ImageView imCard4;
+    @FXML
+    private Text title;
 
     private int result=0;
     private List<Integer> cardIds = new ArrayList<>();
@@ -67,6 +70,7 @@ public class DiscardLeaderCardController  {
      */
     public void setGame(SimpleModel game) {
         this.game = game;
+        GUISupport.setFont(33, title);
         List<Image> cards = new ArrayList<>();
         for (SimpleLeaderCard card : game.getThisPlayer().getLeaderCards()) {
             int cardId = card.getId();

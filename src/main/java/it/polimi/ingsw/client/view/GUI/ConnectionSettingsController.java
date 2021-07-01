@@ -5,6 +5,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.text.Font;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -22,6 +23,12 @@ public class ConnectionSettingsController implements Initializable {
     private TextField textPORT;
     @FXML
     private Label textError;
+    @FXML
+    private Label ipLabel;
+    @FXML
+    private Label portLabel;
+    @FXML
+    private Button confirmButton;
 
     public void setPort() {
         this.port = textPORT.getText();
@@ -45,6 +52,9 @@ public class ConnectionSettingsController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        GUISupport.setFont(22, ipLabel, portLabel, textError);
+        GUISupport.setFont(18, confirmButton);
+        GUISupport.setFont(20, textIP, textPORT);
         textIP.setText("");
         textPORT.setText("");
 

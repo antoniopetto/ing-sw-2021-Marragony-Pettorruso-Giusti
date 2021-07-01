@@ -28,12 +28,12 @@
                </font></TextField>
             <Label fx:id="userLabel" layoutX="154.0" layoutY="140.0" prefHeight="21.0" prefWidth="218.0" text="Insert UserName" textFill="#3b2873">
                <font>
-                  <Font name="Lucida Calligraphy Italic" size="22.0" />
+                  <Font name="System Italic" size="22.0" />
                </font>
             </Label>
             <Label fx:id="playersLabel" layoutX="154.0" layoutY="140.0" prefHeight="33.0" prefWidth="322.0" text="Insert number of players" textFill="#3b2873" visible="false">
                <font>
-                  <Font name="Lucida Calligraphy Italic" size="22.0" />
+                  <Font name="System Italic" size="22.0" />
                </font>
             </Label>
             <ChoiceBox fx:id="choicePlayers" layoutX="200.0" layoutY="185.0" prefHeight="31.0" prefWidth="218.0" style="-fx-background-color: transparent;" visible="false">

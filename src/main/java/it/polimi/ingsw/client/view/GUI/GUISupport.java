@@ -2,9 +2,14 @@ package it.polimi.ingsw.client.view.GUI;
 
 import it.polimi.ingsw.client.simplemodel.SimpleDepot;
 import javafx.scene.Node;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.scene.effect.Bloom;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.text.Font;
+import javafx.scene.text.Text;
 
 /**
  * This is a class with static methods used by many classes of the GUI package.
@@ -181,5 +186,31 @@ public class GUISupport {
 
     }
 
+    public static void setFont(int size, Text...texts){
+        Font font = Font.loadFont(GUISupport.class.getResourceAsStream("/fonts/Lucida Calligraphy Italic.ttf"), size);
+        for (Text text:texts) {
+            text.setFont(font);
+        }
+    }
 
+    public static void setFont(int size, Label...labels){
+        Font font = Font.loadFont(GUISupport.class.getResourceAsStream("/fonts/Lucida Calligraphy Italic.ttf"), size);
+        for (Label label:labels) {
+            label.setFont(font);
+        }
+    }
+
+    public static void setFont(int size, Button...buttons){
+        Font font = Font.loadFont(GUISupport.class.getResourceAsStream("/fonts/Lucida Calligraphy Italic.ttf"), size);
+        for (Button button:buttons) {
+            button.setFont(font);
+        }
+    }
+
+    public static void setFont(int size, TextField...textFields){
+        Font font = Font.loadFont(GUISupport.class.getResourceAsStream("/fonts/Lucida Calligraphy Italic.ttf"), size);
+        for (TextField textField:textFields) {
+            textField.setFont(font);
+        }
+    }
 }

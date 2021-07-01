@@ -8,6 +8,8 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.text.Font;
+
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -98,6 +100,9 @@ public class GameSettingsController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        GUISupport.setFont(22, userLabel, playersLabel);
+        GUISupport.setFont(18, usernameField);
+        GUISupport.setFont(12, playersButton, userButton);
         usernameField.setText("");
         choicePlayers.setItems(FXCollections.observableArrayList(1,2,3,4));
         GUISupport.setVisible(false, choicePlayers, playersLabel, playersButton);
