@@ -1,10 +1,11 @@
 package it.polimi.ingsw.server.model.cards;
 
-import it.polimi.ingsw.server.model.playerboard.Resource;
+import it.polimi.ingsw.shared.CardColor;
+import it.polimi.ingsw.shared.ProductionPower;
+import it.polimi.ingsw.shared.Resource;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.experimental.theories.suppliers.TestedOn;
 
 import java.util.ArrayList;
 import java.util.EmptyStackException;

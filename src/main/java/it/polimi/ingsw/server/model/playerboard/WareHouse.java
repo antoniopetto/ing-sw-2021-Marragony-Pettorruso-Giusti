@@ -3,6 +3,8 @@ package it.polimi.ingsw.server.model.playerboard;
 import it.polimi.ingsw.client.simplemodel.SimpleDepot;
 import it.polimi.ingsw.client.simplemodel.SimpleWarehouse;
 import it.polimi.ingsw.server.VirtualView;
+import it.polimi.ingsw.shared.DepotName;
+import it.polimi.ingsw.shared.Resource;
 
 import java.io.Serializable;
 import java.util.*;

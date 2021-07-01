@@ -1,6 +1,7 @@
 package it.polimi.ingsw.server.model.cards;
 
-import it.polimi.ingsw.server.model.playerboard.Resource;
+import it.polimi.ingsw.shared.ProductionPower;
+import it.polimi.ingsw.shared.Resource;
 import org.junit.Test;
 
 import java.util.HashMap;

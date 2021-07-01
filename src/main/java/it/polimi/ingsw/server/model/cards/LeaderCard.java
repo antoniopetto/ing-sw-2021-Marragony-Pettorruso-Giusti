@@ -2,11 +2,10 @@ package it.polimi.ingsw.server.model.cards;
 
 import it.polimi.ingsw.client.simplemodel.SimpleAbility;
 import it.polimi.ingsw.client.simplemodel.SimpleCardRequirement;
-import it.polimi.ingsw.client.simplemodel.SimpleDevCard;
 import it.polimi.ingsw.client.simplemodel.SimpleLeaderCard;
-import it.polimi.ingsw.server.VirtualView;
 import it.polimi.ingsw.server.model.Player;
-import it.polimi.ingsw.server.model.playerboard.Resource;
+import it.polimi.ingsw.shared.Card;
+import it.polimi.ingsw.shared.Resource;
 
 import java.util.*;
 
@@ -15,7 +14,7 @@ import java.util.*;
  * requirements or card requirements); a boolean attribute played which tells if the card has been played and a special
  * ability attribute. The class extends the abstract class card.
  */
-public class LeaderCard extends Card{
+public class LeaderCard extends Card {
 
     private final List<Requirement> requirements = new ArrayList<>();
     private boolean played = false;

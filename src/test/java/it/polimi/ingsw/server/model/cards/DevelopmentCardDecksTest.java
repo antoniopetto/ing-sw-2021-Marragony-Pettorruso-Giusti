@@ -1,7 +1,9 @@
 package it.polimi.ingsw.server.model.cards;
 
 import it.polimi.ingsw.server.VirtualView;
-import it.polimi.ingsw.server.model.playerboard.Resource;
+import it.polimi.ingsw.shared.CardColor;
+import it.polimi.ingsw.shared.ProductionPower;
+import it.polimi.ingsw.shared.Resource;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -116,19 +118,6 @@ public class DevelopmentCardDecksTest {
         }
         //checks correctness of the method
         assertEquals(4, decks.deckSize(CardColor.BLUE, 1));
-    }
-
-    @Test
-    public void discardTest() {
-        //checks correctness of the method
-        decks.discard(CardColor.YELLOW);
-        assertTrue(decks.deckSize(CardColor.YELLOW,1)==0&&decks.deckSize(CardColor.YELLOW,2)==0);
-        assertNotEquals(0, decks.deckSize(CardColor.YELLOW, 3));
-        decks.drawCard(CardColor.GREEN,1);
-        decks.drawCard(CardColor.GREEN,2);
-        decks.drawCard(CardColor.GREEN,3);
-        decks.discard(CardColor.GREEN);
-        assertTrue(true);
     }
 
     @Test

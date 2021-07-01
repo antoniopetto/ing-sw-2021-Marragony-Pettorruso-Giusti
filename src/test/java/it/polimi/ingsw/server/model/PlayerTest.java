@@ -1,20 +1,14 @@
 package it.polimi.ingsw.server.model;
 
-import it.polimi.ingsw.messages.Msg;
-import it.polimi.ingsw.messages.update.StrongBoxUpdateMsg;
 import it.polimi.ingsw.server.ClientHandler;
-import it.polimi.ingsw.server.GameController;
 import it.polimi.ingsw.server.VirtualView;
 import it.polimi.ingsw.server.model.cards.*;
-import it.polimi.ingsw.server.model.playerboard.DepotName;
+import it.polimi.ingsw.shared.*;
 import it.polimi.ingsw.server.model.playerboard.PlayerBoard;
-import it.polimi.ingsw.server.model.playerboard.Resource;
-import it.polimi.ingsw.server.model.shared.FaithTrack;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.*;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;

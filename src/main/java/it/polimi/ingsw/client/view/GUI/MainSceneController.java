@@ -1,9 +1,9 @@
 package it.polimi.ingsw.client.view.GUI;
 
 import it.polimi.ingsw.client.simplemodel.*;
-import it.polimi.ingsw.server.model.playerboard.DepotName;
-import it.polimi.ingsw.server.model.playerboard.Resource;
-import it.polimi.ingsw.server.model.shared.PopeFavourTile;
+import it.polimi.ingsw.shared.DepotName;
+import it.polimi.ingsw.shared.Resource;
+import it.polimi.ingsw.shared.PopeFavourTile;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;

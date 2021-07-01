@@ -1,10 +1,10 @@
 package it.polimi.ingsw.server.model.playerboard;
 
+import it.polimi.ingsw.shared.DepotName;
+import it.polimi.ingsw.shared.Resource;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-
-import java.util.Optional;
 
 import static org.junit.Assert.*;
 

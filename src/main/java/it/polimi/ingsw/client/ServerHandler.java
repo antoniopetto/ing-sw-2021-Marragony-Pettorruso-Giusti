@@ -2,8 +2,8 @@ package it.polimi.ingsw.client;
 
 import it.polimi.ingsw.client.simplemodel.SimpleModel;
 import it.polimi.ingsw.client.view.View;
-import it.polimi.ingsw.messages.update.UpdateMsg;
-import it.polimi.ingsw.messages.toview.ToViewMsg;
+import it.polimi.ingsw.shared.messages.update.UpdateMsg;
+import it.polimi.ingsw.shared.messages.toview.ToViewMsg;
 import org.apache.logging.log4j.ThreadContext;
 
 import java.io.IOException;

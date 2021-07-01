@@ -1,7 +1,7 @@
 package it.polimi.ingsw.client.view.GUI;
 
-import it.polimi.ingsw.server.model.cards.ProductionPower;
-import it.polimi.ingsw.server.model.playerboard.Resource;
+import it.polimi.ingsw.shared.ProductionPower;
+import it.polimi.ingsw.shared.Resource;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Group;

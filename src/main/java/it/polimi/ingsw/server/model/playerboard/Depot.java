@@ -1,6 +1,8 @@
 package it.polimi.ingsw.server.model.playerboard;
 
 import it.polimi.ingsw.client.simplemodel.SimpleDepot;
+import it.polimi.ingsw.shared.DepotName;
+import it.polimi.ingsw.shared.Resource;
 
 import java.io.Serializable;
 

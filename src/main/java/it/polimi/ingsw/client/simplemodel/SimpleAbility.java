@@ -1,6 +1,6 @@
 package it.polimi.ingsw.client.simplemodel;
 
-import it.polimi.ingsw.server.model.playerboard.Resource;
+import it.polimi.ingsw.shared.Resource;
 
 import java.io.Serializable;
 

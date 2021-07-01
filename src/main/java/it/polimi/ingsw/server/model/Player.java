@@ -6,9 +6,12 @@ import it.polimi.ingsw.server.model.cards.*;
 import it.polimi.ingsw.server.model.cards.LeaderCard;
 import it.polimi.ingsw.server.model.exceptions.ElementNotFoundException;
 import it.polimi.ingsw.server.model.playerboard.*;
-import it.polimi.ingsw.server.model.shared.Marble;
+import it.polimi.ingsw.shared.Marble;
 import it.polimi.ingsw.server.model.shared.MarketBoard;
-import it.polimi.ingsw.server.model.shared.PopeFavourTile;
+import it.polimi.ingsw.shared.PopeFavourTile;
+import it.polimi.ingsw.shared.Card;
+import it.polimi.ingsw.shared.ProductionPower;
+import it.polimi.ingsw.shared.Resource;
 
 import java.util.*;
 import java.util.stream.Collectors;

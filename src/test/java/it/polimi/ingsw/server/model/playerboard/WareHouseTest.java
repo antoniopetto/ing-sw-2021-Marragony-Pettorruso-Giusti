@@ -1,11 +1,11 @@
 package it.polimi.ingsw.server.model.playerboard;
 
 import it.polimi.ingsw.server.VirtualView;
+import it.polimi.ingsw.shared.DepotName;
+import it.polimi.ingsw.shared.Resource;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
-
-import java.io.Serializable;
 
 import static org.junit.Assert.*;
 

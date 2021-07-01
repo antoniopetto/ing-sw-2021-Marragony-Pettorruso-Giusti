@@ -1,7 +1,10 @@
 package it.polimi.ingsw.server.model.cards;
 
 import it.polimi.ingsw.client.simplemodel.SimpleDevCard;
-import it.polimi.ingsw.server.model.playerboard.Resource;
+import it.polimi.ingsw.shared.Card;
+import it.polimi.ingsw.shared.CardColor;
+import it.polimi.ingsw.shared.ProductionPower;
+import it.polimi.ingsw.shared.Resource;
 
 import java.util.*;
 
@@ -10,7 +13,7 @@ import java.util.*;
  * level, a CardColor attribute for the color, a ResourceRequirement attribute for its requirements and a ProductionPower
  * attribute for its production power.
  */
-public class DevelopmentCard extends Card{
+public class DevelopmentCard extends Card {
     private final int level;
     private final CardColor color;
     private final List<ResourceRequirement> requirements;

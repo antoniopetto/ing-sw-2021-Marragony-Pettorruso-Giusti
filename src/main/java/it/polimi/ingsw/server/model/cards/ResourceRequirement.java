@@ -1,7 +1,7 @@
 package it.polimi.ingsw.server.model.cards;
 
 import it.polimi.ingsw.server.model.Player;
-import it.polimi.ingsw.server.model.playerboard.Resource;
+import it.polimi.ingsw.shared.Resource;
 
 import java.io.Serializable;
 import java.util.Objects;

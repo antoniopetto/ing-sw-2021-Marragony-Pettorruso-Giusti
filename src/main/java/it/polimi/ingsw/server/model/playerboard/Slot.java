@@ -1,8 +1,7 @@
 package it.polimi.ingsw.server.model.playerboard;
 
 import it.polimi.ingsw.client.simplemodel.SimpleSlot;
-import it.polimi.ingsw.server.VirtualView;
-import it.polimi.ingsw.server.model.cards.Card;
+import it.polimi.ingsw.shared.Card;
 import it.polimi.ingsw.server.model.cards.DevelopmentCard;
 
 import java.io.Serializable;

@@ -1,6 +1,7 @@
 package it.polimi.ingsw.server.model.shared;
 
 import it.polimi.ingsw.server.VirtualView;
+import it.polimi.ingsw.shared.Marble;
 
 import java.io.Serializable;
 import java.util.ArrayList;

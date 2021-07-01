@@ -1,8 +1,8 @@
 package it.polimi.ingsw.server.model.playerboard;
 
-import it.polimi.ingsw.server.model.cards.CardColor;
+import it.polimi.ingsw.shared.CardColor;
 import it.polimi.ingsw.server.model.cards.DevelopmentCard;
-import it.polimi.ingsw.server.model.cards.ProductionPower;
+import it.polimi.ingsw.shared.ProductionPower;
 import it.polimi.ingsw.server.model.cards.ResourceRequirement;
 import org.junit.After;
 import org.junit.Before;

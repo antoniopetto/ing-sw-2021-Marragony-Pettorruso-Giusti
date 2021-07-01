@@ -1,12 +1,9 @@
 package it.polimi.ingsw.client.view.CLI;
 
 import it.polimi.ingsw.client.simplemodel.SimpleAbility;
-import it.polimi.ingsw.client.simplemodel.SimpleLeaderCard;
-import it.polimi.ingsw.server.model.cards.CardColor;
-import it.polimi.ingsw.server.model.playerboard.Resource;
-import it.polimi.ingsw.server.model.shared.Marble;
-
-import java.util.Map;
+import it.polimi.ingsw.shared.CardColor;
+import it.polimi.ingsw.shared.Resource;
+import it.polimi.ingsw.shared.Marble;
 
 public class Graphics {
     public static final String ANSI_RESET = "\u001B[0m";

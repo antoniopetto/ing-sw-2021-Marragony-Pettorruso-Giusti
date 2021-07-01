@@ -1,14 +1,11 @@
 package it.polimi.ingsw.client.view;
 
 import it.polimi.ingsw.client.simplemodel.SimpleModel;
-import it.polimi.ingsw.client.simplemodel.SimpleLeaderCard;
-import it.polimi.ingsw.client.simplemodel.SimplePlayer;
-import it.polimi.ingsw.server.model.playerboard.DepotName;
-import it.polimi.ingsw.server.model.playerboard.Resource;
-import it.polimi.ingsw.server.model.shared.Marble;
-import it.polimi.ingsw.messages.command.CommandMsg;
+import it.polimi.ingsw.shared.DepotName;
+import it.polimi.ingsw.shared.Resource;
+import it.polimi.ingsw.shared.Marble;
+import it.polimi.ingsw.shared.messages.command.CommandMsg;
 
-import java.util.List;
 import java.util.Map;
 
 public interface View {

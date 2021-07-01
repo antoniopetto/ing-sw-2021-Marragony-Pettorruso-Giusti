@@ -1,15 +1,15 @@
 package it.polimi.ingsw.server;
 
-import it.polimi.ingsw.messages.Msg;
-import it.polimi.ingsw.messages.toview.*;
+import it.polimi.ingsw.shared.messages.Msg;
+import it.polimi.ingsw.shared.messages.toview.*;
 import it.polimi.ingsw.server.model.AbstractPlayer;
-import it.polimi.ingsw.server.model.cards.CardColor;
-import it.polimi.ingsw.server.model.cards.ProductionPower;
-import it.polimi.ingsw.server.model.playerboard.Resource;
+import it.polimi.ingsw.shared.CardColor;
+import it.polimi.ingsw.shared.ProductionPower;
+import it.polimi.ingsw.shared.Resource;
 import it.polimi.ingsw.server.model.shared.FaithTrack;
-import it.polimi.ingsw.server.model.shared.Marble;
-import it.polimi.ingsw.messages.update.*;
-import it.polimi.ingsw.messages.command.CommandMsg;
+import it.polimi.ingsw.shared.Marble;
+import it.polimi.ingsw.shared.messages.update.*;
+import it.polimi.ingsw.shared.messages.command.CommandMsg;
 
 import java.io.*;
 import java.util.*;

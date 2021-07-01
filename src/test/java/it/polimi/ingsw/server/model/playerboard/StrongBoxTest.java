@@ -1,6 +1,7 @@
 package it.polimi.ingsw.server.model.playerboard;
 
 import it.polimi.ingsw.server.VirtualView;
+import it.polimi.ingsw.shared.Resource;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;

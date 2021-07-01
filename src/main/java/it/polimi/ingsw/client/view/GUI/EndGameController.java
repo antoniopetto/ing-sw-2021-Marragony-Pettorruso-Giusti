@@ -1,6 +1,5 @@
 package it.polimi.ingsw.client.view.GUI;
 
-import it.polimi.ingsw.server.model.playerboard.Resource;
 import javafx.fxml.Initializable;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.text.Text;

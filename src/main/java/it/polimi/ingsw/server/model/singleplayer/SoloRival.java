@@ -2,7 +2,7 @@ package it.polimi.ingsw.server.model.singleplayer;
 
 import it.polimi.ingsw.server.model.AbstractPlayer;
 import it.polimi.ingsw.server.GameController;
-import it.polimi.ingsw.server.model.cards.CardColor;
+import it.polimi.ingsw.shared.CardColor;
 
 import java.util.ArrayList;
 import java.util.Collections;

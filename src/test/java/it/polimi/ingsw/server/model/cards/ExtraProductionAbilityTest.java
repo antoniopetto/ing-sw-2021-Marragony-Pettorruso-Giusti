@@ -2,6 +2,7 @@ package it.polimi.ingsw.server.model.cards;
 
 import it.polimi.ingsw.server.VirtualView;
 import it.polimi.ingsw.server.model.Player;
+import it.polimi.ingsw.shared.ProductionPower;
 import org.junit.Test;
 import org.mockito.Mockito;
 

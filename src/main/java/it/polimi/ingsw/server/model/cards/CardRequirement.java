@@ -3,11 +3,10 @@ package it.polimi.ingsw.server.model.cards;
 import it.polimi.ingsw.client.simplemodel.SimpleCardRequirement;
 import it.polimi.ingsw.server.model.Player;
 import it.polimi.ingsw.server.model.playerboard.Slot;
+import it.polimi.ingsw.shared.CardColor;
 
 import java.io.Serializable;
-import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 
 /**
  * this class implements Requirement and represents a requirement of cards, which can be present in Leader cards.

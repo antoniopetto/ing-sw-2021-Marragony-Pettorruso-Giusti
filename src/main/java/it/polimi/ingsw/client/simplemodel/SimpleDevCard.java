@@ -1,9 +1,9 @@
 package it.polimi.ingsw.client.simplemodel;
 
-import it.polimi.ingsw.server.model.cards.Card;
-import it.polimi.ingsw.server.model.cards.CardColor;
-import it.polimi.ingsw.server.model.cards.CardParser;
-import it.polimi.ingsw.server.model.playerboard.Resource;
+import it.polimi.ingsw.shared.Card;
+import it.polimi.ingsw.shared.CardColor;
+import it.polimi.ingsw.shared.CardParser;
+import it.polimi.ingsw.shared.Resource;
 import org.xml.sax.SAXException;
 
 import javax.xml.parsers.ParserConfigurationException;

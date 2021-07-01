@@ -1,8 +1,8 @@
 package it.polimi.ingsw.client.simplemodel;
 
 import it.polimi.ingsw.client.view.View;
-import it.polimi.ingsw.server.model.cards.CardColor;
-import it.polimi.ingsw.server.model.shared.Marble;
+import it.polimi.ingsw.shared.CardColor;
+import it.polimi.ingsw.shared.Marble;
 
 import java.io.Serializable;
 import java.util.*;

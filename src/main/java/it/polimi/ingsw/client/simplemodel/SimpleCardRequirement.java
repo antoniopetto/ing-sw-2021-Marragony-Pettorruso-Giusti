@@ -1,5 +1,5 @@
 package it.polimi.ingsw.client.simplemodel;
-import it.polimi.ingsw.server.model.cards.CardColor;
+import it.polimi.ingsw.shared.CardColor;
 
 import java.io.Serializable;
 

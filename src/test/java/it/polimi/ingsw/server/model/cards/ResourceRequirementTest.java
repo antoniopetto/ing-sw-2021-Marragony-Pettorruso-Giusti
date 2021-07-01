@@ -1,12 +1,10 @@
 package it.polimi.ingsw.server.model.cards;
 
-import it.polimi.ingsw.client.view.View;
 import it.polimi.ingsw.server.VirtualView;
 import it.polimi.ingsw.server.model.Player;
-import it.polimi.ingsw.server.model.playerboard.Resource;
+import it.polimi.ingsw.shared.Resource;
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.Mock;
 import org.mockito.Mockito;
 
 import static org.junit.Assert.*;

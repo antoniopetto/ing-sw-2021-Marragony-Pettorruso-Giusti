@@ -1,8 +1,8 @@
 package it.polimi.ingsw.client.simplemodel;
 
-import it.polimi.ingsw.server.model.cards.ProductionPower;
-import it.polimi.ingsw.server.model.playerboard.Resource;
-import it.polimi.ingsw.server.model.shared.PopeFavourTile;
+import it.polimi.ingsw.shared.ProductionPower;
+import it.polimi.ingsw.shared.Resource;
+import it.polimi.ingsw.shared.PopeFavourTile;
 
 import java.io.Serializable;
 import java.util.*;

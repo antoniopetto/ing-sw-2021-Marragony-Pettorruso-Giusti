@@ -1,7 +1,5 @@
 package it.polimi.ingsw.server;
 
-import it.polimi.ingsw.server.model.Player;
-import it.polimi.ingsw.server.model.playerboard.Resource;
 import org.junit.Test;
 import org.mockito.Mockito;
 
