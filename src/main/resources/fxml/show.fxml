@@ -221,30 +221,30 @@
       </GridPane>
       <ImageView fx:id="leaderCard1" fitHeight="215.0" fitWidth="148.0" layoutX="687.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
          <image>
-            <Image url="@../images/leader/Leader-102.jpg" />
+            <Image url="@../images/leader/Leader-107.jpg" />
          </image>
       </ImageView>
       <ImageView fx:id="leaderCard2" fitHeight="215.0" fitWidth="148.0" layoutX="687.0" layoutY="235.0" pickOnBounds="true" preserveRatio="true">
          <image>
-            <Image url="@../images/leader/Leader-101.jpg" />
+            <Image url="@../images/leader/Leader-107.jpg" />
          </image>
       </ImageView>
-      <ImageView fx:id="resExtra1s" fitHeight="34.0" fitWidth="34.0" layoutX="711.0" layoutY="170.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fx:id="resExtra1s" fitHeight="34.0" fitWidth="34.0" layoutX="717.0" layoutY="184.0" pickOnBounds="true" preserveRatio="true" visible="false">
          <image>
             <Image url="@../images/res-marbles/shield.png" />
          </image>
       </ImageView>
-      <ImageView fx:id="resExtra1d" fitHeight="34.0" fitWidth="34.0" layoutX="769.0" layoutY="170.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fx:id="resExtra1d" fitHeight="34.0" fitWidth="34.0" layoutX="769.0" layoutY="184.0" pickOnBounds="true" preserveRatio="true" visible="false">
          <image>
             <Image url="@../images/res-marbles/shield.png" />
          </image>
       </ImageView>
-      <ImageView fx:id="resExtra2s" fitHeight="34.0" fitWidth="34.0" layoutX="711.0" layoutY="390.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fx:id="resExtra2s" fitHeight="34.0" fitWidth="34.0" layoutX="717.0" layoutY="402.0" pickOnBounds="true" preserveRatio="true" visible="false">
          <image>
             <Image url="@../images/res-marbles/shield.png" />
          </image>
       </ImageView>
-      <ImageView fx:id="resExtra2d" fitHeight="34.0" fitWidth="34.0" layoutX="769.0" layoutY="390.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fx:id="resExtra2d" fitHeight="34.0" fitWidth="34.0" layoutX="769.0" layoutY="402.0" pickOnBounds="true" preserveRatio="true" visible="false">
          <image>
             <Image url="@../images/res-marbles/shield.png" />
          </image>

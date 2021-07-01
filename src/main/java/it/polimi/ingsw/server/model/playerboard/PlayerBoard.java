@@ -114,7 +114,7 @@ public class PlayerBoard implements Serializable {
     /**
      * A support method to quickly retrieve a list containing the first element of the 3 development card slots.
      *
-     * @return                         A <code>List</code> with the first element of each of the <code>Slot</code>s
+     * @return  A <code>List</code> with the first element of each of the <code>Slot</code>s
      */
     public List<DevelopmentCard> getLastDevCards(){
 

@@ -131,4 +131,8 @@ public class SimpleModel implements Serializable {
     public void setInit(boolean init) {
         this.init = init;
     }
+
+    public boolean isInit(){
+        return this.init;
+    }
 }

@@ -14,7 +14,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 
-public class DiscardLeaderCardController implements Initializable {
+/**
+ * it is used when a player selects two LeaderCard before game start
+ */
+public class DiscardLeaderCardController  {
 
 
     @FXML
@@ -30,11 +33,11 @@ public class DiscardLeaderCardController implements Initializable {
     private List<Integer> cardIds = new ArrayList<>();
     private SimpleModel game;
 
-    @Override
-    public void initialize(URL url, ResourceBundle resourceBundle) {
 
-    }
-
+    /**
+     * the selected card id will be send to GUIView and so the selected card will be discard
+     * @param mouseEvent
+     */
     @FXML
     public void selectedCard(MouseEvent mouseEvent) {
             mouseEvent.consume();
@@ -57,6 +60,11 @@ public class DiscardLeaderCardController implements Initializable {
         notifyAll();
     }
 
+    /**
+     * This method iterates and shows all LeaderCard assigned to playing player
+     *
+     * @param game is a mini GameController that contains all game State info
+     */
     public void setGame(SimpleModel game) {
         this.game = game;
         List<Image> cards = new ArrayList<>();

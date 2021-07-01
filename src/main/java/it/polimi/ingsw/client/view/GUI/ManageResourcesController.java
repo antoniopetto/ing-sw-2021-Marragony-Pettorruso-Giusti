@@ -8,14 +8,16 @@ import javafx.scene.input.MouseEvent;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-public class ManageResourcesController implements Initializable {
+
+/**
+ * this controller allows to choose what to do with the Marbles contain in MarbleBuffer :
+ * - Insert a Marble ( so its associated Resource ) in a Depot
+ * - Discard a Marble
+ * - Switch / Move Resources between Depots
+ */
+public class ManageResourcesController {
 
     private int choice = 0;
-
-    @Override
-    public void initialize(URL url, ResourceBundle resourceBundle) {
-
-    }
 
     @FXML
     public void marbleAction(MouseEvent mouseEvent) {

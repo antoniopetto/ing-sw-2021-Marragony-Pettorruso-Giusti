@@ -43,13 +43,13 @@ public class GUIView extends Application implements View  {
     private Stage mainStage;
     private Stage tmpStage;
     private int discardCounter = 0;
-    private int marbleCounter = 0;
     private Marble marble;
     private boolean firstMain = true;
     private Action action = Action.INIT;
     private MainSceneController mainSceneController = null;
     private String serverIp;
     private int port;
+    private boolean victory = false;
 
 
     private enum Action{
@@ -352,10 +352,12 @@ public class GUIView extends Application implements View  {
         showController.setStrongBox();
         showController.setTrack();
         Platform.runLater(() ->{
-            if(tmpStage == null)  tmpStage = new Stage();
-            tmpStage.setAlwaysOnTop(true);
+            if(tmpStage == null || !tmpStage.isShowing()){
+                tmpStage = new Stage();
+            }
             manageStage(tmpStage, scene, "Show PlayerBoard", false);
             tmpStage.initStyle(StageStyle.UNDECORATED);
+            tmpStage.setAlwaysOnTop(true);
         });
 
         if(showController.isCloseWindow()) {
@@ -581,30 +583,26 @@ public class GUIView extends Application implements View  {
         MarbleBufferController marbleBufferController = currentLoader.getController();
         marbleBufferController.setSimpleModel(game);
         marbleBufferController.changeTitle("Please select the marble");
-        if((marbleCounter == 0 && !game.getThisPlayer().getUsername().equals(game.getPlayers().get(0).getUsername()))
-                || (marbleCounter == 1 && game.getPlayers().size() == 4 && game.getThisPlayer().getUsername().equals(game.getPlayers().get(3).getUsername()))){
+         if(game.isInit()){
             Platform.runLater(() -> {
                 oldStage = initStage;
                 initStage = new Stage();
                 manageStage(initStage, scene,"Select Marble", true);
             });
         }
-        else if(marbleCounter >= 0 ){
-            //TODO change label when player wants to discard Marble
+        else
+         {
             marbleBufferController.setMarble();
             manageStage(tmpStage, scene, "Select Marble1", false);
         }
 
         marble = null;
         marble = marbleBufferController.getMarble();
-        marbleCounter++;
 
-        if((marbleCounter ==1 && !game.getThisPlayer().getUsername().equals(game.getPlayers().get(0).getUsername()))
-        || (marbleCounter == 2 && game.getPlayers().size() == 4 && game.getThisPlayer().getUsername().equals(game.getPlayers().get(3).getUsername()))){
+        if(game.isInit()){
             return Marble.WHITE;
         }
-        else if(marbleCounter >= 1 ) return marble;
-        return null;
+        else return marble;
     }
 
     /**
@@ -616,6 +614,7 @@ public class GUIView extends Application implements View  {
         MarbleBufferController marbleBufferController = currentLoader.getController();
         marbleBufferController.show(false, true, false);
         marbleBufferController.manageButton(false);
+        marbleBufferController.setSwitchButton(false);
         marbleBufferController.changeTitle("Please select where to put  resource");
         DepotName depot = marbleBufferController.getDepot();
         return depot;
@@ -629,10 +628,10 @@ public class GUIView extends Application implements View  {
     @Override
     public Resource selectResource(){
         Resource resource = null;
-        if((marbleCounter == 1 && !game.getThisPlayer().getUsername().equals(game.getPlayers().get(0).getUsername()))
-                || (marbleCounter == 2 && game.getPlayers().size() == 4 && game.getThisPlayer().getUsername().equals(game.getPlayers().get(3).getUsername()))){
-            return marble.getResource();
-        }else if(marbleCounter >= 1 ){
+
+        if(game.isInit()) return marble.getResource();
+         else
+            {
             MarbleBufferController marbleBufferController = currentLoader.getController();
             marbleBufferController.show(true, false, false);
             marbleBufferController.manageButton(true);
@@ -692,26 +691,27 @@ public class GUIView extends Application implements View  {
      * different server.
      */
     public void endGame(){
-
-        setLoader("/fxml/endGame.fxml");
-        Scene scene = loadScene(currentLoader);
-        EndGameController controller = currentLoader.getController();
-        closeAllStages();
-        Platform.runLater(() -> {
-            if (mainStage == null)
-                mainStage = new Stage();
-            manageStage(mainStage, scene, "End game", true);
-        });
-        int choice = controller.getChoice();
-        switch (choice) {
-            case 1 -> Platform.runLater(() -> mainStage.close()); //endgame
-            case 2 -> {
-                firstMain = true;
-                setting(null); //newGame
-            }
-            case 3 -> {
-                firstMain = true;
-                start(null); //new server
+        if(!victory) {
+            setLoader("/fxml/endGame.fxml");
+            Scene scene = loadScene(currentLoader);
+            EndGameController controller = currentLoader.getController();
+            closeAllStages();
+            Platform.runLater(() -> {
+                if (mainStage == null)
+                    mainStage = new Stage();
+                manageStage(mainStage, scene, "End game", true);
+            });
+            int choice = controller.getChoice();
+            switch (choice) {
+                case 1 -> Platform.runLater(() -> mainStage.close()); //endgame
+                case 2 -> {
+                    firstMain = true;
+                    setting(null); //newGame
+                }
+                case 3 -> {
+                    firstMain = true;
+                    start(null); //new server
+                }
             }
         }
     }
@@ -747,7 +747,7 @@ public class GUIView extends Application implements View  {
      */
     @Override
     public void victory(Boolean win, Map<String, Integer> leaderboard) {
-
+        victory = true;
         setLoader("/fxml/victory.fxml");
         Scene scene = loadScene(currentLoader);
         VictoryController controller = currentLoader.getController();
@@ -758,8 +758,10 @@ public class GUIView extends Application implements View  {
         });
 
         boolean close = controller.isCloseWindow();
-        if(close)
+        if(close){
+            victory = false;
             endGame();
+        }
     }
 
     private void closeAllStages(){

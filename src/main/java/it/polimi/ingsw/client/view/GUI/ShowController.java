@@ -10,20 +10,20 @@ import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.GridPane;
 import javafx.scene.text.Text;
 
 import java.net.URL;
 import java.util.ResourceBundle;
 
+/**
+ * this controller is used to show the condition of another player
+ */
 public class ShowController implements Initializable {
 
     @FXML
     private ImageView leaderCard1;
     @FXML
     private ImageView leaderCard2;
-    @FXML
-    private Group wareHouse;
     @FXML
     private ImageView resHigh;
     @FXML
@@ -49,8 +49,6 @@ public class ShowController implements Initializable {
     @FXML
     private Group slotsTot;
     @FXML
-    private GridPane strongBox;
-    @FXML
     private Text n1;
     @FXML
     private Text n2;
@@ -70,8 +68,10 @@ public class ShowController implements Initializable {
     private SimplePlayer thisPlayer;
     private boolean closeWindow = false;
 
-    //TODO add resources in ExtraDepot and faith;
 
+    /**
+     * it shows the chosen player's resources in his warehouse
+     */
     public void setWareHouse(){
         GUISupport.setVisible(false, resHigh, resMed1, resMed2, resLow1, resLow2, resLow3);
 
@@ -86,6 +86,10 @@ public class ShowController implements Initializable {
 
     }
 
+    /**
+     * the target of the method is to show the active leader cards of the player to be viewed,
+     * and if they have extra depots, their contained resources will also be shown
+     */
     public void setLeaderCard(){
         int counter = 0;
         for(SimpleLeaderCard card : thisPlayer.getLeaderCards()){
@@ -125,6 +129,10 @@ public class ShowController implements Initializable {
 
     }
 
+    /**
+     * the target of the method is to show the DevelopmentCards bought by the chosen player,
+     * in their own slots
+     */
     public void setSlots(){
         int slotCounter = 0;
         int cardCounter;
@@ -154,6 +162,10 @@ public class ShowController implements Initializable {
         }
     }
 
+    /**
+     * the target of the method is to show the faith position of the player chosen to be viewed.
+     *
+     */
     public void setTrack(){
         int position= thisPlayer.getPosition();
         if(position<3){
@@ -190,6 +202,9 @@ public class ShowController implements Initializable {
         }
     }
 
+    /**
+     * it shows quantity of each resource in the chosen player's StrongBox
+     */
     public void setStrongBox(){
         int quantity;
         if(thisPlayer.getStrongbox().get(Resource.COIN)!=null)
@@ -253,7 +268,7 @@ public class ShowController implements Initializable {
     }
 
     private synchronized void setCloseWindow(boolean close){
-        closeWindow = close;
+        this.closeWindow = close;
         notifyAll();
     }
     @Override

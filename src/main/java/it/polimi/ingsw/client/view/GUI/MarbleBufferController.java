@@ -138,7 +138,7 @@ public class MarbleBufferController implements Initializable {
         insertResource.setVisible(marble);
         if(resources){
             insertResource.setVisible(true);
-            //scalarlo in ordine!
+
             if(simpleModel.getThisPlayer().getLeaderCards().get(0).getAbility().getType().equals(SimpleAbility.Type.WHITEMARBLE)
               && simpleModel.getThisPlayer().getLeaderCards().get(0).isActive()){
                 GUISupport.settingImageView(res1, simpleModel.getThisPlayer().getLeaderCards().get(0).getAbility().getResource().toString());

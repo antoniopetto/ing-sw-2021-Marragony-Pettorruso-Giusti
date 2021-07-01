@@ -7,6 +7,9 @@ import javafx.scene.control.Label;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+/**
+ * this controller is used to bring up the alert dialog with a message
+ */
 public class AlertController implements Initializable {
 
     @FXML
