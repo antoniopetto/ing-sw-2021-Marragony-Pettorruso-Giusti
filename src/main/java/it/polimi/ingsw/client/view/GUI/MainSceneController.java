@@ -700,10 +700,9 @@ public class MainSceneController {
         if(text!=null){
             Text newText = new Text(text+"\n");
             newText.setFill(Color.BLACK);
-            newText.setFont(Font.font("Lucida Calligraphy", 15));
+            newText.setFont(Font.font("Lucida Calligraphy", 14));
             Platform.runLater(()->logText.getChildren().add(newText));
             log.setVvalue(1.0);
-
         }
 
     }

@@ -755,6 +755,7 @@ public class GUIView extends Application implements View  {
             oldStage = mainStage;
             manageStage(mainStage, scene, "Victory", true);
         });
+
         boolean close = controller.isCloseWindow();
         if(close){
             victory = false;
