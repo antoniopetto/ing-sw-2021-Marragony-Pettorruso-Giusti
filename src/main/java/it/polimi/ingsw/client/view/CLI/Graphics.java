@@ -5,6 +5,8 @@ import it.polimi.ingsw.shared.CardColor;
 import it.polimi.ingsw.shared.Resource;
 import it.polimi.ingsw.shared.Marble;
 
+import java.nio.charset.StandardCharsets;
+
 public class Graphics {
     public static final String ANSI_RESET = "\u001B[0m";
     public static final String ANSI_RED = "\u001B[31m";
@@ -15,6 +17,7 @@ public class Graphics {
     public static final String ANSI_CYAN = "\u001B[36m";
     public static final String ANSI_WHITE = "\u001B[37m";
     public static final String ANSI_GREY = "\033[38;2;105;105;105m";
+    public static final String COIN = "\\u{25CF}";
     public static final String TITLE = "  __  __                 _                                    __     ____                           _                                           \n" +
             " |  \\/  |   __ _   ___  | |_    ___   _ __   ___      ___    / _|   |  _ \\    ___   _ __     __ _  (_)  ___   ___    __ _   _ __     ___    ___ \n" +
             " | |\\/| |  / _` | / __| | __|  / _ \\ | '__| / __|    / _ \\  | |_    | |_) |  / _ \\ | '_ \\   / _` | | | / __| / __|  / _` | | '_ \\   / __|  / _ \\\n" +
@@ -26,19 +29,19 @@ public class Graphics {
         switch (res)
         {
             case COIN -> {
-                return ANSI_YELLOW+"●"+ANSI_RESET;
+                return ANSI_YELLOW+"\u25cf"+ANSI_RESET;
             }
             case STONE -> {
-                return ANSI_WHITE+"▲"+ANSI_RESET;
+                return ANSI_WHITE+"\u25b2"+ANSI_RESET;
             }
             case SHIELD -> {
-                return ANSI_CYAN+"♠"+ANSI_RESET;
+                return ANSI_CYAN+"\u2660"+ANSI_RESET;
             }
             case SERVANT -> {
-                return ANSI_PURPLE+"♣"+ANSI_RESET;
+                return ANSI_PURPLE+"\u2663"+ANSI_RESET;
             }
             case FAITH -> {
-                return ANSI_RED+"†"+ANSI_RESET;
+                return ANSI_RED+"\u2020"+ANSI_RESET;
             }
         }
         return "";
@@ -57,7 +60,7 @@ public class Graphics {
     public static String getLevel(CardColor color, int level)
     {
         String result = getCardColor(color);
-        result+="■" + level+ "■" +ANSI_RESET;
+        result+="\u25a0" + level+ "\u25a0" +ANSI_RESET;
 
         return result;
     }
@@ -89,12 +92,12 @@ public class Graphics {
     {
         String result = "";
         switch (marble){
-            case YELLOW -> result = ANSI_YELLOW+"●"+ANSI_RESET;
-            case PURPLE -> result= ANSI_PURPLE+"●"+ANSI_RESET;
-            case BLUE-> result= ANSI_BLUE+"●"+ANSI_RESET;
-            case RED -> result= ANSI_RED+"●"+ANSI_RESET;
-            case GREY -> result= ANSI_GREY+"●"+ANSI_RESET;
-            case WHITE -> result= ANSI_WHITE+"●"+ANSI_RESET;
+            case YELLOW -> result = ANSI_YELLOW+"\u25fc"+ANSI_RESET;
+            case PURPLE -> result= ANSI_PURPLE+"\u25fc"+ANSI_RESET;
+            case BLUE-> result= ANSI_BLUE+"\u25fc"+ANSI_RESET;
+            case RED -> result= ANSI_RED+"\u25fc"+ANSI_RESET;
+            case GREY -> result= ANSI_GREY+"\u25fc"+ANSI_RESET;
+            case WHITE -> result= ANSI_WHITE+"\u25fc"+ANSI_RESET;
 
         }
         return result;
@@ -109,7 +112,7 @@ public class Graphics {
                 return "Extra depot" + System.lineSeparator() + "    " + getResource(res) + " " + getResource(res);
             }
             case WHITEMARBLE -> {
-                return ANSI_WHITE+"   ● = "+getResource(res);
+                return ANSI_WHITE+"   \u25cf = "+getResource(res);
             }
             case EXTRAPRODUCTION -> {
                 return "1"+getResource(res)+" } "+"1? 1"+getResource(Resource.FAITH);
