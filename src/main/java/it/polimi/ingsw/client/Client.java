@@ -22,7 +22,10 @@ public class Client {
 
         int choice = CLIView.askChoice("Please select how to play:", "CLI", "GUI");
         View view = ((choice == 1) ? new CLIView() : new GUIView());
-        Runtime.getRuntime().addShutdownHook(new Thread( () -> view.getServerHandler().stopRunning()));
+        Runtime.getRuntime().addShutdownHook(new Thread( () -> {
+            System.out.println("Hello");
+            view.getServerHandler().stopRunning();
+        }));
         view.startConnection();
     }
 }

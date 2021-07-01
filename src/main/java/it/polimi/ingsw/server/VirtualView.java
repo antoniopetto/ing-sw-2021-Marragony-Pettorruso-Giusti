@@ -12,24 +12,31 @@ import it.polimi.ingsw.shared.messages.update.*;
 import it.polimi.ingsw.shared.messages.command.CommandMsg;
 
 import java.io.*;
+import java.net.URISyntaxException;
 import java.util.*;
 
 public class VirtualView implements Runnable{
 
-    private static final String SAVES_PATH = "src/main/resources/saves/";
-    private static final File saveDir = new File(SAVES_PATH);
-
-    private final File saveFile;
+    private File baseDir;
+    private File saveFile;
     private boolean exiting = false;
-    private final GameController gameController;
+    private GameController gameController;
     private final Map<String, ClientHandler> players = new HashMap<>();
     private Boolean turnJustFinished = null;
 
     public VirtualView(Map<String, ClientHandler> players){
 
         this.players.putAll(players);
-        saveFile = new File(SAVES_PATH + Server.formatGameName(players.keySet()) + ".ser");
-
+        try {
+            baseDir = new File(VirtualView.class.getProtectionDomain().getCodeSource().getLocation().toURI());
+            saveFile = new File(baseDir.getPath() + "/data/" + Server.formatGameName(players.keySet()) + ".ser");
+        }
+        catch (URISyntaxException e){
+            Server.logger.error("Could get installation path.");
+            exitGame();
+            return;
+        }
+        System.out.println(saveFile.getPath());
         gameController = restoreGame()
                 .orElse(new GameController(this.players.keySet()));
         gameController.setVirtualView(this);
@@ -59,7 +66,7 @@ public class VirtualView implements Runnable{
 
     private void saveGameState(){
         try {
-            if (!saveDir.exists() && !saveDir.mkdir())
+            if (!baseDir.exists() && !baseDir.mkdir())
                 throw new IOException();
             if (saveFile.exists() && !saveFile.delete())
                 throw new IOException();
