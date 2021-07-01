@@ -626,7 +626,7 @@ public class GUIView extends Application implements View  {
      */
     @Override
     public Resource selectResource(){
-        Resource resource = null;
+        Resource resource;
 
         if(game.isInit()) return marble.getResource();
          else

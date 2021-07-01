@@ -7,7 +7,6 @@ import it.polimi.ingsw.shared.Marble;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -15,25 +14,18 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.text.Text;
 
-import java.net.URL;
-import java.util.ResourceBundle;
 
 public class MarbleBufferController {
 
     private Marble marble = null;
     private SimpleModel simpleModel = null;
     private Resource resource = null;
-    private String resourceString = null;
     private DepotName depot = null;
 
     @FXML
     private ImageView res1;
     @FXML
     private ImageView res2;
-    @FXML
-    private ImageView res3;
-    @FXML
-    private ImageView res4;
     @FXML
     private ImageView marble1;
     @FXML
@@ -92,7 +84,7 @@ public class MarbleBufferController {
 
     /**
      * it inserts a previously chosen marble/resource in the clicked depot.
-     * @param actionEvent
+     *
      */
     @FXML
     public void insertResource(ActionEvent actionEvent) {
@@ -110,7 +102,7 @@ public class MarbleBufferController {
 
     /**
      * it returns the selected marble from the MarbleBuffer.
-     * @param mouseEvent
+     *
      */
     @FXML
     public void selectMarble(MouseEvent mouseEvent) {
@@ -131,7 +123,7 @@ public class MarbleBufferController {
 
     /**
      * it disables or enables Depot buttons.
-     * @param disable
+     *
      */
     public void manageButton(boolean disable) {
         lowDepot.setDisable(disable);
@@ -194,7 +186,7 @@ public class MarbleBufferController {
 
         for(SimpleLeaderCard card : simpleModel.getThisPlayer().getLeaderCards()){
             if(card.isActive() && card.getAbility().getType().equals(SimpleAbility.Type.EXTRADEPOT)) {
-                int quantity = 0;
+                int quantity;
                 if(card.getAbility().getResource().equals(simpleModel.getThisPlayer().getWarehouse().getDepot(DepotName.FIRST_EXTRA).getConstraint())){
                  extraCard1.setImage(new Image("/images/leader/Leader-" + card.getId() + ".jpg"));
                  extraCard1.setVisible(true);
@@ -212,7 +204,7 @@ public class MarbleBufferController {
 
     /**
      * it sets the selected resource associated to whiteMarble.
-     * @param mouseEvent
+     *
      */
     @FXML
     public void selectResource(MouseEvent mouseEvent) {
@@ -289,7 +281,7 @@ public class MarbleBufferController {
 
     /**
      * it inserts a previously selected resources in an extra depot.
-     * @param mouseEvent
+     *
      */
     @FXML
     public void insertAResource(MouseEvent mouseEvent) {
@@ -304,12 +296,20 @@ public class MarbleBufferController {
 
     }
 
+    /**
+     *
+     * @param visible: if it is true, the buttons for switch Resources are visible.
+     */
     public void setSwitchButton(boolean visible){
         GUISupport.setVisible(visible, switchLow, switchMed, switchHigh);
         if(extraCard1.isVisible()) switchExtra1.setVisible(visible);
         if(extraCard2.isVisible()) switchExtra2.setVisible(visible);
     }
 
+    /**
+     * when a switchButton is clicked, this method sends one of two depotNames used to the switch.
+     *
+     */
     @FXML
     public void switchDepot(MouseEvent mouseEvent) {
         mouseEvent.consume();

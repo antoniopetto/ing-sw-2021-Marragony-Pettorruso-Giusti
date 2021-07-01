@@ -7,7 +7,6 @@ import it.polimi.ingsw.shared.PopeFavourTile;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.control.*;
@@ -21,19 +20,16 @@ import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.ResourceBundle;
 
-public class MainSceneController implements Initializable {
+public class MainSceneController {
 
     private int choice = 0;
     private SimpleModel simpleModel = null;
     private int cardId = 0;
     private int bufferId = 0;
-    private List<Node> elementsWithEffects = new ArrayList<>();
-    private int numberOfVaticanReport =0;
+    private final List<Node> elementsWithEffects = new ArrayList<>();
 
 
     //LeaderCard Action
@@ -139,14 +135,16 @@ public class MainSceneController implements Initializable {
     private ImageView blackCross;
 
     private String username;
-    private List<String> allUsername = new ArrayList<>();
+    private final List<String> allUsername = new ArrayList<>();
 
 
-    @Override
-    public void initialize(URL url, ResourceBundle resourceBundle) {
-
-    }
-
+    /**
+     * it filters the selected action.
+     * 1- play LeaderCard: now the player can choose a leaderCard to active.
+     * 2- discard LeaderCard:  now the player can choose a leaderCard to discard.
+     * 3,4,5 - they are the normal action ( buy resources, buy devCard, activate prodcution power)
+     * 6,7,8 - the player sees the playerBoard of the selected opponent.
+     */
     @FXML
     public void clickActionButton(ActionEvent actionEvent) {
         actionEvent.consume();
@@ -171,9 +169,7 @@ public class MainSceneController implements Initializable {
                     setActionButton(false);
                 }
             }
-            case "buyCardButton" -> {
-                setChoice(4);
-            }
+            case "buyCardButton" -> setChoice(4);
             case "buyResourcesButton" ->{
                 setChoice(3);
                 resourceArrow.setVisible(true);
@@ -210,6 +206,12 @@ public class MainSceneController implements Initializable {
     public String getUser(){
         return username;
     }
+
+    /**
+     * it allows to select a LeaderCard so then is possible active/discard this lCard.
+     * @param active: if it is true, radioButtons will be visible
+     * @param counter: number of  player's LeaderCard
+     */
     private void activeLeaderCardComponents(boolean active, int counter){
         if(counter > 0){
         GUISupport.setVisible(active, activeCard1Radio, lCardButton);
@@ -220,6 +222,10 @@ public class MainSceneController implements Initializable {
     }
 
 
+    /**
+     * it is called when a LeaderCard ( first or second ) has been selected and so it sets the lCard id.
+     *
+     */
     @FXML
     public void selectLCard(ActionEvent actionEvent) {
         actionEvent.consume();
@@ -231,6 +237,9 @@ public class MainSceneController implements Initializable {
 
     }
 
+    /**
+     * it ainms to show the player's LeaderCard/s and if there are active extraDepots then extraDepots' resources will be shown.
+     */
     public void setLeaderCard(){
         GUISupport.setVisible(false, rectCard1, rectCard2, resourceSXExtra1, resourceDXExtra1, resourceSXExtra2, resourceDXExtra2);
 
@@ -250,21 +259,8 @@ public class MainSceneController implements Initializable {
                     leaderCard1.setImage(cards.get(0));
                     leaderCard2.setImage(cards.get(1));
                     GUISupport.setVisible(true, leaderCard1, leaderCard2);
+                    activeLeaderCard(simpleLeaderCards);
 
-                    if(simpleLeaderCards.get(0).isActive()){
-                        rectCard1.setVisible(true);
-                        if(simpleLeaderCards.get(0).getAbility().getType().equals(SimpleAbility.Type.EXTRADEPOT)){
-                            int quantity = 0;
-                            if(simpleLeaderCards.get(0).getAbility().getResource().equals(simpleModel.getThisPlayer().getWarehouse().getDepot(DepotName.FIRST_EXTRA).getConstraint()))
-                              quantity =GUISupport.quantityOfResources(simpleModel.getThisPlayer().getWarehouse().getDepot(DepotName.FIRST_EXTRA));
-                                else  quantity =GUISupport.quantityOfResources(simpleModel.getThisPlayer().getWarehouse().getDepot(DepotName.SECOND_EXTRA));
-
-                            GUISupport.settingImageView(quantity, resourceSXExtra1, resourceDXExtra1);
-                        }
-                        else GUISupport.setVisible(false, resourceSXExtra1, resourceDXExtra1);
-                    }else{
-                        rectCard1.setVisible(false);
-                    }
 
 
                     if(simpleLeaderCards.get(1).isActive()){
@@ -286,21 +282,7 @@ public class MainSceneController implements Initializable {
                     leaderCard1.setImage(cards.get(0));
                     leaderCard1.setVisible(true);
                     leaderCard2.setVisible(false);
-
-                    if(simpleLeaderCards.get(0).isActive()){
-                        rectCard1.setVisible(true);
-                        if(simpleLeaderCards.get(0).getAbility().getType().equals(SimpleAbility.Type.EXTRADEPOT)){
-                            int quantity;
-                            if(simpleLeaderCards.get(0).getAbility().getResource().equals(simpleModel.getThisPlayer().getWarehouse().getDepot(DepotName.FIRST_EXTRA).getConstraint()))
-                                quantity =GUISupport.quantityOfResources(simpleModel.getThisPlayer().getWarehouse().getDepot(DepotName.FIRST_EXTRA));
-                            else  quantity =GUISupport.quantityOfResources(simpleModel.getThisPlayer().getWarehouse().getDepot(DepotName.SECOND_EXTRA));
-
-                            GUISupport.settingImageView(quantity, resourceSXExtra1, resourceDXExtra1);
-                        }
-                        else GUISupport.setVisible(false, resourceSXExtra1, resourceDXExtra1);
-                    }else{
-                        rectCard1.setVisible(false);
-                    }
+                    activeLeaderCard(simpleLeaderCards);
                 }
 
             }
@@ -311,6 +293,22 @@ public class MainSceneController implements Initializable {
 
     }
 
+    private void activeLeaderCard(List<SimpleLeaderCard> simpleLeaderCards){
+        if(simpleLeaderCards.get(0).isActive()){
+            rectCard1.setVisible(true);
+            if(simpleLeaderCards.get(0).getAbility().getType().equals(SimpleAbility.Type.EXTRADEPOT)){
+                int quantity;
+                if(simpleLeaderCards.get(0).getAbility().getResource().equals(simpleModel.getThisPlayer().getWarehouse().getDepot(DepotName.FIRST_EXTRA).getConstraint()))
+                    quantity =GUISupport.quantityOfResources(simpleModel.getThisPlayer().getWarehouse().getDepot(DepotName.FIRST_EXTRA));
+                else  quantity =GUISupport.quantityOfResources(simpleModel.getThisPlayer().getWarehouse().getDepot(DepotName.SECOND_EXTRA));
+
+                GUISupport.settingImageView(quantity, resourceSXExtra1, resourceDXExtra1);
+            }
+            else GUISupport.setVisible(false, resourceSXExtra1, resourceDXExtra1);
+        }else{
+            rectCard1.setVisible(false);
+        }
+    }
 
     public synchronized int getChoice() {
         while (choice == 0) {
@@ -348,11 +346,14 @@ public class MainSceneController implements Initializable {
         notifyAll();
     }
 
-
+    /**
+     *
+     * @param postTurn if it is false, it disables the normal action button and it shows endTurn button.
+     */
     public void setActionButton( boolean postTurn){
         if(!postTurn){
             GUISupport.setVisible(true, pLCardButton, dLCardButton, buyResourcesButton, buyCardButton, activateProductionButton);
-            endTurnButton.setVisible(postTurn);
+            endTurnButton.setVisible(false);
         }else{
             GUISupport.setVisible(false, buyResourcesButton, buyCardButton, activateProductionButton);
             endTurnButton.setVisible(true);
@@ -361,6 +362,10 @@ public class MainSceneController implements Initializable {
     }
 
 
+    /**
+     * it sets the starting status of the match.
+     *
+     */
     public void setScene(SimpleModel simpleModel){
         this.simpleModel=simpleModel;
         setActionButton(false);
@@ -422,6 +427,9 @@ public class MainSceneController implements Initializable {
         }
     }
 
+    /**
+     * it is useful for showing the DevCards of the decks.
+     */
     public void setDecks()
     {
         List<Integer> ids = new ArrayList<>();
@@ -445,6 +453,9 @@ public class MainSceneController implements Initializable {
         }
     }
 
+    /**
+     * it sets the Marbles in correct positions of the MarketBoard.
+     */
     public void setMarketBoard(){
 
         List<String> marbleColor = new ArrayList<>();
@@ -471,6 +482,11 @@ public class MainSceneController implements Initializable {
         spareMarble.setImage(new Image("/images/res-marbles/" + GUISupport.getMarblePath(simpleModel.getSpareMarble().toString())));
     }
 
+
+    /**
+     *
+     * it is called when a marketBoard's line has been selected and it sets this line in the MarbleBuffer.
+     */
     @FXML
     public void selectMarbleBuffer(MouseEvent mouseEvent) {
         mouseEvent.consume();
@@ -506,6 +522,9 @@ public class MainSceneController implements Initializable {
         return tmpId;
     }
 
+    /**
+     * it sets the player's resources in own warehouse's position.
+     */
     public void setWarehouse(){
         GUISupport.setVisible(false, resourceHigh, resourceSXMed, resourceDXMed, resourceSXLow, resourceCLow, resourceDXLow);
 
@@ -519,6 +538,9 @@ public class MainSceneController implements Initializable {
         GUISupport.settingImageView(quantity, resourceSXLow, resourceCLow, resourceDXLow);
     }
 
+    /**
+     * it is used to active a PopeFavourTile when player's faith is in a pope's position.
+     */
     public void setTiles(){
         List<PopeFavourTile> tiles=simpleModel.getThisPlayer().getTiles();
         if(tiles.get(0).isGained()) tile1.setImage(new Image("/images/pope-favor/pope_favor1_front.png"));
@@ -536,6 +558,9 @@ public class MainSceneController implements Initializable {
         return max;
     }
 
+    /**
+     * it inserts the DevCards bought by the player in their slots.
+     */
     public void setSlots() {
         int slotCounter = 0;
         int cardCounter;
@@ -565,7 +590,9 @@ public class MainSceneController implements Initializable {
         }
     }
 
-
+    /**
+     * it shows the number of each resource contained in the player's strongBox.
+     */
     public void setStrongbox()
     {
         int count=0;
@@ -634,6 +661,10 @@ public class MainSceneController implements Initializable {
         }
     }
 
+    /**
+     * it sets the id of the DevCard that player wants to buy.
+     *
+     */
     public void devCardSelected(MouseEvent mouseEvent) {
         mouseEvent.consume();
         Platform.runLater(()->{
@@ -643,8 +674,10 @@ public class MainSceneController implements Initializable {
     }
 
 
-
-
+    /**
+     * it returns the id of the slot in which the player wants to insert the purchased devCard.
+     *
+     */
     public void slotSelected(MouseEvent mouseEvent) {
         mouseEvent.consume();
         Platform.runLater(()->{
@@ -658,16 +691,16 @@ public class MainSceneController implements Initializable {
         });
     }
 
+    /**
+     *
+     * @param text: shows the message that indicates the action of the other player/s.
+     */
     public void addTextInLog(String text)
     {
         if(text!=null){
             Text newText = new Text(text+"\n");
             newText.setFill(Color.BLACK);
             newText.setFont(Font.font("Lucida Calligraphy", 15));
-            /*
-            String previous = logText.getText();
-            logText.setText(previous+"\n"+text);
-             */
             Platform.runLater(()->logText.getChildren().add(newText));
             log.setVvalue(1.0);
 
@@ -675,6 +708,10 @@ public class MainSceneController implements Initializable {
 
     }
 
+    /**
+     * it is called when a DevCard is selected for production.
+     *
+     */
     public void prodCardSelected(MouseEvent mouseEvent) {
         mouseEvent.consume();
         Platform.runLater(()->{
@@ -686,16 +723,28 @@ public class MainSceneController implements Initializable {
         });
     }
 
+    /**
+     * it is called when the player actives the production.
+     *
+     */
     public void confirmProduction(ActionEvent actionEvent) {
         actionEvent.consume();
         Platform.runLater(()->setChoice(1));
     }
 
+    /**
+     * it is called when the player decides to active the basePower.
+     *
+     */
     public void basePowerSelected(MouseEvent mouseEvent) {
         mouseEvent.consume();
         Platform.runLater(()->setChoice(3));
     }
 
+    /**
+     * it is called when the player decides to active the leaderCardProductionPower.
+     * it sets the id of the selected LeaderCard.
+     */
     public void leaderProductionPower(MouseEvent mouseEvent) {
         mouseEvent.consume();
         ImageView card = (ImageView)mouseEvent.getSource();
@@ -717,6 +766,10 @@ public class MainSceneController implements Initializable {
 
     }
 
+    /**
+     * it returns the selected leaderCard's resource by the player
+     *
+     */
     public void leaderResourceSelected(MouseEvent mouseEvent) {
         mouseEvent.consume();
         ImageView resource = (ImageView)mouseEvent.getSource();

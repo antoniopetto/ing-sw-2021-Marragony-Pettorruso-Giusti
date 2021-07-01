@@ -128,7 +128,11 @@ public class GUISupport {
 
     }
 
-
+    /**
+     * it is used to set visible a number equal to quantity of ImageView ( resources, leaderCard, DevCard)
+     * @param quantity: number of image to set visible.
+     * @param resources: a set of ImageView that may be set visible or invisible.
+     */
     public static void settingImageView(int quantity, ImageView... resources){
         String path = "/images/res-marbles/";
 
@@ -139,6 +143,11 @@ public class GUISupport {
         for(int i = quantity; i < resources.length; i++) resources[i].setVisible(false);
     }
 
+    /**
+     * it takes the 'resource' ImageView and sets it with 'resourceLeaderCard' Image.
+     * @param resource: Imageview
+     * @param resourceLeaderCard: url of resource to set.
+     */
     public static void settingImageView(ImageView resource, String resourceLeaderCard){
         String path = "/images/res-marbles/";
         resourceString = returnPath(resourceLeaderCard);
