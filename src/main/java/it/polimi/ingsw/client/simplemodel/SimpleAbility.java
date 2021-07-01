@@ -1,14 +1,18 @@
 package it.polimi.ingsw.client.simplemodel;
 
+import it.polimi.ingsw.server.model.cards.SpecialAbility;
 import it.polimi.ingsw.shared.Resource;
 
 import java.io.Serializable;
 
 /**
- *
+ * Simplified version of SpecialAbility
  */
 public class SimpleAbility implements Serializable {
 
+    /**
+     * Enum - codified types of special ability
+     */
     public enum Type {
         CARDDISCOUNT,
         WHITEMARBLE,

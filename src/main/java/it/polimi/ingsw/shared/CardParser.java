@@ -13,6 +13,10 @@ import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.xpath.*;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.URL;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -25,7 +29,6 @@ import static java.util.stream.Collectors.toMap;
  */
 public class CardParser {
 
-    private static final String CONFIG_PATH = "src/main/resources/config.xml";
     private final Node config;
     private final XPath xPath = XPathFactory.newInstance().newXPath();
     private static CardParser instance;
@@ -46,10 +49,10 @@ public class CardParser {
      */
     private CardParser() throws ParserConfigurationException, IOException, SAXException{
 
-        File configFile = new File(CONFIG_PATH);
+        InputStream configStream = getClass().getClassLoader().getResourceAsStream("config.xml");
         DocumentBuilderFactory domBuilderFactory = DocumentBuilderFactory.newInstance();
         DocumentBuilder domBuilder = domBuilderFactory.newDocumentBuilder();
-        Document dom = domBuilder.parse(configFile);
+        Document dom = domBuilder.parse(configStream);
         dom.getDocumentElement().normalize();
         config = getChildNode("config", dom)
                 .orElseThrow(() -> new IllegalConfigXMLException("Missing root config node"));

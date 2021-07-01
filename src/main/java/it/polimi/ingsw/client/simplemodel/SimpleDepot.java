@@ -5,6 +5,9 @@ import it.polimi.ingsw.shared.Resource;
 
 import java.io.Serializable;
 
+/**
+ * Simplified version of
+ */
 public class SimpleDepot implements Serializable {
     /**
      * It indicates the number of resources present in this depot
@@ -37,10 +40,6 @@ public class SimpleDepot implements Serializable {
         return capacity;
     }
 
-    /**
-     *
-     * @return the type of <code>Resource</code> inserted in the Depot
-     */
     public Resource getResource(){
         return this.resource;
     }
