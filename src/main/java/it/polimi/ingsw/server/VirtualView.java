@@ -36,7 +36,6 @@ public class VirtualView implements Runnable{
             exitGame();
             return;
         }
-        System.out.println(saveFile.getPath());
         gameController = restoreGame()
                 .orElse(new GameController(this.players.keySet()));
         gameController.setVirtualView(this);
