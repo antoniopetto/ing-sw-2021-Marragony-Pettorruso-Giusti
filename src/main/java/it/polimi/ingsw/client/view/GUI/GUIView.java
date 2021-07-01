@@ -16,7 +16,6 @@ import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.text.Font;
@@ -28,6 +27,10 @@ import java.net.Socket;
 
 import java.util.*;
 
+/**
+ * This class handles the GUI with javafx, so it extends Application. It implements the interface <code>View</code>,
+ * used by the messages to communicate with the Client, using the Strategy pattern.
+ */
 public class GUIView extends Application implements View  {
 
     private SimpleModel game;
@@ -36,7 +39,6 @@ public class GUIView extends Application implements View  {
     public static Font font;
     private Stage initStage;
     private Stage oldStage;
-    private Alert alert;
     private Stage errorStage;
     private Stage mainStage;
     private Stage tmpStage;
@@ -57,13 +59,7 @@ public class GUIView extends Application implements View  {
         END_TURN,
         BUY_CARD,
         ACTIVE_PRODUCTION,
-        MOVE_DEPOT,
         INIT,
-        SWITCH_DEPOT;
-    }
-
-    public GUIView() {
-        font=Font.loadFont("@fonts/master_of_break.ttf", 14);
     }
 
     @Override
@@ -71,11 +67,13 @@ public class GUIView extends Application implements View  {
         return game;
     }
 
+    /**
+     * This method is used to start the GUI. It loads the first scene, where server ip and port are asked to the user.
+     */
     @Override
     public void start(Stage stage) {
 
         setLoader("/fxml/connectionSettings.fxml");
-        Font.loadFont(getClass().getResourceAsStream("/resources/fonts/master_of_break.ttf"), 14);
         Scene scene = loadScene(currentLoader);
         Platform.runLater(() ->{
             if(mainStage!=null) oldStage=mainStage;
@@ -92,6 +90,12 @@ public class GUIView extends Application implements View  {
         });
     }
 
+    /**
+     * This method is called when the client is connected with the server and username and number of players are asked.
+     * @param connectionSettingsController is the controller of the scene. If it is null, it means that you are starting
+     *                                     a new game after the end of an old one, so server ip and port are already saved
+     *                                     in the class
+     */
     public void setting(ConnectionSettingsController connectionSettingsController){
         try{
             if(connectionSettingsController != null) {
@@ -108,11 +112,20 @@ public class GUIView extends Application implements View  {
         }
     }
 
+    /**
+     * This method is used to show an error message.
+     * @param text is the text of the message
+     */
     @Override
     public void showErrorMessage(String text){
         showMessage(text, true);
     }
 
+    /**
+     * This method is used to show a message.
+     * @param text is the text of the message
+     * @param closable tells if the user can close the scene or it is a waiting massage that can't be closed
+     */
     public void showMessage(String text, boolean closable) {
 
         setLoader("/fxml/alertDialog.fxml");
@@ -140,6 +153,10 @@ public class GUIView extends Application implements View  {
         });
     }
 
+    /**
+     * This method is called when the username is asked to the user.
+     * @return the username chosen by the user.
+     */
     @Override
     public String getUsername() {
         setLoader("/fxml/gameSettings.fxml");
@@ -153,7 +170,10 @@ public class GUIView extends Application implements View  {
 
         return username;
     }
-
+    /**
+     * This method is called when the number of players is asked to the user.
+     * @return the number chosen by the user.
+     */
     @Override
     public int getNumberOfPlayers() {
         ((GameSettingsController) currentLoader.getController()).setUserComponents(false);
@@ -164,6 +184,9 @@ public class GUIView extends Application implements View  {
         return nPlayers;
     }
 
+    /**
+     * This method closes the init stage to start the game.
+     */
     @Override
     public void showTitle() {
         closeStage(initStage);
@@ -174,6 +197,9 @@ public class GUIView extends Application implements View  {
         Application.launch();
     }
 
+    /**
+     * This method is used when the initialization phase ends and the main scene is showed to all the players.
+     */
     public void endInit(){
 
         game.setInit(false);
@@ -201,6 +227,13 @@ public class GUIView extends Application implements View  {
         mainSceneController.disableLeaderCards(true);
     }
 
+    /**
+     * This method is called by <code>NextActionMsg</code> when a move is asked to the user. Based on the last action done,
+     * it uploads some parts of the main scene. The first if is used when the main scene is opened for the first time.
+     * @param postTurn tells if the players is at the beginning of the turn or it has already done a move so it can
+     *                 only do a leader card action or end the turn
+     * @return the message of the chosen move to the server.
+     */
     @Override
     public CommandMsg selectMove(boolean postTurn){
         if(firstMain){
@@ -301,6 +334,12 @@ public class GUIView extends Application implements View  {
         return null;
     }
 
+    /**
+     * This method is used to show the playerBoard of the other players.
+     * @param username is the username of the player the user wants to show
+     * @param postTurn is used when selectMove is called again
+     * @return the same message returned by <code>selectMove</code>
+     */
     private CommandMsg show(String username, boolean postTurn){
         setLoader("/fxml/show.fxml");
         Scene scene = loadScene(currentLoader);
@@ -326,11 +365,12 @@ public class GUIView extends Application implements View  {
     }
 
     /**
+     * This method is used when the player wants to activate the production. There are several actions that the player can do.
      * Choice=1 when confirm button is pressed, choice=2 when a card is selected, choice=3 when base power is selected,
      * choice=4 when leader card1 production power is selected, choice=5 when leader card 2 production power is selected
-     * @param selectedCardIds
-     * @param selectedExtraPowers
-     * @return
+     * @param selectedCardIds contains the ids of the cards selected to activate the production power.
+     * @param selectedExtraPowers contains the extra production powers (base power and leader card powers) selected by the pleyer.
+     * @return an <code>ActivateProductionMsg</code>
      */
     private CommandMsg activateProduction(Set<Integer> selectedCardIds, Map<Integer, ProductionPower> selectedExtraPowers)
     {
@@ -355,7 +395,6 @@ public class GUIView extends Application implements View  {
                 setLoader("/fxml/basePower.fxml");
                 Scene scene = loadScene(currentLoader);
                 BasePowerController controller=currentLoader.getController();
-                controller.setPower(game.getThisPlayer().getExtraProductionPowers().get(0));
                 Platform.runLater(() ->{
                     if(tmpStage == null)  tmpStage = new Stage();
                     manageStage(tmpStage, scene, "Base Power", false);
@@ -413,6 +452,11 @@ public class GUIView extends Application implements View  {
         return null;
     }
 
+    /**
+     * This method is called when the buy card action is selected. It asks the user the color and level of the card to
+     * buy and the id of the slot where to put the card
+     * @return a <code>BuyAndAddCardInSlotMsg</code>
+     */
     private CommandMsg buyCard() {
         mainSceneController.disableButtons(true);
         mainSceneController.disableCards(false);
@@ -426,6 +470,11 @@ public class GUIView extends Application implements View  {
         return new BuyAndAddCardInSlotMsg(card.getColor(), card.getLevel(), slotId);
     }
 
+    /**
+     * This method is used when the player buys marbles from the marketBoard, so it has to chose a resource action:
+     * put a resource, discard a marble or change depots.
+     * @return the message of the action chosen by the player.
+     */
     @Override
     public CommandMsg manageResource(){
 
@@ -459,13 +508,15 @@ public class GUIView extends Application implements View  {
                 Marble selectedMarble = selectMarble();
                 msg = new DiscardMarbleMsg(selectedMarble);
             }
-            case 3 ->{
-                msg = changeDepots();
-            }
+            case 3 ->msg = changeDepots();
         }
         return msg;
     }
 
+    /**
+     * This method is used when the player wants to change two depots in the warehouse.
+     * @return a <code>MoveDepotsMsg</code> or a <code>SwitchDepotsMsg</code>
+     */
     @Override
     public CommandMsg changeDepots() {
         setLoader("/fxml/marbleBufferScene.fxml");
@@ -477,9 +528,7 @@ public class GUIView extends Application implements View  {
         marbleBufferController.setSwitchButton(true);
         marbleBufferController.changeTitle("Please select two depots to change");
 
-        Platform.runLater(() ->{
-            manageStage(tmpStage, scene, "Select Marble1", false);
-        });
+        Platform.runLater(() -> manageStage(tmpStage, scene, "Select Marble1", false));
 
         DepotName depot1 = marbleBufferController.getDepot();
         DepotName depot2 = marbleBufferController.getDepot();
@@ -491,9 +540,12 @@ public class GUIView extends Application implements View  {
             return new SwitchDepotsMsg(depot1,depot2);
     }
 
+    /**
+     * This method is used at the beginning of a game when each player has to discard two of the four leader cards shown.
+     * @return a <code>DiscardLeaderCardMsg</code> with the card to discard.
+     */
     @Override
     public CommandMsg discardLeaderCard() {
-
         setLoader("/fxml/discardLeaderCard.fxml");
         Scene scene = loadScene(currentLoader);
         DiscardLeaderCardController controller = currentLoader.getController();
@@ -515,6 +567,11 @@ public class GUIView extends Application implements View  {
         return new DiscardLeaderCardMsg(id);
     }
 
+    /**
+     * This method shows a scene with the marbles bought, which can be inserted in the warehouse or discarded. The player
+     * selects one of the marbles.
+     * @return the marble selected
+     */
     @Override
     public Marble selectMarble() {
 
@@ -550,6 +607,10 @@ public class GUIView extends Application implements View  {
         return null;
     }
 
+    /**
+     * This method is used when a player is adding a resource in the warehouse, so it has to chose a depot to put the resource
+     * @return the DepotName of the depot selected.
+     */
     @Override
     public DepotName selectDepot() {
         MarbleBufferController marbleBufferController = currentLoader.getController();
@@ -560,6 +621,11 @@ public class GUIView extends Application implements View  {
         return depot;
     }
 
+    /**
+     * This method is used when a white marble power is active so the player has to chose a resource among the resources
+     * available to put in the warehouse when a white marble is bought.
+     * @return the resource chosen.
+     */
     @Override
     public Resource selectResource(){
         Resource resource = null;
@@ -576,6 +642,12 @@ public class GUIView extends Application implements View  {
         return resource;
     }
 
+    /**
+     * This method is used to show messages received by the client as <code>TextMsg</code>. They are shown in the log
+     * in the main scene, or as pop up messages if the main scene hasn't been opened yet.
+     * @param text is the text of the message.
+     * @param loud if true the message is shown in a pop up window without the "close" button
+     */
     @Override
     public void showTextMessage(String text, boolean loud) {
         //URL path = getClass().getResource("/mainScene.fxml");
@@ -614,6 +686,11 @@ public class GUIView extends Application implements View  {
         return new Scene(root);
     }
 
+    /**
+     * This method is used after the end of a game, caused by the victory of a player or the disconnection of the server.
+     * The user can chose to end the game and close the window, start a new game on the same server or start a new game on a
+     * different server.
+     */
     public void endGame(){
 
         setLoader("/fxml/endGame.fxml");
@@ -627,9 +704,7 @@ public class GUIView extends Application implements View  {
         });
         int choice = controller.getChoice();
         switch (choice) {
-            case 1 -> Platform.runLater(() -> {
-                mainStage.close();
-            }); //endgame
+            case 1 -> Platform.runLater(() -> mainStage.close()); //endgame
             case 2 -> {
                 firstMain = true;
                 setting(null); //newGame
@@ -641,6 +716,11 @@ public class GUIView extends Application implements View  {
         }
     }
 
+
+    /**
+     * This method is used to update synchronously the main scene when it changes after the moves of other players.
+     * @param updated is the part of the main scene that changed.
+     */
     @Override
     public void update(String updated) {
         if(mainSceneController!=null) {
@@ -658,6 +738,13 @@ public class GUIView extends Application implements View  {
         serverHandler.setModel(game);
     }
 
+    /**
+     * This method is called when a player wins. It closes the main scene and it opens a new scene with the name of the winner
+     * and the leaderboard.
+     * @param win is used in single player games only, to tell either if you won or if you lost. In multiplayer games
+     *            <code>win</code> is null.
+     * @param leaderboard is the final leaderboard.
+     */
     @Override
     public void victory(Boolean win, Map<String, Integer> leaderboard) {
 

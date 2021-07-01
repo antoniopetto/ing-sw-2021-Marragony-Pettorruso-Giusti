@@ -5,6 +5,9 @@ import it.polimi.ingsw.client.view.View;
 
 import java.util.Map;
 
+/**
+ * This class is the message that notify the end of a game and the victory of a player.
+ */
 public class EndGameMsg implements ToViewMsg {
 
     private final Map<String, Integer> leaderboard;

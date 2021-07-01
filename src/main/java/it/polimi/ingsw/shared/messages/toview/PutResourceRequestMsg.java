@@ -8,6 +8,9 @@ import it.polimi.ingsw.shared.DepotName;
 import it.polimi.ingsw.shared.Resource;
 import it.polimi.ingsw.shared.Marble;
 
+/**
+ * This class is the message sent to ask to put a resource in a depot.
+ */
 public class PutResourceRequestMsg implements ToViewMsg {
 
     @Override

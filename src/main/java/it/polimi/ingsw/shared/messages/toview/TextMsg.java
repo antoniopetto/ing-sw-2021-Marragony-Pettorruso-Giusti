@@ -4,6 +4,9 @@ package it.polimi.ingsw.shared.messages.toview;
 import it.polimi.ingsw.client.ServerHandler;
 import it.polimi.ingsw.client.view.View;
 
+/**
+ * This class is a text message to the view.
+ */
 public class TextMsg implements ToViewMsg {
 
     private final String text;

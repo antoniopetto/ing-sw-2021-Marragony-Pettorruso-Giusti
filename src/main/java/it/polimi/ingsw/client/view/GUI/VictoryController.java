@@ -2,17 +2,16 @@ package it.polimi.ingsw.client.view.GUI;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.text.Text;
-
-import java.net.URL;
 import java.util.Iterator;
 import java.util.Map;
-import java.util.ResourceBundle;
 
-public class VictoryController implements Initializable {
+/**
+ * This is the controller of the victory stage. It opens after the victory of a player.
+ */
+public class VictoryController {
 
     @FXML
     private Text title;
@@ -21,9 +20,11 @@ public class VictoryController implements Initializable {
 
     private boolean closeWindow = false;
 
-    @Override
-    public void initialize(URL url, ResourceBundle resourceBundle) {}
-
+    /**
+     * It sets the scene with the name of the winner and the leaderboard
+     * @param win tells if the player won in a single player game. In a multiplayer game it is null.
+     * @param leaderboard is the final leaderboard.
+     */
     public void setScene(Boolean win, Map<String, Integer> leaderboard){
         Iterator<String> iterator = leaderboard.keySet().iterator();
         int count =1;
@@ -44,6 +45,9 @@ public class VictoryController implements Initializable {
         }
     }
 
+    /**
+     * @return a boolean that tells if the close button has been pressed.
+     */
     public synchronized boolean isCloseWindow() {
         while(!closeWindow){
             try {
@@ -52,18 +56,22 @@ public class VictoryController implements Initializable {
                 e.printStackTrace();
             }
         }
-        return closeWindow;
+        return true;
     }
 
-    private synchronized void setCloseWindow(boolean close){
-        closeWindow = close;
+    private synchronized void setCloseWindow(){
+        closeWindow = true;
         notifyAll();
     }
 
+    /**
+     * Is the event handler of the click event on the close button.
+     * @param actionEvent is the click event.
+     */
     @FXML
     public void close(ActionEvent actionEvent){
         actionEvent.consume();
-        setCloseWindow(true);
+        setCloseWindow();
 
     }
 }

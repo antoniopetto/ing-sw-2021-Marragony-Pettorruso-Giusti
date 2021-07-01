@@ -3,22 +3,18 @@ package it.polimi.ingsw.client.view.GUI;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Node;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import javafx.scene.input.MouseEvent;
-import javafx.stage.Stage;
-
-import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+/**
+ * This is the controller of the window that opens after the connection with the server. In this window, username and number
+ * of players are asked.
+ */
 public class GameSettingsController implements Initializable {
 
     @FXML
@@ -53,15 +49,23 @@ public class GameSettingsController implements Initializable {
         notifyAll();
     }
 
+    /**
+     * This is the event handler of the click event on the confirm button after the username has been inserted.
+     * @param actionEvent is the click event.
+     */
     @FXML
     public void userConfirm(ActionEvent actionEvent){
         actionEvent.consume();
         setUsername(usernameField.getText());
     }
 
+    /**
+     * This is the event handler of the click event on the confirm button after the number of players has been inserted.
+     * @param actionEvent is the click event.
+     */
     @FXML
-    public void playersConfirm(ActionEvent mouseEvent){
-        mouseEvent.consume();
+    public void playersConfirm(ActionEvent actionEvent){
+        actionEvent.consume();
         setnPlayers(choicePlayers.getValue()==null ? -1 : choicePlayers.getValue() );
     }
 
@@ -84,15 +88,11 @@ public class GameSettingsController implements Initializable {
     }
 
     public void setUserComponents(boolean visible){
-        usernameField.setVisible(visible);
-        userLabel.setVisible(visible);
-        userButton.setVisible(visible);
+        GUISupport.setVisible(visible, usernameField, userLabel, userButton);
     }
 
     public void setPlayersComponents(boolean visible){
-        choicePlayers.setVisible(visible);
-        playersLabel.setVisible(visible);
-        playersButton.setVisible(visible);
+        GUISupport.setVisible(visible, choicePlayers, playersLabel, playersButton);
     }
 
 
@@ -100,8 +100,6 @@ public class GameSettingsController implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {
         usernameField.setText("");
         choicePlayers.setItems(FXCollections.observableArrayList(1,2,3,4));
-        choicePlayers.setVisible(false);
-        playersLabel.setVisible(false);
-        playersButton.setVisible(false);
+        GUISupport.setVisible(false, choicePlayers, playersLabel, playersButton);
     }
 }

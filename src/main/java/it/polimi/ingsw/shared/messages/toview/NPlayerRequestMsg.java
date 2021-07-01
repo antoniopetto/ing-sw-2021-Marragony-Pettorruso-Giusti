@@ -2,7 +2,11 @@ package it.polimi.ingsw.shared.messages.toview;
 
 import it.polimi.ingsw.client.ServerHandler;
 import it.polimi.ingsw.client.view.View;
+import it.polimi.ingsw.shared.messages.command.NPlayerMsg;
 
+/**
+ * This class is the message sent to ask the number of players for the game.
+ */
 public class NPlayerRequestMsg implements ToViewMsg {
 
     @Override

@@ -1,5 +1,7 @@
 package it.polimi.ingsw.server;
 
+import it.polimi.ingsw.shared.messages.command.NPlayerMsg;
+import it.polimi.ingsw.shared.messages.command.UsernameMsg;
 import it.polimi.ingsw.shared.messages.toview.*;
 
 import java.io.IOException;
