@@ -141,6 +141,7 @@ public class MarbleBufferController {
      */
     public void show(boolean resources, boolean depot, boolean marble) {
         GUISupport.setVisible(marble, marble1, marble2, marble3, marble4);
+        GUISupport.setFont(22, titleLabel);
         insertResource.setVisible(marble);
         if(resources){
             insertResource.setVisible(true);

@@ -2,16 +2,21 @@ package it.polimi.ingsw.client.view.GUI;
 
 import it.polimi.ingsw.shared.Resource;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.scene.Group;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.shape.Circle;
+import javafx.scene.text.Text;
+
+import java.net.URL;
+import java.util.ResourceBundle;
 
 /**
  * This class is the controller of the base power stage.
  */
-public class BasePowerController  {
+public class BasePowerController  implements Initializable {
     @FXML
     private Group inputResources;
     @FXML
@@ -26,6 +31,8 @@ public class BasePowerController  {
     private ImageView resIn1;
     @FXML
     private ImageView resIn2;
+    @FXML
+    private Text title;
     private Resource choice=null;
 
     public void showInput(boolean show){GUISupport.setVisible(show, inputResources);}
@@ -89,5 +96,10 @@ public class BasePowerController  {
         else if(url.contains("shield.png")) setChoice(Resource.SHIELD);
         else if(url.contains("stone.png")) setChoice(Resource.STONE);
         else setChoice(Resource.SERVANT);
+    }
+
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+        GUISupport.setFont(25, title);
     }
 }

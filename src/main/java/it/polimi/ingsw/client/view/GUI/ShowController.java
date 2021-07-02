@@ -8,6 +8,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Group;
 import javafx.scene.Node;
+import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.text.Text;
@@ -64,6 +65,10 @@ public class ShowController implements Initializable {
     private ImageView servant;
     @FXML
     private ImageView coin;
+    @FXML
+    private Text title;
+    @FXML
+    private Button closeButton;
 
     private SimplePlayer thisPlayer;
     private boolean closeWindow = false;
@@ -275,5 +280,7 @@ public class ShowController implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {
         leaderCard2.setVisible(false);
         leaderCard1.setVisible(false);
+        GUISupport.setFont(25, title);
+        GUISupport.setFont(18, closeButton);
     }
 }

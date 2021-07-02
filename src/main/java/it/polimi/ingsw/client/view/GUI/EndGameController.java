@@ -1,13 +1,27 @@
 package it.polimi.ingsw.client.view.GUI;
 
+import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.text.Text;
+
+import java.net.URL;
+import java.util.ResourceBundle;
+
 /**
  * This class is the controller of the window shown at the end of a game. The player has 3 choices: to end the game, to start
  * a new game on the same server or to start a new game on a different server.
  */
-public class EndGameController {
+public class EndGameController implements Initializable {
     private int choice=0;
+    @FXML
+    private Text exit;
+    @FXML
+    private Text newGame;
+    @FXML
+    private Text newServer;
+    @FXML
+    private Text title;
 
     public synchronized int getChoice(){
         while (choice == 0) {
@@ -40,5 +54,11 @@ public class EndGameController {
             case "newGame" -> setChoice(2);
             case "newServer"-> setChoice(3);
         }
+    }
+
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+        GUISupport.setFont(25, newGame, newServer, exit);
+        GUISupport.setFont(40, title);
     }
 }

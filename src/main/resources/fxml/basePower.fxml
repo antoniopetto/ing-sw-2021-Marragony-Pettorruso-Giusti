@@ -25,7 +25,7 @@
             <Image url="@../images/scroll.png" />
          </image>
       </ImageView>
-      <Text fill="#1d25b7" layoutX="163.0" layoutY="63.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Please select the resources">
+      <Text fx:id="title" fill="#1d25b7" layoutX="163.0" layoutY="63.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Please select the resources">
          <font>
             <Font name="Lucida Calligraphy Italic" size="25.0" />
          </font>

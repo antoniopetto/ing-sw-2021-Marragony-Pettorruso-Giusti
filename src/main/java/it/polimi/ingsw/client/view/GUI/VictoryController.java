@@ -26,6 +26,8 @@ public class VictoryController {
      * @param leaderboard is the final leaderboard.
      */
     public void setScene(Boolean win, Map<String, Integer> leaderboard){
+        GUISupport.setFont(45, title);
+
         Iterator<String> iterator = leaderboard.keySet().iterator();
         int count =1;
         for (Node node: this.leaderboard.getChildren()) {
@@ -38,6 +40,7 @@ public class VictoryController {
                     }
                     else title.setText(username+" won!");
                 }
+                GUISupport.setFont(22, text);
                 text.setText(count+") "+username+" - "+leaderboard.get(username)+" pts");
                 count++;
             }
