@@ -14,7 +14,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<Pane prefHeight="200.0" prefWidth="430.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.client.view.GUI.AlertController">
+<Pane prefHeight="200.0" prefWidth="430.0" xmlns="http://javafx.com/javafx/11.0.2" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.client.view.GUI.AlertController">
     <children>
         <Pane prefHeight="200.0" prefWidth="429.0" style="-fx-opacity: 0.3;" styleClass="anchor2" stylesheets="@../backgroundStart.css" />
         <GridPane hgap="14.0" layoutX="-7.0" maxHeight="+Infinity" maxWidth="+Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="189.0" prefWidth="436.0" vgap="20.0">

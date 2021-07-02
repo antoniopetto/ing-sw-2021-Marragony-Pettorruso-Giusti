@@ -49,29 +49,4 @@ public class PlayerBoardTest {
         }
 
     }
-
-    //TODO write this test
-/*
-    @Test
-    public void testCountVictoryPoints(){
-        DevelopmentCard developmentCard1 = new DevelopmentCard(4,10,1, CardColor.BLUE,
-                resourceRequirementList, productionPower);
-        playerBoard.addCardInSlot(developmentCard1,0);
-        DevelopmentCard developmentCard2 = new DevelopmentCard(5,3,2, CardColor.BLUE,
-                resourceRequirementList, productionPower);
-        playerBoard.addCardInSlot(developmentCard2,0);
-
-        assertEquals(13, playerBoard.countVictoryPoints());
-
-        playerBoard.getStrongBox().addResource(Resource.COIN, 12);
-
-        assertEquals(25, playerBoard.countVictoryPoints());
-
-        playerBoard.getWareHouse().insert(DepotName.MEDIUM,Resource.COIN);
-        playerBoard.getWareHouse().insert(DepotName.MEDIUM,Resource.COIN);
-
-        assertEquals(27, playerBoard.countVictoryPoints());
-
-    }
-*/
 }
