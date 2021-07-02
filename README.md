@@ -10,6 +10,7 @@ Project of the Software Engineering 2020/2021 course held at Politecnico di Mila
 
 - Complete rules
 - CLI
+- GUI
 - Socket
 - Multiple games
 - Persistence
