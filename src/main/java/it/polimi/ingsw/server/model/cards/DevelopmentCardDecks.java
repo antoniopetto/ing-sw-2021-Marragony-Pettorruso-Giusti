@@ -100,12 +100,11 @@ public class DevelopmentCardDecks implements Serializable {
                 toDiscard--;
             }
             else level ++;
-            if (level == 4) {
+            if (level == 3 && getDeck(color, level).size() == 0) {
                 virtualView.endSinglePlayerGame();
                 return;
             }
         }
-
     }
 
     /**

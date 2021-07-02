@@ -316,7 +316,6 @@ public class MarbleBufferController {
     public void switchDepot(MouseEvent mouseEvent) {
         mouseEvent.consume();
         ImageView button = (ImageView) mouseEvent.getSource();
-        System.out.println("button:" + button.getId());
 
         switch (button.getId()){
             case "switchLow" ->{
