@@ -260,6 +260,7 @@ public class GUIView extends Application implements View  {
         mainSceneController.setTiles();
         mainSceneController.setFaithTrack();
         mainSceneController.disableLeaderCards(true);
+        mainSceneController.disableCardsInSlot(true);
 
         if(action.equals(Action.DISCARD_LEADER) || action.equals(Action.PLAY_LEADER)) mainSceneController.setLeaderCard();
         if(action.equals(Action.BUY_RESOURCES)){
@@ -283,6 +284,7 @@ public class GUIView extends Application implements View  {
         }
         if(action.equals(Action.ACTIVE_PRODUCTION))
         {
+            mainSceneController.disableForProduction(false);
             mainSceneController.removeEffects();
             mainSceneController.setWarehouse();
             mainSceneController.setFaithTrack();
@@ -378,6 +380,7 @@ public class GUIView extends Application implements View  {
     {
         mainSceneController.disableCardsInSlot(false);
         mainSceneController.disableLeaderCards(false);
+        mainSceneController.disableForProduction(true);
         int choice= mainSceneController.getChoice();
         switch (choice)
         {
