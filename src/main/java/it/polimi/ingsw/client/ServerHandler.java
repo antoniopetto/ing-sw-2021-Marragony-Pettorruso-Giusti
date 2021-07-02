@@ -75,8 +75,11 @@ public class ServerHandler implements Runnable{
      * Triggers the end game in the view and gracefully stops the ServerHandler
      */
     public void closeServerHandler(){
-        Client.logger.warn("Connection dropped with server [" + serverSocket.getInetAddress() + "]");
-        view.endGame();
+        if (running) {
+            workingThread.interrupt();
+            Client.logger.warn("Connection dropped with server [" + serverSocket.getInetAddress() + "]");
+            view.endGame();
+        }
         running = false;
     }
 
@@ -101,5 +104,9 @@ public class ServerHandler implements Runnable{
 
         running = false;
         workingThread.interrupt();
+    }
+
+    public void setRunning(boolean running){
+        this.running = running;
     }
 }

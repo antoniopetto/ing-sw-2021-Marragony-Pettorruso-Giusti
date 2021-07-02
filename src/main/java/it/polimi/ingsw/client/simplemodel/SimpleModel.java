@@ -135,7 +135,6 @@ public class SimpleModel implements Serializable {
                 if(i>=0) {
                     result.add(decks[row][col][i]);
                 }
-                else result.add(null);
             }
         }
         return result;

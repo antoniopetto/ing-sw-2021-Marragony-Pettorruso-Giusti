@@ -71,15 +71,15 @@ public class CLIView implements View {
      * Lets you chose if you want to close all, do a new game or change server.
      */
     @Override
-    public void endGame(){
+    public void endGame() {
+
         System.out.println("Game over.");
         serverHandler.stopWorkingThread();
         int choice = askChoice("Do you want to:", "Exit game", "Start new game", "Start new game on different server");
 
-        if (choice == 2){
+        if (choice == 2) {
             startConnection();
-        }
-        else if (choice == 3){
+        } else if (choice == 3) {
             askConnectionSettings();
             startConnection();
         }
@@ -157,7 +157,7 @@ public class CLIView implements View {
     }
 
     /**
-     * Utility methos, asks a yes/no question
+     * Utility method, asks a yes/no question
      * @param text          The question text
      * @param defaultYes    If true, pressing enter will return true, else false
      * @return              The choice
@@ -361,8 +361,7 @@ public class CLIView implements View {
 
     /**
      * Prints to screen a blue message
-     * @param text
-     * @param loud
+     * @param text  The text of the message
      */
     @Override
     public void showTextMessage(String text, boolean loud) {
@@ -419,7 +418,7 @@ public class CLIView implements View {
     }
 
     /**
-     * Asks the user to manage a bough resurce in the marblebuffer.
+     * Asks the user to manage a bough resource in the MarbleBuffer.
      * It can be placed in the warehouse or discarded. The method provides ways to visualize the situation,
      * switching depots and choosing the operation.
      * @return      The <code>CommandMsg</code> representing the chosen action
@@ -463,7 +462,7 @@ public class CLIView implements View {
      */
     private void show() {
         String[] fixed = new String[] {"Resources legend", "Market board", "Decks", "Faith track"};
-        String[] mutable = game.getPlayers().stream().map(i -> i.getUsername() + "'s playerboard").toArray(String[]::new);
+        String[] mutable = game.getPlayers().stream().map(i -> i.getUsername() + "'s PlayerBoard").toArray(String[]::new);
         String[] options = Stream.concat(Arrays.stream(fixed), Arrays.stream(mutable)).toArray(String[]::new);
         int choice = askChoice("Select what to show:", options);
 
@@ -526,7 +525,8 @@ public class CLIView implements View {
     private void showDevCardDecks() {
         for (SimpleDevCard card: game.getDevCardDecks()) {
             System.out.println((game.getDevCardDecks().indexOf(card)+1)+")");
-            showDevCard(card);
+            if (card != null)
+                showDevCard(card);
         }
     }
 
@@ -769,13 +769,13 @@ public class CLIView implements View {
     }
 
     /**
-     * Requires the user to chose a card to buy and the slot wher he wants to place it
+     * Requires the user to chose a card to buy and the slot where he wants to place it
      * @return      The corresponding BuyAndAddCardInSlotMsg
      */
     private CommandMsg buyCard(){
 
         showDevCardDecks();
-        int position = askNumber("Choose developement card to buy", 1, game.getDevCardDecks().size());
+        int position = askNumber("Choose development card to buy", 1, game.getDevCardDecks().size());
 
         int slotIdx = -1 + askNumber("Choose the slot where you want to insert the development card", 1, getThisPlayer().getSlots().size());
 
@@ -910,6 +910,7 @@ public class CLIView implements View {
      */
     @Override
     public void victory(Boolean win, Map<String, Integer> leaderboard) {
+        serverHandler.setRunning(false);
         showTextMessage("The game has ended");
         if (win != null)
             showTextMessage(win ? "You won!" : "You lost.");

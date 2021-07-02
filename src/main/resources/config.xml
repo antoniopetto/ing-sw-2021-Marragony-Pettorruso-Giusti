@@ -558,7 +558,7 @@
         </productionPower>
     </developmentCard>
 
-    <developmentCard id="37" points="0" level="3" color="GREEN">
+    <developmentCard id="37" points="10" level="3" color="GREEN">
         <resourceRequirements>
             <resQty type="SHIELD">5</resQty>
             <resQty type="SERVANT">2</resQty>
@@ -576,7 +576,7 @@
         </productionPower>
     </developmentCard>
 
-    <developmentCard id="38" points="0" level="3" color="PURPLE">
+    <developmentCard id="38" points="10" level="3" color="PURPLE">
         <resourceRequirements>
             <resQty type="SERVANT">5</resQty>
             <resQty type="COIN">2</resQty>
@@ -594,7 +594,7 @@
         </productionPower>
     </developmentCard>
 
-    <developmentCard id="39" points="0" level="3" color="BLUE">
+    <developmentCard id="39" points="10" level="3" color="BLUE">
         <resourceRequirements>
             <resQty type="COIN">5</resQty>
             <resQty type="STONE">2</resQty>
@@ -612,7 +612,7 @@
         </productionPower>
     </developmentCard>
 
-    <developmentCard id="40" points="0" level="3" color="YELLOW">
+    <developmentCard id="40" points="10" level="3" color="YELLOW">
         <resourceRequirements>
             <resQty type="STONE">5</resQty>
             <resQty type="SERVANT">2</resQty>
@@ -630,7 +630,7 @@
         </productionPower>
     </developmentCard>
 
-    <developmentCard id="41" points="1" level="3" color="GREEN">
+    <developmentCard id="41" points="11" level="3" color="GREEN">
         <resourceRequirements>
             <resQty type="SHIELD">7</resQty>
         </resourceRequirements>
@@ -645,7 +645,7 @@
         </productionPower>
     </developmentCard>
 
-    <developmentCard id="42" points="1" level="3" color="PURPLE">
+    <developmentCard id="42" points="11" level="3" color="PURPLE">
         <resourceRequirements>
             <resQty type="SERVANT">7</resQty>
         </resourceRequirements>
@@ -660,7 +660,7 @@
         </productionPower>
     </developmentCard>
 
-    <developmentCard id="43" points="1" level="3" color="BLUE">
+    <developmentCard id="43" points="11" level="3" color="BLUE">
         <resourceRequirements>
             <resQty type="COIN">7</resQty>
         </resourceRequirements>
@@ -675,7 +675,7 @@
         </productionPower>
     </developmentCard>
 
-    <developmentCard id="44" points="1" level="3" color="YELLOW">
+    <developmentCard id="44" points="11" level="3" color="YELLOW">
         <resourceRequirements>
             <resQty type="STONE">7</resQty>
         </resourceRequirements>
@@ -690,7 +690,7 @@
         </productionPower>
     </developmentCard>
 
-    <developmentCard id="45" points="2" level="3" color="GREEN">
+    <developmentCard id="45" points="12" level="3" color="GREEN">
         <resourceRequirements>
             <resQty type="SHIELD">4</resQty>
             <resQty type="COIN">4</resQty>
@@ -706,7 +706,7 @@
         </productionPower>
     </developmentCard>
 
-    <developmentCard id="46" points="2" level="3" color="PURPLE">
+    <developmentCard id="46" points="12" level="3" color="PURPLE">
         <resourceRequirements>
             <resQty type="SERVANT">4</resQty>
             <resQty type="SHIELD">4</resQty>
@@ -722,7 +722,7 @@
         </productionPower>
     </developmentCard>
 
-    <developmentCard id="47" points="2" level="3" color="BLUE">
+    <developmentCard id="47" points="12" level="3" color="BLUE">
         <resourceRequirements>
             <resQty type="COIN">4</resQty>
             <resQty type="STONE">4</resQty>
@@ -738,7 +738,7 @@
         </productionPower>
     </developmentCard>
 
-    <developmentCard id="48" points="2" level="3" color="YELLOW">
+    <developmentCard id="48" points="12" level="3" color="YELLOW">
         <resourceRequirements>
             <resQty type="STONE">4</resQty>
             <resQty type="SERVANT">4</resQty>

@@ -690,6 +690,7 @@ public class GUIView extends Application implements View  {
      * different server.
      */
     public void endGame(){
+        serverHandler.setRunning(false);
         if(!victory) {
             setLoader("/fxml/endGame.fxml");
             Scene scene = loadScene(currentLoader);

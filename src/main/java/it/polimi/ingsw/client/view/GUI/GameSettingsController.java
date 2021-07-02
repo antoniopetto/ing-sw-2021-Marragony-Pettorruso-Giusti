@@ -68,7 +68,7 @@ public class GameSettingsController implements Initializable {
     @FXML
     public void playersConfirm(ActionEvent actionEvent){
         actionEvent.consume();
-        setnPlayers(choicePlayers.getValue()==null ? -1 : choicePlayers.getValue() );
+        setnPlayers(choicePlayers.getValue()==null ? 0 : choicePlayers.getValue() );
     }
 
     public synchronized int getnPlayers() {

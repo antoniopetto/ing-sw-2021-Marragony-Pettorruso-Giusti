@@ -315,7 +315,7 @@ public class MainSceneController {
             try {
                 wait();
             } catch (InterruptedException e) {
-                e.printStackTrace();
+                System.out.println("Interrupting thread.");
             }
         }
         int tmpChoice = choice;
@@ -380,7 +380,7 @@ public class MainSceneController {
         disableButtons(false);
         disableCardsInSlot(true);
         GUISupport.setFont(16, buyCardButton, buyResourcesButton, activateProductionButton, confirmSelectionButton, dLCardButton, endTurnButton, pLCardButton, show1, show2, show3);
-        Font font = Font.loadFont(GUISupport.class.getResourceAsStream("/fonts/Lucida Calligraphy Italic.ttf"), 18);
+        Font font = Font.loadFont(GUISupport.class.getResourceAsStream("/fonts/Lucida Calligraphy Italic.ttf"), 13);
         for (TitledPane pane:actionButtons.getPanes()) {
             pane.setFont(font);
         }

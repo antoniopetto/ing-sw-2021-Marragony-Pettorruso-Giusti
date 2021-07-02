@@ -100,7 +100,8 @@ public class VirtualView implements Runnable{
                 CommandMsg command = (CommandMsg)nextMsg;
                 Server.logger.debug(command);
                 command.execute(gameController);
-                saveGameState();
+                if (!exiting)
+                    saveGameState();
             } catch (IOException | ClassNotFoundException e) {
                 Server.logger.warn("Connection dropped with player " + getPlayingUsername() + " [" + players.get(getPlayingUsername()).getIP() + "]");
                 exitGame();
@@ -343,13 +344,11 @@ public class VirtualView implements Runnable{
             Server.logOut(username);
             players.get(username).closeConnection();
         }
-        while (saveFile.exists()){
+        if(saveFile.exists()){
             if (!saveFile.delete())
                 Server.logger.error("Error deleting save file for [" + Server.formatGameName(players.keySet()) + "]");
-            else {
+            else
                 Server.logger.info("Deleted save file for [" + Server.formatGameName(players.keySet()) + "]");
-                break;
-            }
         }
     }
 
