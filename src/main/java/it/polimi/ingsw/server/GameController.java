@@ -22,6 +22,9 @@ import java.util.stream.Collectors;
 
 public class GameController implements Serializable {
 
+    /**
+     * Enum codification of possible states of the game
+     */
     private enum State {
         INIT_CARDS,
         INIT_RES,
@@ -43,6 +46,10 @@ public class GameController implements Serializable {
     private final DevelopmentCardDecks developmentCardDecks;
     private final List<Marble> marbleBuffer = new ArrayList<>();
 
+    /**
+     * Creates a game controller for a single player of multiplayer game, depending on the size of the usernames Set.
+     * @param usernames     Names of the players of the new game
+     */
     public GameController(Set<String> usernames) {
 
         if (usernames.size() == 0 || usernames.size() > 4)
@@ -73,6 +80,10 @@ public class GameController implements Serializable {
         }
     }
 
+    /**
+     * Sets the virtual view transitively down for each if the observed game components.
+     * @param virtualView   The VirtualView to set
+     */
     public void setVirtualView(VirtualView virtualView){
         this.virtualView = virtualView;
         marketBoard.setVirtualView(virtualView);
@@ -82,7 +93,11 @@ public class GameController implements Serializable {
             player.setVirtualView(virtualView);
         }
     }
-    
+
+    /**
+     * Sends a request to the player to perform some kind of action.
+     * For each state of the game, a different action is required.
+     */
     public void resumeGame(){
         virtualView.notifyNewTurn();
         if (state == State.PRETURN)             virtualView.nextAction(false);
@@ -438,6 +453,11 @@ public class GameController implements Serializable {
         this.state = state;
     }
 
+    /**
+     * Gets the position of a player
+     * @param playerUsername    The player username
+     * @return                  His position
+     */
     public int turnPosition(String playerUsername){
         for(int i = 0; i < players.size(); i++){
            if( players.get(i).getUsername().equals(playerUsername) ) return i;
@@ -445,6 +465,10 @@ public class GameController implements Serializable {
         return -1;
     }
 
+    /**
+     * Gets a map representation of the leaderboard by calling a point counter function on each player
+     * @return  The username -> points map representing the leaderboard
+     */
     public Map<String, Integer> getLeaderboard(){
         List<Map.Entry<String, Integer>> pointsList = new ArrayList<>();
         players.forEach(i -> pointsList.add(new AbstractMap.SimpleEntry<>(i.getUsername(), i.countPoints())));
@@ -458,6 +482,13 @@ public class GameController implements Serializable {
         return singlePlayer;
     }
 
+    /**
+     * Translates the GameController in a SimpleModel object, and doing so calls getSimple for all the components that
+     * need to be converted in their simple version.
+     * @param requirerName      The username of the player whose client is requesting the SimpleModel.
+     *                          Needed in order to hide the non played leader cards of other players
+     * @return                  The simplified model
+     */
     public SimpleModel getSimple(String requirerName){
 
         SimpleModel game = new SimpleModel();
@@ -479,10 +510,18 @@ public class GameController implements Serializable {
         return game;
     }
 
+    /**
+     * Makes a player advance a position in the FaithTrack
+     * @param player    The moving player
+     */
     public void advance (AbstractPlayer player){
         lastRound = faithTrack.advance(player);
     }
 
+    /**
+     * Makes all players but one advance a position in the FaithTrack
+     * @param player    The excluded player
+     */
     public void advanceAllBut (AbstractPlayer player){
         lastRound = faithTrack.advanceAllBut(player);
     }

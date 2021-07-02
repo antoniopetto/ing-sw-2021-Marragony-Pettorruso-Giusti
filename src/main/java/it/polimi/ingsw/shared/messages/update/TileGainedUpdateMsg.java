@@ -4,6 +4,9 @@ import it.polimi.ingsw.client.simplemodel.SimpleModel;
 
 import java.io.Serializable;
 
+/**
+ * Update message that sets active SimplePlayer's tile
+ */
 public class TileGainedUpdateMsg implements UpdateMsg, Serializable {
 
     private final String username;

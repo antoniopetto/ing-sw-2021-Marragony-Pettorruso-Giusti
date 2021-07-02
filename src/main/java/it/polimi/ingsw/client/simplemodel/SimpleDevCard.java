@@ -14,6 +14,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Simplified version of DevelopmentCard
+ * Requirements are represented by a Map<Resource, Integer>
+ */
 public class SimpleDevCard extends Card implements Serializable {
 
     private Map<Resource, Integer> requirements;
@@ -34,6 +38,11 @@ public class SimpleDevCard extends Card implements Serializable {
         }
     }
 
+    /**
+     * Static method to get a SimpleDevCard by its id
+     * @param id    The card's id
+     * @return      The required card
+     */
     public static SimpleDevCard parse(int id){
         return Card.getById(id, devCards);
     }

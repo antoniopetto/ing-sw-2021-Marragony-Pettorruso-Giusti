@@ -6,6 +6,9 @@ import it.polimi.ingsw.shared.Marble;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Update message that initializes the marble buffer of the client
+ */
 public class CreateBufferMsg implements UpdateMsg {
     private List<Marble> marbleBuffer;
 

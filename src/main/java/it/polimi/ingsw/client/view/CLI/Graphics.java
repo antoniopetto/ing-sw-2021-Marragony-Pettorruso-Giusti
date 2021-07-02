@@ -24,6 +24,12 @@ public class Graphics {
             " | |  | | | (_| | \\__ \\ | |_  |  __/ | |    \\__ \\   | (_) | |  _|   |  _ <  |  __/ | | | | | (_| | | | \\__ \\ \\__ \\ | (_| | | | | | | (__  |  __/\n" +
             " |_|  |_|  \\__,_| |___/  \\__|  \\___| |_|    |___/    \\___/  |_|     |_| \\_\\  \\___| |_| |_|  \\__,_| |_| |___/ |___/  \\__,_| |_| |_|  \\___|  \\___|\n" +
             "                                                                                                                                                ";
+
+    /**
+     * Return the graphical representation of a resource
+     * @param res   The resource
+     * @return      Its representation
+     */
     public static String getResource(Resource res)
     {
         switch (res)
@@ -46,6 +52,12 @@ public class Graphics {
         }
         return "";
     }
+
+    /**
+     * Returns the ANSI color corresponding to a CardColor
+     * @param color     The card color
+     * @return          Its ANSI code
+     */
     public static String getCardColor(CardColor color)
     {
         String result="";
@@ -57,6 +69,13 @@ public class Graphics {
         }
         return result;
     }
+
+    /**
+     * The graphical representation of a leve
+     * @param color The color of the card
+     * @param level Its level
+     * @return      The representation of the level
+     */
     public static String getLevel(CardColor color, int level)
     {
         String result = getCardColor(color);
@@ -64,6 +83,10 @@ public class Graphics {
 
         return result;
     }
+
+    /**
+     * Prints the faith track legend
+     */
     public static void showPositions()
     {
         System.out.println("Important positions:");
@@ -88,6 +111,11 @@ public class Graphics {
         System.out.print(Graphics.ANSI_RED+"  24-"+Graphics.ANSI_YELLOW+"(20)\n"+Graphics.ANSI_RESET);
     }
 
+    /**
+     * Returns the graphical representation of a marble
+     * @param marble    The marble
+     * @return          Its representation
+     */
     public static String getMarble(Marble marble)
     {
         String result = "";
@@ -103,6 +131,12 @@ public class Graphics {
         return result;
     }
 
+    /**
+     * Returns the graphical representation of an ability
+     * @param type  The type of ability
+     * @param res   Its corresponding resource
+     * @return      The representation
+     */
     public static String getAbility(SimpleAbility.Type type, Resource res) {
         switch (type){
             case CARDDISCOUNT -> {

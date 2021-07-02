@@ -3,6 +3,9 @@ package it.polimi.ingsw.shared.messages.update;
 import it.polimi.ingsw.client.simplemodel.SimpleModel;
 import it.polimi.ingsw.client.simplemodel.SimplePlayer;
 
+/**
+ * Update message containing the player, the card he's added and the slot where he's added it
+ */
 public class AddCardInSlotUpdateMsg implements UpdateMsg {
 
     private final String username;

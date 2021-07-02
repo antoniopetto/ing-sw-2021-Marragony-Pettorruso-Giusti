@@ -6,7 +6,7 @@ import it.polimi.ingsw.shared.Resource;
 import java.io.Serializable;
 
 /**
- * Simplified version of
+ * Simplified version of Depot
  */
 public class SimpleDepot implements Serializable {
     /**

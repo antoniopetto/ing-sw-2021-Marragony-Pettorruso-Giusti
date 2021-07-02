@@ -28,11 +28,6 @@ public class PlayerBoard implements Serializable {
     public PlayerBoard() {
         wareHouse = new WareHouse();
         strongBox = new StrongBox();
-
-
-
-
-
     }
 
     public void setVirtualView(VirtualView virtualView) {

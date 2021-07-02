@@ -2,6 +2,9 @@ package it.polimi.ingsw.shared.messages.update;
 
 import it.polimi.ingsw.client.simplemodel.SimpleModel;
 
+/**
+ * Update message that triggers the activation of a leader card of a SimplePlayer
+ */
 public class LeaderCardUpdateMsg implements UpdateMsg {
     private final String username;
     private final int cardId;

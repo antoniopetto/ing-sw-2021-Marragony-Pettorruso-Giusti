@@ -7,6 +7,9 @@ import it.polimi.ingsw.shared.Resource;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Update Message that sets the contents of the strongbox of a SimplePlayer
+ */
 public class StrongBoxUpdateMsg implements UpdateMsg{
     private final Map<Resource, Integer> strongbox;
     private final String username;

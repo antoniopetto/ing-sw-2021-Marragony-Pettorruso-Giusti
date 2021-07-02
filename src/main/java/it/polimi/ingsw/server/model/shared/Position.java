@@ -2,6 +2,11 @@ package it.polimi.ingsw.server.model.shared;
 
 import java.io.Serializable;
 
+/**
+ * Representation of a cell in the FaithTrack.
+ * It contains it number, the associated victory points, if it is a pope space, and the vatican report section number it's in
+ * (-1 if it's not in a section)
+ */
 public class Position implements Serializable {
 
     private final int number;

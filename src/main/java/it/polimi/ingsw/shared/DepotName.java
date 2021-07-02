@@ -1,5 +1,8 @@
 package it.polimi.ingsw.shared;
 
+/**
+ * Enum - codified depots. To each value it's linked a conventional position
+ */
 public enum DepotName {
     HIGH (0) ,
     MEDIUM (1),

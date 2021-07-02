@@ -6,6 +6,9 @@ import it.polimi.ingsw.client.simplemodel.SimplePlayer;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Message that updates the positions of each player in the SimpleModel
+ */
 public class TrackUpdateMsg implements UpdateMsg {
     private final Map<String, Integer> positions;
 

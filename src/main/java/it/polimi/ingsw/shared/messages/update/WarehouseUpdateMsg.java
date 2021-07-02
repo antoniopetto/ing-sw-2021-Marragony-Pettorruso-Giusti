@@ -4,6 +4,9 @@ import it.polimi.ingsw.client.simplemodel.SimpleModel;
 import it.polimi.ingsw.client.simplemodel.SimplePlayer;
 import it.polimi.ingsw.client.simplemodel.SimpleWarehouse;
 
+/**
+ * Update message that sets the content of the warehouse of a SimplePlayer
+ */
 public class WarehouseUpdateMsg implements UpdateMsg {
 
     private final SimpleWarehouse warehouse;

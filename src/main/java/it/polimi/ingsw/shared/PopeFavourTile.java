@@ -2,6 +2,9 @@ package it.polimi.ingsw.shared;
 
 import java.io.Serializable;
 
+/**
+ * Represents a pope favour tile, with its value and its gained status
+ */
 public class PopeFavourTile implements Serializable {
 
     private final int value;

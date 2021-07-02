@@ -9,6 +9,9 @@ import it.polimi.ingsw.shared.messages.command.CommandMsg;
 
 import java.util.Map;
 
+/**
+ * Generic view interface, contains all the methods that messages sent from the server need.
+ */
 public interface View {
 
     void showErrorMessage(String text);

@@ -5,6 +5,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Simplified version of Slot. Simply contains a list of SimpleDevCard
+ */
 public class SimpleSlot implements Serializable {
 
     private final List<SimpleDevCard> cards;
@@ -22,6 +25,10 @@ public class SimpleSlot implements Serializable {
         return cards;
     }
 
+    /**
+     * Returns the last card to have been added as an Optional
+     * @return  The Optional of the card
+     */
     public Optional<SimpleDevCard> getLastCard(){
         int size = cards.size();
         if (size == 0)

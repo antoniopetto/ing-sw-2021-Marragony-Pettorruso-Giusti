@@ -12,6 +12,9 @@ import java.io.ObjectOutputStream;
 import java.lang.management.ManagementFactory;
 import java.net.Socket;
 
+/**
+ * Class that manages the connection with the server
+ */
 public class ServerHandler implements Runnable{
 
     private final Socket serverSocket;
@@ -27,6 +30,11 @@ public class ServerHandler implements Runnable{
         this.view = view;
     }
 
+    /**
+     * After updating some logger parameters, we create the input and output streams to transfer messages through
+     * serialization. Then in a loop we read a new message, wait for the execution of the previous one to join, then
+     * execute it in a new Thread.
+     */
     @Override
     public void run() {
 
@@ -63,12 +71,19 @@ public class ServerHandler implements Runnable{
         }
     }
 
+    /**
+     * Triggers the end game in the view and gracefully stops the ServerHandler
+     */
     public void closeServerHandler(){
         Client.logger.warn("Connection dropped with server [" + serverSocket.getInetAddress() + "]");
         view.endGame();
         running = false;
     }
 
+    /**
+     * Writes an object in the stream
+     * @param o The object to write
+     */
     public void writeObject(Object o){
         try{
             output.writeObject(o);
@@ -82,7 +97,7 @@ public class ServerHandler implements Runnable{
         this.model = model;
     }
 
-    public void stopRunning() {
+    public void stopWorkingThread() {
 
         running = false;
         workingThread.interrupt();

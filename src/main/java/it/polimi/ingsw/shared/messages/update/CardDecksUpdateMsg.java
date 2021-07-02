@@ -3,6 +3,9 @@ package it.polimi.ingsw.shared.messages.update;
 import it.polimi.ingsw.client.simplemodel.SimpleModel;
 import it.polimi.ingsw.shared.CardColor;
 
+/**
+ * Update message containing the Deck from which a card has been removed
+ */
 public class CardDecksUpdateMsg implements UpdateMsg {
 
     private final int level;

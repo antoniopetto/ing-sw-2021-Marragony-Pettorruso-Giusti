@@ -7,6 +7,10 @@ import it.polimi.ingsw.shared.PopeFavourTile;
 import java.io.Serializable;
 import java.util.*;
 
+/**
+ * Simplified version of Player.
+ * Contains the username, position in the faith track and tiles, playerboard elements, and the active effects of the leader cards.
+ */
 public class SimplePlayer implements Serializable {
     private final String username;
     private int position;
@@ -50,6 +54,10 @@ public class SimplePlayer implements Serializable {
         return username;
     }
 
+    /**
+     * Activates a SimpleLeaderCard of the player
+     * @param cardId    The card's id
+     */
     public void activateLeaderCard(int cardId){
 
         Optional<SimpleLeaderCard> card = leaderCards.stream().filter(i -> i.getId() == cardId).findAny();
@@ -62,14 +70,27 @@ public class SimplePlayer implements Serializable {
         }
     }
 
+    /**
+     * Adds a discount given by the activation of a LeaderCard
+     * @param resource      The discounted resource
+     */
     public void addCardDiscount(Resource resource){
         activeDiscounts.add(resource);
     }
 
+    /**
+     * Inserts a card in a slot of the playerboard
+     * @param cardId    The card's id
+     * @param slotIdx   The index in the list of slots where to put the card
+     */
     public void insertCardInSlot(int cardId, int slotIdx){
         slots.get(slotIdx).addCard(cardId);
     }
 
+    /**
+     * Removes a LeaderCard of the player
+     * @param cardId    The card's id
+     */
     public void discardLeaderCard(int cardId){
         leaderCards.removeIf(card -> card.getId() == cardId);
     }
@@ -146,6 +167,10 @@ public class SimplePlayer implements Serializable {
         leaderCards.clear();
     }
 
+    /**
+     * Update method that changes the gained state of a tile
+     * @param tileIdx   The tile index in the list
+     */
     public void gainTile(int tileIdx){
 
         tiles.get(tileIdx).gain();

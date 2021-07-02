@@ -5,6 +5,9 @@ import it.polimi.ingsw.client.simplemodel.SimpleModel;
 import it.polimi.ingsw.client.view.View;
 import it.polimi.ingsw.shared.messages.toview.ToViewMsg;
 
+/**
+ * Update message that signals the end of the initialization phase
+ */
 public class InitModelMsg implements ToViewMsg {
 
     private final SimpleModel game;

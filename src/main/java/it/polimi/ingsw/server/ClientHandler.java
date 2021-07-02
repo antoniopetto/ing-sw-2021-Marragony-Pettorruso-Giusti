@@ -6,6 +6,9 @@ import java.io.ObjectOutputStream;
 import java.net.InetAddress;
 import java.net.Socket;
 
+/**
+ * Wrapper for object streams i/o operations
+ */
 public class ClientHandler {
 
     private final Socket clientSocket;

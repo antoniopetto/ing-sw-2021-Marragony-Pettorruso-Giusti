@@ -3,6 +3,9 @@ package it.polimi.ingsw.shared.messages.update;
 import it.polimi.ingsw.client.simplemodel.SimpleModel;
 import it.polimi.ingsw.shared.ProductionPower;
 
+/**
+ * Update message that adds an extra ProductionPower to a SimplePlayer
+ */
 public class ExtraPowerUpdateMsg implements UpdateMsg{
 
     private final ProductionPower power;

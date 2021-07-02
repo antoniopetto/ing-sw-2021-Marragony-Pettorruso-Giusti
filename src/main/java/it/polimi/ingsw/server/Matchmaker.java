@@ -18,6 +18,11 @@ public class Matchmaker implements Runnable{
         handler = new ClientHandler(clientSocket);
     }
 
+    /**
+     * The Matchmaker asks the client preliminary questions, such as the username (checking for a valid string)
+     * and the number of players of the game he wants to get in. After getting these info, the player is placed in a
+     * waiting room of the appropriate size.
+     */
     public void run(){
         try{
             while(true) {

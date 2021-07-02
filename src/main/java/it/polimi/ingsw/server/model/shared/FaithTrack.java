@@ -16,6 +16,7 @@ public class FaithTrack implements Serializable {
 
     /**
      * <code>FaithTrack</code> constructor.
+     * Creates a track with the default parameters of the seen in the game rules.
      */
     public FaithTrack(){
 
@@ -62,14 +63,6 @@ public class FaithTrack implements Serializable {
                 this.players.get(i).setPosition(track.get(0));
             else
                 this.players.get(i).setPosition(track.get(1));
-
-        // endgame tester
-        /*this.players.addAll(players);
-        for (int i = 0; i < players.size(); i++)
-            if (i < 2)
-                this.players.get(i).setPosition(track.get(20));
-            else
-                this.players.get(i).setPosition(track.get(21));*/
     }
 
     /**
@@ -148,6 +141,10 @@ public class FaithTrack implements Serializable {
         return someoneFinished();
     }
 
+    /**
+     * Someone finished method
+     * @return True if at least a player is in the last position
+     */
     public boolean someoneFinished(){
         for (AbstractPlayer player : players)
             if (player.getPosition().getNumber() == LAST_POSITION)

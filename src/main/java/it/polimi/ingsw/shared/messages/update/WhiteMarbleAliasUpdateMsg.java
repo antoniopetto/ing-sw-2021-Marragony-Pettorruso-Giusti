@@ -7,6 +7,9 @@ import it.polimi.ingsw.shared.Resource;
 import java.util.HashSet;
 import java.util.Set;
 
+/**
+ * Update message that sets the content of the white marble aliases for a given SimplePlayer
+ */
 public class WhiteMarbleAliasUpdateMsg implements UpdateMsg{
 
     private final String username;

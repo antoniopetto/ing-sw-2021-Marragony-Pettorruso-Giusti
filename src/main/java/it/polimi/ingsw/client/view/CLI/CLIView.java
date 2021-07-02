@@ -36,12 +36,19 @@ public class CLIView implements View {
         askConnectionSettings();
     }
 
+    /**
+     * Asks the user to input ip and port of the server
+     */
     public void askConnectionSettings(){
         ip = CLIView.askString("Insert server ip address:");
         boolean choice = CLIView.askYesNo("Default port is 7777. Do you want to change it?", false);
         port = (choice) ? CLIView.askNumber("Insert port number", 0, 65535) : 7777;
     }
 
+    /**
+     * Tries to connect to the server with the provided connection details.
+     * If it fails asks again for the settings
+     */
     @Override
     public void startConnection() {
         for (boolean reachable = false; !reachable;) {
@@ -59,10 +66,14 @@ public class CLIView implements View {
         }
     }
 
+    /**
+     * Procedure to end the game. Can be called at the end of a normal game, or when the connection drops.
+     * Lets you chose if you want to close all, do a new game or change server.
+     */
     @Override
     public void endGame(){
         System.out.println("Game over.");
-        serverHandler.stopRunning();
+        serverHandler.stopWorkingThread();
         int choice = askChoice("Do you want to:", "Exit game", "Start new game", "Start new game on different server");
 
         if (choice == 2){
@@ -80,6 +91,12 @@ public class CLIView implements View {
 
     }
 
+    /**
+     * Utility method to read a number in a range
+     * @param min   The choice range minimum
+     * @param max   The choice range maximum
+     * @return      The selected choice
+     */
     private static int inputNumber(int min, int max){
         System.out.print(">");
         Scanner input = new Scanner(System.in);
@@ -89,6 +106,13 @@ public class CLIView implements View {
         return choice;
     }
 
+    /**
+     * Utility method to ask to insert a number in a range
+     * @param text  The message to be displayed
+     * @param min   The choice range minimum
+     * @param max   The choice range maximum
+     * @return      THe selected number
+     */
     public static int askNumber(String text, int min, int max){
 
         if (min > max)
@@ -102,6 +126,12 @@ public class CLIView implements View {
         }
     }
 
+    /**
+     * Utility method to ask between a numbered list of strings
+     * @param text      The question text
+     * @param options   The list of possible strings
+     * @return          The chosen string's number
+     */
     public static int askChoice (String text, String... options){
 
         if (options == null)
@@ -119,10 +149,19 @@ public class CLIView implements View {
         }
     }
 
+    /**
+     * Same as askChoice, but returns the selected text and not his number
+     */
     public static String askChoiceValue(String text, String... options){
         return options[askChoice(text, options) - 1];
     }
 
+    /**
+     * Utility methos, asks a yes/no question
+     * @param text          The question text
+     * @param defaultYes    If true, pressing enter will return true, else false
+     * @return              The choice
+     */
     public static boolean askYesNo(String text, boolean defaultYes) {
         System.out.println(text + (defaultYes ? " [Y/n]" : " [y/N]"));
         System.out.print(">");
@@ -138,6 +177,11 @@ public class CLIView implements View {
         }
     }
 
+    /**
+     * Utility method. Asks an input string to the user
+     * @param text      The question to answer
+     * @return          The answer
+     */
     public static String askString(String text){
         Scanner input = new Scanner(System.in);
         System.out.println(text);
@@ -148,6 +192,10 @@ public class CLIView implements View {
     @Override
     public SimpleModel getGame() { return game; }
 
+    /**
+     * Asks the user his username
+     * @return  The chosen username
+     */
     @Override
     public String getUsername() {
         String name = askString("Insert your username:");
@@ -177,6 +225,9 @@ public class CLIView implements View {
         showLegend();
     }
 
+    /**
+     * Prints a simplified graphical legend of the resources to better understand their representation
+     */
     public void showLegend() {
         System.out.println("Legend: "
                 +Graphics.getResource(Resource.FAITH)+"-Faith, "
@@ -250,6 +301,10 @@ public class CLIView implements View {
         return new DiscardLeaderCardMsg(player.chooseLeaderCard(choice));
     }
 
+    /**
+     * Prints the content of the marbleBuffer
+     * @param marbleList        The buffer
+     */
     public void showMarbleBuffer(List<Marble> marbleList) {
         System.out.println("Marble Buffer:");
         for (Marble marble : marbleList) {
@@ -291,6 +346,10 @@ public class CLIView implements View {
         return choice;
     }
 
+    /**
+     * Asks the user to select a Resource between those included in his white marble aliases
+     * @return
+     */
     public Resource selectResource(){
 
         List<Resource> aliases = new ArrayList<>(getThisPlayer().getWhiteMarbleAliases());
@@ -300,6 +359,11 @@ public class CLIView implements View {
         return aliases.get(choice - 1);
     }
 
+    /**
+     * Prints to screen a blue message
+     * @param text
+     * @param loud
+     */
     @Override
     public void showTextMessage(String text, boolean loud) {
         showTextMessage(text);
@@ -354,6 +418,12 @@ public class CLIView implements View {
         return null;
     }
 
+    /**
+     * Asks the user to manage a bough resurce in the marblebuffer.
+     * It can be placed in the warehouse or discarded. The method provides ways to visualize the situation,
+     * switching depots and choosing the operation.
+     * @return      The <code>CommandMsg</code> representing the chosen action
+     */
     public CommandMsg manageResource(){
 
         CommandMsg msg;
@@ -406,6 +476,10 @@ public class CLIView implements View {
         }
     }
 
+    /**
+     * Prints the status of a PlayerBoard
+     * @param player    The SimplePlayer whose PlayerBoard wants to be visualized
+     */
     private void showPlayerBoard(SimplePlayer player) {
 
         if(player == null) throw new IllegalStateException();
@@ -427,6 +501,9 @@ public class CLIView implements View {
         }
     }
 
+    /**
+     * Prints the FaithTrack, along with the status of the Tiles of each player
+     */
     private void showFaithTrack(){
         for (SimplePlayer player: game.getPlayers()) {
             System.out.println(player.getUsername()+" position: "+player.getPosition());
@@ -453,6 +530,10 @@ public class CLIView implements View {
         }
     }
 
+    /**
+     * Prints the contents of a warehouse
+     * @param player    The SimplePlayer whose warehouse is being visualized
+     */
     public void showWarehouse(SimplePlayer player) {
 
         showTextMessage(player.getUsername() + " warehouse");
@@ -466,6 +547,11 @@ public class CLIView implements View {
         }
     }
 
+    /**
+     * Asks the user to define a ChangeDepots action.
+     * Such action moves resources between Depots or ExtraDepots.
+     * @return      A MoveDepotsMsg or a SwitchDepotsMsg, depending on the chosen action
+     */
     @Override
     public CommandMsg changeDepots(){
 
@@ -499,7 +585,10 @@ public class CLIView implements View {
             return new SwitchDepotsMsg(depotName1,depotName2);
     }
 
-
+    /**
+     * Requires the user to provide a leader card to activate
+     * @return      The corresponding PlayLeaderCardMsg
+     */
     private CommandMsg playLeaderCard(){
         SimplePlayer player = getThisPlayer();
         if (player.getLeaderCards().isEmpty())
@@ -512,6 +601,10 @@ public class CLIView implements View {
         }
     }
 
+    /**
+     * Requires the user to provide a Column or a Row of the MarketBoard to buy
+     * @return      The corresponding BuyResourcesMsg
+     */
     private CommandMsg buyResources(){
 
         showMarketBoard();
@@ -527,6 +620,14 @@ public class CLIView implements View {
         return new BuyResourcesMsg(choice - 1, isRow);
     }
 
+    /**
+     * Requires the user to provide a set of special or normal production powers, as well as the resources that he's
+     * chosen in place of agnostic inputs and outputs.
+     * @param selectedCardIds       A set of ids of the DevelopmentCard that the user wants to activate
+     * @param selectedExtraPowers   A map whose keys are the index in the Player's array of a chosen ExtraProductionPower,
+     *                              and as value a ProductionPower containing the chosen resources to replace with agnostics
+     * @return                      The corresponding ActivateProductionMessage, or another CommandMsg if the user goes back.
+     */
     private CommandMsg activateProduction(Set<Integer> selectedCardIds, Map<Integer, ProductionPower> selectedExtraPowers){
 
         if (selectedCardIds == null || selectedExtraPowers == null)
@@ -556,6 +657,12 @@ public class CLIView implements View {
         return selectMove(false);
     }
 
+    /**
+     * Utility method to show the currently selected powers during the activateProduction flow
+     * @param selectedCardIds       A set of ids of the DevelopmentCard that the user wants to activate
+     * @param selectedExtraPowers   A map whose keys are the index in the Player's array of a chosen ExtraProductionPower,
+     *                              and as value a ProductionPower containing the chosen resources to replace with agnostics
+     */
     private void showProductionSelection(Set<Integer> selectedCardIds, Map<Integer, ProductionPower> selectedExtraPowers){
         System.out.println("Selected development cards:");
         for (Integer i : selectedCardIds)
@@ -572,6 +679,11 @@ public class CLIView implements View {
         }
     }
 
+    /**
+     * Requires the user to provide, if possible a new card to add to the set of those he wants to activate production
+     * @param selectedCardIds       A set of ids of the DevelopmentCard that the user has already selected
+     * @return                      An Optional of the choice
+     */
     private Optional<Integer> selectDevCard(Set<Integer> selectedCardIds) {
 
         SimpleDevCard[] availableCards = getThisPlayer().getSlots().stream()
@@ -591,6 +703,12 @@ public class CLIView implements View {
         return Optional.of(availableCards[choice - 1].getId());
     }
 
+    /**
+     * Requires the user to provide, if possible, an Entry containing chosen ExtraProductionPower and its replacing resources
+     * @param selectedExtraPowers   A map whose keys are the index in the Player's array of an already chosen ExtraProductionPower,
+     *                              and as value a ProductionPower containing the chosen resources to replace with agnostics
+     * @return                      An Optional of the choice
+     */
     private Optional<Map.Entry<Integer, ProductionPower>> selectExtraPower(Map<Integer, ProductionPower> selectedExtraPowers) {
 
         System.out.println("Available extra powers:");
@@ -628,6 +746,10 @@ public class CLIView implements View {
         return Optional.of(new AbstractMap.SimpleEntry<>(extraPowers.indexOf(chosenPower), new ProductionPower(realInput, realOutput)));
     }
 
+    /**
+     * Prints a production power, including it agnostic resources
+     * @param power     The ProductionPower to print
+     */
     private void showRealProductionPower(ProductionPower power){
 
         System.out.print(" Input: ");
@@ -646,6 +768,10 @@ public class CLIView implements View {
         System.out.println();
     }
 
+    /**
+     * Requires the user to chose a card to buy and the slot wher he wants to place it
+     * @return      The corresponding BuyAndAddCardInSlotMsg
+     */
     private CommandMsg buyCard(){
 
         showDevCardDecks();
@@ -659,6 +785,10 @@ public class CLIView implements View {
         return new BuyAndAddCardInSlotMsg(cardColor, level, slotIdx);
     }
 
+    /**
+     * Prints the leaderboard
+     * @param leaderboard   A map of username -> points entries
+     */
     public void showLeaderboard(Map<String, Integer> leaderboard) {
         System.out.println("Leaderboard:");
         int count = 1;
@@ -668,6 +798,10 @@ public class CLIView implements View {
         }
     }
 
+    /**
+     * Prints a development card
+     * @param card  The card to print
+     */
     public void showDevCard(SimpleDevCard card) {
         System.out.println("┌──────────┐");
         //Level and color
@@ -679,6 +813,12 @@ public class CLIView implements View {
         System.out.println("└──────────┘");
     }
 
+    /**
+     * Prints a ProductionPower passing directly its parameters
+     * @param color     The color of the card in which is placed
+     * @param input     The input map
+     * @param output    The output map
+     */
     public void showProductionPower(CardColor color, Map<Resource, Integer> input, Map<Resource, Integer> output){
         System.out.println(Graphics.getCardColor(color)+"Input:"+Graphics.ANSI_RESET);
         String[] inputString = new String[2];
@@ -705,6 +845,10 @@ public class CLIView implements View {
         System.out.format(formatInfo, outputString[0], outputString[1], outputString[2], "");
     }
 
+    /**
+     * Prints a map of resources
+     * @param resources A map or Resource -> quantity entries
+     */
     public void showResources(Map<Resource, Integer> resources) {
         if(resources == null || resources.isEmpty()){
             System.out.println();
@@ -719,6 +863,9 @@ public class CLIView implements View {
         System.out.format(formatInfo, req[0], req[1], req[2], req[3]);
     }
 
+    /**
+     * Prints the MarketBoard
+     */
     public void showMarketBoard() {
         Marble[][] marketBoard = game.getMarketBoard();
         System.out.println("  1 2 3 4");
@@ -736,6 +883,10 @@ public class CLIView implements View {
         System.out.print("\n");
     }
 
+    /**
+     * Display a red error message
+     * @param text  The message text
+     */
     @Override
     public void showErrorMessage(String text) {
         System.out.println(Graphics.ANSI_RED + text + Graphics.ANSI_RESET);
@@ -752,6 +903,11 @@ public class CLIView implements View {
         serverHandler.setModel(model);
     }
 
+    /**
+     * Activates the end of a game, showing the winner, the leaderboard, and ending the game.
+     * @param win           True if the player won in a SinglePlayer game false if he lost, null if multiplayer
+     * @param leaderboard   The game's leaderboard
+     */
     @Override
     public void victory(Boolean win, Map<String, Integer> leaderboard) {
         showTextMessage("The game has ended");
@@ -761,6 +917,9 @@ public class CLIView implements View {
         endGame();
     }
 
+    /**
+     * Notifies the client that the initialization phase is over
+     */
     @Override
     public void endInit(){
         game.setInit(false);

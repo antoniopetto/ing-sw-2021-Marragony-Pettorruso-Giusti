@@ -5,10 +5,16 @@ import it.polimi.ingsw.shared.DepotName;
 import java.io.Serializable;
 import java.util.*;
 
+/**
+ * Simple version of Warehouse. Contains just its depots
+ */
 public class SimpleWarehouse implements Serializable {
 
     private final List<SimpleDepot> depots;
 
+    /**
+     * Default constructor, generates three depots of capacity 1, 2 and 3
+     */
     public SimpleWarehouse() {
         depots = new ArrayList<>();
         depots.add(new SimpleDepot(DepotName.HIGH, 1, null, null, 0));

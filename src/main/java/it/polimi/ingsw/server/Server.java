@@ -6,15 +6,37 @@ import org.apache.logging.log4j.Logger;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.*;
 
 public class Server {
+
+    /**
+     * Static block needed to set a System property with the location of the base folder where we can save data from
+     * the execution. In the server it's needed by the logger and the save file operations.
+     */
+    static {
+        try{
+            URI jarUri = VirtualView.class.getProtectionDomain().getCodeSource().getLocation().toURI();
+            URI baseDirUri = jarUri.getPath().endsWith("/") ? jarUri.resolve("..") : jarUri.resolve(".");
+            System.setProperty("mor.base", baseDirUri.getPath());
+        }
+        catch (URISyntaxException e){
+            System.out.println("Could not get baseDir");
+        }
+    }
 
     public static final Logger logger = LogManager.getLogger(Server.class);
     public static final PublicWaitRoom[] publicRooms = new PublicWaitRoom[4];
     private static int SOCKET_PORT = 7777;
     public static final Set<String> activeUsernames = new HashSet<>();
 
+    /**
+     * After creating the public wait rooms, the server asks for the port number to open the socket.
+     * Then for each request, creates a ClientHandler and starts a Matchmaker in a new Thread.
+     * @param args      Ignored arguments
+     */
     public static void main(String[] args){
 
         logger.debug(System.lineSeparator());
@@ -61,6 +83,10 @@ public class Server {
         }
     }
 
+    /**
+     * Removes a username from the set of those connected to the server
+     * @param username  The name of the player disconnecting
+     */
     public static void logOut(String username){
         if (username != null){
             Server.logger.info("Logging out [" + username + "]");
@@ -68,6 +94,11 @@ public class Server {
         }
     }
 
+    /**
+     * Creates an unique string for every different collection of usernames, using "&" as separator
+     * @param usernames     The collection of usernames
+     * @return              The codified game name
+     */
     public static String formatGameName(Collection<String> usernames){
         List<String> usernameList = new ArrayList<>(usernames);
         Collections.sort(usernameList);

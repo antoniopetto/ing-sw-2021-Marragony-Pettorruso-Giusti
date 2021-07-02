@@ -3,6 +3,9 @@ package it.polimi.ingsw.shared.messages.update;
 import it.polimi.ingsw.client.simplemodel.SimpleModel;
 import it.polimi.ingsw.client.simplemodel.SimplePlayer;
 
+/**
+ * Update message that removes a leader card from those of a SimplePlayer
+ */
 public class DiscardLeaderCardUpdateMsg implements UpdateMsg{
 
     private final String username;

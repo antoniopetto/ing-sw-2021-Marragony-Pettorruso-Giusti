@@ -5,6 +5,10 @@ import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Public wait room. All players requesting a game are put int a wait room of the appropriate size.
+ * When the room is full, a new VirtualView is created and started.
+ */
 public class PublicWaitRoom {
 
     private final int nPlayers;

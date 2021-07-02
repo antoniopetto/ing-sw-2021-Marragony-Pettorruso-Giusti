@@ -1,7 +1,8 @@
 package it.polimi.ingsw.shared;
 
-import it.polimi.ingsw.shared.Resource;
-
+/**
+ * Enum - codified types of marble, each linked with its corresponding resource, a part from WHITE
+ */
 public enum Marble {
     YELLOW(Resource.COIN),
     BLUE(Resource.SHIELD),

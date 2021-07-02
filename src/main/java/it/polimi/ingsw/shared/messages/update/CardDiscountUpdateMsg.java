@@ -5,6 +5,9 @@ import it.polimi.ingsw.shared.Resource;
 
 import java.io.Serializable;
 
+/**
+ * Add a CardDiscount to a SimplePlayer
+ */
 public class CardDiscountUpdateMsg implements UpdateMsg, Serializable {
 
     private final Resource resource;
