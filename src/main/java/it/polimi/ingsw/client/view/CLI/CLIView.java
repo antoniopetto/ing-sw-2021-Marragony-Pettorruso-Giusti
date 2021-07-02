@@ -523,12 +523,16 @@ public class CLIView implements View {
      * the second index is the color and the third is the position of the cards in the deck.
      */
     private void showDevCardDecks() {
+        int counter = 1;
         for (SimpleDevCard card: game.getDevCardDecks()) {
-            System.out.println((game.getDevCardDecks().indexOf(card)+1)+")");
-            if (card != null)
+            if (card != null) {
+                System.out.println(counter + ")");
                 showDevCard(card);
+                counter++;
+            }
         }
     }
+
 
     /**
      * Prints the contents of a warehouse
@@ -775,15 +779,23 @@ public class CLIView implements View {
     private CommandMsg buyCard(){
 
         showDevCardDecks();
-        int position = askNumber("Choose development card to buy", 1, game.getDevCardDecks().size());
+        List<SimpleDevCard> simpleDevCardList = new ArrayList<>();
 
+        for(SimpleDevCard simpleDevCard :game.getDevCardDecks()){
+            if(simpleDevCard!=null){
+                simpleDevCardList.add(simpleDevCard);
+            }
+        }
+
+        int position = askNumber("Choose development card to buy", 1, simpleDevCardList.size());
         int slotIdx = -1 + askNumber("Choose the slot where you want to insert the development card", 1, getThisPlayer().getSlots().size());
+        CardColor cardColor = simpleDevCardList.get(position-1).getColor();
+        int level =  simpleDevCardList.get(position-1).getLevel();
 
-        CardColor cardColor = game.getDevCardDecks().get(position-1).getColor();
-        int level =  game.getDevCardDecks().get(position-1).getLevel();
 
         return new BuyAndAddCardInSlotMsg(cardColor, level, slotIdx);
     }
+
 
     /**
      * Prints the leaderboard

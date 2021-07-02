@@ -2,6 +2,11 @@ package it.polimi.ingsw.shared.messages.command;
 
 import it.polimi.ingsw.server.GameController;
 
+
+/**
+ * It is called when a player decides to discard a LeaderCard with cardId id
+ * @see CommandMsg
+ */
 public class DiscardLeaderCardMsg implements CommandMsg {
 
     private int cardId;
