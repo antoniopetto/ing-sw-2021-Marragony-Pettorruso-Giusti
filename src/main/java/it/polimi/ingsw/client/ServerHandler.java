@@ -33,7 +33,7 @@ public class ServerHandler implements Runnable{
     /**
      * After updating some logger parameters, we create the input and output streams to transfer messages through
      * serialization. Then in a loop we read a new message, wait for the execution of the previous one to join, then
-     * execute it in a new Thread.
+     * execute it in a new Thread. Before executing a new message we wait for the previous one to join.
      */
     @Override
     public void run() {
