@@ -3,6 +3,7 @@ package it.polimi.ingsw.client.view.GUI;
 import it.polimi.ingsw.client.ServerHandler;
 import it.polimi.ingsw.client.simplemodel.*;
 import it.polimi.ingsw.client.view.View;
+import it.polimi.ingsw.shared.exceptions.ServerUnreachableException;
 import it.polimi.ingsw.shared.messages.command.BuyAndAddCardInSlotMsg;
 import it.polimi.ingsw.shared.messages.command.DiscardLeaderCardMsg;
 import it.polimi.ingsw.shared.messages.command.PlayLeaderCardMsg;
@@ -109,6 +110,7 @@ public class GUIView extends Application implements View  {
             if(connectionSettingsController !=null) connectionSettingsController.setTextError("You are connected to the server!");
         }catch(Exception e) {
             if(connectionSettingsController !=null) connectionSettingsController.setTextError("Server unreachable, try again.");
+            else throw new ServerUnreachableException();
         }
     }
 
@@ -651,7 +653,6 @@ public class GUIView extends Application implements View  {
      */
     @Override
     public void showTextMessage(String text, boolean loud) {
-        //URL path = getClass().getResource("/mainScene.fxml");
         if(mainSceneController != null){
             mainSceneController.addTextInLog(text);
         }
@@ -704,16 +705,28 @@ public class GUIView extends Application implements View  {
                     mainStage = new Stage();
                 manageStage(mainStage, scene, "End game", true);
             });
-            int choice = controller.getChoice();
-            switch (choice) {
-                case 1 -> Platform.runLater(() -> mainStage.close()); //endgame
-                case 2 -> {
-                    firstMain = true;
-                    setting(null); //newGame
-                }
-                case 3 -> {
-                    firstMain = true;
-                    start(null); //new server
+            boolean connected = false;
+            while(!connected) {
+                int choice = controller.getChoice();
+                switch (choice) {
+                    case 1 ->{
+                        connected=true;
+                        Platform.runLater(() -> mainStage.close()); //endgame
+                    }
+                    case 2 -> {
+                        firstMain = true;
+                        try {
+                            setting(null); //newGame
+                            connected = true;
+                        } catch (ServerUnreachableException e) {
+                            showErrorMessage("Server unreachable, try again!");
+                        }
+                    }
+                    case 3 -> {
+                        firstMain = true;
+                        connected=true;
+                        start(null); //new server
+                    }
                 }
             }
         }

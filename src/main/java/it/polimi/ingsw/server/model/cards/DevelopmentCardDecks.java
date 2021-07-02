@@ -94,17 +94,18 @@ public class DevelopmentCardDecks implements Serializable {
      * @param color is the color of the two cards to be discarded
      */
     public void discard(CardColor color){
-
         for (int toDiscard = 2, level = 1; toDiscard > 0;){
             if (getDeck(color, level).size() > 0) {
                 drawCard(color, level);
                 toDiscard--;
             }
             else level ++;
-            if (level == 4)
+            if (level == 4) {
                 virtualView.endSinglePlayerGame();
                 return;
+            }
         }
+
     }
 
     /**

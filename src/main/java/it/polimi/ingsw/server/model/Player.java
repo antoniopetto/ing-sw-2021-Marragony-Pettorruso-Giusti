@@ -4,7 +4,7 @@ import it.polimi.ingsw.client.simplemodel.SimplePlayer;
 import it.polimi.ingsw.server.VirtualView;
 import it.polimi.ingsw.server.model.cards.*;
 import it.polimi.ingsw.server.model.cards.LeaderCard;
-import it.polimi.ingsw.server.model.exceptions.ElementNotFoundException;
+import it.polimi.ingsw.shared.exceptions.ElementNotFoundException;
 import it.polimi.ingsw.server.model.playerboard.*;
 import it.polimi.ingsw.shared.Marble;
 import it.polimi.ingsw.server.model.shared.MarketBoard;
