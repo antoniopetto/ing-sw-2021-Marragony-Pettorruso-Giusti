@@ -68,6 +68,13 @@ public class ServerHandler implements Runnable{
                 workingThread.setUncaughtExceptionHandler(handler);
                 workingThread.start();
             } catch (IOException | ClassNotFoundException | InterruptedException e) {
+                //TODO find a way to wait untill workingthread is waiting
+                try{
+                    Thread.sleep(200);
+                }
+                catch (InterruptedException i){
+
+                }
                 closeServerHandler();
             }
         }
@@ -77,6 +84,7 @@ public class ServerHandler implements Runnable{
      * Triggers the end game in the view and gracefully stops the ServerHandler
      */
     public void closeServerHandler(){
+        System.out.println("incloseserverhandler");
         if (running) {
             workingThread.interrupt();
             Client.logger.warn("Connection dropped with server [" + serverSocket.getInetAddress() + "]");
@@ -100,12 +108,6 @@ public class ServerHandler implements Runnable{
 
     public void setModel(SimpleModel model){
         this.model = model;
-    }
-
-    public void stopWorkingThread() {
-
-        running = false;
-        workingThread.interrupt();
     }
 
     public void setRunning(boolean running){

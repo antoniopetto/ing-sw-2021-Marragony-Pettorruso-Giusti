@@ -694,6 +694,7 @@ public class GUIView extends Application implements View  {
      * different server.
      */
     public void endGame(){
+
         serverHandler.setRunning(false);
         if(!victory) {
             setLoader("/fxml/endGame.fxml");
@@ -763,6 +764,9 @@ public class GUIView extends Application implements View  {
      */
     @Override
     public void victory(Boolean win, Map<String, Integer> leaderboard) {
+
+        System.out.println("in victory");
+        serverHandler.setRunning(false);
         victory =true;
         setLoader("/fxml/victory.fxml");
         Scene scene = loadScene(currentLoader);

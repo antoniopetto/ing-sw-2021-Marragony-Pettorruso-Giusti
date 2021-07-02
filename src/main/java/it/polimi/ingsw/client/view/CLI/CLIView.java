@@ -73,8 +73,8 @@ public class CLIView implements View {
     @Override
     public void endGame() {
 
+        serverHandler.setRunning(false);
         System.out.println("Game over.");
-        serverHandler.stopWorkingThread();
         int choice = askChoice("Do you want to:", "Exit game", "Start new game", "Start new game on different server");
 
         if (choice == 2) {
@@ -910,6 +910,7 @@ public class CLIView implements View {
      */
     @Override
     public void victory(Boolean win, Map<String, Integer> leaderboard) {
+
         serverHandler.setRunning(false);
         showTextMessage("The game has ended");
         if (win != null)
