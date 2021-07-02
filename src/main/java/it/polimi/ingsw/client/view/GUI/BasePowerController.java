@@ -1,5 +1,6 @@
 package it.polimi.ingsw.client.view.GUI;
 
+import it.polimi.ingsw.client.view.UncheckedInterruptedException;
 import it.polimi.ingsw.shared.Resource;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -71,7 +72,7 @@ public class BasePowerController  implements Initializable {
             try {
                 wait();
             } catch (InterruptedException e) {
-                e.printStackTrace();
+                throw new UncheckedInterruptedException();
             }
         }
         Resource tmpChoice =choice;

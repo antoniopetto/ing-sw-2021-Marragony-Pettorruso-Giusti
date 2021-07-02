@@ -2,6 +2,7 @@ package it.polimi.ingsw.client.view.GUI;
 
 import it.polimi.ingsw.client.simplemodel.SimpleModel;
 import it.polimi.ingsw.client.simplemodel.SimpleLeaderCard;
+import it.polimi.ingsw.client.view.UncheckedInterruptedException;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -10,6 +11,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.text.Text;
 
+import java.io.UncheckedIOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -118,7 +120,7 @@ public class DiscardLeaderCardController  {
             try {
                 wait();
             } catch (InterruptedException e) {
-                e.printStackTrace();
+                throw new UncheckedInterruptedException();
             }
         }
         return result;

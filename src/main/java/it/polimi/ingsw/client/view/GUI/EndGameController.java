@@ -1,5 +1,6 @@
 package it.polimi.ingsw.client.view.GUI;
 
+import it.polimi.ingsw.client.view.UncheckedInterruptedException;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.input.MouseEvent;
@@ -28,7 +29,7 @@ public class EndGameController implements Initializable {
             try {
                 wait();
             } catch (InterruptedException e) {
-                e.printStackTrace();
+                throw new UncheckedInterruptedException();
             }
         }
         int tmpChoice = choice;

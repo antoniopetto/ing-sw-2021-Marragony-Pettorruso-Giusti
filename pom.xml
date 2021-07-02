@@ -122,6 +122,7 @@
             <id>build-client</id>
             <phase>package</phase>
             <configuration>
+              <encoding>UTF-8</encoding>
               <appendAssemblyId>false</appendAssemblyId>
               <archive>
                 <manifest>
@@ -142,6 +143,7 @@
             <id>build-server</id>
             <phase>package</phase>
             <configuration>
+              <encoding>UTF-8</encoding>
               <appendAssemblyId>false</appendAssemblyId>
               <archive>
                 <manifest>

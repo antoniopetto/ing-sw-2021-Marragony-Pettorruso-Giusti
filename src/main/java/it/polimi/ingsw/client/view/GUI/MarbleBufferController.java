@@ -1,6 +1,7 @@
 package it.polimi.ingsw.client.view.GUI;
 
 import it.polimi.ingsw.client.simplemodel.*;
+import it.polimi.ingsw.client.view.UncheckedInterruptedException;
 import it.polimi.ingsw.shared.DepotName;
 import it.polimi.ingsw.shared.Resource;
 import it.polimi.ingsw.shared.Marble;
@@ -248,7 +249,7 @@ public class MarbleBufferController {
             try {
                 wait();
             } catch (InterruptedException e) {
-                e.printStackTrace();
+                throw new UncheckedInterruptedException();
             }
         }
         return resource;
@@ -269,7 +270,7 @@ public class MarbleBufferController {
             try {
                 wait();
             } catch (InterruptedException e) {
-                e.printStackTrace();
+                throw new UncheckedInterruptedException();
             }
         }
         return marble;
@@ -353,7 +354,7 @@ public class MarbleBufferController {
             try {
                 wait();
             } catch (InterruptedException e) {
-                e.printStackTrace();
+                throw new UncheckedInterruptedException();
             }
         }
         DepotName tmpDepot = depot;

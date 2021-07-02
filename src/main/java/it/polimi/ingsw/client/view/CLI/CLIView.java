@@ -99,8 +99,8 @@ public class CLIView implements View {
      */
     private static int inputNumber(int min, int max){
         System.out.print(">");
-        Scanner input = new Scanner(System.in);
-        int choice = input.nextInt();
+        InterruptibleInput input = new InterruptibleInput();
+        int choice = Integer.parseInt(input.call());
         if (choice < min || choice > max)
             throw new InputMismatchException();
         return choice;
@@ -165,8 +165,8 @@ public class CLIView implements View {
     public static boolean askYesNo(String text, boolean defaultYes) {
         System.out.println(text + (defaultYes ? " [Y/n]" : " [y/N]"));
         System.out.print(">");
-        Scanner input = new Scanner(System.in);
-        String choice = input.nextLine();
+        InterruptibleInput input = new InterruptibleInput();
+        String choice = input.call();
         if (choice.equalsIgnoreCase("y") || (choice.equals("") && defaultYes))
             return true;
         else if(choice.equalsIgnoreCase("n") || choice.equals(""))
@@ -183,10 +183,10 @@ public class CLIView implements View {
      * @return          The answer
      */
     public static String askString(String text){
-        Scanner input = new Scanner(System.in);
         System.out.println(text);
         System.out.print(">");
-        return input.nextLine();
+        InterruptibleInput input = new InterruptibleInput();
+        return input.call();
     }
 
     @Override

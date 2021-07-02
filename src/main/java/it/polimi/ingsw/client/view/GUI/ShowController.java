@@ -1,6 +1,7 @@
 package it.polimi.ingsw.client.view.GUI;
 
 import it.polimi.ingsw.client.simplemodel.*;
+import it.polimi.ingsw.client.view.UncheckedInterruptedException;
 import it.polimi.ingsw.shared.DepotName;
 import it.polimi.ingsw.shared.Resource;
 import javafx.event.ActionEvent;
@@ -266,7 +267,7 @@ public class ShowController implements Initializable {
             try {
                 wait();
             } catch (InterruptedException e) {
-                e.printStackTrace();
+                throw new UncheckedInterruptedException();
             }
         }
         return closeWindow;

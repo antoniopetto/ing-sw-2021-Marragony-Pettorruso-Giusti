@@ -1,6 +1,7 @@
 package it.polimi.ingsw.client.view.GUI;
 
 import it.polimi.ingsw.client.simplemodel.*;
+import it.polimi.ingsw.client.view.UncheckedInterruptedException;
 import it.polimi.ingsw.shared.DepotName;
 import it.polimi.ingsw.shared.Resource;
 import it.polimi.ingsw.shared.PopeFavourTile;
@@ -315,7 +316,7 @@ public class MainSceneController {
             try {
                 wait();
             } catch (InterruptedException e) {
-                System.out.println("Interrupting thread.");
+                throw new UncheckedInterruptedException();
             }
         }
         int tmpChoice = choice;
@@ -333,7 +334,7 @@ public class MainSceneController {
             try {
                 wait();
             } catch (InterruptedException e) {
-                e.printStackTrace();
+                throw new UncheckedInterruptedException();
             }
         }
         int tmpCardId = cardId;
@@ -518,7 +519,7 @@ public class MainSceneController {
             try {
                 wait();
             } catch (InterruptedException e) {
-                e.printStackTrace();
+                throw new UncheckedInterruptedException();
             }
         }
 

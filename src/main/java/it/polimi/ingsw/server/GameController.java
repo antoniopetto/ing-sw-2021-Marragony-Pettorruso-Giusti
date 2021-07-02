@@ -146,10 +146,10 @@ public class GameController implements Serializable {
             playing.removeLeaderCard(cardId);
 
             //TODO remove
-            getPlaying().getPlayerBoard().getStrongBox().addResource(Resource.COIN, 20);
-            getPlaying().getPlayerBoard().getStrongBox().addResource(Resource.STONE, 20);
-            getPlaying().getPlayerBoard().getStrongBox().addResource(Resource.SERVANT, 20);
-            getPlaying().getPlayerBoard().getStrongBox().addResource(Resource.SHIELD, 20);
+            //getPlaying().getPlayerBoard().getStrongBox().addResource(Resource.COIN, 20);
+            //getPlaying().getPlayerBoard().getStrongBox().addResource(Resource.STONE, 20);
+            //getPlaying().getPlayerBoard().getStrongBox().addResource(Resource.SERVANT, 20);
+            //getPlaying().getPlayerBoard().getStrongBox().addResource(Resource.SHIELD, 20);
             //
 
             if (state == State.PRETURN || state == State.POSTTURN) {

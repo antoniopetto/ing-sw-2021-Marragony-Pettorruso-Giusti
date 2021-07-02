@@ -42,6 +42,7 @@ public class ServerHandler implements Runnable{
         ThreadContext.put("PID", pid.substring(0, (pid.contains("@")) ? pid.indexOf("@") : pid.length()));
         Client.logger.info("Server handler started");
 
+        Thread.UncaughtExceptionHandler handler = ((t, e) -> Client.logger.info("Closed dangling thread"));
         running = true;
         try {
             output = new ObjectOutputStream(serverSocket.getOutputStream());
@@ -64,6 +65,7 @@ public class ServerHandler implements Runnable{
                     ToViewMsg toViewMsg = (ToViewMsg)message;
                     workingThread = new Thread(() -> toViewMsg.changeView(view, this));
                 }
+                workingThread.setUncaughtExceptionHandler(handler);
                 workingThread.start();
             } catch (IOException | ClassNotFoundException | InterruptedException e) {
                 closeServerHandler();
