@@ -5,6 +5,13 @@ import it.polimi.ingsw.shared.DepotName;
 import it.polimi.ingsw.shared.Resource;
 import it.polimi.ingsw.shared.Marble;
 
+
+/**
+ * It is called when a player decides to put a resource corresponding to a marble in a 'depot' Depot
+ * When the selected marble is a white Marble, it will be filtered based on its own associated resource and placed in depot
+ *
+ * @see CommandMsg
+ */
 public class PutResourceMsg implements CommandMsg {
     private final Marble marble;
     private final DepotName depot;

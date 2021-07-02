@@ -3,6 +3,10 @@ package it.polimi.ingsw.shared.messages.command;
 import it.polimi.ingsw.server.GameController;
 import it.polimi.ingsw.shared.CardColor;
 
+/**
+ * It is called when a player decides to buy a DevelopmentCard with 'cardColor' color and 'level' level
+ * then he chooses a slot in which to insert the DevelopmentCard (slotIdx is chosen slot id )
+ */
 public class BuyAndAddCardInSlotMsg implements CommandMsg {
 
     private final CardColor cardColor;

@@ -3,6 +3,10 @@ package it.polimi.ingsw.shared.messages.command;
 import it.polimi.ingsw.server.GameController;
 import it.polimi.ingsw.shared.DepotName;
 
+/**
+ * A message that sends two depots between which to swap their resources
+ * @see CommandMsg
+ */
 public class SwitchDepotsMsg implements CommandMsg {
 
     private DepotName depot1;

@@ -8,6 +8,10 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+
+/**
+ * It is called when a player actives production power to 1+ DevCards ( selectedCardIds are Ids of selected DevCards )
+ */
 public class ActivateProductionMsg implements CommandMsg{
 
     private final Set<Integer> selectedCardIds;
