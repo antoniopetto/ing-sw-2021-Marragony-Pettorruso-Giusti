@@ -1,6 +1,6 @@
 package it.polimi.ingsw.client.view.GUI;
 
-import it.polimi.ingsw.client.view.UncheckedInterruptedException;
+import it.polimi.ingsw.shared.exceptions.UncheckedInterruptedException;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Group;

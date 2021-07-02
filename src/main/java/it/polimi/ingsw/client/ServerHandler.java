@@ -68,7 +68,6 @@ public class ServerHandler implements Runnable{
                 workingThread.setUncaughtExceptionHandler(handler);
                 workingThread.start();
             } catch (IOException | ClassNotFoundException | InterruptedException e) {
-                //TODO find a way to wait untill workingthread is waiting
                 try{
                     Thread.sleep(200);
                 }
