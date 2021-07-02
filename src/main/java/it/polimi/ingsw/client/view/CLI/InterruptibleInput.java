@@ -1,5 +1,5 @@
 package it.polimi.ingsw.client.view.CLI;
-import it.polimi.ingsw.client.view.UncheckedInterruptedException;
+import it.polimi.ingsw.shared.exceptions.UncheckedInterruptedException;
 
 import java.io.*;
 import java.util.concurrent.Callable;

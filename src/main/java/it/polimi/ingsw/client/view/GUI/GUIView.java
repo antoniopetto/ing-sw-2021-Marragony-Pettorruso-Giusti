@@ -580,7 +580,6 @@ public class GUIView extends Application implements View  {
      */
     @Override
     public Marble selectMarble() {
-
         closeStage(errorStage);
         setLoader("/fxml/marbleBufferScene.fxml");
         Scene scene = loadScene(currentLoader);
@@ -717,7 +716,8 @@ public class GUIView extends Application implements View  {
                 switch (choice) {
                     case 1 ->{
                         connected=true;
-                        Platform.runLater(() -> mainStage.close()); //endgame
+                        Platform.exit();
+                        //Platform.runLater(() -> mainStage.close()); //endgame
                     }
                     case 2 -> {
                         try {
