@@ -91,6 +91,8 @@ public class MainSceneController {
     @FXML
     private TitledPane showOthers;
     @FXML
+    private TitledPane leaderButtons;
+    @FXML
     private Button show1;
     @FXML
     private Button show2;
@@ -392,6 +394,7 @@ public class MainSceneController {
     public void disableButtons(boolean disable) {GUISupport.setDisable(disable, actionButtons);}
     public void disableCardsInSlot(boolean disable) {GUISupport.setDisable(disable, cardsSlots);}
     public void showBasePower(boolean show){GUISupport.setVisible(show, basePower);}
+    public void disableForProduction(boolean disable){GUISupport.setDisable(disable, showOthers, leaderButtons);}
     public void disableLeaderCards(boolean disable){
         GUISupport.setDisable(disable, leaderCard1);
         GUISupport.setDisable(disable, leaderCard2);

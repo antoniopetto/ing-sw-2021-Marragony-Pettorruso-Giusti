@@ -1,6 +1,6 @@
 package it.polimi.ingsw.shared;
 
-import it.polimi.ingsw.server.model.exceptions.ElementNotFoundException;
+import it.polimi.ingsw.shared.exceptions.ElementNotFoundException;
 
 import java.io.Serializable;
 import java.util.Collection;

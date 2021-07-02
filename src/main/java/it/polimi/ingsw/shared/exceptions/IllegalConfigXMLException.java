@@ -1,4 +1,4 @@
-package it.polimi.ingsw.server.model.exceptions;
+package it.polimi.ingsw.shared.exceptions;
 
 public class IllegalConfigXMLException extends RuntimeException{
 

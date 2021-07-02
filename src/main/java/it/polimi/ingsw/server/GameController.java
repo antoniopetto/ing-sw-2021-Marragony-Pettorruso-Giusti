@@ -5,8 +5,8 @@ import it.polimi.ingsw.client.simplemodel.SimplePlayer;
 import it.polimi.ingsw.server.model.AbstractPlayer;
 import it.polimi.ingsw.server.model.Player;
 import it.polimi.ingsw.server.model.cards.*;
-import it.polimi.ingsw.server.model.exceptions.ElementNotFoundException;
-import it.polimi.ingsw.server.model.exceptions.IllegalConfigXMLException;
+import it.polimi.ingsw.shared.exceptions.ElementNotFoundException;
+import it.polimi.ingsw.shared.exceptions.IllegalConfigXMLException;
 import it.polimi.ingsw.shared.*;
 import it.polimi.ingsw.server.model.shared.FaithTrack;
 import it.polimi.ingsw.server.model.shared.MarketBoard;
@@ -144,14 +144,14 @@ public class GameController implements Serializable {
             return;
         try {
             playing.removeLeaderCard(cardId);
-
+            /*
             //TODO remove
             //getPlaying().getPlayerBoard().getStrongBox().addResource(Resource.COIN, 20);
             //getPlaying().getPlayerBoard().getStrongBox().addResource(Resource.STONE, 20);
             //getPlaying().getPlayerBoard().getStrongBox().addResource(Resource.SERVANT, 20);
             //getPlaying().getPlayerBoard().getStrongBox().addResource(Resource.SHIELD, 20);
             //
-
+*/
             if (state == State.PRETURN || state == State.POSTTURN) {
                 advance(playing);
             } else if (playing.getLeaderCardList().size() == 2){
