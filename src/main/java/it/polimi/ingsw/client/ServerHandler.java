@@ -84,7 +84,6 @@ public class ServerHandler implements Runnable{
      * Triggers the end game in the view and gracefully stops the ServerHandler
      */
     public void closeServerHandler(){
-        System.out.println("incloseserverhandler");
         if (running) {
             workingThread.interrupt();
             Client.logger.warn("Connection dropped with server [" + serverSocket.getInetAddress() + "]");

@@ -697,6 +697,11 @@ public class GUIView extends Application implements View  {
 
         serverHandler.setRunning(false);
         if(!victory) {
+
+            discardCounter = 0;
+            firstMain = true;
+            victory = false;
+
             setLoader("/fxml/endGame.fxml");
             Scene scene = loadScene(currentLoader);
             EndGameController controller = currentLoader.getController();
@@ -715,7 +720,6 @@ public class GUIView extends Application implements View  {
                         Platform.runLater(() -> mainStage.close()); //endgame
                     }
                     case 2 -> {
-                        firstMain = true;
                         try {
                             setting(null); //newGame
                             connected = true;
@@ -724,7 +728,6 @@ public class GUIView extends Application implements View  {
                         }
                     }
                     case 3 -> {
-                        firstMain = true;
                         connected=true;
                         start(null); //new server
                     }
@@ -765,7 +768,6 @@ public class GUIView extends Application implements View  {
     @Override
     public void victory(Boolean win, Map<String, Integer> leaderboard) {
 
-        System.out.println("in victory");
         serverHandler.setRunning(false);
         victory =true;
         setLoader("/fxml/victory.fxml");
